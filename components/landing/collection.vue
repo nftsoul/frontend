@@ -13,58 +13,58 @@
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
                     <client-only>
-                    <VueSlickCarousel v-bind="settings">
-                        <div>
-                            <v-card color="transparent" flat class="pa-5" max-width="300">
-                                <div class="outer-card">
-                                    <div class="inner-card">
-                                        <v-img :src="require('~/assets/images/1.png')" class="mx-auto" width="220" height="240"></v-img>
-                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                        <VueSlickCarousel v-bind="settings">
+                            <div>
+                                <v-card color="transparent" flat class="pa-5" max-width="300">
+                                    <div class="outer-card">
+                                        <div class="inner-card">
+                                            <v-img :src="require('~/assets/images/1.png')" class="mx-auto" width="220" height="240"></v-img>
+                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                        </div>
                                     </div>
-                                </div>
-                            </v-card>
-                        </div>
-                        <div>
-                            <v-card color="transparent" flat class="pa-5" max-width="300">
-                                <div class="outer-card">
-                                    <div class="inner-card">
-                                        <v-img :src="require('~/assets/images/2.png')" class="mx-auto" width="220" height="240"></v-img>
-                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                </v-card>
+                            </div>
+                            <div>
+                                <v-card color="transparent" flat class="pa-5" max-width="300">
+                                    <div class="outer-card">
+                                        <div class="inner-card">
+                                            <v-img :src="require('~/assets/images/2.png')" class="mx-auto" width="220" height="240"></v-img>
+                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                        </div>
                                     </div>
-                                </div>
-                            </v-card>
-                        </div>
-                        <div>
-                            <v-card color="transparent" flat class="pa-5" max-width="300">
-                                <div class="outer-card">
-                                    <div class="inner-card">
-                                        <v-img :src="require('~/assets/images/3.png')" class="mx-auto" width="220" height="240"></v-img>
-                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                </v-card>
+                            </div>
+                            <div>
+                                <v-card color="transparent" flat class="pa-5" max-width="300">
+                                    <div class="outer-card">
+                                        <div class="inner-card">
+                                            <v-img :src="require('~/assets/images/3.png')" class="mx-auto" width="220" height="240"></v-img>
+                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                        </div>
                                     </div>
-                                </div>
-                            </v-card>
-                        </div>
-                        <div>
-                            <v-card color="transparent" flat class="pa-5" max-width="300">
-                                <div class="outer-card">
-                                    <div class="inner-card">
-                                        <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
-                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                </v-card>
+                            </div>
+                            <div>
+                                <v-card color="transparent" flat class="pa-5" max-width="300">
+                                    <div class="outer-card">
+                                        <div class="inner-card">
+                                            <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
+                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                        </div>
                                     </div>
-                                </div>
-                            </v-card>
-                        </div>
-                        <div>
-                            <v-card color="transparent" flat class="pa-5" max-width="300">
-                                <div class="outer-card">
-                                    <div class="inner-card">
-                                        <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
-                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                </v-card>
+                            </div>
+                            <div>
+                                <v-card color="transparent" flat class="pa-5" max-width="300">
+                                    <div class="outer-card">
+                                        <div class="inner-card">
+                                            <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
+                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                        </div>
                                     </div>
-                                </div>
-                            </v-card>
-                        </div>
-                    </VueSlickCarousel>
+                                </v-card>
+                            </div>
+                        </VueSlickCarousel>
                     </client-only>
                 </v-col>
                 <v-col cols="12" align="right">
@@ -78,51 +78,53 @@
 
                 </v-col>
             </v-row>
-            <!-- <v-row justify="center">
+            <v-row justify="center">
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
-                    <VueSlickCarousel v-bind="settings">
-                        <v-card color="transparent" flat class="pa-5" max-width="300">
-                            <div class="outer-card">
-                                <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/5.png')" class="mx-auto" width="220" height="240"></v-img>
-                                    <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                    <client-only>
+                        <VueSlickCarousel v-bind="settings">
+                            <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <div class="outer-card">
+                                    <div class="inner-card">
+                                        <v-img :src="require('~/assets/images/5.png')" class="mx-auto" width="220" height="240"></v-img>
+                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                    </div>
                                 </div>
-                            </div>
-                        </v-card>
-                        <v-card color="transparent" flat class="pa-5" max-width="300">
-                            <div class="outer-card">
-                                <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/6.png')" class="mx-auto" width="220" height="240"></v-img>
-                                    <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                            </v-card>
+                            <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <div class="outer-card">
+                                    <div class="inner-card">
+                                        <v-img :src="require('~/assets/images/6.png')" class="mx-auto" width="220" height="240"></v-img>
+                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                    </div>
                                 </div>
-                            </div>
-                        </v-card>
-                        <v-card color="transparent" flat class="pa-5" max-width="300">
-                            <div class="outer-card">
-                                <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/7.png')" class="mx-auto" width="220" height="240"></v-img>
-                                    <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                            </v-card>
+                            <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <div class="outer-card">
+                                    <div class="inner-card">
+                                        <v-img :src="require('~/assets/images/7.png')" class="mx-auto" width="220" height="240"></v-img>
+                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                    </div>
                                 </div>
-                            </div>
-                        </v-card>
-                        <v-card color="transparent" flat class="pa-5" max-width="300">
-                            <div class="outer-card">
-                                <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/8.png')" class="mx-auto" width="220" height="240"></v-img>
-                                    <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                            </v-card>
+                            <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <div class="outer-card">
+                                    <div class="inner-card">
+                                        <v-img :src="require('~/assets/images/8.png')" class="mx-auto" width="220" height="240"></v-img>
+                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                    </div>
                                 </div>
-                            </div>
-                        </v-card>
-                        <v-card color="transparent" flat class="pa-5" max-width="300">
-                            <div class="outer-card">
-                                <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/8.png')" class="mx-auto" width="220" height="240"></v-img>
-                                    <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                            </v-card>
+                            <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <div class="outer-card">
+                                    <div class="inner-card">
+                                        <v-img :src="require('~/assets/images/8.png')" class="mx-auto" width="220" height="240"></v-img>
+                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                    </div>
                                 </div>
-                            </div>
-                        </v-card>
-                    </VueSlickCarousel>
+                            </v-card>
+                        </VueSlickCarousel>
+                    </client-only>
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
@@ -137,48 +139,50 @@
             <v-row justify="center">
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
-                    <VueSlickCarousel v-bind="settings">
-                        <v-card color="transparent" flat class="pa-5" max-width="300">
-                            <div class="outer-card">
-                                <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/2.png')" class="mx-auto" width="220" height="240"></v-img>
-                                    <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                    <client-only>
+                        <VueSlickCarousel v-bind="settings">
+                            <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <div class="outer-card">
+                                    <div class="inner-card">
+                                        <v-img :src="require('~/assets/images/2.png')" class="mx-auto" width="220" height="240"></v-img>
+                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                    </div>
                                 </div>
-                            </div>
-                        </v-card>
-                        <v-card color="transparent" flat class="pa-5" max-width="300">
-                            <div class="outer-card">
-                                <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/5.png')" class="mx-auto" width="220" height="240"></v-img>
-                                    <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                            </v-card>
+                            <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <div class="outer-card">
+                                    <div class="inner-card">
+                                        <v-img :src="require('~/assets/images/5.png')" class="mx-auto" width="220" height="240"></v-img>
+                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                    </div>
                                 </div>
-                            </div>
-                        </v-card>
-                        <v-card color="transparent" flat class="pa-5" max-width="300">
-                            <div class="outer-card">
-                                <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/9.png')" class="mx-auto" width="220" height="240"></v-img>
-                                    <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                            </v-card>
+                            <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <div class="outer-card">
+                                    <div class="inner-card">
+                                        <v-img :src="require('~/assets/images/9.png')" class="mx-auto" width="220" height="240"></v-img>
+                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                    </div>
                                 </div>
-                            </div>
-                        </v-card>
-                        <v-card color="transparent" flat class="pa-5" max-width="300">
-                            <div class="outer-card">
-                                <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/10.png')" class="mx-auto" width="220" height="240"></v-img>
-                                    <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                            </v-card>
+                            <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <div class="outer-card">
+                                    <div class="inner-card">
+                                        <v-img :src="require('~/assets/images/10.png')" class="mx-auto" width="220" height="240"></v-img>
+                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                    </div>
                                 </div>
-                            </div>
-                        </v-card>
-                        <v-card color="transparent" flat class="pa-5" max-width="300">
-                            <div class="outer-card">
-                                <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/8.png')" class="mx-auto" width="220" height="240"></v-img>
-                                    <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                            </v-card>
+                            <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <div class="outer-card">
+                                    <div class="inner-card">
+                                        <v-img :src="require('~/assets/images/8.png')" class="mx-auto" width="220" height="240"></v-img>
+                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                    </div>
                                 </div>
-                            </div>
-                        </v-card>
-                    </VueSlickCarousel>
+                            </v-card>
+                        </VueSlickCarousel>
+                    </client-only>
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
@@ -189,7 +193,7 @@
                         </div>
                     </v-row>
                 </v-col>
-            </v-row> -->
+            </v-row>
         </div>
     </v-container>
 </div>
