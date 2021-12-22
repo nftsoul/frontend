@@ -12,9 +12,9 @@
             <v-row>
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
-                    <hooper :itemsToShow="3">
-                        <slide >
-                            <v-card color="transparent" flat class="pa-5" max-width="300">
+                    <!-- <hooper :itemsToShow="3">
+                        <slide style="height:300px !important">
+                            <v-card color="transparent" flat class="pa-5" max-width="300" height="240">
                                 <div class="outer-card">
                                     <div class="inner-card">
                                         <v-img :src="require('~/assets/images/1.png')" class="mx-auto" width="220" height="240"></v-img>
@@ -53,8 +53,8 @@
                                 </div>
                             </v-card>
                         </slide>
-                    </hooper>
-                    <!-- <VueSlickCarousel v-bind="settings">
+                    </hooper> -->
+                    <VueSlickCarousel v-bind="settings">
                         <div>
                             <v-card color="transparent" flat class="pa-5" max-width="300">
                                 <div class="outer-card">
@@ -105,7 +105,7 @@
                                 </div>
                             </v-card>
                         </div>
-                    </VueSlickCarousel> -->
+                    </VueSlickCarousel>
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
