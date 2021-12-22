@@ -6,7 +6,7 @@
         </v-row>
         <v-row justify="center">
             <v-col cols="12" class="px-5">
-                <carousel-3d autoplay autoplayHoverPause :controls-visible="true" :controls-width="40" :controls-height="40" perspective="0" inverseScaling="00" space="360" display="3" width="320" height="545" border="0">
+                <carousel-3d  autoplay autoplayHoverPause :controls-visible="true" :controls-width="40" :controls-height="40" perspective="0" inverseScaling="00" space="360" display="4" width="320" height="545" border="0">
                     <slide v-for="(item,i) in featured" :index='i' :key="i">
                         <template slot-scope="{index,isCurrent,leftIndex,rightIndex}">
                             <v-card :data-index="index" class="slide-box pa-5" color="primary" max-width="320" height="545" :class="{current:isCurrent,onLeft:(leftIndex >=0),onRight:(rightIndex >= 0)}">

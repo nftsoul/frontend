@@ -12,48 +12,6 @@
             <v-row>
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
-                    <!-- <hooper :itemsToShow="3">
-                        <slide style="height:300px !important">
-                            <v-card color="transparent" flat class="pa-5" max-width="300" height="240">
-                                <div class="outer-card">
-                                    <div class="inner-card">
-                                        <v-img :src="require('~/assets/images/1.png')" class="mx-auto" width="220" height="240"></v-img>
-                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                    </div>
-                                </div>
-                            </v-card>
-                        </slide>
-                        <slide>
-                            <v-card color="transparent" flat class="pa-5" max-width="300">
-                                <div class="outer-card">
-                                    <div class="inner-card">
-                                        <v-img :src="require('~/assets/images/2.png')" class="mx-auto" width="220" height="240"></v-img>
-                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                    </div>
-                                </div>
-                            </v-card>
-                        </slide>
-                        <slide>
-                            <v-card color="transparent" flat class="pa-5" max-width="300">
-                                <div class="outer-card">
-                                    <div class="inner-card">
-                                        <v-img :src="require('~/assets/images/3.png')" class="mx-auto" width="220" height="240"></v-img>
-                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                    </div>
-                                </div>
-                            </v-card>
-                        </slide>
-                        <slide>
-                            <v-card color="transparent" flat class="pa-5" max-width="300">
-                                <div class="outer-card">
-                                    <div class="inner-card">
-                                        <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
-                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                    </div>
-                                </div>
-                            </v-card>
-                        </slide>
-                    </hooper> -->
                     <VueSlickCarousel v-bind="settings">
                         <div>
                             <v-card color="transparent" flat class="pa-5" max-width="300">
@@ -236,24 +194,14 @@
 </template>
 
 <script>
-import {
-    Hooper,
-    Slide
-} from 'hooper';
-import 'hooper/dist/hooper.css';
-
 export default {
-    components: {
-        Hooper,
-        Slide
-    },
     data() {
         return {
             settings: {
                 "dots": false,
                 "infinite": true,
                 "speed": 500,
-                "slidesToShow": 3,
+                "slidesToShow": 4,
                 "slidesToScroll": 1,
                 "arrows": true,
                 "responsive": [{
