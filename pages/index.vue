@@ -1,6 +1,6 @@
 <template>
 <div>
-    <!-- <LandingIntro /> -->
+    <LandingIntro />
     <!-- <LandingCollection /> -->
     <!-- <LandingWorking /> -->
 </div>
