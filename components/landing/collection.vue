@@ -12,7 +12,7 @@
             <v-row>
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
-                    <VueSlickCarousel v-bind="settings">
+                    <!-- <VueSlickCarousel v-bind="settings"> -->
                         <v-card color="transparent" flat class="pa-5" max-width="300">
                             <div class="outer-card">
                                 <div class="inner-card">
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                         </v-card>
-                    </VueSlickCarousel>
+                    <!-- </VueSlickCarousel> -->
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
@@ -230,7 +230,7 @@ export default {
 </script>
 
 <style lang="css">
-/* .enclose-border {
+.enclose-border {
     border: 1px solid #500083;
     box-sizing: border-box;
     filter: drop-shadow(0px 1px 10px #500083);
@@ -273,5 +273,5 @@ export default {
     background: #000229;
     width: 100%;
     padding: 20px;
-} */
+}
 </style>
