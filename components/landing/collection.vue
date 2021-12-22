@@ -12,6 +12,7 @@
             <v-row>
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
+                    <client-only>
                     <VueSlickCarousel v-bind="settings">
                         <div>
                             <v-card color="transparent" flat class="pa-5" max-width="300">
@@ -64,6 +65,7 @@
                             </v-card>
                         </div>
                     </VueSlickCarousel>
+                    </client-only>
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
