@@ -16,7 +16,7 @@
                         <v-card color="transparent" flat class="pa-5" max-width="300">
                             <div class="outer-card">
                                 <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/1.png')" class="mx-auto" height="240"></v-img>
+                                    <v-img :src="require('~/assets/images/1.png')" class="mx-auto" width="220" height="240"></v-img>
                                     <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
                                 </div>
                             </div>
@@ -24,7 +24,7 @@
                         <v-card color="transparent" flat class="pa-5" max-width="300">
                             <div class="outer-card">
                                 <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/2.png')" class="mx-auto" height="240"></v-img>
+                                    <v-img :src="require('~/assets/images/2.png')" class="mx-auto" width="220" height="240"></v-img>
                                     <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
                                 </div>
                             </div>
@@ -32,7 +32,7 @@
                         <v-card color="transparent" flat class="pa-5" max-width="300">
                             <div class="outer-card">
                                 <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/3.png')" class="mx-auto" height="240"></v-img>
+                                    <v-img :src="require('~/assets/images/3.png')" class="mx-auto" width="220" height="240"></v-img>
                                     <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
                         <v-card color="transparent" flat class="pa-5" max-width="300">
                             <div class="outer-card">
                                 <div class="inner-card">
-                                    <v-img :src="require('~/assets/images/4.png')" class="mx-auto" height="240"></v-img>
+                                    <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
                                     <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
                                 </div>
                             </div>
@@ -195,34 +195,34 @@ export default {
                 "slidesToScroll": 1,
                 "initialSlide": 0,
                 "arrows":true,
-                "responsive": [{
-                        "breakpoint": 1264,
-                        "settings": {
-                            "slidesToShow": 3,
-                            "slidesToScroll": 3,
-                            "infinite": true,
-                            "dots": false,
-                            "arrows":true,
-                        }
-                    },
-                    {
-                        "breakpoint": 960,
-                        "settings": {
-                            "slidesToShow": 2,
-                            "slidesToScroll": 2,
-                            "initialSlide": 2,
-                            "arrows":true,
-                        }
-                    },
-                    {
-                        "breakpoint": 600,
-                        "settings": {
-                            "slidesToShow": 1,
-                            "slidesToScroll": 1,
-                            "arrows":true,
-                        }
-                    }
-                ]
+                // "responsive": [{
+                //         "breakpoint": 1264,
+                //         "settings": {
+                //             "slidesToShow": 3,
+                //             "slidesToScroll": 3,
+                //             "infinite": true,
+                //             "dots": false,
+                //             "arrows":true,
+                //         }
+                //     },
+                //     {
+                //         "breakpoint": 960,
+                //         "settings": {
+                //             "slidesToShow": 2,
+                //             "slidesToScroll": 2,
+                //             "initialSlide": 2,
+                //             "arrows":true,
+                //         }
+                //     },
+                //     {
+                //         "breakpoint": 600,
+                //         "settings": {
+                //             "slidesToShow": 1,
+                //             "slidesToScroll": 1,
+                //             "arrows":true,
+                //         }
+                //     }
+                // ]
             }
         }
     }
