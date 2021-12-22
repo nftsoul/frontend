@@ -1,0 +1,9 @@
+.art-card{
+    border-radius: 20px !important;
+    background: linear-gradient(261.36deg, #C202D3 3.07%, #300253 64.08%, #16023C 82.04%, #000229 100%);
+
+}
+.art-card p{
+    font-size: 12px;
+    line-height: 18px;
+}

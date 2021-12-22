@@ -1,0 +1,50 @@
+@font-face {
+    font-family: "Poppins";
+    src: url('~/assets/poppins/Poppins-Regular.ttf');
+  }
+  @font-face {
+    font-family: "Poppins-Medium";
+    src: url('~/assets/poppins/Poppins-Medium.ttf');
+  }
+  @font-face {
+    font-family: "Poppins-SemiBold";
+    src: url('~/assets/poppins/Poppins-SemiBold.ttf');
+  }
+
+.v-application .caption,.v-application .text-h6,
+.v-application .text-h5,.v-application .text-h4,
+.v-application .text-h4,.v-card,.v-list,
+.v-btn__content,.v-data-table,p,h5,small,.title{
+    font-family: 'Poppins', sans-serif !important;
+}
+.v-btn {
+  text-transform: capitalize;
+  border-radius:7px;
+}
+.dark-bg{
+  background: #000229;
+
+}
+.outer-btn{
+  background: linear-gradient(264.44deg, #FE87FF 2.87%, #C202D3 34.05%, #5E0FFF 67.82%, #1905DA 99.15%);
+  padding:1px;
+  border-radius:7px;
+  cursor: pointer;
+}
+.inner-btn{
+width:99px;
+height:35px;
+background: #000229;
+padding:10px;
+align-content: center;
+border-radius: 7px;
+}
+.grand-title-text {
+  font-weight: 500;
+  font-size: 16px;
+  background: linear-gradient(86.47deg, #FE87FF 1.47%, #FD2BFF 21.9%, #C202D3 39.06%, #9208E8 57.62%, #5E0FFF 84.84%, #1905DA 96.24%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+}
+
