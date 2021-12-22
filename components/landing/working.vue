@@ -1,0 +1,71 @@
+<template>
+<div class="back">
+    <v-container>
+        <v-row justify="center" class="my-5">
+             <p class="grand-title-text">How does it works?</p>
+        </v-row>
+        <v-row justify="center">
+            <v-col cols="10" align="center" class="custom-back py-16">
+                <v-row justify="center">
+                    <v-card flat color="transparent" max-width="300">
+                        <v-avatar class="mx-auto pa-1 gradient-back" size="60">
+                            <v-img :src="require('~/assets/images/wallet-filled-money-tool.png')"></v-img>
+                        </v-avatar>
+                        <p class="text-center mb-n3 mt-5">Setup Your Wallet</p>
+
+                        <v-card-subtitle>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.
+                        </v-card-subtitle>
+                    </v-card>
+
+                    <v-icon class="icon-grad" large>mdi-arrow-right</v-icon>
+
+                    <v-card flat color="transparent" max-width="300">
+                        <v-avatar class="mx-auto pa-1 gradient-back" size="60">
+                            <v-img :src="require('~/assets/images/image-gallery.png')"></v-img>
+                        </v-avatar>
+                        <p class="text-center mb-n3 mt-5">Setup Your Wallet</p>
+
+                        <v-card-subtitle>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.
+                        </v-card-subtitle>
+                    </v-card>
+
+                    <v-icon class="icon-grad" large>mdi-arrow-right</v-icon>
+
+                    <v-card flat color="transparent" max-width="300">
+                        <v-avatar class="mx-auto pa-1 gradient-back" size="60">
+                            <v-img :src="require('~/assets/images/tag.png')"></v-img>
+                        </v-avatar>
+                        <p class="text-center mb-n3 mt-5">Setup Your Wallet</p>
+
+                        <v-card-subtitle>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.
+                        </v-card-subtitle>
+                    </v-card>
+                </v-row>
+            </v-col>
+        </v-row>
+    </v-container>
+</div>
+</template>
+
+<style lang="css">
+.back {
+    background: #000229;
+}
+
+.custom-back {
+    background: #0E103B;
+    border-radius: 7px;
+}
+.icon-grad{
+background: linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.gradient-back{
+    border-radius:7px;
+    background: linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%);
+}
+</style>
