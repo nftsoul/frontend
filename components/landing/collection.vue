@@ -195,34 +195,34 @@ export default {
                 "slidesToScroll": 1,
                 "initialSlide": 0,
                 "arrows":true,
-                // "responsive": [{
-                //         "breakpoint": 1264,
-                //         "settings": {
-                //             "slidesToShow": 3,
-                //             "slidesToScroll": 3,
-                //             "infinite": true,
-                //             "dots": false,
-                //             "arrows":true,
-                //         }
-                //     },
-                //     {
-                //         "breakpoint": 960,
-                //         "settings": {
-                //             "slidesToShow": 2,
-                //             "slidesToScroll": 2,
-                //             "initialSlide": 2,
-                //             "arrows":true,
-                //         }
-                //     },
-                //     {
-                //         "breakpoint": 600,
-                //         "settings": {
-                //             "slidesToShow": 1,
-                //             "slidesToScroll": 1,
-                //             "arrows":true,
-                //         }
-                //     }
-                // ]
+                "responsive": [{
+                        "breakpoint": 1264,
+                        "settings": {
+                            "slidesToShow": 3,
+                            "slidesToScroll": 3,
+                            "infinite": true,
+                            "dots": false,
+                            "arrows":true,
+                        }
+                    },
+                    {
+                        "breakpoint": 960,
+                        "settings": {
+                            "slidesToShow": 2,
+                            "slidesToScroll": 2,
+                            "initialSlide": 2,
+                            "arrows":true,
+                        }
+                    },
+                    {
+                        "breakpoint": 600,
+                        "settings": {
+                            "slidesToShow": 1,
+                            "slidesToScroll": 1,
+                            "arrows":true,
+                        }
+                    }
+                ]
             }
         }
     }
@@ -230,7 +230,7 @@ export default {
 </script>
 
 <style lang="css">
-.enclose-border {
+/* .enclose-border {
     border: 1px solid #500083;
     box-sizing: border-box;
     filter: drop-shadow(0px 1px 10px #500083);
@@ -273,5 +273,5 @@ export default {
     background: #000229;
     width: 100%;
     padding: 20px;
-}
+} */
 </style>
