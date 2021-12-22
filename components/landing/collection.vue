@@ -198,40 +198,47 @@ export default {
     data() {
         return {
             settings: {
-                "dots": false,
-                "infinite": true,
-                "speed": 500,
-                "slidesToShow": 4,
-                "slidesToScroll": 1,
-                "arrows": true,
-                "responsive": [{
-                        "breakpoint": 1264,
-                        "settings": {
-                            "slidesToShow": 3,
-                            "slidesToScroll": 3,
-                            "infinite": true,
-                            "dots": false,
-                            "arrows": true,
-                        }
-                    },
-                    {
-                        "breakpoint": 960,
-                        "settings": {
-                            "slidesToShow": 2,
-                            "slidesToScroll": 2,
-                            "initialSlide": 2,
-                            "arrows": true,
-                        }
-                    },
-                    {
-                        "breakpoint": 600,
-                        "settings": {
-                            "slidesToShow": 1,
-                            "slidesToScroll": 1,
-                            "arrows": true,
-                        }
-                    }
-                ]
+                "dots": true,
+  "focusOnSelect": true,
+  "infinite": true,
+  "speed": 500,
+  "slidesToShow": 3,
+  "slidesToScroll": 3,
+  "touchThreshold": 5
+                // "dots": false,
+                // "infinite": true,
+                // "speed": 500,
+                // "slidesToShow": 4,
+                // "slidesToScroll": 1,
+                // "arrows": true,
+                // "responsive": [{
+                //         "breakpoint": 1264,
+                //         "settings": {
+                //             "slidesToShow": 3,
+                //             "slidesToScroll": 3,
+                //             "infinite": true,
+                //             "dots": false,
+                //             "arrows": true,
+                //         }
+                //     },
+                //     {
+                //         "breakpoint": 960,
+                //         "settings": {
+                //             "slidesToShow": 2,
+                //             "slidesToScroll": 2,
+                //             "initialSlide": 2,
+                //             "arrows": true,
+                //         }
+                //     },
+                //     {
+                //         "breakpoint": 600,
+                //         "settings": {
+                //             "slidesToShow": 1,
+                //             "slidesToScroll": 1,
+                //             "arrows": true,
+                //         }
+                //     }
+                // ]
             }
         }
     }
