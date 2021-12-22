@@ -12,7 +12,7 @@
             <v-row>
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
-                    <!-- <VueSlickCarousel v-bind="settings"> -->
+                    <VueSlickCarousel >
                         <v-card color="transparent" flat class="pa-5" max-width="300">
                             <div class="outer-card">
                                 <div class="inner-card">
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                         </v-card>
-                    <!-- </VueSlickCarousel> -->
+                    </VueSlickCarousel>
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
@@ -193,7 +193,6 @@ export default {
                 "speed": 500,
                 "slidesToShow": 4,
                 "slidesToScroll": 1,
-                "initialSlide": 0,
                 "arrows":true,
                 "responsive": [{
                         "breakpoint": 1264,
