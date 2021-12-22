@@ -9,7 +9,7 @@
             </div>
         </v-row>
         <div class="enclose-border">
-            <v-row>
+            <!-- <v-row>
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
                     <VueSlickCarousel v-bind="settings">
@@ -177,7 +177,7 @@
                         </div>
                     </v-row>
                 </v-col>
-            </v-row>
+            </v-row> -->
         </div>
     </v-container>
 </div>
