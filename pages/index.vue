@@ -1,7 +1,7 @@
 <template>
 <div>
     <LandingIntro />
-    <!-- <LandingCollection /> -->
+    <LandingCollection />
     <LandingWorking />
 </div>
 </template>
