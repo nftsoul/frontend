@@ -9,6 +9,8 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nfteyez/sol-rayz": "^0.8.0",
+    "@solana/web3.js": "^1.31.0",
     "core-js": "^3.19.3",
     "hooper": "^0.3.4",
     "nuxt": "^2.15.8",
