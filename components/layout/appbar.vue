@@ -2,7 +2,7 @@
 <div>
     <v-app-bar color="transparent" style="position:absolute;top:0;" app flat class="px-lg-16 px-md-5" extended>
         <v-app-bar-nav-icon class="mx-16 mt-3">
-            <v-img :src="require('~/assets/images/logo.svg')" style="width:5%"></v-img>
+            <v-img :src="require('~/assets/images/logo.svg')" style="width:5%" @click="$router.push({path:'/'})"></v-img>
         </v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <div class="hidden-md-and-down mt-5">
@@ -37,7 +37,7 @@
                             <v-img :src="require('~/assets/images/phantom.png')"></v-img>
                         </v-avatar>
                     </div>
-                    <div class="auth-inside-2">
+                    <div class="auth-inside-2" @click="viewProfile">
                         <p class="wallet-text mt-3" v-if="walletAddress">{{walletAddress.slice(0,8)+'...'}}</p>
                     </div>
                 </div>
@@ -117,6 +117,19 @@ export default {
         async getAddress() {
             var resp = await window.solana.connect();
             this.$store.commit('wallet/setWalletAddress', resp.publicKey.toString())
+            this.$toast
+                    .success("Phantom wallet connected successfully.", {
+                        iconPack: "mdi",
+                        icon: "mdi-wallet",
+                        theme: "outline"
+                    })
+                    .goAway(3000);
+        },
+        viewProfile(){
+            this.$router.push({
+                name:'profile-address',
+                params:{address:this.walletAddress}
+            })
         }
     }
 }
@@ -157,6 +170,7 @@ export default {
 }
 
 .auth-inside-2 {
+    cursor: pointer;
     width: 69%;
     height: 43px;
     margin-left: 1px;
