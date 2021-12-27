@@ -10,10 +10,10 @@
                 <v-row>
                     <v-col cols="12" lg="4" md="6" v-for="(item,i) in nfts" :key="i" align="center">
                         <v-card max-width="300" class="art-card">
-                            <v-img :src="item.data.uri"></v-img>
-                            <v-card-text class="ml-n2 white--text">{{item.data.name}}</v-card-text>
-                            <p class="mx-2 mt-n2">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.
+                            <v-img :src="item.data.image" width="270" height="240"></v-img>
+                            <v-card-text class="ml-n2 white--text text-left">{{item.data.name}}</v-card-text>
+                            <p class="mx-2 mt-n2 text-left">
+                                {{item.data.description}}
                             </p>
                             <v-card-actions class="mt-n10">
                                 <v-spacer></v-spacer>
@@ -73,33 +73,24 @@ export default {
                 const provider = this.getProvider();
                 let ownerToken = provider.publicKey;
                 const result = isValidSolanaAddress(ownerToken);
-                console.log("result", result);
                 this.nfts = await getParsedNftAccountsByOwner({
                     publicAddress: ownerToken,
                     connection: connect,
                     serialization: true,
                 });
-                console.log(this.nfts)
+                var data = Object.keys(this.nfts ).map((key) => this.nfts [key]);
+                let arr = [];
+                let n = data.length;
+                for (let i = 0; i < n; i++) {
+                    let val = await axios.get(data[i].data.uri);
+                    arr.push(val);
+                }
+                this.nfts=arr
             } catch (error) {
                 console.log(error);
             }
-        },
-        // async getNftTokenData(){
-        //     try {
-        //         let nftData = await this.getAllNftData();
-        //         var data = Object.keys(nftData).map((key) => nftData[key]);
-        //         let arr = [];
-        //         let n = data.length;
-        //         for (let i = 0; i < n; i++) {
-        //             console.log(data[i].data.uri);
-        //             let val = await axios.get(data[i].data.uri);
-        //             arr.push(val);
-        //         }
-        //         return arr;
-        //     } catch (error) {
-        //         console.log(error);
-        //     }
-        // }
+        }
+
     }
 }
 </script>
