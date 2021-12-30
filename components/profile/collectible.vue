@@ -52,9 +52,6 @@ export default {
         }
     },
     mounted() {
-        const createConnection = () => {
-            return new Connection(clusterApiUrl("devnet"));
-        };
         this.getAllNftData()
     },
     methods: {
@@ -69,7 +66,7 @@ export default {
         },
         async getAllNftData() {
             try {
-                const connect = createConnectionConfig(clusterApiUrl("devnet"));
+                const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
                 const provider = this.getProvider();
                 let ownerToken = provider.publicKey;
                 const result = isValidSolanaAddress(ownerToken);
