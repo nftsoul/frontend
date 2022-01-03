@@ -10,7 +10,7 @@
                 <v-row>
                     <v-col cols="12" lg="4" md="6" v-for="(item,i) in nfts" :key="i" align="center">
                         <v-card max-width="300" class="art-card">
-                            <v-img :src="item.data.image" width="270" height="240"></v-img>
+                            <v-img :src="item.data.image" :lazy-src="item.data.image" width="270" height="240"></v-img>
                             <v-card-text class="ml-n2 white--text text-left">{{item.data.name}}</v-card-text>
                             <p class="mx-2 mt-n2 text-left">
                                 {{item.data.description}}
@@ -53,6 +53,7 @@ export default {
     },
     mounted() {
         this.getAllNftData()
+        this.nfts=[]
     },
     methods: {
         getProvider() {
@@ -67,22 +68,22 @@ export default {
         async getAllNftData() {
             try {
                 const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+                // const connect = createConnectionConfig(clusterApiUrl("devnet"));
                 const provider = this.getProvider();
                 let ownerToken = provider.publicKey;
                 const result = isValidSolanaAddress(ownerToken);
-                this.nfts = await getParsedNftAccountsByOwner({
+                const tokens = await getParsedNftAccountsByOwner({
                     publicAddress: ownerToken,
                     connection: connect,
                     serialization: true,
                 });
-                var data = Object.keys(this.nfts ).map((key) => this.nfts [key]);
-                let arr = [];
+                var data = Object.keys(tokens ).map((key) => tokens [key]);
                 let n = data.length;
+                let arr=[]
                 for (let i = 0; i < n; i++) {
                     let val = await axios.get(data[i].data.uri);
-                    arr.push(val);
+                    this.nfts.push(val);
                 }
-                this.nfts=arr
             } catch (error) {
                 console.log(error);
             }
