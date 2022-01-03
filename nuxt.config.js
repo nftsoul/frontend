@@ -27,6 +27,7 @@ export default {
   plugins: [
     { src: "~/plugins/vue-slick-carousel", mode: "client" },
     { src: "~/plugins/vue-carousel-3d", mode: "client" },
+    { src: "~/plugins/spinner", mode: "client" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

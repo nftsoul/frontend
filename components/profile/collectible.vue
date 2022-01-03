@@ -50,13 +50,11 @@ import {
     isValidSolanaAddress,
     createConnectionConfig,
 } from "@nfteyez/sol-rayz";
-import {
-    OrbitSpinner
-} from 'epic-spinners'
+
+// import { OrbitSpinner } from 'epic-spinners'
+
 export default {
-    components: {
-        OrbitSpinner
-    },
+    // components:{OrbitSpinner},
     data() {
         return {
             nfts: [],
