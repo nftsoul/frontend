@@ -1,7 +1,7 @@
 <template>
 <div class="profile-bg">
     <v-container class="py-16">
-        <v-row class="py-16" justify="center">
+        <v-row class="pt-16" justify="center">
             <v-col cols="6">
                 <v-card flat>
                     <v-list style="background-color:transparent">
