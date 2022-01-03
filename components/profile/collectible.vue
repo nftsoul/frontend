@@ -98,14 +98,16 @@ export default {
                     connection: connect,
                     serialization: true,
                 });
-                var data = Object.keys(tokens).map((key) => tokens[key]);
-                console.log('collection:',data)
+                var data=tokens
+                // var data = Object.keys(tokens).map((key) => tokens[key]);
+                console.log('collection:',tokens)
                 let n = data.length;
                 let arr = []
                 
                 for (let i = 0; i < n; i++) {
                     let val = await axios.get(data[i].data.uri);
                     this.nfts.push(val);
+                    console.log('val:',val)
                     this.loading = false
                 }
                 console.log('final:',this.nfts)
