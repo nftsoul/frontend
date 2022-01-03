@@ -110,7 +110,7 @@ export default {
                     this.nfts.push(val);
                     this.loading = false
                 }
-                console.log(this.nfts)
+                console.log('final:',this.nfts)
             } catch (error) {
                 console.log(error);
             }
