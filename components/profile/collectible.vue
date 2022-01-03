@@ -90,8 +90,8 @@ export default {
         },
         async getAllNftData() {
             try {
-                // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
-                const connect = createConnectionConfig(clusterApiUrl("devnet"));
+                const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+                // const connect = createConnectionConfig(clusterApiUrl("devnet"));
                 const provider = this.getProvider()
                 let ownerToken = provider.publicKey
                 const result = isValidSolanaAddress(ownerToken)
