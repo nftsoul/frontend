@@ -16,7 +16,7 @@
                 <v-row>
                     <v-col cols="12" lg="4" md="6" v-for="(item,i) in nfts" :key="i" align="center">
                         <v-card max-width="300" class="art-card" height="390">
-                            <v-img :src="item.imageUrl" :lazy-src="item.imageUrl" width="270" height="240"></v-img>
+                            <v-img :src="item.image" :lazy-src="item.image" width="270" height="240"></v-img>
                             <v-card-text class="ml-n2 white--text text-left">{{item.name}}</v-card-text>
                             <p class="mx-2 mt-n2 desc-text text-left">
                                 {{item.description}}
@@ -43,16 +43,14 @@ import axios from 'axios'
 import {
     Connection,
     clusterApiUrl,
-    LAMPORTS_PER_SOL
+    LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
 import {
     getParsedNftAccountsByOwner,
     isValidSolanaAddress,
     createConnectionConfig,
 } from "@nfteyez/sol-rayz";
-import {
-    FetchNFTClient
-} from '@audius/fetch-nft'
+import NFTs from '@primenums/solana-nft-tools'
 
 // import { OrbitSpinner } from 'epic-spinners';
 export default {
@@ -77,6 +75,7 @@ export default {
     },
     mounted() {
         this.getAllNftData()
+        console.log('')
     },
     methods: {
         getProvider() {
@@ -89,27 +88,20 @@ export default {
 
         },
         async getAllNftData() {
-            const solanaConfig = {
-                rpcEndpoint: '...'
-            }
-            // const wallet=this.walletAddress+''
-            const fetchClient = new FetchNFTClient()
+            // const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
 
-            // Fetching all collectibles for the given wallets
-            fetchClient.getCollectibles({
-                solWallets: [this.walletAddress]
-            }).then(res => {
-                const data=res.solCollectibles
-                var result=Object.keys(data).map(function (key, index) {
-                    return data[key][0];
-                });
-                this.nfts=result
-                console.log(result)
-            })
-            // const fetchClient = new FetchNFTClient({
-            //     solanaConfig
-            // })
-            // fetchClient.getSolanaCollectibles().then(res => console.log(res))
+            // Get all mint tokens (NFTs) from your wallet
+            const walletAddr = 'EaeLkUWHDXBRcLfvBXhczgavxPtCBASYYXB9rBrYN1b6';
+            let mints = await NFTs.getMintTokensByOwner(connect, this.walletAddress);
+            console.log('mints', mints);
+
+            for (let i = 0; i < mints.length; i++) {
+                let myNFT = await NFTs.getNFTByMintAddress(connect, mints[i]);
+                console.log('myNFT', myNFT);
+                this.nfts.push(myNFT)
+            }
+            
             // try {
             //     // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
             //     const connect = createConnectionConfig(clusterApiUrl("devnet"));
