@@ -88,33 +88,39 @@ export default {
 
         },
         async getAllNftData() {
-            // const connect = createConnectionConfig(clusterApiUrl("devnet"));
-            const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+            const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
 
             //first getting mint addresses and then fetching using those mints
-            // let mints = await NFTs.getMintTokensByOwner(connect, this.walletAddress);
-            // console.log('mints', mints);
+            let mints = await NFTs.getMintTokensByOwner(connect, this.walletAddress);
+            console.log('mints', mints);
 
-            // for (let i = 0; i < mints.length; i++) {
-            //     let myNFT = await NFTs.getNFTByMintAddress(connect, mints[i]);
-            //     console.log('myNFT', myNFT);
-            //     this.nfts.push(myNFT)
-            // }
+            for (let i = 0; i < mints.length; i++) {
+                let myNFT = await NFTs.getNFTByMintAddress(connect, mints[i]);
+                console.log('myNFT', myNFT);
+                this.nfts.push(myNFT)
+            }
 
             //all nfts by owner at once
-            let allMyNFTs = await NFTs.getNFTsByOwner(connect, this.walletAddress);
-            this.nfts = allMyNFTs
-            console.log('allMyNFTs', allMyNFTs);
+            // let allMyNFTs = await NFTs.getNFTsByOwner(connect, this.walletAddress);
+            // this.nfts = allMyNFTs
+            // console.log('allMyNFTs', allMyNFTs);
 
             //paginate fetching by owner
             // let page = 1;
-            // const perPage = 1;
+            // const perPage = 5;
             // const cacheTtlMins = 1; 
-
-            // mynft=''
-            // let myNFTsPage1 = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins);
-            // console.log('myNFTsPage1', myNFTsPage1);
-            // this.nfts=myNFTsPage1
+           
+            // // var mynft=null
+            // // do{
+            //  let mynft= await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins);
+            // console.log('mynft:',mynft)
+            // }
+            // while(mynft !=null){
+            //     this.nfts.push(mynft)
+            //     console.log(mynft)
+            //     mynft=null
+            // }
 
             //sabai fetch nagarne no fix sequence
             // try {
