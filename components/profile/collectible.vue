@@ -88,8 +88,8 @@ export default {
 
         },
         async getAllNftData() {
-            const connect = createConnectionConfig(clusterApiUrl("devnet"));
-            // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+            // const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
 
             //first getting mint addresses and then fetching using those mints
             let mints = await NFTs.getMintTokensByOwner(connect, this.walletAddress);
