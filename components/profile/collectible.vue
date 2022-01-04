@@ -88,9 +88,9 @@ export default {
 
         },
         async getAllNftData() {
-            // const connect = createConnectionConfig(clusterApiUrl("devnet"));
-            const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
-            
+            const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+
             //first getting mint addresses and then fetching using those mints
             // let mints = await NFTs.getMintTokensByOwner(connect, this.walletAddress);
             // console.log('mints', mints);
@@ -100,13 +100,23 @@ export default {
             //     console.log('myNFT', myNFT);
             //     this.nfts.push(myNFT)
             // }
-            
+
             //all nfts by owner at once
             let allMyNFTs = await NFTs.getNFTsByOwner(connect, this.walletAddress);
-            this.nfts=allMyNFTs
-            // console.log('allMyNFTs', allMyNFTs);
+            this.nfts = allMyNFTs
+            console.log('allMyNFTs', allMyNFTs);
 
-            //sabai fetch nagarne jpt
+            //paginate fetching by owner
+            // let page = 1;
+            // const perPage = 1;
+            // const cacheTtlMins = 1; 
+
+            // mynft=''
+            // let myNFTsPage1 = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins);
+            // console.log('myNFTsPage1', myNFTsPage1);
+            // this.nfts=myNFTsPage1
+
+            //sabai fetch nagarne no fix sequence
             // try {
             //     // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
             //     const connect = createConnectionConfig(clusterApiUrl("devnet"));
