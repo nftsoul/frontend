@@ -88,8 +88,8 @@ export default {
 
         },
         async getAllNftData() {
-            // const connect = createConnectionConfig(clusterApiUrl("devnet"));
-            const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+            const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
 
             //first getting mint addresses and then fetching using those mints
             let mints = await NFTs.getMintTokensByOwner(connect, this.walletAddress);
@@ -97,8 +97,12 @@ export default {
 
             for (let i = 0; i < mints.length; i++) {
                 let myNFT = await NFTs.getNFTByMintAddress(connect, mints[i]);
-                console.log('myNFT', myNFT);
-                this.nfts.push(myNFT)
+
+                if (myNFT.owner == this.walletAddress) {
+                    console.log('myNFT', myNFT);
+                    this.nfts.push(myNFT)
+                }
+
             }
 
             //all nfts by owner at once
@@ -110,7 +114,7 @@ export default {
             // let page = 1;
             // const perPage = 5;
             // const cacheTtlMins = 1; 
-           
+
             // // var mynft=null
             // // do{
             //  let mynft= await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins);
