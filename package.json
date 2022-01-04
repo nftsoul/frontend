@@ -9,8 +9,10 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@audius/fetch-nft": "^0.1.6",
     "@nfteyez/sol-rayz": "^0.8.0",
     "@nuxtjs/axios": "^5.13.6",
+    "@solana/spl-token": "^0.1.8",
     "@solana/web3.js": "^1.31.0",
     "core-js": "^3.19.3",
     "epic-spinners": "^1.1.0",

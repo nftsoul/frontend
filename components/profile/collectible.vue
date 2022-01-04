@@ -13,13 +13,13 @@
                         <p>Loading your NFTs...</p>
                     </v-col>
                 </v-row>
-                <v-row v-else>
+                <v-row>
                     <v-col cols="12" lg="4" md="6" v-for="(item,i) in nfts" :key="i" align="center">
                         <v-card max-width="300" class="art-card" height="390">
-                            <v-img :src="item.data.image" :lazy-src="item.data.image" width="270" height="240"></v-img>
-                            <v-card-text class="ml-n2 white--text text-left">{{item.data.name}}</v-card-text>
+                            <v-img :src="item.imageUrl" :lazy-src="item.imageUrl" width="270" height="240"></v-img>
+                            <v-card-text class="ml-n2 white--text text-left">{{item.name}}</v-card-text>
                             <p class="mx-2 mt-n2 desc-text text-left">
-                                {{item.data.description}}
+                                {{item.description}}
                             </p>
                             <v-card-actions class="mt-n10">
                                 <v-spacer></v-spacer>
@@ -50,9 +50,11 @@ import {
     isValidSolanaAddress,
     createConnectionConfig,
 } from "@nfteyez/sol-rayz";
+import {
+    FetchNFTClient
+} from '@audius/fetch-nft'
 
-// import { OrbitSpinner } from 'epic-spinners'
-
+// import { OrbitSpinner } from 'epic-spinners';
 export default {
     // components:{OrbitSpinner},
     data() {
@@ -61,14 +63,14 @@ export default {
             loading: true
         }
     },
-    computed:{
-        walletAddress(){
+    computed: {
+        walletAddress() {
             return this.$store.state.wallet.walletAddress
         }
     },
-    watch:{
-        walletAddress(newValue,oldValue){
-            if(newValue!=oldValue){
+    watch: {
+        walletAddress(newValue, oldValue) {
+            if (newValue != oldValue) {
                 this.getAllNftData()
             }
         }
@@ -87,33 +89,51 @@ export default {
 
         },
         async getAllNftData() {
-            try {
-                const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
-                // const connect = createConnectionConfig(clusterApiUrl("devnet"));
-                const provider = this.getProvider()
-                let ownerToken = provider.publicKey
-                const result = isValidSolanaAddress(ownerToken)
-                const tokens = await getParsedNftAccountsByOwner({
-                    publicAddress: ownerToken,
-                    connection: connect,
-                    serialization: true,
-                });
-                var data=tokens
-                // var data = Object.keys(tokens).map((key) => tokens[key]);
-                console.log('collection:',tokens)
-                let n = data.length;
-                let arr = []
-                
-                for (let i = 0; i < n; i++) {
-                    let val = await axios.get(data[i].data.uri);
-                    this.nfts.push(val);
-                    console.log('val:',val)
-                    this.loading = false
-                }
-                console.log('final:',this.nfts)
-            } catch (error) {
-                console.log(error);
+            const solanaConfig = {
+                rpcEndpoint: '...'
             }
+            // const wallet=this.walletAddress+''
+            const fetchClient = new FetchNFTClient()
+
+            // Fetching all collectibles for the given wallets
+            fetchClient.getCollectibles({
+                solWallets: [this.walletAddress]
+            }).then(res => {
+                const data=res.solCollectibles
+                var result=Object.keys(data).map(function (key, index) {
+                    return data[key][0];
+                });
+                this.nfts=result
+                console.log(result)
+            })
+            // const fetchClient = new FetchNFTClient({
+            //     solanaConfig
+            // })
+            // fetchClient.getSolanaCollectibles().then(res => console.log(res))
+            // try {
+            //     // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+            //     const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            //     const provider = this.getProvider()
+            //     let ownerToken = provider.publicKey
+            //     const result = isValidSolanaAddress(ownerToken)
+            //     const tokens = await getParsedNftAccountsByOwner({
+            //         publicAddress: ownerToken,
+            //         connection: connect,
+            //         serialization: true,
+            //     });
+            //     var data = Object.keys(tokens).map((key) => tokens[key]);
+            //     console.log('collection:',tokens)
+            //     let n = data.length;
+            //     let arr = []
+
+            //     for (let i = 0; i < n; i++) {
+            //         let val = await axios.get(data[i].data.uri);
+            //         this.nfts.push(val);
+            //         this.loading = false
+            //     }
+            // } catch (error) {
+            //     console.log(error);
+            // }
         }
 
     }
