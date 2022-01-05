@@ -54,11 +54,13 @@ import NFTs from '@primenums/solana-nft-tools'
 
 let OrbitSpinner = null
 if (process.client) {
-  OrbitSpinner = require('epic-spinners').OrbitSpinner
+    OrbitSpinner = require('epic-spinners').OrbitSpinner
 }
 
 export default {
-    components:{OrbitSpinner},
+    components: {
+        OrbitSpinner
+    },
     data() {
         return {
             nfts: [],
@@ -120,33 +122,33 @@ export default {
             const cacheTtlMins = 1;
 
             var fetch = true;
-            while(fetch==true){
+            while (fetch == true) {
                 let myNft = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins)
                 console.log(myNft)
-                this.loading=false
-                if(myNft.length==0){
-                    fetch=false
-                }
-                else{
-                    if(!myNft[0].error){
-                    this.nfts.push(myNft[0])
-
+                this.loading = false
+                if (myNft.length == 0) {
+                    fetch = false
+                } else {
+                    if (!myNft[0].error) {
+                        if (myNft[0].owner == this.walletAddress) {
+                            this.nfts.push(myNft[0])
+                        }
                     }
                     page++
                 }
             }
 
-                // let myNFT = await NFTs.getNFTByMintAddress(connect, mint[0].mint);
-                // console.log('nft:',myNFT)
+            // let myNFT = await NFTs.getNFTByMintAddress(connect, mint[0].mint);
+            // console.log('nft:',myNFT)
             //     page++
-                // if(mynft==''){
-                //     fetch=false
-                //     console.log(stopped)
-                // }
-                // else{
-                //     this.nfts.push(mynft)
-                // }
-            
+            // if(mynft==''){
+            //     fetch=false
+            //     console.log(stopped)
+            // }
+            // else{
+            //     this.nfts.push(mynft)
+            // }
+
             // while (x < 5) {
             //     let mynft = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins);
             //     console.log('mynft:', mynft)
