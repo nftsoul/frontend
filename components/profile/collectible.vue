@@ -40,6 +40,8 @@
 
 <script>
 import axios from 'axios'
+const web3 = require("@solana/web3.js");
+
 import {
     Connection,
     clusterApiUrl,
@@ -95,6 +97,12 @@ export default {
 
         },
         async getAllNftData() {
+            // let addrs = new web3.PublicKey(this.walletAddress)
+            // let connection = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
+
+            // axios.get('https://explorer.solana.com/address/'+this.walletAddress+'/tokens?cluster=devnet')
+            // .then(res=>console.log(res.data))
+    
             // const connect = createConnectionConfig(clusterApiUrl("devnet"));
             const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
 
@@ -120,13 +128,13 @@ export default {
 
             //paginate fetching by owner
             let page = 1;
-            const perPage = 1;
+            const perPage = 10;
             const cacheTtlMins = 1;
             var fetch = true;
             while (fetch == true) {
                 let myNft = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins)
                 console.log(myNft)
-                this.loading = false
+
                 if (myNft.length == 0) {
                     fetch = false
                 } else {
@@ -134,6 +142,7 @@ export default {
                         if (!myNft[x].error) {
                             if (myNft[x].owner == this.walletAddress) {
                                 this.nfts.push(myNft[x])
+                                this.loading = false
                             }
                         }
                     }
