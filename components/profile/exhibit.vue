@@ -14,37 +14,122 @@
             </div>
         </v-row>
         <v-row justify="center" class="py-5">
-            <v-col cols="8">
-                <div class="outer-card rounded-lg">
-                    <div class="inner-card pa-1 rounded-lg">
-                        <v-list dense style="background-color:transparent" class="py-0">
-                            <v-list-item class="px-0">
-                                <v-list-item-avatar tile class="rounded-lg my-0">
-                                    <v-img :src="require('~/assets/images/1.png')"></v-img>
-                                </v-list-item-avatar>
-                                <v-list-item-content>
-                                    <v-list-item-title>Phaty Platys</v-list-item-title>
-                                </v-list-item-content>
-                                <v-list-item-action>
-                                    <v-checkbox></v-checkbox>
-                                </v-list-item-action>
-                            </v-list-item>
+            <v-col cols="12" lg="8" md="10">
+                <v-row v-if="loading" justify="center">
+                    <v-col align="center">
+                        <orbit-spinner class="ma-10" :animation-duration="1200" :size="55" color="#fff" />
+                        <p>Loading your NFTs...</p>
+                    </v-col>
+                </v-row>
+                <v-row v-else>
+                    <v-col cols="12" lg="6" md="6" v-for="(item,i) in nfts" :key="i">
+                        <div class="outer-card rounded-lg">
+                            <div class="inner-card pa-1 rounded-lg">
+                                <v-list dense style="background-color:transparent" class="py-0">
+                                    <v-list-item class="px-0">
+                                        <v-list-item-avatar tile class="rounded-lg my-0">
+                                            <v-img :src="item.image"></v-img>
+                                        </v-list-item-avatar>
+                                        <v-list-item-content>
+                                            <v-list-item-title>{{item.name}}</v-list-item-title>
+                                        </v-list-item-content>
+                                        <v-list-item-action>
+                                            <v-checkbox color="green" dark value="red"></v-checkbox>
+                                        </v-list-item-action>
+                                    </v-list-item>
 
-                        </v-list>
-                    </div>
-                </div>
+                                </v-list>
+                            </div>
+                        </div>
+                    </v-col>
+                </v-row>
             </v-col>
         </v-row>
+
     </v-container>
 </div>
 </template>
 
 <script>
+import {
+    Connection,
+    clusterApiUrl,
+    LAMPORTS_PER_SOL,
+} from "@solana/web3.js";
+import {
+    getParsedNftAccountsByOwner,
+    isValidSolanaAddress,
+    createConnectionConfig,
+} from "@nfteyez/sol-rayz";
+
+import NFTs from '@primenums/solana-nft-tools'
+let OrbitSpinner = null
+if (process.client) {
+    OrbitSpinner = require('epic-spinners').OrbitSpinner
+}
 export default {
+    components: {
+        OrbitSpinner
+    },
     data() {
         return {
+            nfts: [],
+            loading: true,
             color: 'linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%)'
         }
+    },
+    computed: {
+        walletAddress() {
+            return this.$store.state.wallet.walletAddress
+        }
+    },
+    watch: {
+        walletAddress(newValue, oldValue) {
+            if (newValue != oldValue) {
+                this.getAllNftData()
+            }
+        }
+    },
+    mounted() {
+        this.getAllNftData()
+
+    },
+    methods: {
+        getProvider() {
+            if ("solana" in window) {
+                const provider = window.solana;
+                if (provider.isPhantom) {
+                    return provider;
+                }
+            }
+
+        },
+        async getAllNftData() {
+            // const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+            let page = 1;
+            const perPage = 1;
+            const cacheTtlMins = 1;
+            var fetch = true;
+            while (fetch == true) {
+                let myNft = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins)
+                console.log(myNft)
+                this.loading = false
+                if (myNft.length == 0) {
+                    fetch = false
+                } else {
+                    for (var x = 0; x < myNft.length; x++) {
+                        if (!myNft[x].error) {
+                            if (myNft[x].owner == this.walletAddress) {
+                                this.nfts.push(myNft[x])
+                            }
+                        }
+                    }
+                    page++
+                }
+            }
+        }
+
     }
 }
 </script>

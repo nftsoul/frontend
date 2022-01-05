@@ -50,6 +50,7 @@ import {
     isValidSolanaAddress,
     createConnectionConfig,
 } from "@nfteyez/sol-rayz";
+
 import NFTs from '@primenums/solana-nft-tools'
 
 let OrbitSpinner = null
@@ -113,14 +114,14 @@ export default {
 
             //all nfts by owner at once
             // let allMyNFTs = await NFTs.getNFTsByOwner(connect, this.walletAddress);
-            // // this.nfts = allMyNFTs
+            // console.log(allMyNFTs)
+            // this.nfts = allMyNFTs
             // console.log('allMyNFTs', allMyNFTs);
 
             //paginate fetching by owner
             let page = 1;
-            const perPage = 10;
+            const perPage = 1;
             const cacheTtlMins = 1;
-
             var fetch = true;
             while (fetch == true) {
                 let myNft = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins)
@@ -129,9 +130,11 @@ export default {
                 if (myNft.length == 0) {
                     fetch = false
                 } else {
-                    if (!myNft[0].error) {
-                        if (myNft[0].owner == this.walletAddress) {
-                            this.nfts.push(myNft[0])
+                    for (var x = 0; x < myNft.length; x++){
+                        if (!myNft[x].error) {
+                            if (myNft[x].owner == this.walletAddress) {
+                                this.nfts.push(myNft[x])
+                            }
                         }
                     }
                     page++
