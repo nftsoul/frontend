@@ -128,7 +128,7 @@ export default {
 
             //paginate fetching by owner
             let page = 1;
-            const perPage = 10;
+            const perPage = 5;
             const cacheTtlMins = 1;
             var fetch = true;
             while (fetch == true) {
