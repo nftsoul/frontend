@@ -13,7 +13,7 @@
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
                     <client-only>
-                        <VueSlickCarousel v-bind="settings">
+                        <VueSlickCarousel v-bind="slickSetting">
                             <div>
                                 <v-card color="transparent" flat class="pa-5" max-width="300">
                                     <div class="outer-card">
@@ -82,7 +82,7 @@
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
                     <client-only>
-                        <VueSlickCarousel v-bind="settings">
+                        <VueSlickCarousel v-bind="slickSetting">
                             <v-card color="transparent" flat class="pa-5" max-width="300">
                                 <div class="outer-card">
                                     <div class="inner-card">
@@ -140,7 +140,7 @@
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
                     <client-only>
-                        <VueSlickCarousel v-bind="settings">
+                        <VueSlickCarousel v-bind="slickSetting">
                             <v-card color="transparent" flat class="pa-5" max-width="300">
                                 <div class="outer-card">
                                     <div class="inner-card">
@@ -203,42 +203,11 @@
 export default {
     data() {
         return {
-            settings: {
-                "dots": false,
-                "infinite": true,
-                "speed": 500,
-                "slidesToShow": 4,
-                "slidesToScroll": 1,
-                "arrows": true,
-                "responsive": [{
-                        "breakpoint": 1264,
-                        "settings": {
-                            "slidesToShow": 3,
-                            "slidesToScroll": 3,
-                            "infinite": true,
-                            "dots": false,
-                            "arrows": true,
-                        }
-                    },
-                    {
-                        "breakpoint": 960,
-                        "settings": {
-                            "slidesToShow": 2,
-                            "slidesToScroll": 2,
-                            "initialSlide": 2,
-                            "arrows": true,
-                        }
-                    },
-                    {
-                        "breakpoint": 600,
-                        "settings": {
-                            "slidesToShow": 1,
-                            "slidesToScroll": 1,
-                            "arrows": true,
-                        }
-                    }
-                ]
-            }
+        }
+    },
+    computed:{
+        slickSetting(){
+            return this.$store.state.plugins.slickSetting
         }
     }
 }

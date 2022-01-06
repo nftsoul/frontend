@@ -2,6 +2,7 @@
 <div>
     <LandingIntro />
     <LandingCollection />
+    <LandingPremium />
     <LandingWorking />
 </div>
 </template>
