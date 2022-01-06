@@ -4,7 +4,7 @@
         <v-row class="pt-16" justify="center">
             <v-col cols="6" align="end">
                 <v-card flat>
-                    <v-list style="background-color:transparent">
+                    <v-list style="background-color:transparent !important;box-shadow:none !important">
                         <v-list-item>
                             <v-list-item-avatar tile width="200" height="220">
                                 <v-img :src="require('~/assets/images/profile.png')"></v-img>

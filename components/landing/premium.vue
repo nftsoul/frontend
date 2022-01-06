@@ -148,7 +148,7 @@
                                     <div class="outer-card">
                                         <div class="inner-card">
                                             <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
-                                            <v-card class="rounded-pill mt-n6" max-width="150" style="">
+                                            <v-card class="rounded-pill mt-n6 prem" max-width="150" style="">
                                                 <v-list dense class="py-1">
                                                     <v-list-item dense class="pa-0">
                                                         <v-list-item-avatar class="my-0 ml-2">
@@ -194,7 +194,7 @@
                                         <div class="inner-card">
                                             <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
                                             <v-card class="rounded-pill mt-n6" max-width="150" style="">
-                                                <v-list dense class="py-1">
+                                                <v-list dense class="py-1 prem">
                                                     <v-list-item dense class="pa-0">
                                                         <v-list-item-avatar class="my-0 ml-2">
                                                             <v-img :src="require('~/assets/images/1.png')"></v-img>

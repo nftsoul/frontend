@@ -32,16 +32,31 @@
 
             <div v-else class="auth-box mt-n2">
                 <div class="auth-inside">
-                    <div class="auth-inside-1">
+                    <div class="auth-inside-1" @click="$router.push({name:'profile-address',params:{address:walletAddress}})">
                         <v-avatar size="20" class="mx-2 mt-3">
                             <v-img :src="require('~/assets/images/phantom.png')"></v-img>
                         </v-avatar>
                     </div>
                     <div class="auth-inside-2" @click="viewProfile">
-                        <p class="wallet-text mt-3" v-if="walletAddress">{{walletAddress.slice(0,8)+'...'}}</p>
+                        <v-menu transition="slide-y-transition" bottom offset-y>
+                            <template v-slot:activator="{ on, attrs }">
+                                <p class="wallet-text mt-3" v-bind="attrs" v-on="on">{{walletAddress.slice(0,8)+'...'}}</p>
+                            </template>
+                            <v-card width="200" color="#636262">
+                                <v-list style="background-color:#636262" dense>
+                                    <div v-for="(item, i) in items" :key="i">
+                                        <v-list-item>
+                                            <v-list-item-title>{{ item.title }}</v-list-item-title><br><br>
+                                        </v-list-item>
+                                        <v-divider v-if="items.length-items.indexOf(item)>1"></v-divider>
+                                    </div>
+                                </v-list>
+                            </v-card>
+                        </v-menu>
                     </div>
                 </div>
             </div>
+
         </div>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-app-bar-nav-icon>
     </v-app-bar>
@@ -80,7 +95,14 @@ export default {
         return {
             resp: '',
             drawer: false,
-            authBtn: null
+            authBtn: null,
+            items: [{
+                    title: 'Personal Page'
+                },
+                {
+                    title: 'Disconnect'
+                }
+            ],
         }
     },
     computed: {
@@ -116,19 +138,25 @@ export default {
         },
         async getAddress() {
             var resp = await window.solana.connect();
-            this.$store.commit('wallet/setWalletAddress', resp.publicKey.toString())
-            this.$toast
-                    .success("Phantom wallet connected successfully.", {
-                        iconPack: "mdi",
-                        icon: "mdi-wallet",
-                        theme: "outline"
-                    })
-                    .goAway(3000);
-        },
-        viewProfile(){
+            await this.$store.commit('wallet/setWalletAddress', resp.publicKey.toString())
             this.$router.push({
                 name:'profile-address',
                 params:{address:this.walletAddress}
+            })
+            this.$toast
+                .success("Phantom wallet connected successfully.", {
+                    iconPack: "mdi",
+                    icon: "mdi-wallet",
+                    theme: "outline"
+                })
+                .goAway(3000);
+        },
+        viewProfile() {
+            this.$router.push({
+                name: 'profile-address',
+                params: {
+                    address: this.walletAddress
+                }
             })
         }
     }
@@ -147,7 +175,7 @@ export default {
 }
 
 .auth-box {
-    float:right;
+    float: right;
     background: linear-gradient(265.07deg, #4A04D8 3.26%, #5E0FFF 31.76%, #FD2BFF 70.6%, #C202D3 97.81%);
     width: 145px;
     height: 45px;
@@ -167,6 +195,7 @@ export default {
     background-color: #030537;
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
+    cursor: pointer;
 }
 
 .auth-inside-2 {

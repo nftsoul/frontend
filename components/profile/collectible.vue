@@ -15,7 +15,7 @@
                 </v-row>
                 <v-row v-else>
                     <v-col cols="12" lg="4" md="6" v-for="(item,i) in nfts" :key="i" align="center">
-                        <v-card max-width="300" class="art-card" height="390">
+                        <v-card max-width="300" class="art-card" height="390" @click="$store.commit('content/setDetailDialog',true)">
                             <v-img :src="item.image" :lazy-src="item.image" width="270" height="240"></v-img>
                             <v-card-text class="ml-n2 white--text text-left">{{item.name}}</v-card-text>
                             <p class="mx-2 mt-n2 desc-text text-left">

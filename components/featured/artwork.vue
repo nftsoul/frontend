@@ -41,11 +41,11 @@
 
         </v-row>
         <v-row>
-            <v-col cols="12" lg="2" md="4" v-for="(item,i) in 32" :key="i" align="center">
-                <v-card max-width="300" class="art-card">
+            <v-col cols="12" lg="3" md="4" v-for="(item,i) in 32" :key="i" align="center">
+                <v-card max-width="300" class="art-card" @click="$store.commit('content/setDetailDialog',true)">
                     <v-img :src="require('~/assets/images/1.png')"></v-img>
-                    <v-card-text class="ml-n2 white--text">Lorem Ipsum Dolor</v-card-text>
-                    <p class="mx-2 mt-n2">
+                    <v-card-text class="ml-n2 white--text text-left">Lorem Ipsum Dolor</v-card-text>
+                    <p class="mx-2 mt-n2 text-left desc-text">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.
                     </p>
                     <v-card-actions class="mt-n10">

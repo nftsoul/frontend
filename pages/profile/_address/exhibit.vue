@@ -2,6 +2,7 @@
 <div>
     <ProfileMain />
     <ProfileExhibit />
+    <CommonProfile />
 </div>
 </template>
 
