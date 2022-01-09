@@ -1,8 +1,8 @@
 <template>
 <div>
     <ProfileMain />
-    <ProfileCollectible />
-        <CommonProfile />
+    <ProfilePreview />
+    <CommonProfile />
 </div>
 </template>
 

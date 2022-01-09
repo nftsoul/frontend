@@ -15,6 +15,7 @@
     "@primenums/solana-nft-tools": "^0.1.2",
     "@solana/spl-token": "^0.1.8",
     "@solana/web3.js": "^1.31.0",
+    "buffer-layout": "^1.2.2",
     "core-js": "^3.19.3",
     "epic-spinners": "^1.1.0",
     "hooper": "^0.3.4",
@@ -26,7 +27,8 @@
     "vue-template-compiler": "^2.6.14",
     "vueperslides": "^2.15.2",
     "vuetify": "^2.6.1",
-    "webpack": "^4.46.0"
+    "webpack": "^4.46.0",
+    "zebecprotocol-sdk": "^1.1.2"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.3"

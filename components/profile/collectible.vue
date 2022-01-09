@@ -103,8 +103,8 @@ export default {
             // axios.get('https://explorer.solana.com/address/'+this.walletAddress+'/tokens?cluster=devnet')
             // .then(res=>console.log(res.data))
     
-            const connect = createConnectionConfig(clusterApiUrl("devnet"));
-            // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+            // const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
 
             //first getting mint addresses and then fetching using those mints
             // let mints = await NFTs.getMintTokensByOwner(connect, this.walletAddress);
