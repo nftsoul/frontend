@@ -7,7 +7,7 @@
                     <v-btn text dark color="#C202D3">My Collections</v-btn>
                     <v-btn text dark>Favourite</v-btn>
                 </v-row>
-                <v-row v-if="loading" justify="center">
+                <v-row v-if="nfts.length==0" justify="center">
                     <v-col align="center">
                         <orbit-spinner class="ma-10" :animation-duration="1200" :size="55" color="#fff" />
                         <p>Loading your NFTs...</p>
@@ -16,10 +16,10 @@
                 <v-row v-else>
                     <v-col cols="12" lg="4" md="6" v-for="(item,i) in nfts" :key="i" align="center">
                         <v-card max-width="300" class="art-card" height="390" @click="$store.commit('content/setDetailDialog',true)">
-                            <v-img :src="item.image" :lazy-src="item.image" width="270" height="240"></v-img>
-                            <v-card-text class="ml-n2 white--text text-left">{{item.name}}</v-card-text>
+                            <v-img :src="item.image" :lazy-src="item.img" width="270" height="240"></v-img>
+                            <v-card-text class="ml-n2 white--text text-left">{{item.title}}</v-card-text>
                             <p class="mx-2 mt-n2 desc-text text-left">
-                                {{item.description}}
+                                {{item.content}}
                             </p>
                             <v-card-actions class="mt-n10">
                                 <v-spacer></v-spacer>
@@ -111,16 +111,16 @@ export default {
     watch: {
         walletAddress(newValue, oldValue) {
             if (newValue != oldValue) {
-                // this.getAllNftData()
+                this.getAllNftData()
             }
         }
     },
     mounted() {
-        console.log('meta:',meta)
-        this.connect = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
-        // this.getAllNftData()
-        var result = this.getNftsByOwner(this.connect, this.walletAddress, 1, 1, 1)
-        console.log('result:', result)
+        // console.log('meta:',meta)
+        // this.connect = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
+        this.getAllNftData()
+        // var result = this.getNftsByOwner(this.connect, this.walletAddress, 1, 1, 1)
+        // console.log('result:', result)
     },
     methods: {
         Metadata(args) {
@@ -381,115 +381,123 @@ export default {
 
         },
         
-        // async getAllNftData() {
+        async getAllNftData() {
+            axios.get('https://api-mainnet.magiceden.io/rpc/getNFTsByOwner/'+this.walletAddress)
+            .then(res=>{
+                for(var x=0;x<res.data.results.length;x++){
+                    if(this.walletAddress==res.data.results[x].owner){
+                        this.nfts.push(res.data.results[x])
+                    }
+                }
+            })
+            .catch(err=>console.log(err.respoonse))
+            // let addrs = new web3.PublicKey(this.walletAddress)
+            // let connection = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
 
-        //     // let addrs = new web3.PublicKey(this.walletAddress)
-        //     // let connection = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
+            // var res = await connection.getTokenAccountsByOwner(addrs, {
+            //     programId: new web3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')
+            // })
+            // console.log(res)
+            // console.log('res:', res.value[0].pubkey.toBase58())
+            // console.log('res:', res.value[0].account.data)
+            // for (var x = 0; x < res.value.length; x++) {
+            //     var mint = this.deserialize(res.value[x].account.data)
+            //     console.log('mint:', mint)
+            // }
 
-        //     // var res = await connection.getTokenAccountsByOwner(addrs, {
-        //     //     programId: new web3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')
-        //     // })
-        //     // console.log(res)
-        //     // console.log('res:', res.value[0].pubkey.toBase58())
-        //     // console.log('res:', res.value[0].account.data)
-        //     // for (var x = 0; x < res.value.length; x++) {
-        //     //     var mint = this.deserialize(res.value[x].account.data)
-        //     //     console.log('mint:', mint)
-        //     // }
+            // axios.get('https://explorer.solana.com/address/'+this.walletAddress+'/tokens?cluster=devnet')
+            // .then(res=>console.log(res.data))
 
-        //     // axios.get('https://explorer.solana.com/address/'+this.walletAddress+'/tokens?cluster=devnet')
-        //     // .then(res=>console.log(res.data))
+            // const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
 
-        //     // const connect = createConnectionConfig(clusterApiUrl("devnet"));
-        //     // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+            //first getting mint addresses and then fetching using those mints
+            // let mints = await NFTs.getMintTokensByOwner(connect, this.walletAddress);
+            // console.log('mints', mints);
 
-        //     //first getting mint addresses and then fetching using those mints
-        //     // let mints = await NFTs.getMintTokensByOwner(connect, this.walletAddress);
-        //     // console.log('mints', mints);
+            // for (let i = 0; i < mints.length; i++) {
+            //     let myNFT = await NFTs.getNFTByMintAddress(connect, mints[i]);
 
-        //     // for (let i = 0; i < mints.length; i++) {
-        //     //     let myNFT = await NFTs.getNFTByMintAddress(connect, mints[i]);
+            //     if (myNFT.owner == this.walletAddress) {
+            //         console.log('myNFT', myNFT);
+            //         this.nfts.push(myNFT)
+            //     }
 
-        //     //     if (myNFT.owner == this.walletAddress) {
-        //     //         console.log('myNFT', myNFT);
-        //     //         this.nfts.push(myNFT)
-        //     //     }
+            // }
 
-        //     // }
+            //all nfts by owner at once
+            // let allMyNFTs = await NFTs.getNFTsByOwner(connect, this.walletAddress);
+            // console.log(allMyNFTs)
+            // this.nfts = allMyNFTs
+            // console.log('allMyNFTs', allMyNFTs);
 
-        //     //all nfts by owner at once
-        //     // let allMyNFTs = await NFTs.getNFTsByOwner(connect, this.walletAddress);
-        //     // console.log(allMyNFTs)
-        //     // this.nfts = allMyNFTs
-        //     // console.log('allMyNFTs', allMyNFTs);
+            //paginate fetching by owner
+            // let page = 1;
+            // const perPage = 5;
+            // const cacheTtlMins = 1;
+            // var fetch = true;
+            // while (fetch == true) {
+            //     let myNft = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins)
+            //     console.log(myNft)
 
-        //     //paginate fetching by owner
-        //     // let page = 1;
-        //     // const perPage = 5;
-        //     // const cacheTtlMins = 1;
-        //     // var fetch = true;
-        //     // while (fetch == true) {
-        //     //     let myNft = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins)
-        //     //     console.log(myNft)
+            //     if (myNft.length == 0) {
+            //         fetch = false
+            //     } else {
+            //         for (var x = 0; x < myNft.length; x++){
+            //             if (!myNft[x].error) {
+            //                 if (myNft[x].owner == this.walletAddress) {
+            //                     this.nfts.push(myNft[x])
+            //                     this.loading = false
+            //                 }
+            //             }
+            //         }
+            //         page++
+            //     }
+            // }
 
-        //     //     if (myNft.length == 0) {
-        //     //         fetch = false
-        //     //     } else {
-        //     //         for (var x = 0; x < myNft.length; x++){
-        //     //             if (!myNft[x].error) {
-        //     //                 if (myNft[x].owner == this.walletAddress) {
-        //     //                     this.nfts.push(myNft[x])
-        //     //                     this.loading = false
-        //     //                 }
-        //     //             }
-        //     //         }
-        //     //         page++
-        //     //     }
-        //     // }
+            // let myNFT = await NFTs.getNFTByMintAddress(connect, mint[0].mint);
+            // console.log('nft:',myNFT)
+            //     page++
+            // if(mynft==''){
+            //     fetch=false
+            //     console.log(stopped)
+            // }
+            // else{
+            //     this.nfts.push(mynft)
+            // }
 
-        //     // let myNFT = await NFTs.getNFTByMintAddress(connect, mint[0].mint);
-        //     // console.log('nft:',myNFT)
-        //     //     page++
-        //     // if(mynft==''){
-        //     //     fetch=false
-        //     //     console.log(stopped)
-        //     // }
-        //     // else{
-        //     //     this.nfts.push(mynft)
-        //     // }
+            // while (x < 5) {
+            //     let mynft = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins);
+            //     console.log('mynft:', mynft)
+            //     page++
+            // }
 
-        //     // while (x < 5) {
-        //     //     let mynft = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins);
-        //     //     console.log('mynft:', mynft)
-        //     //     page++
-        //     // }
+            //sabai fetch nagarne no fix sequence
+            // try {
+            //     // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+            //     const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            //     const provider = this.getProvider()
+            //     let ownerToken = provider.publicKey
+            //     const result = isValidSolanaAddress(ownerToken)
+            //     const tokens = await getParsedNftAccountsByOwner({
+            //         publicAddress: ownerToken,
+            //         connection: connect,
+            //         serialization: true,
+            //     });
+            //     var data = Object.keys(tokens).map((key) => tokens[key]);
+            //     console.log('collection:',tokens)
+            //     let n = data.length;
+            //     let arr = []
 
-        //     //sabai fetch nagarne no fix sequence
-        //     // try {
-        //     //     // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
-        //     //     const connect = createConnectionConfig(clusterApiUrl("devnet"));
-        //     //     const provider = this.getProvider()
-        //     //     let ownerToken = provider.publicKey
-        //     //     const result = isValidSolanaAddress(ownerToken)
-        //     //     const tokens = await getParsedNftAccountsByOwner({
-        //     //         publicAddress: ownerToken,
-        //     //         connection: connect,
-        //     //         serialization: true,
-        //     //     });
-        //     //     var data = Object.keys(tokens).map((key) => tokens[key]);
-        //     //     console.log('collection:',tokens)
-        //     //     let n = data.length;
-        //     //     let arr = []
-
-        //     //     for (let i = 0; i < n; i++) {
-        //     //         let val = await axios.get(data[i].data.uri);
-        //     //         this.nfts.push(val);
-        //     //         this.loading = false
-        //     //     }
-        //     // } catch (error) {
-        //     //     console.log(error);
-        //     // }
-        // }
+            //     for (let i = 0; i < n; i++) {
+            //         let val = await axios.get(data[i].data.uri);
+            //         this.nfts.push(val);
+            //         this.loading = false
+            //     }
+            // } catch (error) {
+            //     console.log(error);
+            // }
+        }
 
     }
 }

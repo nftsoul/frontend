@@ -15,7 +15,7 @@
         </v-row>
         <v-row justify="center" class="py-5">
             <v-col cols="12" lg="8" md="10">
-                <v-row v-if="loading" justify="center">
+                <v-row v-if="nfts.length==0" justify="center">
                     <v-col align="center">
                         <orbit-spinner class="ma-10" :animation-duration="1200" :size="55" color="#fff" />
                         <p>Loading your NFTs...</p>
@@ -28,10 +28,10 @@
                                 <v-list dense style="background-color:transparent" class="py-0">
                                     <v-list-item class="px-0">
                                         <v-list-item-avatar tile class="rounded-lg my-0">
-                                            <v-img :src="item.image"></v-img>
+                                            <v-img :src="item.img"></v-img>
                                         </v-list-item-avatar>
                                         <v-list-item-content>
-                                            <v-list-item-title>{{item.name}}</v-list-item-title>
+                                            <v-list-item-title>{{item.title}}</v-list-item-title>
                                         </v-list-item-content>
                                         <v-list-item-action>
                                             <v-checkbox color="green" dark value="red"></v-checkbox>
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import {
     Connection,
     clusterApiUrl,
@@ -105,29 +106,38 @@ export default {
 
         },
         async getAllNftData() {
-            // const connect = createConnectionConfig(clusterApiUrl("devnet"));
-            const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
-            let page = 1;
-            const perPage = 1;
-            const cacheTtlMins = 1;
-            var fetch = true;
-            while (fetch == true) {
-                let myNft = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins)
-                console.log(myNft)
-                this.loading = false
-                if (myNft.length == 0) {
-                    fetch = false
-                } else {
-                    for (var x = 0; x < myNft.length; x++) {
-                        if (!myNft[x].error) {
-                            if (myNft[x].owner == this.walletAddress) {
-                                this.nfts.push(myNft[x])
-                            }
-                        }
+             axios.get('https://api-mainnet.magiceden.io/rpc/getNFTsByOwner/'+this.walletAddress)
+            .then(res=>{
+                for(var x=0;x<res.data.results.length;x++){
+                    if(this.walletAddress==res.data.results[x].owner){
+                        this.nfts.push(res.data.results[x])
                     }
-                    page++
                 }
-            }
+            })
+            .catch(err=>console.log(err.respoonse))
+            // const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
+            // let page = 1;
+            // const perPage = 1;
+            // const cacheTtlMins = 1;
+            // var fetch = true;
+            // while (fetch == true) {
+            //     let myNft = await NFTs.getNFTsByOwner(connect, this.walletAddress, page, perPage, cacheTtlMins)
+            //     console.log(myNft)
+            //     this.loading = false
+            //     if (myNft.length == 0) {
+            //         fetch = false
+            //     } else {
+            //         for (var x = 0; x < myNft.length; x++) {
+            //             if (!myNft[x].error) {
+            //                 if (myNft[x].owner == this.walletAddress) {
+            //                     this.nfts.push(myNft[x])
+            //                 }
+            //             }
+            //         }
+            //         page++
+            //     }
+            // }
         }
 
     }

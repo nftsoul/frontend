@@ -8,7 +8,7 @@
                     <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
                             <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
                                     <div class="outer-card">
                                         <div class="inner-card">
                                             <v-img :src="require('~/assets/images/1.png')" class="mx-auto" width="220" height="220"></v-img>
@@ -54,7 +54,7 @@
                                 </v-card>
                             </div>
                             <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
                                     <div class="outer-card">
                                         <div class="inner-card">
                                             <v-img :src="require('~/assets/images/2.png')" class="mx-auto" width="220" height="240"></v-img>
@@ -99,7 +99,7 @@
                                 </v-card>
                             </div>
                             <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
                                     <div class="outer-card">
                                         <div class="inner-card">
                                             <v-img :src="require('~/assets/images/3.png')" class="mx-auto" width="220" height="240"></v-img>
@@ -144,7 +144,7 @@
                                 </v-card>
                             </div>
                             <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
                                     <div class="outer-card">
                                         <div class="inner-card">
                                             <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
@@ -189,7 +189,7 @@
                                 </v-card>
                             </div>
                             <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300">
+                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
                                     <div class="outer-card">
                                         <div class="inner-card">
                                             <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
@@ -252,6 +252,13 @@ export default {
     computed: {
         slickSetting() {
             return this.$store.state.plugins.slickSetting
+        }
+    },
+    methods:{
+        seePremium(){
+            this.$router.push({
+                name:'profile-preview',
+            })
         }
     }
 }
