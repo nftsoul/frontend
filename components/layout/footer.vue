@@ -35,7 +35,7 @@
                     <h5 class="mb-5">Newsletter</h5>
                     <p>Signup for our newsletter to get the latest news in your inbox.</p>
                     <v-form v-model="valid" ref="form">
-                        <v-text-field prepend-inner-icon="mdi-mail" :loading="loading" :rules="[validRules.required,validRules.validEmail]" append-icon="mdi-arrow-right" placeholder="Enter your email"></v-text-field>
+                        <v-text-field prepend-inner-icon="mdi-mail" append-icon="mdi-arrow-right" placeholder="Enter your email"></v-text-field>
 
                     </v-form>
                     <p>Your email is safe with us. We don't spam.</p>
