@@ -3,10 +3,6 @@
     <v-container>
         <v-row justify="center">
             <v-col cols="8">
-                <v-row class="py-5">
-                    <v-btn text dark color="#C202D3">My Collections</v-btn>
-                    <v-btn text dark>Favourite</v-btn>
-                </v-row>
                 <v-row v-if="nfts.length==0" justify="center">
                     <v-col align="center">
                         <orbit-spinner class="ma-10" :animation-duration="1200" :size="55" color="#fff" />
@@ -117,7 +113,7 @@ export default {
     },
     mounted() {
         // console.log('meta:',meta)
-        // this.connect = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
+        this.connect = new web3.Connection(web3.clusterApiUrl('mainnet-beta'), 'confirmed');
         this.getAllNftData()
         // var result = this.getNftsByOwner(this.connect, this.walletAddress, 1, 1, 1)
         // console.log('result:', result)
@@ -382,6 +378,7 @@ export default {
         },
         
         async getAllNftData() {
+        //magic eden method
             axios.get('https://api-mainnet.magiceden.io/rpc/getNFTsByOwner/'+this.walletAddress)
             .then(res=>{
                 for(var x=0;x<res.data.results.length;x++){
@@ -391,6 +388,7 @@ export default {
                 }
             })
             .catch(err=>console.log(err.respoonse))
+
             // let addrs = new web3.PublicKey(this.walletAddress)
             // let connection = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
 
@@ -408,7 +406,7 @@ export default {
             // axios.get('https://explorer.solana.com/address/'+this.walletAddress+'/tokens?cluster=devnet')
             // .then(res=>console.log(res.data))
 
-            // const connect = createConnectionConfig(clusterApiUrl("devnet"));
+            const connect = createConnectionConfig(clusterApiUrl("devnet"));
             // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
 
             //first getting mint addresses and then fetching using those mints
@@ -426,7 +424,7 @@ export default {
             // }
 
             //all nfts by owner at once
-            // let allMyNFTs = await NFTs.getNFTsByOwner(connect, this.walletAddress);
+            // let allMyNFTs = await NFTs.getNFTsByOwner(connect, new web3.PublicKey(this.walletAddress));
             // console.log(allMyNFTs)
             // this.nfts = allMyNFTs
             // console.log('allMyNFTs', allMyNFTs);
@@ -497,7 +495,7 @@ export default {
             // } catch (error) {
             //     console.log(error);
             // }
-        }
+        },
 
     }
 }

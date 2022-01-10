@@ -7,7 +7,7 @@
                     <p class="text-lg-h3 text-md-h4 text-sm-h5">Exhibit Your NFT<br>Collections</p>
                     <p class="">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                     <v-row class="mt-10">
-                        <v-btn class="btn-exhibit ma-3" width="100">Exhibit</v-btn>
+                        <v-btn class="btn-exhibit ma-3" width="100" @click="exhibit()">Exhibit</v-btn>
                         <div class="outer-btn ma-3" @click="$router.push({path:'/featured'})">
                             <div class="inner-btn">
                                 <p class="ml-3 mt-n1" style="font-size:14px">Explore</p>
@@ -33,12 +33,34 @@ export default {
             windowHeight: 0,
         }
     },
+    computed:{
+        walletAddress(){
+            return this.$store.state.wallet.walletAddress
+        }
+    },
     mounted() {
         this.windowHeight = window.innerHeight
     },
     methods: {
         screenHeight() {
             return this.windowHeight;
+        },
+        exhibit(){
+            if(this.walletAddress==null){
+                this.$toast
+                .error("Please connect your phantom wallet first and then try again.", {
+                    iconPack: "mdi",
+                    icon: "mdi-wallet",
+                    theme: "outline"
+                })
+                .goAway(3000);
+            }
+            else{
+                this.$router.push({
+                    name:'profile-address-exhibit',
+                    params:{address:this.walletAddress}
+                })
+            }
         }
     }
 }

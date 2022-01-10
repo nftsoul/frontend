@@ -4,8 +4,8 @@
         <v-row justify="center">
             <div class="outer-card rounded-lg">
                 <div class="inner-card pa-1 rounded-lg">
-                    <v-btn text dark class="px-5">
-                        Create New Item
+                    <v-btn text dark class="px-5" @click="createGallery">
+                        Create New Gallery
                         <div class="btn-plus ml-2">
                             <v-icon dark color="white" small>mdi-plus</v-icon>
                         </div>
@@ -25,7 +25,7 @@
                     <v-col cols="12" lg="6" md="6" v-for="(item,i) in nfts" :key="i">
                         <div class="outer-card rounded-lg">
                             <div class="inner-card pa-1 rounded-lg">
-                                <v-list dense style="background-color:transparent" class="py-0">
+                                <v-list dense style="background-color:transparent;box-shadow:none !important" class="py-0">
                                     <v-list-item class="px-0">
                                         <v-list-item-avatar tile class="rounded-lg my-0">
                                             <v-img :src="item.img"></v-img>
@@ -34,7 +34,7 @@
                                             <v-list-item-title>{{item.title}}</v-list-item-title>
                                         </v-list-item-content>
                                         <v-list-item-action>
-                                            <v-checkbox color="green" dark value="red"></v-checkbox>
+                                            <v-checkbox color="green" dark value="red" style="border-radius:50% !important"></v-checkbox>
                                         </v-list-item-action>
                                     </v-list-item>
 
@@ -74,6 +74,7 @@ export default {
     },
     data() {
         return {
+            collection: [],
             nfts: [],
             loading: true,
             color: 'linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%)'
@@ -106,15 +107,15 @@ export default {
 
         },
         async getAllNftData() {
-             axios.get('https://api-mainnet.magiceden.io/rpc/getNFTsByOwner/'+this.walletAddress)
-            .then(res=>{
-                for(var x=0;x<res.data.results.length;x++){
-                    if(this.walletAddress==res.data.results[x].owner){
-                        this.nfts.push(res.data.results[x])
+            axios.get('https://api-mainnet.magiceden.io/rpc/getNFTsByOwner/' + this.walletAddress)
+                .then(res => {
+                    for (var x = 0; x < res.data.results.length; x++) {
+                        if (this.walletAddress == res.data.results[x].owner) {
+                            this.nfts.push(res.data.results[x])
+                        }
                     }
-                }
-            })
-            .catch(err=>console.log(err.respoonse))
+                })
+                .catch(err => console.log(err.respoonse))
             // const connect = createConnectionConfig(clusterApiUrl("devnet"));
             // const connect = createConnectionConfig(clusterApiUrl("mainnet-beta"));
             // let page = 1;
@@ -138,6 +139,17 @@ export default {
             //         page++
             //     }
             // }
+        },
+        createGallery() {
+            if (this.collection.length == 0) {
+                this.$toast
+                    .error("Please select some nfts to create gallery.", {
+                        iconPack: "mdi",
+                        icon: "mdi-image",
+                        theme: "outline"
+                    })
+                    .goAway(3000);
+            }
         }
 
     }

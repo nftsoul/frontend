@@ -6,13 +6,11 @@
         </v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <div class="hidden-md-and-down mt-5">
-            <v-btn text>
+            <v-btn text @click="$router.push({path:'/'})">
                 Home
-                <v-icon>mdi-chevron-down</v-icon>
             </v-btn>
-            <v-btn text>
+            <v-btn text @click="$router.push({path:'/featured'})">
                 Explore
-                <v-icon>mdi-chevron-down</v-icon>
             </v-btn>
             <v-btn text>
                 Pages
@@ -44,12 +42,13 @@
                             </template>
                             <v-card width="200" color="#636262">
                                 <v-list style="background-color:#636262" dense>
-                                    <div v-for="(item, i) in items" :key="i">
-                                        <v-list-item>
-                                            <v-list-item-title>{{ item.title }}</v-list-item-title><br><br>
-                                        </v-list-item>
-                                        <v-divider v-if="items.length-items.indexOf(item)>1"></v-divider>
-                                    </div>
+                                    <v-list-item @click="$router.push({name:'profile-address',params:{address:walletAddress}})">
+                                        <v-list-item-title>Personal Page</v-list-item-title><br><br>
+                                    </v-list-item>
+                                    <v-divider></v-divider>
+                                    <v-list-item @click="disconnect">
+                                        <v-list-item-title>Disconnect</v-list-item-title><br><br>
+                                    </v-list-item>
                                 </v-list>
                             </v-card>
                         </v-menu>
@@ -80,15 +79,45 @@
             <v-list-item>
                 <v-list-item-title>Elements</v-list-item-title>
             </v-list-item>
-            <v-list-item>
-                <v-list-item-title>Connect Wallet</v-list-item-title>
-            </v-list-item>
+            <v-btn v-if="walletAddress == null" class="connect-wallet" @click="detectWallet()">
+                Connect Wallet
+            </v-btn>
+
+            <div v-else class="auth-box mt-n2">
+                <div class="auth-inside">
+                    <div class="auth-inside-1" @click="$router.push({name:'profile-address',params:{address:walletAddress}})">
+                        <v-avatar size="20" class="mx-2 mt-3">
+                            <v-img :src="require('~/assets/images/phantom.png')"></v-img>
+                        </v-avatar>
+                    </div>
+                    <div class="auth-inside-2" @click="viewProfile">
+                        <v-menu transition="slide-y-transition" bottom offset-y>
+                            <template v-slot:activator="{ on, attrs }">
+                                <p class="wallet-text mt-3" v-bind="attrs" v-on="on">{{walletAddress.slice(0,8)+'...'}}</p>
+                            </template>
+                            <v-card width="200" color="#636262">
+                                <v-list style="background-color:#636262" dense>
+                                    <v-list-item @click="$router.push({name:'profile-address',params:{address:walletAddress}})">
+                                        <v-list-item-title>Personal Page</v-list-item-title><br><br>
+                                    </v-list-item>
+                                    <v-divider></v-divider>
+                                    <v-list-item @click="disconnect">
+                                        <v-list-item-title>Disconnect</v-list-item-title><br><br>
+                                    </v-list-item>
+                                </v-list>
+                            </v-card>
+                        </v-menu>
+                    </div>
+                </div>
+            </div>
         </v-list>
     </v-navigation-drawer>
 </div>
 </template>
 
 <script>
+const web3 = require("@solana/web3.js");
+
 export default {
 
     data() {
@@ -96,13 +125,6 @@ export default {
             resp: '',
             drawer: false,
             authBtn: null,
-            items: [{
-                    title: 'Personal Page'
-                },
-                {
-                    title: 'Disconnect'
-                }
-            ],
         }
     },
     computed: {
@@ -138,11 +160,7 @@ export default {
         },
         async getAddress() {
             var resp = await window.solana.connect();
-            await this.$store.commit('wallet/setWalletAddress', resp.publicKey.toString())
-            this.$router.push({
-                name:'profile-address',
-                params:{address:this.walletAddress}
-            })
+            this.$store.commit('wallet/setWalletAddress', resp.publicKey.toString())
             this.$toast
                 .success("Phantom wallet connected successfully.", {
                     iconPack: "mdi",
@@ -158,6 +176,13 @@ export default {
                     address: this.walletAddress
                 }
             })
+        },
+        disconnect() {
+            window.solana.request({
+                method: "disconnect"
+            });
+            this.$store.commit('wallet/setWalletAddress', null)
+
         }
     }
 }

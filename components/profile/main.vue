@@ -6,14 +6,17 @@
                 <v-card flat>
                     <v-list style="background-color:transparent !important;box-shadow:none !important">
                         <v-list-item>
-                            <v-list-item-avatar tile width="200" height="220">
+                            <!-- <v-list-item-avatar tile width="200" height="220">
                                 <v-img :src="require('~/assets/images/profile.png')"></v-img>
-                            </v-list-item-avatar>
+                            </v-list-item-avatar> -->
                             <v-list-item-content>
                                 <v-list-item-title>
-                                    Masham Raymens
+                                    <b>Wallet ID:</b> {{this.walletAddress}}
                                 </v-list-item-title>
-                                <small>
+                                <v-list-item-subtitle>
+                                    <b>Balance:</b> {{this.balance}} SOL
+                                </v-list-item-subtitle>
+                                <!-- <small>
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.
 
                                 </small>
@@ -24,7 +27,7 @@
                                     <v-chip dark :color="chipColor">
                                         Following  116
                                     </v-chip>
-                                </v-card-actions>
+                                </v-card-actions> -->
                             </v-list-item-content>
                         </v-list-item>
                     </v-list>
@@ -39,16 +42,39 @@
 </template>
 
 <script>
+const web3 = require("@solana/web3.js");
+
 export default {
     layout: 'user',
     data() {
         return {
-            chipColor: 'rgba(160, 160, 160, 0.3)'
+            chipColor: 'rgba(160, 160, 160, 0.3)',
+            loading: true,
+            connect: '',
+            balance:'',
         }
     },
-    computed:{
-        walletAddress(){
-            return this.$route.params.address
+    computed: {
+        walletAddress() {
+            return this.$store.state.wallet.walletAddress
+        }
+    },
+    watch: {
+        walletAddress(newValue, oldValue) {
+            if (newValue != oldValue) {
+                this.getAccountInfo()
+            }
+        }
+    },
+    mounted(){
+        this.connect = new web3.Connection(web3.clusterApiUrl('mainnet-beta'), 'confirmed');
+        this.getAccountInfo()
+    },
+    methods:{
+        async getAccountInfo(){
+            var blc=await this.connect.getBalance(new web3.PublicKey(this.walletAddress))
+            this.balance=parseFloat(blc*0.000000001).toFixed(5)
+            
         }
     }
 }
