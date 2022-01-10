@@ -2,45 +2,45 @@
 <div class="back">
     <v-container>
         <v-row justify="center" class="my-5">
-             <p class="grand-title-text">How does it works?</p>
+             <p class="grand-title-text text-h5">How does it work?</p>
         </v-row>
         <v-row justify="center">
             <v-col cols="10" align="center" class="custom-back py-16">
                 <v-row justify="center">
-                    <v-card flat color="transparent" max-width="300">
+                    <v-card flat color="transparent" max-width="300" class="mr-16">
                         <v-avatar class="mx-auto pa-1 gradient-back" size="60">
                             <v-img :src="require('~/assets/images/wallet-filled-money-tool.png')"></v-img>
                         </v-avatar>
-                        <p class="text-center mb-n3 mt-5">Setup Your Wallet</p>
+                        <p class="text-center mb-n3 mt-5">Connect Wallet</p>
 
                         <v-card-subtitle>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.
+                            <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua. -->
                         </v-card-subtitle>
                     </v-card>
 
                     <v-icon class="icon-grad" large>mdi-arrow-right</v-icon>
 
-                    <v-card flat color="transparent" max-width="300">
+                    <v-card flat color="transparent" max-width="300" class="mx-16">
                         <v-avatar class="mx-auto pa-1 gradient-back" size="60">
                             <v-img :src="require('~/assets/images/image-gallery.png')"></v-img>
                         </v-avatar>
-                        <p class="text-center mb-n3 mt-5">Setup Your Wallet</p>
+                        <p class="text-center mb-n3 mt-5">Create Gallery</p>
 
                         <v-card-subtitle>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.
+                            <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua. -->
                         </v-card-subtitle>
                     </v-card>
 
                     <v-icon class="icon-grad" large>mdi-arrow-right</v-icon>
 
-                    <v-card flat color="transparent" max-width="300">
+                    <v-card flat color="transparent" max-width="300" class="ml-16">
                         <v-avatar class="mx-auto pa-1 gradient-back" size="60">
                             <v-img :src="require('~/assets/images/tag.png')"></v-img>
                         </v-avatar>
-                        <p class="text-center mb-n3 mt-5">Setup Your Wallet</p>
+                        <p class="text-center mb-n3 mt-5">Exhibit</p>
 
                         <v-card-subtitle>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.
+                            <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua. -->
                         </v-card-subtitle>
                     </v-card>
                 </v-row>

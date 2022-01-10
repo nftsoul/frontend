@@ -35,14 +35,14 @@
 
                         <label for="price" class="text--disabled">Price</label>
                         <v-text-field v-model="price" :rules="[validRules.required]" id="price" filled background-color="#030537" dense outlined placeholder="e.g. '250 SOL'"></v-text-field>
-                        <v-row no-gutters>
+                        <!-- <v-row no-gutters>
                             <small class="mr-5">
                                 <v-checkbox label="Put on sale" dense dark></v-checkbox>
                             </small>
                             <small>
                                 <v-checkbox label="Free Listing" dark dense></v-checkbox>
                             </small>
-                        </v-row>
+                        </v-row> -->
                     </v-form>
                     <v-row @click="createGallery()">
                         <v-btn class="mx-auto my-5 btn-exhibit">Create Gallery</v-btn>
@@ -61,12 +61,12 @@ export default {
     layout: 'user',
     data() {
         return {
-            valid:true,
+            valid: true,
             name: '',
             about: '',
             price: '',
             src: null,
-            public_id:'',
+            public_id: '',
             isSelecting: false,
             validRules: {
                 required: value => !!value || "Required.",
@@ -78,33 +78,41 @@ export default {
         collection() {
             return this.$store.state.nft.collection
         },
-        walletAddress(){
+        walletAddress() {
             return this.$store.state.wallet.walletAddress
         }
     },
     methods: {
         createGallery() {
-            if(this.$refs.form.validate()){
-                if(this.src != null){
-                    axios.post('https://nft-soul.herokuapp.com/api/create-gallery',{
-                        user_id:this.walletAddress,
-                        gallery_name:this.name,
-                        nfts:this.collection,
-                        image:this.public_id,
-                        description:this.about,
-                        price:this.price
-                    }).then(res=>{
-                        console.log(res.data)
-                    }).catch(err=>console.log(err.response))
-                }
-                else{
+            if (this.$refs.form.validate()) {
+                if (this.src != null) {
+                    axios.post('https://nft-soul.herokuapp.com/api/create-gallery', {
+                        user_id: this.walletAddress,
+                        gallery_name: this.name,
+                        nfts: this.collection,
+                        image: this.public_id,
+                        description: this.about,
+                        price: this.price
+                    }).then(res => {
+                        this.$toast
+                            .success("Your gallery has been created successfully.", {
+                                iconPack: "mdi",
+                                icon: "mdi-image",
+                                theme: "outline"
+                            })
+                            .goAway(3000);
+                            this.$router.push({
+                                name:'profile-preview'
+                            })
+                    }).catch(err => console.log(err.response))
+                } else {
                     this.$toast
-                    .error("Please upload a featured image.", {
-                        iconPack: "mdi",
-                        icon: "mdi-image",
-                        theme: "outline"
-                    })
-                    .goAway(3000);
+                        .error("Please upload a featured image.", {
+                            iconPack: "mdi",
+                            icon: "mdi-image",
+                            theme: "outline"
+                        })
+                        .goAway(3000);
                 }
             }
         },
@@ -131,7 +139,7 @@ export default {
                     uploadPreset: "jzzyk6rp"
                 })
                 .then(response => {
-                    this.public_id=response.public_id
+                    this.public_id = response.public_id
                     this.src = this.$cloudinary.image.url(
                         response.public_id, {
                             gravity: 'auto:subject',

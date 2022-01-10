@@ -6,7 +6,7 @@
         </v-app-bar-nav-icon>
         <v-spacer></v-spacer>
         <div class="hidden-md-and-down mt-5">
-            <v-btn text @click="$router.push({path:'/'})">
+            <!-- <v-btn text @click="$router.push({path:'/'})">
                 Home
             </v-btn>
             <v-btn text @click="$router.push({path:'/featured'})">
@@ -23,7 +23,7 @@
             <v-btn text>
                 Elements
                 <v-icon>mdi-chevron-down</v-icon>
-            </v-btn>
+            </v-btn> -->
             <v-btn v-if="walletAddress == null" class="connect-wallet" @click="detectWallet()">
                 Connect Wallet
             </v-btn>
@@ -61,7 +61,7 @@
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" app absolute temporary right dark color="primary">
         <v-list nav dense>
-            <v-list-item>
+            <!-- <v-list-item>
                 <v-list-item-title>Home</v-list-item-title>
             </v-list-item>
 
@@ -78,7 +78,7 @@
             </v-list-item>
             <v-list-item>
                 <v-list-item-title>Elements</v-list-item-title>
-            </v-list-item>
+            </v-list-item> -->
             <v-btn v-if="walletAddress == null" class="connect-wallet" @click="detectWallet()">
                 Connect Wallet
             </v-btn>

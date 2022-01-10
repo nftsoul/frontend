@@ -2,14 +2,58 @@
 <div class="dark-bg pt-16">
     <v-container>
         <v-row justify="center" class="mt-5">
-            <h3>Featured Items</h3>
+            <h3>Featured Collections</h3>
         </v-row>
         <v-row justify="center">
-            <v-col cols="12" class="px-5">
-                <carousel-3d style="box-shadow:none"  autoplay autoplayHoverPause :controls-visible="true" :controls-width="40" :controls-height="40" perspective="0" inverseScaling="00" space="360" display="4" width="320" height="545" border="0">
+            <v-col cols="12" class="px-5" align="center">
+                <carousel-3d style="box-shadow:none" autoplay autoplayHoverPause :controls-visible="true" :controls-width="40" :controls-height="40" perspective="0" inverseScaling="00" space="360" display="4" width="320" height="545" border="0">
                     <slide v-for="(item,i) in featured" :index='i' :key="i">
                         <template slot-scope="{index,isCurrent,leftIndex,rightIndex}">
-                            <v-card :data-index="index" class="slide-box pa-5" color="primary" max-width="320" height="545" :class="{current:isCurrent,onLeft:(leftIndex >=0),onRight:(rightIndex >= 0)}">
+                            <v-card color="transparent" :data-index="index" flat class="slide-box pa-5" max-width="320" :class="{current:isCurrent,onLeft:(leftIndex >=0),onRight:(rightIndex >= 0)}">
+                                <div class="outer-card">
+                                    <div class="inner-card">
+                                        <v-img :src="require('~/assets/images/featured/'+item.src)" class="mx-auto" width="220" max-height="220"></v-img>
+
+                                        <v-card class="rounded-pill mt-n6" max-width="150" style="">
+                                            <v-list dense class="py-1">
+                                                <v-list-item dense class="pa-0">
+                                                    <v-list-item-avatar class="my-0 ml-2">
+                                                        <v-img :src="require('~/assets/images/1.png')"></v-img>
+                                                    </v-list-item-avatar>
+                                                    <v-list-item-content>
+                                                        <v-list-item-title class="ml-n2">@Roy Reyna</v-list-item-title>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </v-list>
+                                        </v-card>
+                                        <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                        <v-row>
+                                            <div class="prem-sup-card rounded-lg">
+                                                <span>Neko Kingdom</span>
+                                            </div>
+                                            <div class="prem-sup-card rounded-lg">
+                                                <span>Cat Series</span>
+                                            </div>
+                                            <div class="prem-sup-card rounded-lg">
+                                                <span>Neko</span>
+                                            </div>
+                                            <div class="prem-sup-card rounded-lg">
+                                                <span>Stone Tail</span>
+                                            </div>
+                                            <div class="prem-sup-card rounded-lg">
+                                                <span>Eye</span>
+                                            </div>
+                                            <div class="prem-sup-card rounded-lg">
+                                                <span>Bunny Ear</span>
+                                            </div>
+                                            <div class="prem-sup-card rounded-lg">
+                                                <span>Triple Horn</span>
+                                            </div>
+                                        </v-row>
+                                    </div>
+                                </div>
+                            </v-card>
+                            <!-- <v-card :data-index="index" class="slide-box pa-5" color="primary" max-width="320" height="545" :class="{current:isCurrent,onLeft:(leftIndex >=0),onRight:(rightIndex >= 0)}">
                                 <v-img :src="require('~/assets/images/featured/'+item.src)" class="mx-auto" max-width="280"></v-img>
                                 <div class="outer-avatar ml-10 mt-n7">
                                     <v-avatar>
@@ -25,7 +69,7 @@
                                         </div>
                                     </div>
                                 </v-card-actions>
-                            </v-card>
+                            </v-card> -->
                         </template>
                     </slide>
                 </carousel-3d>
@@ -33,7 +77,6 @@
         </v-row>
     </v-container>
 
-    
 </div>
 </template>
 
@@ -131,12 +174,14 @@ a.prev span {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
 .slider {
-  @media screen and (min-width: 769px) {
-      height: 220px;
-  }
-  @media screen and (max-width: 440px) {
-      height: 140px;
-  }
+    @media screen and (min-width: 769px) {
+        height: 220px;
+    }
+
+    @media screen and (max-width: 440px) {
+        height: 140px;
+    }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <FeaturedSlide />
-        <FeaturedArtwork />
-        <CommonProfile />
+        <!-- <FeaturedArtwork />
+        <CommonProfile /> -->
     </div>
 </template>

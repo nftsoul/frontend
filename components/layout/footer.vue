@@ -2,7 +2,7 @@
 <div class="dark-bg pt-10">
     <div class="f-shadow">
 
-        <v-container class="py-10">
+        <!-- <v-container class="py-10">
             <v-row class="py-10">
                 <v-col cols="12" lg="3" md="6" sm="4" class="footer">
                     <h5 class="mb-5">Marketplace</h5>
@@ -42,10 +42,10 @@
                 </v-col>
             </v-row>
 
-        </v-container>
+        </v-container> -->
         <v-divider></v-divider>
         <v-container>
-            <v-row class="py-2">
+            <v-row justify="center" class="py-2">
                 <small>
                     <v-icon>mdi-copyright</v-icon>Copyright 2021 - NFT Soul
                 </small>

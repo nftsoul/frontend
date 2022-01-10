@@ -257,7 +257,7 @@ export default {
     methods:{
         seePremium(){
             this.$router.push({
-                name:'profile-preview',
+                name:'preview',
             })
         }
     }
