@@ -757,6 +757,13 @@ export default {
         slickSetting(){
             return this.$store.state.plugins.slickSetting
         }
+    },
+    methods:{
+        seePremium(){
+            this.$router.push({
+                name:'profile-preview',
+            })
+        }
     }
 }
 </script>

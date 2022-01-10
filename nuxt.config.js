@@ -29,6 +29,12 @@ export default {
     { src: "~/plugins/vue-carousel-3d", mode: "client" },
     { src: "~/plugins/spinner", mode: "client" },
   ],
+  cloudinary: {
+    cloudName: 'dtj1m4wvd',
+    apiKey: '936617525278493',
+    apiSecret: 'ZrJtyCEer4AhvYuQflWkq-EZosU',
+    useComponent:true
+  },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -42,7 +48,8 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
-    '@nuxtjs/toast'
+    '@nuxtjs/toast',
+    '@nuxtjs/cloudinary',
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

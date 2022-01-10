@@ -34,7 +34,10 @@
                 <v-col cols="12" lg="3" md="6" sm="4" class="footer">
                     <h5 class="mb-5">Newsletter</h5>
                     <p>Signup for our newsletter to get the latest news in your inbox.</p>
-                    <v-text-field prepend-inner-icon="mdi-mail" append-icon="mdi-arrow-right" placeholder="Enter your email"></v-text-field>
+                    <v-form v-model="valid" ref="form">
+                        <v-text-field prepend-inner-icon="mdi-mail" :loading="loading" :rules="[validRules.required,validRules.validEmail]" append-icon="mdi-arrow-right" placeholder="Enter your email"></v-text-field>
+
+                    </v-form>
                     <p>Your email is safe with us. We don't spam.</p>
                 </v-col>
             </v-row>
@@ -51,6 +54,40 @@
     </div>
 </div>
 </template>
+
+<script>
+export default {
+    datae() {
+        return {
+            valid: true,
+            email: '',
+            loading: false,
+            validRules: {
+                required: value => !!value || "Required.",
+                length10: v => v && v.length == 10 || "Should be 10 characters",
+            },
+        }
+    },
+    methods: {
+        recordMail() {
+            if (this.$refs.form.validate()) {
+                this.loading = true
+                axios.post('https://nft-soul.herokuapp.com/api/subscribe', {
+                    email: this.email
+                }).then(res => {
+                    this.$toast
+                        .error("Thanks for subscribing our newsletter.", {
+                            iconPack: "mdi",
+                            icon: "mdi-newspaper",
+                            theme: "outline"
+                        })
+                        .goAway(3000);
+                }).catch(err => console.log(err.response))
+            }
+        }
+    }
+}
+</script>
 
 <style lang="css">
 .f-shadow {

@@ -14,7 +14,7 @@
 .v-application .caption,.v-application .text-h6,
 .v-application .text-h5,.v-application .text-h4,
 .v-application .text-h4,.v-card,.v-list,
-.v-btn__content,.v-data-table,p,h5,small,.title{
+.v-btn__content,.v-data-table,p,h5,small,.title,label,.body-2{
     font-family: 'Poppins', sans-serif !important;
 }
 .v-btn {

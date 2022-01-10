@@ -34,7 +34,7 @@
                                             <v-list-item-title>{{item.title}}</v-list-item-title>
                                         </v-list-item-content>
                                         <v-list-item-action>
-                                            <v-checkbox color="green" dark value="red" style="border-radius:50% !important"></v-checkbox>
+                                            <v-checkbox @change="selectNft(item)" color="green" dark value="red" style="border-radius:50% !important"></v-checkbox>
                                         </v-list-item-action>
                                     </v-list-item>
 
@@ -74,7 +74,7 @@ export default {
     },
     data() {
         return {
-            collection: [],
+            selected: [],
             nfts: [],
             loading: true,
             color: 'linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%)'
@@ -141,7 +141,7 @@ export default {
             // }
         },
         createGallery() {
-            if (this.collection.length == 0) {
+            if (this.selected.length == 0) {
                 this.$toast
                     .error("Please select some nfts to create gallery.", {
                         iconPack: "mdi",
@@ -149,7 +149,20 @@ export default {
                         theme: "outline"
                     })
                     .goAway(3000);
+            } else {
+                this.$store.commit('nft/setCollection', this.selected)
+                this.$router.push({
+                    name: 'create',
+                })
             }
+        },
+        selectNft(item) {
+            if (this.selected.includes(item)) {
+                this.selected.splice(this.selected.indexOf(item), 1)
+            } else {
+                this.selected.push(item)
+            }
+
         }
 
     }
