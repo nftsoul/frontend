@@ -7,13 +7,13 @@
                     <v-container>
                         <v-row>
                             <v-col cols="12" lg="4" md="6" align="center" class="px-5">
-                                <v-img :src="require('~/assets/images/1.png')" class="rounded-lg"></v-img>
+                                <v-img :src="selected.nfts[0].img" class="rounded-lg"></v-img>
                             </v-col>
-                            <v-col cols="12" lg="4" md="6" align="center" class="px-5">
-                                <v-img :src="require('~/assets/images/2.png')" class="rounded-lg"></v-img>
+                            <v-col v-if="selected.nfts.length>1" cols="12" lg="4" md="6" align="center" class="px-5">
+                                <v-img :src="selected.nfts[1].img" class="rounded-lg"></v-img>
                             </v-col>
                             <v-col cols="12" lg="4" md="6" class="pr-0">
-                                <p>Infinity Lab Collections</p>
+                                <p>{{selected.gallery_name}}</p>
                                 <v-list dense style="box-shadow:none !important">
                                     <v-list-item dense>
                                         <v-list-item-avatar>
@@ -21,11 +21,11 @@
                                         </v-list-item-avatar>
                                         <v-list-item-content>
                                             <v-list-item-title>
-                                                Roy Reyna
+                                                {{selected.user_id.slice(0,5)}}
                                             </v-list-item-title>
-                                            <v-list-item-subtitle>
+                                            <!-- <v-list-item-subtitle>
                                                 @Rayna
-                                            </v-list-item-subtitle>
+                                            </v-list-item-subtitle> -->
                                         </v-list-item-content>
                                     </v-list-item>
                                 </v-list>
@@ -73,6 +73,14 @@ export default {
            
         }
     },
+    computed:{
+        selected(){
+            return this.$store.state.content.selected
+        }
+    },
+    mounted(){
+        console.log(this.selected)
+    },
     methods: {
         
         async stream() {
@@ -80,12 +88,12 @@ export default {
             var myAddress = res.publicKey.toString()
             const depositData = {
                 sender: myAddress, 
-                amount: 0.001,
+                amount: 1,
             };
             const streamData = {
                 sender: myAddress,
                 receiver: "8NhEDGdQEmzNR8fULpsdfLZV8NmWiSzyyzz2VdhoTfXU",
-                amount: 0.001,
+                amount: 1,
                 start: Math.floor(Date.now() / 1000),
                 end: Math.floor(Date.now() / 1000)+30,
             };

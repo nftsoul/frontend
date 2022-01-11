@@ -13,7 +13,7 @@
                     </v-tab>
 
                     <v-tab href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/gallery'">
-                        Gallery
+                        Collections
                     </v-tab>
                 </v-tabs>
             </v-col>

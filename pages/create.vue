@@ -44,8 +44,8 @@
                             </small>
                         </v-row> -->
                     </v-form>
-                    <v-row @click="createGallery()">
-                        <v-btn class="mx-auto my-5 btn-exhibit">Create Gallery</v-btn>
+                    <v-row>
+                        <v-btn class="mx-auto my-5 btn-exhibit" @click="createGallery()" :loading="creating">Create Gallery</v-btn>
                     </v-row>
 
                 </div>
@@ -67,6 +67,7 @@ export default {
             price: '',
             src: null,
             public_id: '',
+            creating:false,
             isSelecting: false,
             validRules: {
                 required: value => !!value || "Required.",
@@ -86,6 +87,8 @@ export default {
         createGallery() {
             if (this.$refs.form.validate()) {
                 if (this.src != null) {
+                    this.creating=true
+                    // console.log(this.walletAddress,this.name,this.collection,this.public_id,this.about,this.price)
                     axios.post('https://nft-soul.herokuapp.com/api/create-gallery', {
                         user_id: this.walletAddress,
                         gallery_name: this.name,
@@ -94,6 +97,8 @@ export default {
                         description: this.about,
                         price: this.price
                     }).then(res => {
+                        console.log(res.data)
+                        this.creating=false
                         this.$toast
                             .success("Your gallery has been created successfully.", {
                                 iconPack: "mdi",
@@ -101,9 +106,11 @@ export default {
                                 theme: "outline"
                             })
                             .goAway(3000);
+                            this.$store.commit('content/setFreshNft',res.data)
                             this.$router.push({
                                 name:'profile-preview'
                             })
+
                     }).catch(err => console.log(err.response))
                 } else {
                     this.$toast

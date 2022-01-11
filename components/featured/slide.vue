@@ -12,7 +12,7 @@
                             <v-card color="transparent" :data-index="index" flat class="slide-box pa-5" max-width="320" :class="{current:isCurrent,onLeft:(leftIndex >=0),onRight:(rightIndex >= 0)}">
                                 <div class="outer-card">
                                     <div class="inner-card">
-                                        <v-img :src="require('~/assets/images/featured/'+item.src)" class="mx-auto" width="220" max-height="220"></v-img>
+                                        <v-img :src="require('~/assets/images/featured/'+item.src)" class="mx-auto" width="220" height="220"></v-img>
 
                                         <v-card class="rounded-pill mt-n6" max-width="150" style="">
                                             <v-list dense class="py-1">

@@ -12,13 +12,13 @@
             <v-row>
                 <v-col cols="12" align="center">
                     <p class="title">Trending Collections</p>
-                    <client-only>
+                    <client-only v-if="trending.length>0">
                         <VueSlickCarousel v-bind="slickSetting">
-                            <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
+                            <div v-for="(item,i) in trending" :key="i">
+                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium(item)">
                                     <div class="outer-card">
                                         <div class="inner-card">
-                                            <v-img :src="require('~/assets/images/1.png')" class="mx-auto" width="220" height="220"></v-img>
+                                            <v-img :src="getImg(item)" class="mx-auto" width="220" height="220"></v-img>
 
                                             <v-card class="rounded-pill mt-n6" max-width="150" style="">
                                                 <v-list dense class="py-1">
@@ -27,192 +27,12 @@
                                                             <v-img :src="require('~/assets/images/1.png')"></v-img>
                                                         </v-list-item-avatar>
                                                         <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2">@Roy Reyna</v-list-item-title>
+                                                            <v-list-item-title class="ml-n2">{{item.user_id.slice(0,5)}}</v-list-item-title>
                                                         </v-list-item-content>
                                                     </v-list-item>
                                                 </v-list>
                                             </v-card>
-                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                            <v-row>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko Kingdom</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Cat Series</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Stone Tail</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Eye</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Bunny Ear</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Triple Horn</span>
-                                                </div>
-                                            </v-row>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </div>
-                            <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
-                                    <div class="outer-card">
-                                        <div class="inner-card">
-                                            <v-img :src="require('~/assets/images/2.png')" class="mx-auto" width="220" height="240"></v-img>
-                                            <v-card class="rounded-pill mt-n6" max-width="150" style="">
-                                                <v-list dense class="py-1">
-                                                    <v-list-item dense class="pa-0">
-                                                        <v-list-item-avatar class="my-0 ml-2">
-                                                            <v-img :src="require('~/assets/images/1.png')"></v-img>
-                                                        </v-list-item-avatar>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2">@Roy Reyna</v-list-item-title>
-                                                        </v-list-item-content>
-                                                    </v-list-item>
-                                                </v-list>
-                                            </v-card>
-                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                            <v-row>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko Kingdom</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Cat Series</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Stone Tail</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Eye</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Bunny Ear</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Triple Horn</span>
-                                                </div>
-                                            </v-row>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </div>
-                            <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
-                                    <div class="outer-card">
-                                        <div class="inner-card">
-                                            <v-img :src="require('~/assets/images/3.png')" class="mx-auto" width="220" height="240"></v-img>
-                                            <v-card class="rounded-pill mt-n6" max-width="150" style="">
-                                                <v-list dense class="py-1">
-                                                    <v-list-item dense class="pa-0">
-                                                        <v-list-item-avatar class="my-0 ml-2">
-                                                            <v-img :src="require('~/assets/images/1.png')"></v-img>
-                                                        </v-list-item-avatar>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2">@Roy Reyna</v-list-item-title>
-                                                        </v-list-item-content>
-                                                    </v-list-item>
-                                                </v-list>
-                                            </v-card>
-                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                            <v-row>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko Kingdom</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Cat Series</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Stone Tail</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Eye</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Bunny Ear</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Triple Horn</span>
-                                                </div>
-                                            </v-row>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </div>
-                            <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
-                                    <div class="outer-card">
-                                        <div class="inner-card">
-                                            <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
-                                            <v-card class="rounded-pill mt-n6 prem" max-width="150" style="">
-                                                <v-list dense class="py-1">
-                                                    <v-list-item dense class="pa-0">
-                                                        <v-list-item-avatar class="my-0 ml-2">
-                                                            <v-img :src="require('~/assets/images/1.png')"></v-img>
-                                                        </v-list-item-avatar>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2">@Roy Reyna</v-list-item-title>
-                                                        </v-list-item-content>
-                                                    </v-list-item>
-                                                </v-list>
-                                            </v-card>
-                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                            <v-row>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko Kingdom</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Cat Series</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Stone Tail</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Eye</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Bunny Ear</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Triple Horn</span>
-                                                </div>
-                                            </v-row>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </div>
-                            <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
-                                    <div class="outer-card">
-                                        <div class="inner-card">
-                                            <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
-                                            <v-card class="rounded-pill mt-n6" max-width="150" style="">
-                                                <v-list dense class="py-1 prem">
-                                                    <v-list-item dense class="pa-0">
-                                                        <v-list-item-avatar class="my-0 ml-2">
-                                                            <v-img :src="require('~/assets/images/1.png')"></v-img>
-                                                        </v-list-item-avatar>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2">@Roy Reyna</v-list-item-title>
-                                                        </v-list-item-content>
-                                                    </v-list-item>
-                                                </v-list>
-                                            </v-card>
-                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                            <v-card-subtitle class="text-left">{{item.gallery_name}}</v-card-subtitle>
                                             <v-row>
                                                 <div class="prem-sup-card rounded-lg">
                                                     <span>Neko Kingdom</span>
@@ -257,13 +77,13 @@
             <v-row justify="center">
                 <v-col cols="12" align="center">
                     <p class="title">Popular Collections</p>
-                    <client-only>
+                    <client-only v-if="popular.length>0">
                         <VueSlickCarousel v-bind="slickSetting">
-                            <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
+                            <div v-for="(item,i) in popular" :key="i">
+                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium(item)">
                                     <div class="outer-card">
                                         <div class="inner-card">
-                                            <v-img :src="require('~/assets/images/1.png')" class="mx-auto" width="220" height="220"></v-img>
+                                            <v-img :src="getImg(item)" class="mx-auto" width="220" height="220"></v-img>
 
                                             <v-card class="rounded-pill mt-n6" max-width="150" style="">
                                                 <v-list dense class="py-1">
@@ -272,192 +92,12 @@
                                                             <v-img :src="require('~/assets/images/1.png')"></v-img>
                                                         </v-list-item-avatar>
                                                         <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2">@Roy Reyna</v-list-item-title>
+                                                            <v-list-item-title class="ml-n2">{{item.user_id.slice(0,5)}}</v-list-item-title>
                                                         </v-list-item-content>
                                                     </v-list-item>
                                                 </v-list>
                                             </v-card>
-                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                            <v-row>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko Kingdom</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Cat Series</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Stone Tail</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Eye</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Bunny Ear</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Triple Horn</span>
-                                                </div>
-                                            </v-row>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </div>
-                            <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
-                                    <div class="outer-card">
-                                        <div class="inner-card">
-                                            <v-img :src="require('~/assets/images/2.png')" class="mx-auto" width="220" height="240"></v-img>
-                                            <v-card class="rounded-pill mt-n6" max-width="150" style="">
-                                                <v-list dense class="py-1">
-                                                    <v-list-item dense class="pa-0">
-                                                        <v-list-item-avatar class="my-0 ml-2">
-                                                            <v-img :src="require('~/assets/images/1.png')"></v-img>
-                                                        </v-list-item-avatar>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2">@Roy Reyna</v-list-item-title>
-                                                        </v-list-item-content>
-                                                    </v-list-item>
-                                                </v-list>
-                                            </v-card>
-                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                            <v-row>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko Kingdom</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Cat Series</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Stone Tail</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Eye</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Bunny Ear</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Triple Horn</span>
-                                                </div>
-                                            </v-row>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </div>
-                            <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
-                                    <div class="outer-card">
-                                        <div class="inner-card">
-                                            <v-img :src="require('~/assets/images/3.png')" class="mx-auto" width="220" height="240"></v-img>
-                                            <v-card class="rounded-pill mt-n6" max-width="150" style="">
-                                                <v-list dense class="py-1">
-                                                    <v-list-item dense class="pa-0">
-                                                        <v-list-item-avatar class="my-0 ml-2">
-                                                            <v-img :src="require('~/assets/images/1.png')"></v-img>
-                                                        </v-list-item-avatar>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2">@Roy Reyna</v-list-item-title>
-                                                        </v-list-item-content>
-                                                    </v-list-item>
-                                                </v-list>
-                                            </v-card>
-                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                            <v-row>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko Kingdom</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Cat Series</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Stone Tail</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Eye</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Bunny Ear</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Triple Horn</span>
-                                                </div>
-                                            </v-row>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </div>
-                            <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
-                                    <div class="outer-card">
-                                        <div class="inner-card">
-                                            <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
-                                            <v-card class="rounded-pill mt-n6 prem" max-width="150" style="">
-                                                <v-list dense class="py-1">
-                                                    <v-list-item dense class="pa-0">
-                                                        <v-list-item-avatar class="my-0 ml-2">
-                                                            <v-img :src="require('~/assets/images/1.png')"></v-img>
-                                                        </v-list-item-avatar>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2">@Roy Reyna</v-list-item-title>
-                                                        </v-list-item-content>
-                                                    </v-list-item>
-                                                </v-list>
-                                            </v-card>
-                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
-                                            <v-row>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko Kingdom</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Cat Series</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Neko</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Stone Tail</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Eye</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Bunny Ear</span>
-                                                </div>
-                                                <div class="prem-sup-card rounded-lg">
-                                                    <span>Triple Horn</span>
-                                                </div>
-                                            </v-row>
-                                        </div>
-                                    </div>
-                                </v-card>
-                            </div>
-                            <div>
-                                <v-card color="transparent" flat class="pa-5" max-width="300" @click="seePremium()">
-                                    <div class="outer-card">
-                                        <div class="inner-card">
-                                            <v-img :src="require('~/assets/images/4.png')" class="mx-auto" width="220" height="240"></v-img>
-                                            <v-card class="rounded-pill mt-n6" max-width="150" style="">
-                                                <v-list dense class="py-1 prem">
-                                                    <v-list-item dense class="pa-0">
-                                                        <v-list-item-avatar class="my-0 ml-2">
-                                                            <v-img :src="require('~/assets/images/1.png')"></v-img>
-                                                        </v-list-item-avatar>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2">@Roy Reyna</v-list-item-title>
-                                                        </v-list-item-content>
-                                                    </v-list-item>
-                                                </v-list>
-                                            </v-card>
-                                            <v-card-subtitle class="text-left">Lorem Ipsum Dolor</v-card-subtitle>
+                                            <v-card-subtitle class="text-left">{{item.gallery_name}}</v-card-subtitle>
                                             <v-row>
                                                 <div class="prem-sup-card rounded-lg">
                                                     <span>Neko Kingdom</span>
@@ -748,9 +388,12 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data() {
         return {
+            trending:[],
+            popular:[],
         }
     },
     computed:{
@@ -758,11 +401,32 @@ export default {
             return this.$store.state.plugins.slickSetting
         }
     },
+    mounted(){
+        this.getCollections()
+    },
     methods:{
-        seePremium(){
+        seePremium(item){
+            this.$store.commit('content/setSelected',item)
             this.$router.push({
-                name:'profile-preview',
+                name:'preview',
             })
+        },
+        getCollections(){
+            axios.get('http://nft-soul.herokuapp.com/api/get-gallery')
+            .then(res=>{
+                console.log(res.data)
+                this.trending=res.data.trending
+                console.log('trend:',this.trending)
+                this.popular=res.data.premium
+            })
+            .catch(err=>console.log(err.response))
+        },
+        getImg(item){
+            return this.$cloudinary.image.url(
+                item.image, {
+                    gravity: 'auto:subject',
+                }
+            )
         }
     }
 }

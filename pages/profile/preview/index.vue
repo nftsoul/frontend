@@ -26,9 +26,9 @@
                                                         <v-list-item-title>
                                                             Roy Reyna
                                                         </v-list-item-title>
-                                                        <v-list-item-subtitle>
+                                                        <!-- <v-list-item-subtitle>
                                                             @Rayna
-                                                        </v-list-item-subtitle>
+                                                        </v-list-item-subtitle> -->
                                                     </v-list-item-content>
                                                 </v-list-item>
                                             </v-list>
@@ -68,6 +68,11 @@ export default {
     data() {
         return {
 
+        }
+    },
+    computed:{
+        freshNft(){
+            return this.$store.state.content.freshNft
         }
     }
 }
