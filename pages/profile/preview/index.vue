@@ -10,13 +10,13 @@
                                 <v-container>
                                     <v-row>
                                         <v-col cols="12" lg="4" md="6" align="center" class="px-5">
-                                            <v-img :src="require('~/assets/images/1.png')" class="rounded-lg"></v-img>
+                                            <v-img :src="selected.nfts[0].img" class="rounded-lg"></v-img>
                                         </v-col>
-                                        <v-col cols="12" lg="4" md="6" align="center" class="px-5">
-                                            <v-img :src="require('~/assets/images/2.png')" class="rounded-lg"></v-img>
+                                        <v-col v-if="selected.nfts.length>1" cols="12" lg="4" md="6" align="center" class="px-5">
+                                            <v-img :src="selected.nfts[1].img" class="rounded-lg"></v-img>
                                         </v-col>
                                         <v-col cols="12" lg="4" md="6" class="pr-0">
-                                            <p>Infinity Lab Collections</p>
+                                            <p>{{selected.gallery_name}}</p>
                                             <v-list dense style="box-shadow:none !important">
                                                 <v-list-item dense>
                                                     <v-list-item-avatar>
@@ -24,7 +24,8 @@
                                                     </v-list-item-avatar>
                                                     <v-list-item-content>
                                                         <v-list-item-title>
-                                                            Roy Reyna
+                                                            {{selected.user_id.slice(0,5)}}
+                                                            <!-- Roy Reyna -->
                                                         </v-list-item-title>
                                                         <!-- <v-list-item-subtitle>
                                                             @Rayna
@@ -36,12 +37,12 @@
                                                 <v-col cols="5">
                                                     <p class="mb-0 caption text--disabled">start with</p>
                                                     <p class="text-h5">2.5 SOL</p>
-                                                   
+
                                                     <p class="mt-2 body-2">Total Items: 45</p>
                                                 </v-col>
                                                 <v-col cols="7" class="px-0">
                                                     <p class="mb-0 caption text--disabled">About This Gallery</p>
-                                                    <p style="line-height:15px"><small>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.</small></p>
+                                                    <p style="line-height:15px"><small>{{selected.description}}</small></p>
                                                     <v-btn small rounded color="#A0A0A0">
                                                         <small>Add To Favourite</small>
                                                     </v-btn>
@@ -70,9 +71,18 @@ export default {
 
         }
     },
-    computed:{
-        freshNft(){
-            return this.$store.state.content.freshNft
+    computed: {
+        selected() {
+            return this.$store.state.content.selected
+        }
+    },
+    methods: {
+        getImg(item) {
+            return this.$cloudinary.image.url(
+                item.image, {
+                    gravity: 'auto:subject',
+                }
+            )
         }
     }
 }

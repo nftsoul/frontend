@@ -106,7 +106,7 @@ export default {
                                 theme: "outline"
                             })
                             .goAway(3000);
-                            this.$store.commit('content/setFreshNft',res.data)
+                            this.$store.commit('content/setSelected',res.data)
                             this.$router.push({
                                 name:'profile-preview'
                             })

@@ -15,10 +15,10 @@
                                     <v-container>
                                         <v-row>
                                             <v-col cols="12" lg="5" md="6">
-                                                <v-img :src="require('~/assets/images/'+item.src)" class="mx-auto rounded-lg" height="375"></v-img>
+                                                <v-img :src="getImg(selected)" class="mx-auto rounded-lg" height="375"></v-img>
                                             </v-col>
                                             <v-col cols="12" lg="7" md="6">
-                                                <p class="text-h5 mb-0">Infinity Lab</p>
+                                                <p class="text-h5 mb-0">{{selected.gallery_name}}</p>
                                                 <p><small>1 of 30 <v-chip dark small>
                                                             <v-icon small class="mr-1">mdi-heart</v-icon>1.0k
                                                         </v-chip></small></p>
@@ -30,8 +30,7 @@
                                                     </v-row>
                                                     <v-divider class="mt-3"></v-divider>
                                                     <v-card-text class="caption">
-                                                        Lorem ipsum Dolor Sit Amet, Consectetur Adipiscing Elit, Sed Do Eisumod Tempor.
-                                                        Lorem ipsum Dolor Sit Amet, Consectetur Adipiscing Elit, Sed Do Eisumod Tempor.
+                                                        {{selected.description}}
 
                                                     </v-card-text>
                                                 </v-card>
@@ -44,7 +43,7 @@
                                                     </v-list-item-avatar>
                                                     <v-list-item-content>
                                                         <v-list-item-title>
-                                                            @Royna_ray
+                                                            {{selected.user_id.slice(0,5)}}
                                                         </v-list-item-title>
                                                     </v-list-item-content>
                                                 </v-list-item>
@@ -97,20 +96,35 @@ export default {
             ],
         }
     },
+    computed: {
+        selected() {
+            return this.$store.state.content.selected
+        }
+    },
     mounted() {
         window.setInterval(() => {
             this.minuteLeft = Math.floor(this.totalTime / 60)
             this.secondLeft = this.totalTime % 60
             this.totalTime -= 1
-            if(this.totalTime==0){
+            if (this.totalTime == 0) {
                 window.clearInterval()
                 this.$router.push({
-                    name:'profile-preview'
+                    name: 'profile-preview'
                 })
             }
         }, 1000);
 
+    },
+    methods: {
+        getImg(item) {
+            return this.$cloudinary.image.url(
+                item.image, {
+                    gravity: 'auto:subject',
+                }
+            )
+        }
     }
+
 }
 </script>
 

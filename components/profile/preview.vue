@@ -40,7 +40,7 @@
                                     </v-col>
                                     <v-col cols="7" class="px-0">
                                         <p class="mb-0 caption text--disabled">About This Gallery</p>
-                                        <p style="line-height:15px"><small>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.</small></p>
+                                        <p style="line-height:15px"><small>{{selected.description}}</small></p>
                                         <v-btn small rounded color="#A0A0A0">
                                             <small>Add To Favourite</small>
                                         </v-btn>
