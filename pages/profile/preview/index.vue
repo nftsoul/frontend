@@ -38,7 +38,7 @@
                                                     <p class="mb-0 caption text--disabled">start with</p>
                                                     <p class="text-h5">2.5 SOL</p>
 
-                                                    <p class="mt-2 body-2">Total Items: 45</p>
+                                                    <p class="mt-2 body-2">Total Items: {{selected.nfts.length}}</p>
                                                 </v-col>
                                                 <v-col cols="7" class="px-0">
                                                     <p class="mb-0 caption text--disabled">About This Gallery</p>

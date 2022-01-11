@@ -2,8 +2,8 @@
 <div class="dark-bg">
     <v-container class="py-lg-16 py-md-10 py-5">
         <v-row justify="center">
-            <div class="outer-card rounded-lg">
-                <div class="inner-card pa-1 rounded-lg">
+            <div class="outer-card rounded-lg" style="height:46px">
+                <div class="inner-card pa-1 rounded-lg" style="height:44px">
                     <v-btn text dark class="px-5" @click="createGallery">
                         Create New Gallery
                         <div class="btn-plus ml-2">
@@ -23,8 +23,8 @@
                 </v-row>
                 <v-row v-else>
                     <v-col cols="12" lg="6" md="6" v-for="(item,i) in nfts" :key="i">
-                        <div class="outer-card rounded-lg">
-                            <div class="inner-card pa-1 rounded-lg">
+                        <div class="outer-card rounded-lg" style="height:55px">
+                            <div class="inner-card pa-1 rounded-lg" style="height:53px">
                                 <v-list dense style="background-color:transparent;box-shadow:none !important" class="py-0">
                                     <v-list-item class="px-0">
                                         <v-list-item-avatar tile class="rounded-lg my-0">

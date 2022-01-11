@@ -17,7 +17,7 @@
                                 <v-list dense style="box-shadow:none !important">
                                     <v-list-item dense>
                                         <v-list-item-avatar>
-                                            <v-img :src="require('~/assets/images/profile.png')"></v-img>
+                                            <v-icon>mdi-account-tie</v-icon>
                                         </v-list-item-avatar>
                                         <v-list-item-content>
                                             <v-list-item-title>
@@ -32,18 +32,18 @@
                                 <v-row class="mt-5">
                                     <v-col cols="5">
                                         <p class="mb-0 caption text--disabled">start with</p>
-                                        <p class="text-h5">2.5 SOL</p>
+                                        <p class="text-h5">{{selected.price}} SOL</p>
                                         <v-btn small color="green" class="mt-7" rounded x-small @click="stream">
                                             <small>Play Now</small>
                                         </v-btn>
-                                        <p class="mt-2 body-2">Total Items: 45</p>
+                                        <p class="mt-2 body-2">Total Items: {{selected.nfts.length}}</p>
                                     </v-col>
                                     <v-col cols="7" class="px-0">
                                         <p class="mb-0 caption text--disabled">About This Gallery</p>
                                         <p style="line-height:15px"><small>{{selected.description}}</small></p>
-                                        <v-btn small rounded color="#A0A0A0">
+                                        <!-- <v-btn small rounded color="#A0A0A0">
                                             <small>Add To Favourite</small>
-                                        </v-btn>
+                                        </v-btn> -->
                                     </v-col>
                                 </v-row>
                             </v-col>

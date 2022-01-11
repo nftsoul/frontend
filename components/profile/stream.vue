@@ -9,13 +9,13 @@
                 <div class="enclose-border yo">
 
                     <carousel-3d autoplay autoplayHoverPause :controls-visible="true" :controls-width="40" :controls-height="40" perspective="0" inverseScaling="00" display="1" width="700" height="400" border="0">
-                        <slide v-for="(item,i) in featured" :index='i' :key="i">
+                        <slide v-for="(item,i) in selected.nfts" :index='i' :key="i">
                             <template slot-scope="{index,isCurrent,leftIndex,rightIndex}">
                                 <v-card :data-index="index" flat style="border-radius:10px" color="transparent" :class="{current:isCurrent,onLeft:(leftIndex >=0),onRight:(rightIndex >= 0)}">
                                     <v-container>
                                         <v-row>
                                             <v-col cols="12" lg="5" md="6">
-                                                <v-img :src="getImg(selected)" class="mx-auto rounded-lg" height="375"></v-img>
+                                                <v-img :src="item.img" class="mx-auto rounded-lg" height="375"></v-img>
                                             </v-col>
                                             <v-col cols="12" lg="7" md="6">
                                                 <p class="text-h5 mb-0">{{selected.gallery_name}}</p>
@@ -39,7 +39,7 @@
                                                 <v-divider class="mt-n3"></v-divider>
                                                 <v-list-item dense class="px-0">
                                                     <v-list-item-avatar size="30">
-                                                        <v-img :src="require('~/assets/images/1.png')"></v-img>
+                                                        <v-icon>mdi-account-tie</v-icon>
                                                     </v-list-item-avatar>
                                                     <v-list-item-content>
                                                         <v-list-item-title>
@@ -74,26 +74,6 @@ export default {
             totalTime: 300,
             minuteLeft: 0,
             secondLeft: 0,
-            featured: [{
-                    src: '1.png',
-                    avatar: 'fa1.png',
-                    title: '3D Art',
-                    subtitle: 'Lorem Ipsum Dolor'
-                },
-                {
-                    src: '2.png',
-                    avatar: 'f2.png',
-                    title: '3D Art',
-                    subtitle: 'Lorem Ipsum Dolor'
-                },
-                {
-                    src: '3.png',
-                    avatar: 'fa3.png',
-                    title: '3D Art',
-                    subtitle: 'Lorem Ipsum Dolor'
-                },
-
-            ],
         }
     },
     computed: {
