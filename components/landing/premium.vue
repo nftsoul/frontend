@@ -85,7 +85,7 @@ export default {
             })
         },
         getPremium(){
-            axios.get('http://nft-soul.herokuapp.com/api/get-gallery')
+            axios.get('https://nft-soul.herokuapp.com/api/get-gallery')
             .then(res=>{
                 this.premium=res.data.premium
             })

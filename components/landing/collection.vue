@@ -412,7 +412,7 @@ export default {
             })
         },
         getCollections(){
-            axios.get('http://nft-soul.herokuapp.com/api/get-gallery')
+            axios.get('https://nft-soul.herokuapp.com/api/get-gallery')
             .then(res=>{
                 console.log(res.data)
                 this.trending=res.data.trending
