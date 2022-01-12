@@ -43,7 +43,7 @@
                             <v-card width="200" color="#636262">
                                 <v-list style="background-color:#636262" dense>
                                     <v-list-item @click="$router.push({name:'profile-address',params:{address:walletAddress}})">
-                                        <v-list-item-title>Personal Page</v-list-item-title><br><br>
+                                        <v-list-item-title>Profile</v-list-item-title><br><br>
                                     </v-list-item>
                                     <v-divider></v-divider>
                                     <v-list-item @click="disconnect">
@@ -98,7 +98,7 @@
                             <v-card width="200" color="#636262">
                                 <v-list style="background-color:#636262" dense>
                                     <v-list-item @click="$router.push({name:'profile-address',params:{address:walletAddress}})">
-                                        <v-list-item-title>Personal Page</v-list-item-title><br><br>
+                                        <v-list-item-title>Profile</v-list-item-title><br><br>
                                     </v-list-item>
                                     <v-divider></v-divider>
                                     <v-list-item @click="disconnect">

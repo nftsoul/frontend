@@ -442,5 +442,6 @@ export default {
     width: 100%;
     padding: 20px;
     height: 446px;
+    overflow: hidden;
 }
 </style>
