@@ -40,6 +40,9 @@
                         </v-card>
                     </v-col>
                 </v-row>
+                <v-row justify="center">
+                    <v-pagination v-model="page" dark :length="total" prev-icon="mdi-menu-left" next-icon="mdi-menu-right" :total-visible="10" @input="input" class="my-5"></v-pagination>
+                </v-row>
             </v-col>
         </v-row>
     </v-container>
@@ -57,8 +60,9 @@ export default {
     data() {
         return {
             nfts: [],
-            page: 0,
-            limit: 15
+            page: 1,
+            limit: 15,
+            total:0,
         }
     },
     mounted() {
@@ -66,12 +70,10 @@ export default {
     },
     methods: {
         getPremiumNfts() {
-            this.page++
             axios.get('http://nft-soul.herokuapp.com/api/all-premium?page='+this.page+'&limit='+this.limit)
                 .then(res => {
-                    for(var x=0;x<res.data.length;x++){
-                        this.nfts.push(res.data[x])
-                    }
+                    this.total=Math.floor(res.data.galleryCount/this.limit)+1
+                    this.nfts=res.data.premium
                 })
                 .catch(err => console.log(err.response))
         },
@@ -81,7 +83,11 @@ export default {
                     gravity: 'auto:subject',
                 }
             )
-        }
+        },
+        input(e) {
+            this.page = e;
+            this.getPremiumNfts();
+        },
     },
 }
 </script>

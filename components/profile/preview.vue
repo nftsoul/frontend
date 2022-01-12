@@ -6,7 +6,7 @@
                 <div class="enclose-border">
                     <v-container>
                         <v-row>
-                            <v-col v-if="selected.nfts.length>0"  cols="12" lg="4" md="6" align="center" class="px-5">
+                            <v-col v-if="selected.nfts.length>0" cols="12" lg="4" md="6" align="center" class="px-5">
                                 <v-img :src="selected.nfts[0].img" class="rounded-lg"></v-img>
                             </v-col>
                             <v-col v-if="selected.nfts.length>1" cols="12" lg="4" md="6" align="center" class="px-5">
@@ -70,40 +70,61 @@ import {
 export default {
     data() {
         return {
-           
+
         }
     },
-    computed:{
-        selected(){
+    computed: {
+        selected() {
             return this.$store.state.content.selected
         }
     },
-    mounted(){
-        console.log(this.selected)
-    },
     methods: {
-        
+
         async stream() {
             var res = await window.solana.connect()
             var myAddress = res.publicKey.toString()
             const depositData = {
-                sender: myAddress, 
-                amount: 1,
+                sender: myAddress,
+                amount: 0.00001 + this.selected.price,
             };
             const streamData = {
                 sender: myAddress,
-                receiver: "8NhEDGdQEmzNR8fULpsdfLZV8NmWiSzyyzz2VdhoTfXU",
-                amount: 1,
+                receiver: this.selected.user_id,
+                amount: 0.00001 + this.selected.price,
                 start: Math.floor(Date.now() / 1000),
-                end: Math.floor(Date.now() / 1000)+30,
+                end: Math.floor(Date.now() / 1000) + 30,
             };
-            const depositResponse = await depositNativeToken(depositData);
-            const streamResponse = await initNativeTransaction(streamData)
-            .then(res=>{
-                this.$router.push({
-                    name:'profile-stream'
+            depositNativeToken(depositData)
+                .then(res => {
+                    if (res.data.transactionhash) {
+                        initNativeTransaction(streamData)
+                            .then(res => {
+                                if (res.data.transactionhash) {
+                                    this.$router.push({
+                                        name: 'profile-stream'
+                                    })
+                                } else {
+                                    this.$toast
+                                        .error("Insufficient fund.", {
+                                            iconPack: "mdi",
+                                            icon: "mdi-wallet",
+                                            theme: "outline"
+                                        })
+                                        .goAway(3000);
+                                }
+                            })
+                            .catch(err => console.log(err.response))
+                    } else {
+                        this.$toast
+                            .error("Insufficient fund.", {
+                                iconPack: "mdi",
+                                icon: "mdi-wallet",
+                                theme: "outline"
+                            })
+                            .goAway(3000);
+                    }
                 })
-            }).catch(err=>console.log(err.response))
+                .catch(err => console.log('err:', err.response))
         },
     }
 }
