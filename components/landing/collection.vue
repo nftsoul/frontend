@@ -47,7 +47,7 @@
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
-                        <div class="outer-btn">
+                        <div class="outer-btn" @click="$router.push('/trending-nfts')">
                             <div class="inner-btn">
                                 <p class="mt-n1 mr-3" style="font-size:14px">View All</p>
                             </div>
@@ -94,7 +94,7 @@
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
-                        <div class="outer-btn">
+                        <div class="outer-btn" @click="$router.push('/popular-nfts')">
                             <div class="inner-btn">
                                 <p class="mt-n1 mr-3" style="font-size:14px">View All</p>
                             </div>

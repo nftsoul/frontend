@@ -6,7 +6,7 @@
                 <div class="enclose-border">
                     <v-container>
                         <v-row>
-                            <v-col cols="12" lg="4" md="6" align="center" class="px-5">
+                            <v-col v-if="selected.nfts.length>0"  cols="12" lg="4" md="6" align="center" class="px-5">
                                 <v-img :src="selected.nfts[0].img" class="rounded-lg"></v-img>
                             </v-col>
                             <v-col v-if="selected.nfts.length>1" cols="12" lg="4" md="6" align="center" class="px-5">
