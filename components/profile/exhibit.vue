@@ -34,7 +34,13 @@
                                             <v-list-item-title>{{item.title}}</v-list-item-title>
                                         </v-list-item-content>
                                         <v-list-item-action>
-                                            <v-checkbox @change="selectNft(item)" color="green" dark value="red" style="border-radius:50% !important"></v-checkbox>
+                                            <v-tooltip top v-if="collected.includes(item.mintAddress)">
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-icon v-bind="attrs" v-on="on" color="red">mdi-stop-circle-outline</v-icon>
+                                                </template>
+                                                <span class="caption">Already belongs to a collection</span>
+                                            </v-tooltip>
+                                            <v-checkbox v-else @change="selectNft(item)" color="green" dark value="red" style="border-radius:50% !important"></v-checkbox>
                                         </v-list-item-action>
                                     </v-list-item>
 
@@ -74,6 +80,7 @@ export default {
     },
     data() {
         return {
+            collected: [],
             selected: [],
             nfts: [],
             loading: true,
@@ -107,6 +114,7 @@ export default {
 
         },
         async getAllNftData() {
+            await this.getCollected()
             axios.get('https://api-mainnet.magiceden.io/rpc/getNFTsByOwner/' + this.walletAddress)
                 .then(res => {
                     for (var x = 0; x < res.data.results.length; x++) {
@@ -114,6 +122,7 @@ export default {
                             this.nfts.push(res.data.results[x])
                         }
                     }
+                    console.log('nfts:', this.nfts)
                 })
                 .catch(err => console.log(err.respoonse))
             // const connect = createConnectionConfig(clusterApiUrl("devnet"));
@@ -140,6 +149,16 @@ export default {
             //     }
             // }
         },
+        getCollected() {
+            axios.get('https://nft-soul.herokuapp.com/api/all-gallery/' + this.walletAddress).then(res => {
+                for (var x = 0; x < res.data.length; x++) {
+                    for (var y = 0; y < res.data[x].nfts.length; y++) {
+                        this.collected.push(res.data[x].nfts[y].mintAddress)
+                    }
+                }
+                console.log('collected:', this.collected)
+            }).catch(err => console.log(err.response))
+        },
         createGallery() {
             if (this.selected.length == 0) {
                 this.$toast
@@ -156,6 +175,7 @@ export default {
                 })
             }
         },
+
         selectNft(item) {
             if (this.selected.includes(item)) {
                 this.selected.splice(this.selected.indexOf(item), 1)

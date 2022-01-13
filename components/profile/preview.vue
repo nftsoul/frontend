@@ -85,21 +85,23 @@ export default {
             var myAddress = res.publicKey.toString()
             const depositData = {
                 sender: myAddress,
-                amount: 0.00001 + this.selected.price,
+                amount: 0.00001 + 0.00001,
             };
             const streamData = {
                 sender: myAddress,
                 receiver: this.selected.user_id,
-                amount: 0.00001 + this.selected.price,
+                amount: 0.00001+0.00001,
                 start: Math.floor(Date.now() / 1000),
                 end: Math.floor(Date.now() / 1000) + 30,
             };
             depositNativeToken(depositData)
                 .then(res => {
+                    console.log('1-res:',res.data)
                     if (res.data.transactionhash) {
                         initNativeTransaction(streamData)
-                            .then(res => {
-                                if (res.data.transactionhash) {
+                            .then(res2 => {
+                                console.log('res:2:',res2.data)
+                                if (res2.data.transactionhash) {
                                     this.$router.push({
                                         name: 'profile-stream'
                                     })
@@ -113,7 +115,7 @@ export default {
                                         .goAway(3000);
                                 }
                             })
-                            .catch(err => console.log(err.response))
+                            .catch(err => console.log('2-err:',err.response))
                     } else {
                         this.$toast
                             .error("Insufficient fund.", {
@@ -124,7 +126,7 @@ export default {
                             .goAway(3000);
                     }
                 })
-                .catch(err => console.log('err:', err.response))
+                .catch(err => console.log('err:1', err.response))
         },
     }
 }
