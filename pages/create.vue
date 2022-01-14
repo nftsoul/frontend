@@ -21,7 +21,7 @@
                 </div>
                 <p class="caption white--text mb-2 mt-16">Note:</p>
                 <small class="dark-text">Service fee:2.5%</small><br>
-                <small class="dark-text" sty>You will receive: 25.00eth $50,00</small>
+                <!-- <small class="dark-text" sty>You will receive: 25.00eth $50,00</small> -->
             </v-col>
             <v-col cols="12" lg="5">
                 <div class="enclose-border">
@@ -34,7 +34,7 @@
                         <v-textarea v-model="about" :rules="[validRules.required]" id="about" rows="3" auto-grow filled background-color="#030537" dense outlined placeholder="e.g.'After purchasing the item you can get the item....'"></v-textarea>
 
                         <label for="price" class="text--disabled">Price</label>
-                        <v-text-field v-model="price" :rules="[validRules.required]" id="price" filled background-color="#030537" dense outlined placeholder="e.g. '250 SOL'"></v-text-field>
+                        <v-text-field v-model="price" type="number" :rules="[validRules.required,validRules.positive]" id="price" filled background-color="#030537" dense outlined placeholder="e.g. '250 SOL'"></v-text-field>
                         <!-- <v-row no-gutters>
                             <small class="mr-5">
                                 <v-checkbox label="Put on sale" dense dark></v-checkbox>
@@ -71,7 +71,8 @@ export default {
             isSelecting: false,
             validRules: {
                 required: value => !!value || "Required.",
-                length10: v => v && v.length == 10 || "Should be 10 characters",
+                length10: v => v && v.length == 10 || "Should be 10 characters.",
+                positive: v => v && v > -1 || "Price cannot be negative.",
             },
         }
     },

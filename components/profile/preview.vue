@@ -33,8 +33,8 @@
                                     <v-col cols="5">
                                         <p class="mb-0 caption text--disabled">start with</p>
                                         <p class="text-h5">{{selected.price}} SOL</p>
-                                        <v-btn small color="green" class="mt-7" rounded x-small @click="stream">
-                                            <small>Play Now</small>
+                                        <v-btn v-if="selected.user_id != this.walletAddress" small color="green" class="mt-7" rounded x-small @click="stream">
+                                            <small>Play and View</small>
                                         </v-btn>
                                         <p class="mt-2 body-2">Total Items: {{selected.nfts.length}}</p>
                                     </v-col>
@@ -74,6 +74,9 @@ export default {
         }
     },
     computed: {
+        walletAddress(){
+            return this.$store.state.wallet.walletAddress
+        },
         selected() {
             return this.$store.state.content.selected
         }

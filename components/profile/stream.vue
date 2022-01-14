@@ -8,7 +8,7 @@
             <v-col cols="10" align="center">
                 <div class="enclose-border yo">
 
-                    <carousel-3d autoplay autoplayHoverPause :controls-visible="true" :controls-width="40" :controls-height="40" perspective="0" inverseScaling="00" display="1" width="700" height="400" border="0">
+                    <carousel-3d :controls-visible="true" :controls-width="40" :controls-height="40" perspective="0" inverseScaling="00" display="1" width="700" height="400" border="0">
                         <slide v-for="(item,i) in selected.nfts" :index='i' :key="i">
                             <template slot-scope="{index,isCurrent,leftIndex,rightIndex}">
                                 <v-card :data-index="index" flat style="border-radius:10px" color="transparent" :class="{current:isCurrent,onLeft:(leftIndex >=0),onRight:(rightIndex >= 0)}">

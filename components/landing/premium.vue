@@ -38,6 +38,16 @@
                         </VueSlickCarousel>
                     </client-only>
                 </v-col>
+                <v-col cols="12" align="right">
+                    <v-row justify="end">
+                        <div class="outer-btn" @click="$router.push('/premium-nfts')">
+                            <div class="inner-btn">
+                                <p class="mt-n1 mr-3" style="font-size:14px">View All</p>
+                            </div>
+                        </div>
+                    </v-row>
+
+                </v-col>
             </div>
         </div>
     </v-container>

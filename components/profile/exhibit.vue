@@ -1,5 +1,6 @@
 <template>
 <div class="dark-bg">
+    <v-card min-height="500" flat color="transparent">
     <v-container class="py-lg-16 py-md-10 py-5">
         <v-row justify="center">
             <div class="outer-card rounded-lg" style="height:46px">
@@ -53,6 +54,7 @@
         </v-row>
 
     </v-container>
+    </v-card>
 </div>
 </template>
 
