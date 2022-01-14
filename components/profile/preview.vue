@@ -33,7 +33,7 @@
                                     <v-col cols="5">
                                         <p class="mb-0 caption text--disabled">start with</p>
                                         <p class="text-h5">{{selected.price}} SOL</p>
-                                        <v-btn v-if="selected.user_id != this.walletAddress" small color="green" class="mt-7" rounded x-small @click="stream">
+                                        <v-btn small color="green" class="mt-7" rounded x-small @click="stream">
                                             <small>Play and View</small>
                                         </v-btn>
                                         <p class="mt-2 body-2">Total Items: {{selected.nfts.length}}</p>
