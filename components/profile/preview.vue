@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import {
     getProvider,
     depositNativeToken,
@@ -80,6 +81,9 @@ export default {
         selected() {
             return this.$store.state.content.selected
         }
+    },
+    mounted(){
+        this.increaseView()
     },
     methods: {
 
@@ -131,6 +135,9 @@ export default {
                 })
                 .catch(err => console.log('err:1', err.response))
         },
+        increaseView(){
+            axios.get('http://nft-soul.herokuapp.com/api/single-gallery/'+this.selected._id)
+        }
     }
 }
 </script>
