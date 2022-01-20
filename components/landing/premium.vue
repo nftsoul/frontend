@@ -37,6 +37,7 @@
                             </div>
                         </VueSlickCarousel>
                     </client-only>
+                    <orbit-spinner v-else class="my-16" :animation-duration="1200" :size="55" color="#fff" />
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
@@ -56,7 +57,12 @@
 
 <script>
 import axios from 'axios'
+let OrbitSpinner = null;
+if (process.client) {
+    OrbitSpinner = require('epic-spinners').OrbitSpinner
+}
 export default {
+    components:{OrbitSpinner},
     data() {
         return {
             premium:[]

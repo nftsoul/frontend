@@ -44,6 +44,8 @@
                             </div>
                         </VueSlickCarousel>
                     </client-only>
+                    <orbit-spinner v-else class="my-16" :animation-duration="1200" :size="55" color="#fff" />
+
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
@@ -91,6 +93,7 @@
                             </div>
                         </VueSlickCarousel>
                     </client-only>
+                    <orbit-spinner v-else class="my-16" :animation-duration="1200" :size="55" color="#fff" />
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
@@ -102,7 +105,7 @@
                     </v-row>
                 </v-col>
             </v-row>
-            <v-row justify="center">
+            <!-- <v-row justify="center">
                 <v-col cols="12" align="center">
                     <p class="title">Free Collections</p>
                     <client-only>
@@ -335,6 +338,7 @@
                             </div>
                         </VueSlickCarousel>
                     </client-only>
+                    
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
@@ -345,15 +349,20 @@
                         </div>
                     </v-row>
                 </v-col>
-            </v-row>
+            </v-row> -->
         </div>
     </v-container>
 </div>
 </template>
 
 <script>
+let OrbitSpinner = null;
+if (process.client) {
+    OrbitSpinner = require('epic-spinners').OrbitSpinner
+}
 import axios from 'axios'
 export default {
+    components:{OrbitSpinner},
     data() {
         return {
             trending: [],

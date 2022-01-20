@@ -10,10 +10,22 @@
                                 <v-container>
                                     <v-row>
                                         <v-col v-if="selected.nfts.length>0" cols="12" lg="4" md="6" align="center" class="px-5">
-                                            <v-img :src="selected.nfts[0].img" class="rounded-lg"></v-img>
+                                            <v-img :src="selected.nfts[0].img" :lazy-src="selected.nfts[0].img" class="rounded-lg">
+                                                <template v-slot:placeholder>
+                                                    <v-row class="fill-height ma-0" align="center" justify="center">
+                                                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                                    </v-row>
+                                                </template>
+                                            </v-img>
                                         </v-col>
                                         <v-col v-if="selected.nfts.length>1" cols="12" lg="4" md="6" align="center" class="px-5">
-                                            <v-img :src="selected.nfts[1].img" class="rounded-lg"></v-img>
+                                            <v-img :src="selected.nfts[1].img" :lazy-src="selected.nfts[1].img" class="rounded-lg">
+                                                <template v-slot:placeholder>
+                                                    <v-row class="fill-height ma-0" align="center" justify="center">
+                                                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                                    </v-row>
+                                                </template>
+                                            </v-img>
                                         </v-col>
                                         <v-col cols="12" lg="4" md="6" class="pr-0">
                                             <p>{{selected.gallery_name}}</p>

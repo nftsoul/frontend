@@ -15,23 +15,31 @@
                                     <v-container>
                                         <v-row>
                                             <v-col cols="12" lg="5" md="6">
-                                                <v-img :src="item.img" class="mx-auto rounded-lg" height="375"></v-img>
+                                                <v-img :src="item.img" :lazy-src="item.img" class="mx-auto rounded-lg" height="375">
+                                                    <template v-slot:placeholder>
+                                                        <v-row class="fill-height ma-0" align="center" justify="center">
+                                                            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                                        </v-row>
+                                                    </template>
+                                                </v-img>
                                             </v-col>
                                             <v-col cols="12" lg="7" md="6">
                                                 <p class="text-h5 mb-0">{{selected.gallery_name}}</p>
-                                                <p><small>1 of 30 <v-chip dark small>
+                                                <p><small>{{i+1}} of {{selected.nfts.length}} <v-chip dark small>
                                                             <v-icon small class="mr-1">mdi-heart</v-icon>1.0k
                                                         </v-chip></small></p>
                                                 <v-card light color="white" class="rounded-lg pa-2">
                                                     <v-row no-gutters>
-                                                        <v-chip dark small color="#C202D3">Details</v-chip>
-                                                        <v-chip small dark class="mx-2">Attributes</v-chip>
-                                                        <v-chip small dark>History</v-chip>
+                                                        <v-chip dark small color="#C202D3" @click="active='details'">Details</v-chip>
+                                                        <v-chip small dark class="mx-2" @click="active='attributes'">Attributes</v-chip>
+                                                        <!-- <v-chip small dark>History</v-chip> -->
                                                     </v-row>
                                                     <v-divider class="mt-3"></v-divider>
                                                     <v-card-text class="caption">
-                                                        {{selected.description}}
-
+                                                        <span v-if="active=='details'">{{selected.description}}</span>
+                                                        <span v-if="active=='attributes'">
+                                                            <v-chip class="ma-1" small v-for="(attr,j) in selected.nfts[i].attributes" :key="j">{{attr.trait_type}}</v-chip>
+                                                        </span>
                                                     </v-card-text>
                                                 </v-card>
                                                 <p class="mb-0"><small>Countdown</small></p>
@@ -47,9 +55,9 @@
                                                         </v-list-item-title>
                                                     </v-list-item-content>
                                                 </v-list-item>
-                                                <v-btn rounded small class="btn-exhibit">
+                                                <!-- <v-btn rounded small class="btn-exhibit">
                                                     <small>View Next NFT</small>
-                                                </v-btn>
+                                                </v-btn> -->
 
                                             </v-col>
                                         </v-row>
@@ -74,6 +82,7 @@ export default {
             totalTime: 300,
             minuteLeft: 0,
             secondLeft: 0,
+            active:'details'
         }
     },
     computed: {
@@ -89,7 +98,7 @@ export default {
             if (this.totalTime == 0) {
                 window.clearInterval()
                 this.$router.push({
-                    name: 'profile-preview'
+                    name: 'preview'
                 })
             }
         }, 1000);

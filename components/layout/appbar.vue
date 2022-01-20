@@ -24,7 +24,7 @@
                 Elements
                 <v-icon>mdi-chevron-down</v-icon>
             </v-btn> -->
-            <v-btn v-if="walletAddress == null" class="connect-wallet" @click="detectWallet()">
+            <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.commit('wallet/connectWallet')">
                 Connect Wallet
             </v-btn>
 
@@ -79,7 +79,7 @@
             <v-list-item>
                 <v-list-item-title>Elements</v-list-item-title>
             </v-list-item> -->
-            <v-btn v-if="walletAddress == null" class="connect-wallet" @click="detectWallet()">
+            <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.dispatch('wallet/connectWallet')">
                 Connect Wallet
             </v-btn>
 
@@ -133,42 +133,6 @@ export default {
         }
     },
     methods: {
-        detectWallet() {
-            const isPhantomInstalled = window.solana && window.solana.isPhantom
-            if (isPhantomInstalled) {
-                try {
-                    this.getAddress()
-                } catch (err) {
-                    this.$toast
-                        .success("Unable to connect.", {
-                            iconPack: "mdi",
-                            icon: "mdi-bitcoin",
-                            theme: "outline"
-                        })
-                        .goAway(3000);
-                }
-
-            } else {
-                this.$toast
-                    .success("Please install phantom wallet", {
-                        iconPack: "mdi",
-                        icon: "mdi-bitcoin",
-                        theme: "outline"
-                    })
-                    .goAway(3000);
-            }
-        },
-        async getAddress() {
-            var resp = await window.solana.connect();
-            this.$store.commit('wallet/setWalletAddress', resp.publicKey.toString())
-            this.$toast
-                .success("Phantom wallet connected successfully.", {
-                    iconPack: "mdi",
-                    icon: "mdi-wallet",
-                    theme: "outline"
-                })
-                .goAway(3000);
-        },
         viewProfile() {
             this.$router.push({
                 name: 'profile-address',

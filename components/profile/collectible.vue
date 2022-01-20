@@ -13,7 +13,13 @@
                     <v-row v-else>
                         <v-col cols="12" lg="4" md="6" v-for="(item,i) in nfts" :key="i" align="center">
                             <v-card max-width="300" class="art-card" height="390" @click="$store.commit('content/setDetailDialog',true)">
-                                <v-img :src="item.img" :lazy-src="item.img" width="270" height="240"></v-img>
+                                <v-img :src="item.img" :lazy-src="item.img" width="270" height="240">
+                                    <template v-slot:placeholder>
+                                        <v-row class="fill-height ma-0" align="center" justify="center">
+                                            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                        </v-row>
+                                    </template>
+                                </v-img>
                                 <v-card-text class="ml-n2 white--text text-left">{{item.title}}</v-card-text>
                                 <p class="mx-2 mt-n2 desc-text text-left">
                                     {{item.content}}
