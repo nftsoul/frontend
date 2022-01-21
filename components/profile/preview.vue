@@ -141,7 +141,6 @@ export default {
     },
   },
   mounted() {
-    console.log("selected:", this.selected);
     this.increaseView();
   },
   methods: {
@@ -173,33 +172,16 @@ export default {
           new web3.PublicKey(this.walletAddress)
         );
         var available = parseFloat(lamports * 0.000000001).toFixed(5);
-
+        console.log("ava:", available);
         if (total_charge < available) {
           try {
-            // let depositResponse = await depositNativeToken(depositData);
+            let depositResponse = await depositNativeToken(depositData);
 
             try {
-              
-              //   let keypair = Keypair.generate();
-              //   let connection = new Connection(clusterApiUrl("testnet"));
+             
 
-              //   sendAndConfirmTransaction(connection, transaction, [keypair]);
-              //   const transaction = new web3.Transaction();
-              //   const instruction = web3.SystemProgram.createAccount({
-              //     fromPubkey: this.walletAddress,
-              //     toPubkey: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-              //     lamports: 100,
-              //   });
-              //   transaction.add(instruction);
-
-              //   const txHash = await web3.signAndSendTransaction(
-              //     this.connection,
-              //     transaction
-              //   );
-              //   console.log("hash:", txHash);
-
-                let streamResponse = await initNativeTransaction(streamData);
-                this.$router.push({ name: "profile-stream" });
+              let streamResponse = await initNativeTransaction(streamData);
+              this.$router.push({ name: "profile-stream" });
             } catch (err) {
               console.log(err);
               if ((err.code = 4001)) {
