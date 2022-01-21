@@ -24,7 +24,7 @@
                 Elements
                 <v-icon>mdi-chevron-down</v-icon>
             </v-btn> -->
-            <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.commit('wallet/connectWallet')">
+            <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.dispatch('wallet/connectWallet')">
                 Connect Wallet
             </v-btn>
 

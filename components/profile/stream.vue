@@ -187,6 +187,7 @@ export default {
     },
   },
   mounted() {
+    this.getFavourite()
     window.setInterval(() => {
       this.minuteLeft = Math.floor(this.totalTime / 60);
       this.secondLeft = this.totalTime % 60;
@@ -200,19 +201,29 @@ export default {
     }, 1000);
   },
   methods: {
+    getFavourite(){
+      axios.get(
+        "http://nft-soul.herokuapp.com/api/get-favourite-gallery/" + this.walletAddress
+      ).then(res=>{
+        for(var x=0;x<res.data.length;x++){
+          this.favourite.push(res.data[x].gallery_id)
+        }
+      })
+      .catch(err=>console.log(err.response))
+    },
     getImg(item) {
       return this.$cloudinary.image.url(item.image, {
         gravity: "auto:subject",
       });
     },
     addToFavourite() {
+      this.favourite.push(this.selected._id);
       axios
         .post("http://nft-soul.herokuapp.com/api/save-favourite", {
           user_id: this.walletAddress,
           gallery_id: this.selected._id,
         })
         .then((res) => {
-          this.favourite.push(this.selected._id);
           this.loading=false
           this.$toast
             .success("Added to favourite.", {
