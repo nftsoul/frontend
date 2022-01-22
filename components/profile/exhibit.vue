@@ -3,7 +3,7 @@
     <v-card min-height="500" flat color="transparent">
     <v-container class="py-lg-16 py-md-10 py-5">
         <v-row justify="center">
-            <div class="outer-card rounded-lg" style="height:46px">
+            <div class="outer-card rounded-lg" style="height:46px" v-if="nfts.length>0">
                 <div class="inner-card pa-1 rounded-lg" style="height:44px">
                     <v-btn text dark class="px-5" @click="createGallery">
                         Create New Gallery
@@ -16,13 +16,7 @@
         </v-row>
         <v-row justify="center" class="py-5">
             <v-col cols="12" lg="8" md="10">
-                <v-row v-if="nfts.length==0" justify="center">
-                    <v-col align="center">
-                        <orbit-spinner class="ma-10" :animation-duration="1200" :size="55" color="#fff" />
-                        <p>Loading your NFTs...</p>
-                    </v-col>
-                </v-row>
-                <v-row v-else>
+                <v-row v-if="nfts.length>0" justify="center">
                     <v-col cols="12" lg="6" md="6" v-for="(item,i) in nfts" :key="i">
                         <div class="outer-card rounded-lg" style="height:55px">
                             <div class="inner-card pa-1 rounded-lg" style="height:53px">
@@ -55,6 +49,16 @@
                             </div>
                         </div>
                     </v-col>
+                </v-row>
+                <v-row v-else>
+                    <v-col v-if="loading==true" align="center">
+                            <orbit-spinner class="ma-10" :animation-duration="1200" :size="55" color="#fff" />
+                            <p>Loading your NFTs...</p>
+                        </v-col>
+                        <v-col v-else align="center">
+                            <v-img :src="require('~/assets/images/sad.svg')" max-width="300"></v-img>
+                            <p>Yo do not have any NFTs. Get some and then come back.</p>
+                        </v-col>
                 </v-row>
             </v-col>
         </v-row>
@@ -130,7 +134,7 @@ export default {
                             this.nfts.push(res.data.results[x])
                         }
                     }
-                    console.log('nfts:', this.nfts)
+                    this.loading=false
                 })
                 .catch(err => console.log(err.respoonse))
             // const connect = createConnectionConfig(clusterApiUrl("devnet"));
