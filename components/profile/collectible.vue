@@ -4,13 +4,7 @@
         <v-container>
             <v-row justify="center">
                 <v-col cols="8">
-                    <v-row v-if="nfts.length==0" justify="center">
-                        <v-col align="center">
-                            <orbit-spinner class="ma-10" :animation-duration="1200" :size="55" color="#fff" />
-                            <p>Loading your NFTs...</p>
-                        </v-col>
-                    </v-row>
-                    <v-row v-else>
+                    <v-row v-if="nfts.length>0" justify="center">
                         <v-col cols="12" lg="4" md="6" v-for="(item,i) in nfts" :key="i" align="center">
                             <v-card max-width="300" class="art-card" height="390" @click="$store.commit('content/setDetailDialog',true)">
                                 <v-img :src="item.img" :lazy-src="item.img" width="270" height="240">
@@ -33,6 +27,16 @@
                                 </v-card-actions>
 
                             </v-card>
+                        </v-col>
+                    </v-row>
+                    <v-row v-else justify="center">
+                        <v-col v-if="loading==true" align="center">
+                            <orbit-spinner class="ma-10" :animation-duration="1200" :size="55" color="#fff" />
+                            <p>Loading your NFTs...</p>
+                        </v-col>
+                        <v-col v-else align="center">
+                            <v-img :src="require('~/assets/images/sad.svg')" max-width="300"></v-img>
+                            <p>Yo do not have any NFTs. Get some and then come back.</p>
                         </v-col>
                     </v-row>
                 </v-col>
@@ -394,6 +398,7 @@ export default {
                             this.nfts.push(res.data.results[x])
                         }
                     }
+                    this.loading=false
                 })
                 .catch(err => console.log(err.respoonse))
 

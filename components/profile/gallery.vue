@@ -6,10 +6,11 @@
                 <v-col cols="12" lg="8" md="6">
                     <v-row v-if="collections.length==0" justify="center">
                         <v-col v-if="!noData" align="center">
-                            <!-- <orbit-spinner class="ma-10" :animation-duration="1200" :size="55" color="#fff" /> -->
+                            <orbit-spinner class="ma-10" :animation-duration="1200" :size="55" color="#fff" />
                             <p>Loading your Collections...</p>
                         </v-col>
                         <v-col v-else align="center">
+                            <v-img :src="require('~/assets/images/sad.svg')" max-width="300"></v-img>
                             <p>You have no collection</p>
                             <v-btn @click="createCol()" class="btn-exhibit">Create Now</v-btn>
                         </v-col>
@@ -60,13 +61,13 @@
 
 <script>
 import axios from 'axios'
-// if (process.client) {
-//     OrbitSpinner = require('epic-spinners').OrbitSpinner
-//     // import OrbitSpinner from 'epic-spinners'
+let OrbitSpinner=null
+if (process.client) {
+    OrbitSpinner = require('epic-spinners').OrbitSpinner
 
-// }
+}
 export default {
-    // components:{OrbitSpinner},
+    components:{OrbitSpinner},
     data() {
         return {
             collections: [],
