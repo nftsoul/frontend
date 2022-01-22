@@ -80,6 +80,7 @@
                         rounded
                         x-small
                         @click="stream"
+                        :loading="loading"
                       >
                         <small>Pay and View</small>
                       </v-btn>
@@ -110,7 +111,9 @@
 </template>
 
 <script>
+// import {decode} from 'base58-universal';
 import axios from "axios";
+
 import {
   getProvider,
   depositNativeToken,
@@ -126,6 +129,7 @@ const web3 = require("@solana/web3.js");
 export default {
   data() {
     return {
+      loading: false,
       connection: new web3.Connection(
         web3.clusterApiUrl("devnet"),
         "confirmed"
@@ -154,46 +158,51 @@ export default {
           })
           .goAway(3000);
       } else {
+        this.loading = true;
         const depositData = {
           sender: this.walletAddress,
-          amount: 0.000001,
-        };
-        const streamData = {
-          sender: this.walletAddress,
-          receiver: this.selected.user_id,
-          amount: 0.000001,
-          start: Math.floor(Date.now() / 1000),
-          end: Math.floor(Date.now() / 1000) + 30,
+          amount: this.selected.price + 0.02 * this.selected.price,
         };
 
-        // var total_charge = this.selected.price + 0.02 * this.selected.price + 0.00001
-        var total_charge = 0.0000001;
+        var total_charge = this.selected.price + 0.02 * this.selected.price;
         var lamports = await this.connection.getBalance(
           new web3.PublicKey(this.walletAddress)
         );
         var available = parseFloat(lamports * 0.000000001).toFixed(5);
-        console.log("ava:", available);
+
         if (total_charge < available) {
           try {
             let depositResponse = await depositNativeToken(depositData);
-
             try {
-             
-
-              let streamResponse = await initNativeTransaction(streamData);
-              this.$router.push({ name: "profile-stream" });
-            } catch (err) {
-              console.log(err);
-              if ((err.code = 4001)) {
-                this.$toast
-                  .error(err.message, {
-                    iconPack: "mdi",
-                    icon: "mdi-cancel",
-                    theme: "outline",
-                  })
-                  .goAway(3000);
+              let creatorResponse = await initNativeTransaction({
+                sender: this.walletAddress,
+                receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
+                amount: 0.02 * this.selected.price,
+                start: Math.floor(Date.now() / 1000),
+                end: Math.floor(Date.now() / 1000),
+              });
+              try {
+                let platformResponse = await initNativeTransaction({
+                  sender: this.walletAddress,
+                  receiver: this.selected.user_id,
+                  amount: this.selected.price,
+                  start: Math.floor(Date.now() / 1000),
+                  end: Math.floor(Date.now() / 1000) + 30,
+                });
+              } catch (err) {
+                if ((err.code = 4001)) {
+                  this.$toast
+                    .error(err.message, {
+                      iconPack: "mdi",
+                      icon: "mdi-cancel",
+                      theme: "outline",
+                    })
+                    .goAway(3000);
+                }
               }
-            }
+              this.loading = false;
+              this.$router.push({ name: "profile-stream" });
+            } catch {}
           } catch (err) {
             if ((err.code = 4001)) {
               this.$toast
