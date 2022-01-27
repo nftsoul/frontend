@@ -20,7 +20,7 @@
                             <v-card color="transparent" flat max-width="300" height="470" @click="seePremium(item)">
                                 <div class="outer-card">
                                     <div class="inner-card">
-                                        <v-img :src="getImg(item.gallery_id)" :lazy-src="getImg(item.gallery_id)" class="mx-auto" width="220" height="220">
+                                        <v-img :src="item.gallery_id.image" :lazy-src="item.gallery_id.image" class="mx-auto" width="220" height="220">
                                             <template v-slot:placeholder>
                                                     <v-row class="fill-height ma-0" align="center" justify="center">
                                                         <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>

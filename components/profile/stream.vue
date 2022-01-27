@@ -211,11 +211,7 @@ export default {
       })
       .catch(err=>console.log(err.response))
     },
-    getImg(item) {
-      return this.$cloudinary.image.url(item.image, {
-        gravity: "auto:subject",
-      });
-    },
+
     addToFavourite() {
       this.favourite.push(this.selected._id);
       axios

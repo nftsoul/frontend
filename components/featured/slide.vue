@@ -54,7 +54,7 @@
                     <div class="outer-card">
                       <div class="inner-card">
                         <v-img
-                          :src="getImg(item)"
+                          :src="item.image"
                           class="mx-auto"
                           width="220"
                           height="220"

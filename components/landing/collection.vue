@@ -18,7 +18,7 @@
                                 <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="seePremium(item)">
                                     <div class="outer-card">
                                         <div class="inner-card">
-                                            <v-img :src="getImg(item)" class="mx-auto" width="220" height="220"></v-img>
+                                            <v-img :src="item.image" class="mx-auto" width="220" height="220"></v-img>
 
                                             <v-card class="rounded-pill mt-n6" max-width="150" style="">
                                                 <v-list dense class="py-1">
@@ -67,7 +67,7 @@
                                 <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="seePremium(item)">
                                     <div class="outer-card">
                                         <div class="inner-card">
-                                            <v-img :src="getImg(item)" class="mx-auto" width="220" height="220"></v-img>
+                                            <v-img :src="item.image" class="mx-auto" width="220" height="220"></v-img>
 
                                             <v-card class="rounded-pill mt-n6" max-width="150">
                                                 <v-list dense class="py-1">
@@ -387,18 +387,13 @@ export default {
         getCollections() {
             axios.get('https://nft-soul.herokuapp.com/api/get-gallery')
                 .then(res => {
+                    console.log(res.data)
                     this.trending = res.data.trending
                     this.popular = res.data.premium
                 })
                 .catch(err => console.log(err.response))
         },
-        getImg(item) {
-            return this.$cloudinary.image.url(
-                item.image, {
-                    gravity: 'auto:subject',
-                }
-            )
-        }
+
     }
 }
 </script>

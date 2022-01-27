@@ -225,7 +225,7 @@ export default {
                     user_id: this.walletAddress,
                     gallery_name: this.name,
                     nfts: this.collection,
-                    image: this.public_id,
+                    image: this.src,
                     description: this.about,
                     price: this.price,
                   })

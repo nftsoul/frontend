@@ -20,7 +20,7 @@
                             <v-card color="transparent" flat max-width="300" height="470">
                                 <div class="outer-card">
                                     <div class="inner-card">
-                                        <v-img :src="getImg(item)" :lazy-src="getImg(item)" class="mx-auto" width="220" height="220">
+                                        <v-img :src="item.image" :lazy-src="item.image" class="mx-auto" width="220" height="220">
                                             <template v-slot:placeholder>
                                                     <v-row class="fill-height ma-0" align="center" justify="center">
                                                         <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -90,13 +90,6 @@ export default {
                     this.noData = true
                 }
             }).catch(err => console.log(err.response))
-        },
-        getImg(item) {
-            return this.$cloudinary.image.url(
-                item.image, {
-                    gravity: 'auto:subject',
-                }
-            )
         },
         createCol() {
             this.$router.push({

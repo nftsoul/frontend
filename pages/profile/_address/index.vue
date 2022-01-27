@@ -19,6 +19,9 @@
                     <v-tab href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/favourite'">
                         Favourites
                     </v-tab>
+                    <v-tab href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/earning-logs'">
+                        Earning Logs
+                    </v-tab>
                 </v-tabs>
             </v-col>
         </v-row>
