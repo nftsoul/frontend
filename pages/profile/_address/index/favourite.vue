@@ -91,13 +91,6 @@ export default {
                 }
             }).catch(err => console.log(err.response))
         },
-        getImg(item) {
-            return this.$cloudinary.image.url(
-                item.image, {
-                    gravity: 'auto:subject',
-                }
-            )
-        },
         seePremium(item) {
             this.$store.commit('content/setSelected', item.gallery_id)
             this.$router.push({

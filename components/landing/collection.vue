@@ -387,7 +387,6 @@ export default {
         getCollections() {
             axios.get('https://nft-soul.herokuapp.com/api/get-gallery')
                 .then(res => {
-                    console.log(res.data)
                     this.trending = res.data.trending
                     this.popular = res.data.premium
                 })

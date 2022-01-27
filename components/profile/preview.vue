@@ -200,6 +200,7 @@ export default {
                     .goAway(3000);
                 }
               }
+              this.saveEarning()
               this.loading = false;
               this.$router.push({ name: "profile-stream" });
             } catch {}
@@ -230,6 +231,15 @@ export default {
         "http://nft-soul.herokuapp.com/api/single-gallery/" + this.selected._id
       );
     },
+    saveEarning(){
+      axios.post("http://nft-soul.herokuapp.com/api/post-earnings",{
+        'user_id':this.walletAddress,
+        'gallery_id':this.selected._id,
+        'price':this.selected.price,
+        'datetime':new Date()
+      })
+      .catch(err=>console.log(err.response))
+    }
   },
 };
 </script>
