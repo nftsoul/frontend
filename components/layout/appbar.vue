@@ -230,8 +230,13 @@ export default {
       return this.$store.state.wallet.walletAddress;
     },
   },
-  mounted(){
-    this.$store.dispatch('wallet/connectWallet')
+  async mounted() {
+    try{
+    var res = await window.solana.connect({ onlyIfTrusted: true });
+    this.$store.commit("wallet/setWalletAddress", res.publicKey.toString());
+    }catch{
+      
+    }
   },
   methods: {
     viewProfile() {

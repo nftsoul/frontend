@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+let API_URL = "https://nft-soul.herokuapp.com/api"
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -51,7 +52,10 @@ export default {
     '@nuxtjs/toast',
     '@nuxtjs/cloudinary',
   ],
-
+  axios: {
+    baseURL: API_URL,
+    // credentials: true,
+  },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
@@ -74,5 +78,8 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+  env: {
+    baseUrl: API_URL,
   }
 }

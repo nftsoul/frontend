@@ -134,7 +134,7 @@ export default {
     };
   },
   mounted() {
-    this.getPremium();
+    this.getPremium()
   },
   methods: {
     getPremium() {
@@ -144,11 +144,6 @@ export default {
           this.premium = res.data.premium;
         })
         .catch((err) => console.log(err.response));
-    },
-    getImg(item) {
-      return this.$cloudinary.image.url(item.image, {
-        gravity: "auto:subject",
-      });
     },
     seePremium(item) {
       this.$store.commit("content/setSelected", item);
