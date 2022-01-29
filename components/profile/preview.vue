@@ -14,7 +14,7 @@
                   align="center"
                   class="px-5"
                 >
-                  <v-img :src="selected.nfts[0].img" class="rounded-lg">
+                  <v-img :src="selected.nfts[0].image" class="rounded-lg">
                     <template v-slot:placeholder>
                       <v-row
                         class="fill-height ma-0"
@@ -37,7 +37,7 @@
                   align="center"
                   class="px-5"
                 >
-                  <v-img :src="selected.nfts[1].img" class="rounded-lg">
+                  <v-img :src="selected.nfts[1].image" class="rounded-lg">
                     <template v-slot:placeholder>
                       <v-row
                         class="fill-height ma-0"

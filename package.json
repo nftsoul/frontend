@@ -9,14 +9,11 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "@audius/fetch-nft": "^0.1.6",
-    "@nfteyez/sol-rayz": "^0.8.0",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/cloudinary": "^1.0.3",
     "@nuxtjs/toast": "^3.3.1",
     "@primenums/solana-nft-tools": "^0.1.2",
     "@solana/spl-token": "^0.1.8",
-    "@solana/wallet-adapter-phantom": "^0.9.2",
     "@solana/wallet-adapter-vue": "^0.4.4",
     "@solana/web3.js": "^1.31.0",
     "base58-universal": "^1.0.0",

@@ -35,7 +35,7 @@
                                             <v-card-subtitle class="text-left">{{item.gallery_name}}</v-card-subtitle>
                                             <v-row>
                                                 <div class="prem-sup-card rounded-lg" v-for="(nft,i) in item.nfts" :key="i">
-                                                    <span v-if="i<4">{{nft.title}}</span>
+                                                    <span v-if="i<4">{{nft.name}}</span>
                                                 </div>
                                             </v-row>
                                         </div>
@@ -84,7 +84,7 @@
                                             <v-card-subtitle class="text-left">{{item.gallery_name}}</v-card-subtitle>
                                             <v-row>
                                                <div class="prem-sup-card rounded-lg" v-for="(nft,i) in item.nfts" :key="i">
-                                                    <span v-if="i<4">{{nft.title}}</span>
+                                                    <span v-if="i<4">{{nft.name}}</span>
                                                 </div>
                                             </v-row>
                                         </div>

@@ -230,6 +230,9 @@ export default {
       return this.$store.state.wallet.walletAddress;
     },
   },
+  mounted(){
+    this.$store.dispatch('wallet/connectWallet')
+  },
   methods: {
     viewProfile() {
       this.$router.push({

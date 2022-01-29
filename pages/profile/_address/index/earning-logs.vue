@@ -86,7 +86,8 @@ export default {
             this.walletAddress
         )
         .then((res) => {
-          this.earning = res.data;
+          // this.earning = res.data;
+          console.log(res.data)
           this.loading = false;
         })
         .catch((err) => console.log(err.response));

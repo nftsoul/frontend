@@ -86,6 +86,7 @@ export default {
         getCollections() {
             axios.get('https://nft-soul.herokuapp.com/api/get-favourite/' + this.walletAddress).then(res => {
                 this.collections = res.data
+                console.log('cl:',this.collections)
                 if (res.data.length == 0) {
                     this.noData = true
                 }
