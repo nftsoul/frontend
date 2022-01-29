@@ -44,27 +44,7 @@ export default {
             return this.$store.state.wallet.walletAddress
         }
     },
-    mounted(){
-        this.seeNft()
-    },
-    methods: {
-        seeNft() {
-            this.$router.push({
-                name: 'profile-address-index-nfts',
-                params: {
-                    address: this.walletAddress
-                }
-            })
-        },
-        seeGallery() {
-            this.$router.push({
-                name: 'profile-address-index-gallery',
-                params: {
-                    address: this.walletAddress
-                }
-            })
-        }
-    }
+    
 }
 </script>
 <style lang="css">

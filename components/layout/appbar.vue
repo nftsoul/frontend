@@ -87,7 +87,7 @@
                 class="auth-inside-1"
                 @click="
                   $router.push({
-                    name: 'profile-address',
+                    name: 'profile-address-index-nfts',
                     params: { address: walletAddress },
                   })
                 "
@@ -231,12 +231,10 @@ export default {
     },
   },
   async mounted() {
-    try{
-    var res = await window.solana.connect({ onlyIfTrusted: true });
-    this.$store.commit("wallet/setWalletAddress", res.publicKey.toString());
-    }catch{
-      
-    }
+    try {
+      var res = await window.solana.connect({ onlyIfTrusted: true });
+      this.$store.commit("wallet/setWalletAddress", res.publicKey.toString());
+    } catch {}
   },
   methods: {
     viewProfile() {
