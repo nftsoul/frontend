@@ -37,7 +37,9 @@
                             </div>
                         </VueSlickCarousel>
                     </client-only>
-                    <orbit-spinner v-else class="my-16" :animation-duration="1200" :size="55" color="#fff" />
+                    <div v-else class="spinner-box my-16">
+                        <orbit-spinner :animation-duration="1200" :size="55" color="#fff" />
+                    </div>
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">

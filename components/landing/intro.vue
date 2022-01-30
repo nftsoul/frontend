@@ -1,5 +1,5 @@
 <template>
-<v-card  :src="require('~/assets/images/abstract-flowing.png')" flat>
+<v-card  :src="require('~/assets/images/abstract-flowing.jpg')" flat>
     <v-img :height="screenHeight()" :lazy-src="require('~/assets/images/abstract-flowing.png')" :src="require('~/assets/images/abstract-flowing.png')">
         <v-container class="py-16">
             <v-row class="py-16">

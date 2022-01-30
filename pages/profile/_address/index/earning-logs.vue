@@ -32,12 +32,9 @@
             </v-row>
             <v-row v-else justify="center">
               <v-col v-if="loading == true" align="center">
-                <orbit-spinner
-                  class="ma-10"
-                  :animation-duration="1200"
-                  :size="55"
-                  color="#fff"
-                />
+               <div class="spinner-box my-16">
+                        <orbit-spinner :animation-duration="1200" :size="55" color="#fff" />
+                    </div>
                 <p>Loading your earning logs...</p>
               </v-col>
               <v-col v-else align="center">
@@ -86,8 +83,7 @@ export default {
             this.walletAddress
         )
         .then((res) => {
-          // this.earning = res.data;
-          console.log(res.data)
+          this.earning = res.data;
           this.loading = false;
         })
         .catch((err) => console.log(err.response));

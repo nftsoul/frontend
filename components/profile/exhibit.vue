@@ -69,12 +69,9 @@
             </v-row>
             <v-row v-else>
               <v-col v-if="loading == true" align="center">
-                <orbit-spinner
-                  class="ma-10"
-                  :animation-duration="1200"
-                  :size="55"
-                  color="#fff"
-                />
+                <div class="spinner-box my-16">
+                        <orbit-spinner :animation-duration="1200" :size="55" color="#fff" />
+                    </div>
                 <p>Loading your NFTs...</p>
               </v-col>
               <v-col v-else align="center">

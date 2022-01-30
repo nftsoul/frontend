@@ -56,16 +56,19 @@
             </v-row>
             <v-row v-if="loading == true" justify="center">
               <v-col align="center">
-                <orbit-spinner
-                  class="ma-10"
-                  :animation-duration="1200"
-                  :size="55"
-                  color="#fff"
+                <div
+                  class="spinner-box my-16"
                   v-intersect.quiet="{
                     handler: onIntersect,
                     options: { threshold: [0, 0.5, 1.0] },
                   }"
-                />
+                >
+                  <orbit-spinner
+                    :animation-duration="1200"
+                    :size="55"
+                    color="#fff"
+                  />
+                </div>
                 <p>Loading your NFTs...</p>
               </v-col>
             </v-row>
@@ -104,7 +107,7 @@ export default {
       loading: true,
       connect: "",
       isIntersecting: false,
-      page:0
+      page: 0,
     };
   },
   computed: {
@@ -152,7 +155,7 @@ export default {
       //     this.nfts.push(allMyNFTs[x]);
       //   }
       // }
-      this.page++
+      this.page++;
       const perPage = 10;
       const cacheTtlMins = 1;
       let myNFTs = await NFTs.getNFTsByOwner(
@@ -198,7 +201,7 @@ export default {
     },
     setNft(item) {
       if (item.length == 0) {
-        this.loading=false
+        this.loading = false;
       } else {
         for (var x = 0; x < item.length; x++) {
           this.nfts.push(item[x]);

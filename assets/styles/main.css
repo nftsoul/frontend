@@ -47,4 +47,8 @@ border-radius: 7px;
   -webkit-text-fill-color: transparent;
 
 }
+.spinner-box{
+  width:60px;
+  height: 60px;
+}
 
