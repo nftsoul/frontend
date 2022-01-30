@@ -121,7 +121,7 @@ export default {
   },
   mounted() {
     this.connect = new web3.Connection(
-      web3.clusterApiUrl("mainnet-beta"),
+      web3.clusterApiUrl("devnet"),
       "confirmed"
     );
     this.getAllNftData();
