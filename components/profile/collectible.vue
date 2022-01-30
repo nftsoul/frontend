@@ -130,15 +130,36 @@ export default {
       //         }
       //     })
 
-      let allMyNFTs = await NFTs.getNFTsByOwner(
-        this.connect,
-        this.walletAddress
-      );
-      console.log("allMyNFTs", allMyNFTs);
-      for (var x = 0; x < allMyNFTs.length; x++) {
-        if (allMyNFTs[x].owner == this.walletAddress) {
-          this.nfts.push(allMyNFTs[x]);
+      // let allMyNFTs = await NFTs.getNFTsByOwner(
+      //   this.connect,
+      //   this.walletAddress
+      // );
+      // console.log("allMyNFTs", allMyNFTs);
+      // for (var x = 0; x < allMyNFTs.length; x++) {
+      //   if (allMyNFTs[x].owner == this.walletAddress) {
+      //     this.nfts.push(allMyNFTs[x]);
+      //   }
+      // }
+      let more = true;
+      let page = 1;
+      const perPage = 10;
+      const cacheTtlMins = 1;
+      while (more == true) {
+        let myNFTs = await NFTs.getNFTsByOwner(
+          this.connect,
+          this.walletAddress,
+          page,
+          perPage,
+          cacheTtlMins
+        )
+        for(var x=0;x < myNFTs.length;x++){
+          this.nfts.push(myNFTs[x])
         }
+        page++
+        if (myNFTs.length== 0) {
+            more=false
+        }
+        
       }
 
       // fetchClient
