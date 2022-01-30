@@ -54,17 +54,23 @@
                 </v-card>
               </v-col>
             </v-row>
-            <v-row v-else justify="center">
-              <v-col v-if="loading == true" align="center">
+            <v-row v-if="loading == true" justify="center">
+              <v-col align="center">
                 <orbit-spinner
                   class="ma-10"
                   :animation-duration="1200"
                   :size="55"
                   color="#fff"
+                  v-intersect.quiet="{
+                    handler: onIntersect,
+                    options: { threshold: [0, 0.5, 1.0] },
+                  }"
                 />
                 <p>Loading your NFTs...</p>
               </v-col>
-              <v-col v-else align="center">
+            </v-row>
+            <v-row>
+              <v-col v-if="nfts.length == 0 && loading == false" align="center">
                 <v-img
                   :src="require('~/assets/images/sad.svg')"
                   max-width="300"
@@ -97,6 +103,8 @@ export default {
       nfts: [],
       loading: true,
       connect: "",
+      isIntersecting: false,
+      page:0
     };
   },
   computed: {
@@ -119,6 +127,10 @@ export default {
     this.getAllNftData();
   },
   methods: {
+    onIntersect(entries, observer, isIntersecting) {
+      console.log("ok");
+      this.getAllNftData();
+    },
     async getAllNftData() {
       // axios.get('https://api-mainnet.magiceden.io/rpc/getNFTsByOwner/' + this.walletAddress)
       //     .then(res => {
@@ -140,27 +152,35 @@ export default {
       //     this.nfts.push(allMyNFTs[x]);
       //   }
       // }
-      let more = true;
-      let page = 1;
+      this.page++
       const perPage = 10;
       const cacheTtlMins = 1;
-      while (more == true) {
-        let myNFTs = await NFTs.getNFTsByOwner(
-          this.connect,
-          this.walletAddress,
-          page,
-          perPage,
-          cacheTtlMins
-        )
-        for(var x=0;x < myNFTs.length;x++){
-          this.nfts.push(myNFTs[x])
-        }
-        page++
-        if (myNFTs.length== 0) {
-            more=false
-        }
-        
-      }
+      let myNFTs = await NFTs.getNFTsByOwner(
+        this.connect,
+        this.walletAddress,
+        this.page,
+        perPage,
+        cacheTtlMins
+      );
+      this.setNft(myNFTs);
+
+      // while (more == true) {
+      //   let myNFTs = await NFTs.getNFTsByOwner(
+      //     this.connect,
+      //     this.walletAddress,
+      //     page,
+      //     perPage,
+      //     cacheTtlMins
+      //   )
+      //   for(var x=0;x < myNFTs.length;x++){
+      //     this.nfts.push(myNFTs[x])
+      //   }
+      //   page++
+      //   if (myNFTs.length== 0) {
+      //       more=false
+      //   }
+
+      // }
 
       // fetchClient
       //   .getCollectibles({
@@ -175,6 +195,15 @@ export default {
       //           }
       //       }
       //   });
+    },
+    setNft(item) {
+      if (item.length == 0) {
+        this.loading=false
+      } else {
+        for (var x = 0; x < item.length; x++) {
+          this.nfts.push(item[x]);
+        }
+      }
     },
   },
 };
