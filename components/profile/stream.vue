@@ -3,11 +3,13 @@
     <v-container>
       <v-row justify="center" class="mt-5">
         <h3>Item Preview</h3>
+        
       </v-row>
       <v-row justify="center">
         <v-col cols="10" align="center">
           <div class="enclose-border yo">
             <carousel-3d
+              :autoplay="false"
               :controls-visible="true"
               :controls-width="40"
               :controls-height="40"
@@ -17,8 +19,10 @@
               width="700"
               height="400"
               border="0"
+              :autoplay-timeout="5000"
             >
               <slide v-for="(item, i) in selected.nfts" :index="i" :key="i">
+                <template slot="isCurrent">{{item}}</template>
                 <template
                   slot-scope="{ index, isCurrent, leftIndex, rightIndex }"
                 >
@@ -37,8 +41,8 @@
                       <v-row>
                         <v-col cols="12" lg="5" md="6">
                           <v-img
-                            :src="item.imageUrl"
-                            :lazy-src="item.imageUrl"
+                            :src="item.image"
+                            :lazy-src="item.image"
                             class="mx-auto rounded-lg"
                             height="375"
                           >
@@ -166,7 +170,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -175,7 +180,8 @@ export default {
       secondLeft: 0,
       active: "details",
       favourite: [],
-      loading:false
+      loading: false,
+      slides:[{text:'text 11111'},{text:'text 22222'},{text:'text 33333'},{text:'text 44444'},{text:'text 55555'},{text:'text 66666'}]
     };
   },
   computed: {
@@ -187,7 +193,12 @@ export default {
     },
   },
   mounted() {
-    this.getFavourite()
+    document.querySelectorAll('.next').forEach(item => {
+  item.addEventListener('click', event => {
+    console.log('next')
+  })
+})
+    this.getFavourite();
     window.setInterval(() => {
       this.minuteLeft = Math.floor(this.totalTime / 60);
       this.secondLeft = this.totalTime % 60;
@@ -201,15 +212,18 @@ export default {
     }, 1000);
   },
   methods: {
-    getFavourite(){
-      axios.get(
-        "http://nft-soul.herokuapp.com/api/get-favourite-gallery/" + this.walletAddress
-      ).then(res=>{
-        for(var x=0;x<res.data.length;x++){
-          this.favourite.push(res.data[x].gallery_id)
-        }
-      })
-      .catch(err=>console.log(err.response))
+    getFavourite() {
+      axios
+        .get(
+          "http://nft-soul.herokuapp.com/api/get-favourite-gallery/" +
+            this.walletAddress
+        )
+        .then((res) => {
+          for (var x = 0; x < res.data.length; x++) {
+            this.favourite.push(res.data[x].gallery_id);
+          }
+        })
+        .catch((err) => console.log(err.response));
     },
 
     addToFavourite() {
@@ -220,7 +234,7 @@ export default {
           gallery_id: this.selected._id,
         })
         .then((res) => {
-          this.loading=false
+          this.loading = false;
           this.$toast
             .success("Added to favourite.", {
               iconPack: "mdi",

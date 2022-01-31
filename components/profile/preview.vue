@@ -14,7 +14,7 @@
                   align="center"
                   class="px-5"
                 >
-                  <v-img :src="selected.nfts[0].imageUrl" class="rounded-lg">
+                  <v-img :src="selected.nfts[0].image" class="rounded-lg">
                     <template v-slot:placeholder>
                       <v-row
                         class="fill-height ma-0"
@@ -37,7 +37,7 @@
                   align="center"
                   class="px-5"
                 >
-                  <v-img :src="selected.nfts[1].imageUrl" class="rounded-lg">
+                  <v-img :src="selected.nfts[1].image" class="rounded-lg">
                     <template v-slot:placeholder>
                       <v-row
                         class="fill-height ma-0"
@@ -111,23 +111,11 @@
 </template>
 
 <script>
-// import {decode} from 'base58-universal';
 import axios from "axios";
-
-import {
-  constants,
-  getProvider,
-  depositNativeToken,
-  initNativeTransaction,
-  withdrawNativeTransaction,
-  cancelNativeTransaction,
-  pauseNativeTransaction,
-  resumeNativeTransaction,
-  withdrawNativeTokenDeposit,
-} from "zebecprotocol-sdk";
-
-// constants.CLUSTER="devnet"
-// constants.connection=new Connection(clusterApiUrl(constants.CLUSTER))
+let zebec = null;
+if (process.client) {
+  zebec = require("zebecprotocol-sdk");
+}
 
 const web3 = require("@solana/web3.js");
 
@@ -150,6 +138,7 @@ export default {
     },
   },
   mounted() {
+    console.log('zebec:',zebec)
     this.increaseView();
   },
   methods: {
@@ -178,62 +167,62 @@ export default {
 
         if (total_charge < available) {
           //depositing sol
-          let depositResponse = await depositNativeToken(depositData);
+          // let depositResponse = await zebec.depositNativeToken(depositData);
 
-          if (depositResponse.status == "success") {
-            let currentTime1 = new Date();
-            let futureTime1 = new Date(currentTime1.getTime() + 5 * 60000);
-            let creatorResponse = await initNativeTransaction({
-              sender: this.walletAddress,
-              receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-              amount: 0.02 * this.selected.price,
-              start_time: Math.floor(currentTime1),
-              end_time: Math.floor(futureTime1),
-            });
-            if (creatorResponse.status == "success") {
-              let currentTime2 = new Date();
-              let futureTime2 = new Date(currentTime2.getTime() + 5 * 60000);
-              let platformResponse = await initNativeTransaction({
-                sender: this.walletAddress,
-                receiver: this.selected.user_id,
-                amount: this.selected.price,
-                start_time: Math.floor(currentTime2),
-                end_time: Math.floor(futureTime2),
-              });
-              if (platformResponse.status == "success") {
+          // if (depositResponse.status == "success") {
+          //   let currentTime1 = new Date();
+          //   let futureTime1 = new Date(currentTime1.getTime() + 5 * 60000);
+          //   let creatorResponse = await zebec.initNativeTransaction({
+          //     sender: this.walletAddress,
+          //     receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
+          //     amount: 0.02 * this.selected.price,
+          //     start_time: Math.floor(currentTime1),
+          //     end_time: Math.floor(futureTime1),
+          //   });
+          //   if (creatorResponse.status == "success") {
+          //     let currentTime2 = new Date();
+          //     let futureTime2 = new Date(currentTime2.getTime() + 5 * 60000);
+          //     let platformResponse = await zebec.initNativeTransaction({
+          //       sender: this.walletAddress,
+          //       receiver: this.selected.user_id,
+          //       amount: this.selected.price,
+          //       start_time: Math.floor(currentTime2),
+          //       end_time: Math.floor(futureTime2),
+          //     });
+          //     if (platformResponse.status == "success") {
                 this.saveEarning();
                 this.loading = false;
                 this.$router.push({ name: "profile-stream" });
-              } else {
-                this.loading = false;
-                this.$toast
-                  .error("User rejected the request", {
-                    iconPack: "mdi",
-                    icon: "mdi-cancel",
-                    theme: "outline",
-                  })
-                  .goAway(3000);
-              }
-            } else {
-              this.loading = false;
-              this.$toast
-                .error("User rejected the request", {
-                  iconPack: "mdi",
-                  icon: "mdi-cancel",
-                  theme: "outline",
-                })
-                .goAway(3000);
-            }
-          } else {
-            this.loading = false;
-            this.$toast
-              .error("User rejected the request", {
-                iconPack: "mdi",
-                icon: "mdi-cancel",
-                theme: "outline",
-              })
-              .goAway(3000);
-          }
+          //     } else {
+          //       this.loading = false;
+          //       this.$toast
+          //         .error("User rejected the request", {
+          //           iconPack: "mdi",
+          //           icon: "mdi-cancel",
+          //           theme: "outline",
+          //         })
+          //         .goAway(3000);
+          //     }
+          //   } else {
+          //     this.loading = false;
+          //     this.$toast
+          //       .error("User rejected the request", {
+          //         iconPack: "mdi",
+          //         icon: "mdi-cancel",
+          //         theme: "outline",
+          //       })
+          //       .goAway(3000);
+          //   }
+          // } else {
+          //   this.loading = false;
+          //   this.$toast
+          //     .error("User rejected the request", {
+          //       iconPack: "mdi",
+          //       icon: "mdi-cancel",
+          //       theme: "outline",
+          //     })
+          //     .goAway(3000);
+          // }
         } else {
           this.loading = false;
           this.$toast

@@ -13,15 +13,10 @@
                 :key="i"
                 align="center"
               >
-                <v-card
-                  max-width="300"
-                  class="art-card"
-                  height="390"
-                  @click="$store.commit('content/setDetailDialog', true)"
-                >
+                <v-card max-width="300" class="art-card" height="390">
                   <v-img
-                    :src="item.imageUrl"
-                    :lazy-src="item.imageUrl"
+                    :src="item.image"
+                    :lazy-src="item.image"
                     width="270"
                     height="240"
                   >
@@ -56,19 +51,11 @@
             </v-row>
             <v-row v-if="loading == true" justify="center">
               <v-col align="center">
-                <div
-                  class="spinner-box my-16"
-                  v-intersect.quiet="{
-                    handler: onIntersect,
-                    options: { threshold: [0, 0.5, 1.0] },
-                  }"
-                >
-                  <orbit-spinner
-                    :animation-duration="1200"
-                    :size="55"
-                    color="#fff"
-                  />
-                </div>
+                <orbit-spinner
+                  :animation-duration="1200"
+                  :size="55"
+                  color="#fff"
+                />
                 <p>Loading your NFTs...</p>
               </v-col>
             </v-row>
@@ -81,6 +68,7 @@
                 <p>Yo do not have any NFTs. Get some and then come back.</p>
               </v-col>
             </v-row>
+            <v-row> </v-row>
           </v-col>
         </v-row>
       </v-container>
@@ -89,12 +77,11 @@
 </template>
 
 <script>
-const web3 = require("@solana/web3.js");
-import { FetchNFTClient } from "@audius/fetch-nft";
-const fetchClient = new FetchNFTClient();
-// const NFTs = require("@primenums/solana-nft-tools");
-// import { programs } from "@metaplex/js"
-
+import axios from "axios";
+import {
+  resolveToWalletAddress,
+  getParsedNftAccountsByOwner,
+} from "@nfteyez/sol-rayz";
 let OrbitSpinner = null;
 if (process.client) {
   OrbitSpinner = require("epic-spinners").OrbitSpinner;
@@ -109,8 +96,6 @@ export default {
       nfts: [],
       loading: true,
       connect: "",
-      isIntersecting: false,
-      page: 0,
     };
   },
   computed: {
@@ -126,122 +111,46 @@ export default {
     },
   },
   mounted() {
-    this.connect = new web3.Connection(
-      web3.clusterApiUrl("devnet"),
-      "confirmed"
-    );
     this.getAllNftData();
-    // this.getTokenAccounts();
   },
   methods: {
-    onIntersect(entries, observer, isIntersecting) {
-      console.log("ok");
-      // this.getAllNftData();
-      // this.getTokenAccounts();
-    },
-    async getTokenAccounts() {
-      const accountPublicKey = new web3.PublicKey(
-        this.walletAddress
-      );
-      const programId = new web3.PublicKey(
-        "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-      );
-      // let tokens = await this.connect.getTokenAccountsByOwner(
-      //   accountPublicKey,
-      //   {programId: programId},
-      //   {encoding: "jsonParsed", commitment: "confirmed"}
-      // );
-      // console.log("tokens", tokens);
-
-      let parsedtokens = await this.connect.getParsedTokenAccountsByOwner(
-        accountPublicKey,
-        {programId: programId},
-        {encoding: "jsonParsed", commitment: "confirmed"}
-      );
-      // console.log("tokens", parsedtokens);
-
-      //metadata
-      // const tokenMetadata = await programs.metadata.Metadata.findByOwnerV2(this.connect, accountPublicKey);
-    
-      // console.log('meta:',JSON.stringify(tokenMetadata));
-
-
-      // let pid=[]
-      // for(var x=0;x < parsedtokens.value.length;x++){
-      //     pid.push(parsedtokens.value[x].pubkey)
-      //     // console.log(parsedtokens.value[x].pubkey)
-      // }
-      // console.log('res:',pid)
-
-      // let nft=await this.connect.getMultipleAccountsInfo(pid)
-      // console.log('nfts:',nft)
-      //
-      //
-      //
-    },
     async getAllNftData() {
-    //   // axios.get('https://api-mainnet.magiceden.io/rpc/getNFTsByOwner/' + this.walletAddress)
-    //   //     .then(res => {
-    //   //       console.log(res.data)
-    //   //         for (var x = 0; x < res.data.results.length; x++) {
-    //   //             if (this.walletAddress == res.data.results[x].owner) {
-    //   //                 this.nfts.push(res.data.results[x])
-    //   //             }
-    //   //         }
-    //   //     })
+      // fetchClient
+      //   .getCollectibles({
+      //     solWallets: [this.walletAddress],
+      //   })
+      //   .then((res) => {
+      //     this.loading = false;
+      //     console.log(res.solCollectibles[this.walletAddress]);
+      //     for (
+      //       var x = 0;
+      //       x < res.solCollectibles[this.walletAddress].length;
+      //       x++
+      //     ) {
+      //       if (res.solCollectibles[this.walletAddress][x].isOwned == true) {
+      //         this.nfts.push(res.solCollectibles[this.walletAddress][x]);
+      //       }
+      //     }
+      //   });
 
-    //   // let allMyNFTs = await NFTs.getNFTsByOwner(
-    //   //   this.connect,
-    //   //   this.walletAddress
-    //   // );
-    //   // console.log("allMyNFTs", allMyNFTs);
-    //   // for (var x = 0; x < allMyNFTs.length; x++) {
-    //   //   if (allMyNFTs[x].owner == this.walletAddress) {
-    //   //     this.nfts.push(allMyNFTs[x]);
-    //   //   }
-    //   // }
-    //   // this.page++;
-    //   // const perPage = 10;
-    //   // const cacheTtlMins = 1;
-    //   // let myNFTs = await NFTs.getNFTsByOwner(
-    //   //   this.connect,
-    //   //   this.walletAddress,
-    //   //   this.page,
-    //   //   perPage,
-    //   //   cacheTtlMins
-    //   // );
-    //   // this.setNft(myNFTs);
+      const publicAddress = await resolveToWalletAddress({
+        text: this.walletAddress,
+      });
 
-    //   // while (more == true) {
-    //   //   let myNFTs = await NFTs.getNFTsByOwner(
-    //   //     this.connect,
-    //   //     this.walletAddress,
-    //   //     page,
-    //   //     perPage,
-    //   //     cacheTtlMins
-    //   //   )
-    //   //   for(var x=0;x < myNFTs.length;x++){
-    //   //     this.nfts.push(myNFTs[x])
-    //   //   }
-    //   //   page++
-    //   //   if (myNFTs.length== 0) {
-    //   //       more=false
-    //   //   }
+      this.meta = await getParsedNftAccountsByOwner({
+        publicAddress,
+      });
+      let promises = [];
+      for (var x = 0; x < this.meta.length; x++) {
+        promises.push(
+          await axios.get(this.meta[x].data.uri).then((response) => {
+            this.nfts.push(response.data);
+          })
+        )
+        // Promise.all(promises).then(() => console.log('nfts:',this.nfts));
 
-    //   // }
-
-      fetchClient
-        .getCollectibles({
-          solWallets: [this.walletAddress],
-        })
-        .then((res) => {
-            this.loading=false
-            for(var x=0;x<res.solCollectibles[this.walletAddress].length;x++){
-                if(res.solCollectibles[this.walletAddress][x].isOwned==true){
-                    this.nfts.push(res.solCollectibles[this.walletAddress][x])
-                }
-            }
-        });
+      }
+      this.loading=false
     },
   },
 };

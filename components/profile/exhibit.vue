@@ -18,7 +18,7 @@
                     >
                       <v-list-item class="px-0">
                         <v-list-item-avatar tile class="rounded-lg my-0">
-                          <v-img :src="item.imageUrl" :lazy-src="item.imageUrl">
+                          <v-img :src="item.image" :lazy-src="item.image">
                             <template v-slot:placeholder>
                               <v-row
                                 class="fill-height ma-0"
@@ -41,7 +41,7 @@
                         <v-list-item-action>
                           <v-tooltip
                             top
-                            v-if="collected.includes(item.mintAddress)"
+                            v-if="collected.includes(item.name)"
                           >
                             <template v-slot:activator="{ on, attrs }">
                               <v-icon v-bind="attrs" v-on="on" color="red"
@@ -96,10 +96,10 @@
 
 <script>
 import axios from "axios"
-const web3 = require("@solana/web3.js");
-import { FetchNFTClient } from "@audius/fetch-nft";
-const fetchClient = new FetchNFTClient();
-// import NFTs from "@primenums/solana-nft-tools";
+import {
+  resolveToWalletAddress,
+  getParsedNftAccountsByOwner,
+} from "@nfteyez/sol-rayz";
 let OrbitSpinner = null;
 if (process.client) {
   OrbitSpinner = require("epic-spinners").OrbitSpinner;
@@ -132,36 +132,27 @@ export default {
     },
   },
   mounted() {
-    this.connect = new web3.Connection(
-      web3.clusterApiUrl("mainnet-beta"),
-      "confirmed"
-    );
     this.getAllNftData();
   },
   methods: {
-    getProvider() {
-      if ("solana" in window) {
-        const provider = window.solana;
-        if (provider.isPhantom) {
-          return provider;
-        }
-      }
-    },
     async getAllNftData() {
       await this.getCollected();
-      fetchClient
-        .getCollectibles({
-          solWallets: [this.walletAddress],
-        })
-        .then((res) => {
-            this.loading=false
-            for(var x=0;x<res.solCollectibles[this.walletAddress].length;x++){
-                if(res.solCollectibles[this.walletAddress][x].isOwned==true){
-                    this.nfts.push(res.solCollectibles[this.walletAddress][x])
-                }
-            }
-        });
-      
+      const publicAddress = await resolveToWalletAddress({
+        text: this.walletAddress,
+      });
+
+      this.meta = await getParsedNftAccountsByOwner({
+        publicAddress,
+      });
+      let promises = [];
+      for (var x = 0; x < this.meta.length; x++) {
+        promises.push(
+          await axios.get(this.meta[x].data.uri).then((response) => {
+            this.nfts.push(response.data);
+          })
+        )
+      }
+      this.loading=false
   
     },
     getCollected() {
@@ -172,10 +163,9 @@ export default {
         .then((res) => {
           for (var x = 0; x < res.data.length; x++) {
             for (var y = 0; y < res.data[x].nfts.length; y++) {
-              this.collected.push(res.data[x].nfts[y].mintAddress);
+              this.collected.push(res.data[x].nfts[y].name);
             }
           }
-          console.log("collected:", this.collected);
         })
         .catch((err) => console.log(err.response));
     },

@@ -36,16 +36,17 @@
             </div> -->
             <v-img :src="src"></v-img>
           </div>
+          <div class="mx-3">
           <client-only>
             <VueSlickCarousel v-bind="slickSetting">
               <div
                 v-for="(item, i) in collection"
                 :key="i"
-                class="pa-3"
+                class="py-3"
                 @click="selectImage(item)"
               >
                 <v-img
-                  :src="item.imageUrl"
+                  :src="item.image"
                   class="mx-auto"
                   width="50"
                   height="50"
@@ -53,6 +54,7 @@
               </div>
             </VueSlickCarousel>
           </client-only>
+          </div>
           <p class="caption white--text mb-2">Note:</p>
           <small class="dark-text">Service fee:2.5%</small><br />
           <!-- <small class="dark-text" sty>You will receive: 25.00eth $50,00</small> -->
@@ -192,7 +194,7 @@ export default {
     },
   },
   mounted() {
-    this.src = this.collection[0].imageUrl;
+    this.src = this.collection[0].image;
   },
   methods: {
     async createGallery() {
@@ -322,7 +324,7 @@ export default {
         });
     },
     selectImage(item) {
-      this.src = item.imageUrl;
+      this.src = item.image;
     },
   },
 };
