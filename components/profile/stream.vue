@@ -37,8 +37,8 @@
                       <v-row>
                         <v-col cols="12" lg="5" md="6">
                           <v-img
-                            :src="item.image"
-                            :lazy-src="item.image"
+                            :src="item.imageUrl"
+                            :lazy-src="item.imageUrl"
                             class="mx-auto rounded-lg"
                             height="375"
                           >

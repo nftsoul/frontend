@@ -14,7 +14,7 @@
                   align="center"
                   class="px-5"
                 >
-                  <v-img :src="selected.nfts[0].image" class="rounded-lg">
+                  <v-img :src="selected.nfts[0].imageUrl" class="rounded-lg">
                     <template v-slot:placeholder>
                       <v-row
                         class="fill-height ma-0"
@@ -37,7 +37,7 @@
                   align="center"
                   class="px-5"
                 >
-                  <v-img :src="selected.nfts[1].image" class="rounded-lg">
+                  <v-img :src="selected.nfts[1].imageUrl" class="rounded-lg">
                     <template v-slot:placeholder>
                       <v-row
                         class="fill-height ma-0"
@@ -115,6 +115,7 @@
 import axios from "axios";
 
 import {
+  constants,
   getProvider,
   depositNativeToken,
   initNativeTransaction,
@@ -124,6 +125,10 @@ import {
   resumeNativeTransaction,
   withdrawNativeTokenDeposit,
 } from "zebecprotocol-sdk";
+
+// constants.CLUSTER="devnet"
+// constants.connection=new Connection(clusterApiUrl(constants.CLUSTER))
+
 const web3 = require("@solana/web3.js");
 
 export default {
@@ -159,6 +164,7 @@ export default {
           .goAway(3000);
       } else {
         this.loading = true;
+
         const depositData = {
           sender: this.walletAddress,
           amount: this.selected.price + 0.02 * this.selected.price,
@@ -171,51 +177,65 @@ export default {
         var available = parseFloat(lamports * 0.000000001).toFixed(5);
 
         if (total_charge < available) {
-          try {
-            let depositResponse = await depositNativeToken(depositData);
-            try {
-              let creatorResponse = await initNativeTransaction({
+          //depositing sol
+          let depositResponse = await depositNativeToken(depositData);
+
+          if (depositResponse.status == "success") {
+            let currentTime1 = new Date();
+            let futureTime1 = new Date(currentTime1.getTime() + 5 * 60000);
+            let creatorResponse = await initNativeTransaction({
+              sender: this.walletAddress,
+              receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
+              amount: 0.02 * this.selected.price,
+              start_time: Math.floor(currentTime1),
+              end_time: Math.floor(futureTime1),
+            });
+            if (creatorResponse.status == "success") {
+              let currentTime2 = new Date();
+              let futureTime2 = new Date(currentTime2.getTime() + 5 * 60000);
+              let platformResponse = await initNativeTransaction({
                 sender: this.walletAddress,
-                receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-                amount: 0.02 * this.selected.price,
-                start: Math.floor(Date.now() / 1000),
-                end: Math.floor(Date.now() / 1000),
+                receiver: this.selected.user_id,
+                amount: this.selected.price,
+                start_time: Math.floor(currentTime2),
+                end_time: Math.floor(futureTime2),
               });
-              try {
-                let platformResponse = await initNativeTransaction({
-                  sender: this.walletAddress,
-                  receiver: this.selected.user_id,
-                  amount: this.selected.price,
-                  start: Math.floor(Date.now() / 1000),
-                  end: Math.floor(Date.now() / 1000) + 30,
-                });
-              } catch (err) {
-                if ((err.code = 4001)) {
-                  this.$toast
-                    .error(err.message, {
-                      iconPack: "mdi",
-                      icon: "mdi-cancel",
-                      theme: "outline",
-                    })
-                    .goAway(3000);
-                }
+              if (platformResponse.status == "success") {
+                this.saveEarning();
+                this.loading = false;
+                this.$router.push({ name: "profile-stream" });
+              } else {
+                this.loading = false;
+                this.$toast
+                  .error("User rejected the request", {
+                    iconPack: "mdi",
+                    icon: "mdi-cancel",
+                    theme: "outline",
+                  })
+                  .goAway(3000);
               }
-              this.saveEarning()
+            } else {
               this.loading = false;
-              this.$router.push({ name: "profile-stream" });
-            } catch {}
-          } catch (err) {
-            if ((err.code = 4001)) {
               this.$toast
-                .error(err.message, {
+                .error("User rejected the request", {
                   iconPack: "mdi",
                   icon: "mdi-cancel",
                   theme: "outline",
                 })
                 .goAway(3000);
             }
+          } else {
+            this.loading = false;
+            this.$toast
+              .error("User rejected the request", {
+                iconPack: "mdi",
+                icon: "mdi-cancel",
+                theme: "outline",
+              })
+              .goAway(3000);
           }
         } else {
+          this.loading = false;
           this.$toast
             .error("Insufficient fund.", {
               iconPack: "mdi",
@@ -231,15 +251,16 @@ export default {
         "http://nft-soul.herokuapp.com/api/single-gallery/" + this.selected._id
       );
     },
-    saveEarning(){
-      axios.post("http://nft-soul.herokuapp.com/api/post-earnings",{
-        'user_id':this.walletAddress,
-        'gallery_id':this.selected._id,
-        'price':this.selected.price,
-        'datetime':new Date()
-      })
-      .catch(err=>console.log(err.response))
-    }
+    saveEarning() {
+      axios
+        .post("http://nft-soul.herokuapp.com/api/post-earnings", {
+          user_id: this.walletAddress,
+          gallery_id: this.selected._id,
+          price: this.selected.price,
+          datetime: new Date(),
+        })
+        .catch((err) => console.log(err.response));
+    },
   },
 };
 </script>

@@ -45,7 +45,7 @@
                 @click="selectImage(item)"
               >
                 <v-img
-                  :src="item.image"
+                  :src="item.imageUrl"
                   class="mx-auto"
                   width="50"
                   height="50"
@@ -192,7 +192,7 @@ export default {
     },
   },
   mounted() {
-    this.src = this.collection[0].image;
+    this.src = this.collection[0].imageUrl;
   },
   methods: {
     async createGallery() {
@@ -322,7 +322,7 @@ export default {
         });
     },
     selectImage(item) {
-      this.src = item.image;
+      this.src = item.imageUrl;
     },
   },
 };

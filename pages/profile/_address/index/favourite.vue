@@ -94,7 +94,7 @@
                           v-for="(nft, i) in item.gallery_id.nfts"
                           :key="i"
                         >
-                          <span v-if="i < 4">{{ nft.title }}</span>
+                          <span v-if="i < 4">{{ nft.name }}</span>
                         </div>
                       </v-row>
                     </div>

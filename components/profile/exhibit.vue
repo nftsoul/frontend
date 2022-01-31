@@ -18,7 +18,7 @@
                     >
                       <v-list-item class="px-0">
                         <v-list-item-avatar tile class="rounded-lg my-0">
-                          <v-img :src="item.image" :lazy-src="item.image">
+                          <v-img :src="item.imageUrl" :lazy-src="item.imageUrl">
                             <template v-slot:placeholder>
                               <v-row
                                 class="fill-height ma-0"
@@ -35,7 +35,7 @@
                         </v-list-item-avatar>
                         <v-list-item-content>
                           <v-list-item-title>{{
-                            item.title
+                            item.name
                           }}</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
@@ -97,8 +97,9 @@
 <script>
 import axios from "axios"
 const web3 = require("@solana/web3.js");
-
-import NFTs from "@primenums/solana-nft-tools";
+import { FetchNFTClient } from "@audius/fetch-nft";
+const fetchClient = new FetchNFTClient();
+// import NFTs from "@primenums/solana-nft-tools";
 let OrbitSpinner = null;
 if (process.client) {
   OrbitSpinner = require("epic-spinners").OrbitSpinner;
@@ -148,15 +149,18 @@ export default {
     },
     async getAllNftData() {
       await this.getCollected();
-       let allMyNFTs = await NFTs.getNFTsByOwner(
-        this.connect,
-        this.walletAddress
-      );
-      for (var x = 0; x < allMyNFTs.length; x++) {
-        if (allMyNFTs[x].owner == this.walletAddress) {
-          this.nfts.push(allMyNFTs[x]);
-        }
-      }
+      fetchClient
+        .getCollectibles({
+          solWallets: [this.walletAddress],
+        })
+        .then((res) => {
+            this.loading=false
+            for(var x=0;x<res.solCollectibles[this.walletAddress].length;x++){
+                if(res.solCollectibles[this.walletAddress][x].isOwned==true){
+                    this.nfts.push(res.solCollectibles[this.walletAddress][x])
+                }
+            }
+        });
       
   
     },

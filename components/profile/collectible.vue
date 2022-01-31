@@ -20,8 +20,8 @@
                   @click="$store.commit('content/setDetailDialog', true)"
                 >
                   <v-img
-                    :src="item.image"
-                    :lazy-src="item.image"
+                    :src="item.imageUrl"
+                    :lazy-src="item.imageUrl"
                     width="270"
                     height="240"
                   >
@@ -39,7 +39,7 @@
                     </template>
                   </v-img>
                   <v-card-text class="ml-n2 white--text text-left">{{
-                    item.title
+                    item.name
                   }}</v-card-text>
                   <p class="mx-2 mt-n2 desc-text text-left">
                     {{ item.description }}
@@ -90,7 +90,10 @@
 
 <script>
 const web3 = require("@solana/web3.js");
-const NFTs = require("@primenums/solana-nft-tools");
+import { FetchNFTClient } from "@audius/fetch-nft";
+const fetchClient = new FetchNFTClient();
+// const NFTs = require("@primenums/solana-nft-tools");
+// import { programs } from "@metaplex/js"
 
 let OrbitSpinner = null;
 if (process.client) {
@@ -128,85 +131,117 @@ export default {
       "confirmed"
     );
     this.getAllNftData();
+    // this.getTokenAccounts();
   },
   methods: {
     onIntersect(entries, observer, isIntersecting) {
       console.log("ok");
-      this.getAllNftData();
+      // this.getAllNftData();
+      // this.getTokenAccounts();
+    },
+    async getTokenAccounts() {
+      const accountPublicKey = new web3.PublicKey(
+        this.walletAddress
+      );
+      const programId = new web3.PublicKey(
+        "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+      );
+      // let tokens = await this.connect.getTokenAccountsByOwner(
+      //   accountPublicKey,
+      //   {programId: programId},
+      //   {encoding: "jsonParsed", commitment: "confirmed"}
+      // );
+      // console.log("tokens", tokens);
+
+      let parsedtokens = await this.connect.getParsedTokenAccountsByOwner(
+        accountPublicKey,
+        {programId: programId},
+        {encoding: "jsonParsed", commitment: "confirmed"}
+      );
+      // console.log("tokens", parsedtokens);
+
+      //metadata
+      // const tokenMetadata = await programs.metadata.Metadata.findByOwnerV2(this.connect, accountPublicKey);
+    
+      // console.log('meta:',JSON.stringify(tokenMetadata));
+
+
+      // let pid=[]
+      // for(var x=0;x < parsedtokens.value.length;x++){
+      //     pid.push(parsedtokens.value[x].pubkey)
+      //     // console.log(parsedtokens.value[x].pubkey)
+      // }
+      // console.log('res:',pid)
+
+      // let nft=await this.connect.getMultipleAccountsInfo(pid)
+      // console.log('nfts:',nft)
+      //
+      //
+      //
     },
     async getAllNftData() {
-      // axios.get('https://api-mainnet.magiceden.io/rpc/getNFTsByOwner/' + this.walletAddress)
-      //     .then(res => {
-      //       console.log(res.data)
-      //         for (var x = 0; x < res.data.results.length; x++) {
-      //             if (this.walletAddress == res.data.results[x].owner) {
-      //                 this.nfts.push(res.data.results[x])
-      //             }
-      //         }
-      //     })
+    //   // axios.get('https://api-mainnet.magiceden.io/rpc/getNFTsByOwner/' + this.walletAddress)
+    //   //     .then(res => {
+    //   //       console.log(res.data)
+    //   //         for (var x = 0; x < res.data.results.length; x++) {
+    //   //             if (this.walletAddress == res.data.results[x].owner) {
+    //   //                 this.nfts.push(res.data.results[x])
+    //   //             }
+    //   //         }
+    //   //     })
 
-      // let allMyNFTs = await NFTs.getNFTsByOwner(
-      //   this.connect,
-      //   this.walletAddress
-      // );
-      // console.log("allMyNFTs", allMyNFTs);
-      // for (var x = 0; x < allMyNFTs.length; x++) {
-      //   if (allMyNFTs[x].owner == this.walletAddress) {
-      //     this.nfts.push(allMyNFTs[x]);
-      //   }
-      // }
-      this.page++;
-      const perPage = 10;
-      const cacheTtlMins = 1;
-      let myNFTs = await NFTs.getNFTsByOwner(
-        this.connect,
-        this.walletAddress,
-        this.page,
-        perPage,
-        cacheTtlMins
-      );
-      this.setNft(myNFTs);
+    //   // let allMyNFTs = await NFTs.getNFTsByOwner(
+    //   //   this.connect,
+    //   //   this.walletAddress
+    //   // );
+    //   // console.log("allMyNFTs", allMyNFTs);
+    //   // for (var x = 0; x < allMyNFTs.length; x++) {
+    //   //   if (allMyNFTs[x].owner == this.walletAddress) {
+    //   //     this.nfts.push(allMyNFTs[x]);
+    //   //   }
+    //   // }
+    //   // this.page++;
+    //   // const perPage = 10;
+    //   // const cacheTtlMins = 1;
+    //   // let myNFTs = await NFTs.getNFTsByOwner(
+    //   //   this.connect,
+    //   //   this.walletAddress,
+    //   //   this.page,
+    //   //   perPage,
+    //   //   cacheTtlMins
+    //   // );
+    //   // this.setNft(myNFTs);
 
-      // while (more == true) {
-      //   let myNFTs = await NFTs.getNFTsByOwner(
-      //     this.connect,
-      //     this.walletAddress,
-      //     page,
-      //     perPage,
-      //     cacheTtlMins
-      //   )
-      //   for(var x=0;x < myNFTs.length;x++){
-      //     this.nfts.push(myNFTs[x])
-      //   }
-      //   page++
-      //   if (myNFTs.length== 0) {
-      //       more=false
-      //   }
+    //   // while (more == true) {
+    //   //   let myNFTs = await NFTs.getNFTsByOwner(
+    //   //     this.connect,
+    //   //     this.walletAddress,
+    //   //     page,
+    //   //     perPage,
+    //   //     cacheTtlMins
+    //   //   )
+    //   //   for(var x=0;x < myNFTs.length;x++){
+    //   //     this.nfts.push(myNFTs[x])
+    //   //   }
+    //   //   page++
+    //   //   if (myNFTs.length== 0) {
+    //   //       more=false
+    //   //   }
 
-      // }
+    //   // }
 
-      // fetchClient
-      //   .getCollectibles({
-      //     solWallets: [this.walletAddress],
-      //   })
-      //   .then((res) => {
-      //       this.loading=false
-      //       console.log(res.solCollectibles)
-      //       for(var x=0;x<res.solCollectibles[this.walletAddress].length;x++){
-      //           if(res.solCollectibles[this.walletAddress][x].isOwned==true){
-      //               this.nfts.push(res.solCollectibles[this.walletAddress][x])
-      //           }
-      //       }
-      //   });
-    },
-    setNft(item) {
-      if (item.length == 0) {
-        this.loading = false;
-      } else {
-        for (var x = 0; x < item.length; x++) {
-          this.nfts.push(item[x]);
-        }
-      }
+      fetchClient
+        .getCollectibles({
+          solWallets: [this.walletAddress],
+        })
+        .then((res) => {
+            this.loading=false
+            for(var x=0;x<res.solCollectibles[this.walletAddress].length;x++){
+                if(res.solCollectibles[this.walletAddress][x].isOwned==true){
+                    this.nfts.push(res.solCollectibles[this.walletAddress][x])
+                }
+            }
+        });
     },
   },
 };

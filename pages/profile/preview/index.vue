@@ -10,7 +10,7 @@
                                 <v-container>
                                     <v-row>
                                         <v-col v-if="selected.nfts.length>0" cols="12" lg="4" md="6" align="center" class="px-5">
-                                            <v-img :src="selected.nfts[0].image" :lazy-src="selected.nfts[0].image" class="rounded-lg">
+                                            <v-img :src="selected.nfts[0].imageUrl" :lazy-src="selected.nfts[0].imageUrl" class="rounded-lg">
                                                 <template v-slot:placeholder>
                                                     <v-row class="fill-height ma-0" align="center" justify="center">
                                                         <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -19,7 +19,7 @@
                                             </v-img>
                                         </v-col>
                                         <v-col v-if="selected.nfts.length>1" cols="12" lg="4" md="6" align="center" class="px-5">
-                                            <v-img :src="selected.nfts[1].image" :lazy-src="selected.nfts[1].image" class="rounded-lg">
+                                            <v-img :src="selected.nfts[1].imageUrl" :lazy-src="selected.nfts[1].imageUrl" class="rounded-lg">
                                                 <template v-slot:placeholder>
                                                     <v-row class="fill-height ma-0" align="center" justify="center">
                                                         <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
