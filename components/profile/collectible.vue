@@ -78,13 +78,11 @@
 
 <script>
 import axios from "axios";
-import {
-  resolveToWalletAddress,
-  getParsedNftAccountsByOwner,
-} from "@nfteyez/sol-rayz";
 let OrbitSpinner = null;
+let solrayz=null
 if (process.client) {
   OrbitSpinner = require("epic-spinners").OrbitSpinner;
+  solrayz=require("@nfteyez/sol-rayz")
 }
 
 export default {
@@ -133,11 +131,11 @@ export default {
       //     }
       //   });
 
-      const publicAddress = await resolveToWalletAddress({
+      const publicAddress = await solrayz.resolveToWalletAddress({
         text: this.walletAddress,
       });
 
-      this.meta = await getParsedNftAccountsByOwner({
+      this.meta = await solrayz.getParsedNftAccountsByOwner({
         publicAddress,
       });
       let promises = [];
