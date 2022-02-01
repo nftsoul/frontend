@@ -438,6 +438,7 @@ export default {
   methods: {
     seePremium(item) {
       this.$store.commit("content/setSelected", item);
+      
       this.$router.push({
         name: "preview",
       });

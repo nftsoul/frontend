@@ -37,23 +37,23 @@
             <v-img :src="src"></v-img>
           </div>
           <div class="mx-3">
-          <client-only>
-            <VueSlickCarousel v-bind="slickSetting">
-              <div
-                v-for="(item, i) in collection"
-                :key="i"
-                class="py-3"
-                @click="selectImage(item)"
-              >
-                <v-img
-                  :src="item.image"
-                  class="mx-auto"
-                  width="50"
-                  height="50"
-                ></v-img>
-              </div>
-            </VueSlickCarousel>
-          </client-only>
+            <client-only>
+              <VueSlickCarousel v-bind="slickSetting">
+                <div
+                  v-for="(item, i) in collection"
+                  :key="i"
+                  class="py-3"
+                  @click="selectImage(item)"
+                >
+                  <v-img
+                    :src="item.image"
+                    class="mx-auto"
+                    width="50"
+                    height="50"
+                  ></v-img>
+                </div>
+              </VueSlickCarousel>
+            </client-only>
           </div>
           <p class="caption white--text mb-2">Note:</p>
           <small class="dark-text">Service fee:2.5%</small><br />
@@ -157,10 +157,10 @@ export default {
   layout: "user",
   data() {
     return {
-         connection: new web3.Connection(
-          web3.clusterApiUrl("devnet"),
-          "confirmed"
-        ),
+      connection: new web3.Connection(
+        web3.clusterApiUrl("devnet"),
+        "confirmed"
+      ),
       agree: true,
       valid: true,
       name: "",
@@ -215,13 +215,16 @@ export default {
             try {
               let depositResponse = await depositNativeToken(depositData);
               try {
+                let currentTime = new Date();
+                let futureTime = new Date(currentTime.getTime() + 0.25 * 60000);
                 let platformResponse = await initNativeTransaction({
                   sender: this.walletAddress,
                   receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
                   amount: 0.01,
-                  start: Math.floor(Date.now()),
-                  end: Math.floor(Date.now()),
+                  start: Math.floor(currentTime),
+                  end: Math.floor(futureTime),
                 });
+                console.log('plat:',platformResponse)
                 axios
                   .post("https://nft-soul.herokuapp.com/api/create-gallery", {
                     user_id: this.walletAddress,
@@ -305,8 +308,8 @@ export default {
 .dark-text {
   color: #1103a2;
 }
-
 .v-input__slot {
   box-shadow: none !important;
+  caret-color: white;
 }
 </style>
