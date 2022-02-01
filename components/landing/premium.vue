@@ -2,10 +2,12 @@
 <div class="dark-bg">
     <v-container>
         <div class="enclose-border">
-            <div class="row">
-                <v-col cols="12" align="center">
+            <v-row justify="center">
                     <p class="title">Premium Collections</p>
-                   <client-only v-if="premium.length>0">
+            </v-row>
+            <v-row v-if="premium.length>0">
+                <v-col cols="12" align="center">
+                   <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
                             <div v-for="(item,i) in premium" :key="i">
                                 <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="seePremium()">
@@ -37,9 +39,6 @@
                             </div>
                         </VueSlickCarousel>
                     </client-only>
-                    <div v-else class="spinner-box my-16">
-                        <orbit-spinner :animation-duration="1200" :size="55" color="#fff" />
-                    </div>
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
@@ -51,7 +50,10 @@
                     </v-row>
 
                 </v-col>
-            </div>
+            </v-row>
+            <v-row v-else justify="center">
+                <orbit-spinner :animation-duration="1200" :size="55" color="#fff" class="my-16" />
+            </v-row>
         </div>
     </v-container>
 </div>

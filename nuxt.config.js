@@ -30,6 +30,7 @@ export default {
     { src: "~/plugins/vue-carousel-3d", mode: "client" },
     { src: "~/plugins/spinner", mode: "client" },
     { src: "~/plugins/zebec-sdk", mode: "client" },
+
   ],
   cloudinary: {
     cloudName: 'dtj1m4wvd',

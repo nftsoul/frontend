@@ -39,13 +39,13 @@
                   <p class="mx-2 mt-n2 desc-text text-left">
                     {{ item.description }}
                   </p>
-                  <v-card-actions class="mt-n10">
+                  <!-- <v-card-actions class="mt-n10">
                     <v-spacer></v-spacer>
                     <v-chip class="ma-2 mt-5" color="#030537">
                       125
                       <v-icon class="ml-3">mdi-eye</v-icon>
                     </v-chip>
-                  </v-card-actions>
+                  </v-card-actions> -->
                 </v-card>
               </v-col>
             </v-row>

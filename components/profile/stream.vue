@@ -126,10 +126,11 @@
                                 <v-chip
                                   class="ma-1"
                                   small
-                                  v-for="(attr, j) in selected.nfts[i]
-                                    .attributes"
-                                  :key="j"
-                                  >{{ attr.trait_type }}</v-chip
+                                  v-for="(attr, j) in selected.nfts[i].attributes" :key="j"
+                                  >
+                                  <span v-if="attr.trait_type">{{ attr.trait_type }}</span>
+                                  <span v-else>{{ attr.value }}</span>
+                                  </v-chip
                                 >
                               </span>
                             </v-card-text>
@@ -193,11 +194,7 @@ export default {
     },
   },
   mounted() {
-    document.querySelectorAll('.next').forEach(item => {
-  item.addEventListener('click', event => {
-    console.log('next')
-  })
-})
+    console.log('stream:',this.selected)
     this.getFavourite();
     window.setInterval(() => {
       this.minuteLeft = Math.floor(this.totalTime / 60);

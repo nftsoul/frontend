@@ -35,7 +35,7 @@
                 :key="i"
                 align="center"
               >
-                <v-card color="transparent" flat max-width="300" height="470">
+                <v-card color="transparent" flat max-width="300" height="470" @click="preview(item)">
                   <div class="outer-card">
                     <div class="inner-card">
                       <v-img
@@ -136,6 +136,12 @@ export default {
           }
         })
         .catch((err) => console.log(err.response));
+    },
+    preview(item){
+      this.$store.commit('content/setSelected', item)
+            this.$router.push({
+                name: 'profile-preview',
+            })
     },
     createCol() {
       this.$router.push({

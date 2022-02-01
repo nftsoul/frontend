@@ -288,41 +288,6 @@ export default {
         }
       }
     },
-    onButtonClick() {
-      this.$refs.uploader.click();
-    },
-    async onFileChanged(e) {
-      this.isSelecting = true;
-      var file = e.target.files[0];
-
-      const readData = (f) =>
-        new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(f);
-        });
-
-      /* Read data */
-      const data = await readData(file);
-
-      /* upload the converted data */
-      const instance = this.$cloudinary
-        .upload(data, {
-          folder: "nftsoul/collection-featured",
-          uploadPreset: "jzzyk6rp",
-        })
-        .then((response) => {
-          this.public_id = response.public_id;
-          this.src = this.$cloudinary.image.url(response.public_id, {
-            gravity: "auto:subject",
-          });
-          this.isSelecting = false;
-          console.log(this.src);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     selectImage(item) {
       this.src = item.image;
     },
