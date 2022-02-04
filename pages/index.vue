@@ -4,6 +4,7 @@
     <LandingCollection />
     <LandingPremium />
     <LandingWorking />
+    <LandingPartner />
     <CommonProfile />
 </div>
 </template>
