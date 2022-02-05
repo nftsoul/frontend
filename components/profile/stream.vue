@@ -87,7 +87,8 @@
                         @click="active = 'attributes'"
                         >Attributes</v-chip
                       >
-                      <!-- <v-chip small dark>History</v-chip> -->
+                      <v-spacer></v-spacer>
+                      <h3>Rank {{index+1}}</h3>
                     </v-row>
                     <v-divider class="mt-3"></v-divider>
                     <v-card-text class="caption">
@@ -127,7 +128,11 @@
                       </p>
                     </v-col>
                     <v-col align="right">
-                      <v-btn small rounded class="btn-exhibit mt-3" @click="viewNext"
+                      <v-btn
+                        small
+                        rounded
+                        class="btn-exhibit mt-3"
+                        @click="viewNext"
                         >View Next NFT</v-btn
                       >
                     </v-col>
@@ -169,6 +174,7 @@ export default {
       loading: false,
       index: 0,
       current: "",
+      attributes: [],
     };
   },
   computed: {
@@ -179,6 +185,7 @@ export default {
       return this.$store.state.wallet.walletAddress;
     },
   },
+ 
   mounted() {
     this.current = this.selected.nfts[this.index];
     this.getFavourite();
@@ -195,10 +202,11 @@ export default {
     }, 1000);
   },
   methods: {
-    viewNext(){
-        if(this.selected.nfts.length > this.index+1){
-          this.index++
-        }
+   
+    viewNext() {
+      if (this.selected.nfts.length > this.index + 1) {
+        this.index++;
+      }
     },
     getFavourite() {
       axios

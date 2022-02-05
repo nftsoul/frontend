@@ -161,6 +161,7 @@ export default {
         web3.clusterApiUrl("devnet"),
         "confirmed"
       ),
+      attributes:[],
       agree: true,
       valid: true,
       name: "",
@@ -183,6 +184,7 @@ export default {
         slidesToScroll: 1,
         arrows: true,
       },
+      rankedNfts:[]
     };
   },
   computed: {
@@ -195,8 +197,59 @@ export default {
   },
   mounted() {
     this.src = this.collection[0].image;
+    this.setAttributes()
   },
   methods: {
+     setAttributes() {
+      // getting all trait value
+      for (var x = 0; x < this.collection.length; x++) {
+        for (var y = 0; y < this.collection[x].attributes.length; y++) {
+          this.attributes.push(this.collection[x].attributes[y].value);
+        }
+      }
+      this.setRankScore();
+    },
+    setRankScore() {
+      let points = [];
+      const map = this.attributes.reduce(
+        (acc, e) => acc.set(e, (acc.get(e) || 0) + 1),
+        new Map()
+      );
+      points = [...map.entries()];
+
+      let rank = [];
+      for (var x = 0; x < this.collection.length; x++) {
+        let tempattrs = [];
+        let nftPoint = 0;
+        for (var y = 0; y < this.collection[x].attributes.length; y++) {
+          //putting trat value of each nft one by one in tempattrs
+          tempattrs.push(this.collection[x].attributes[y].value);
+        }
+        for (var z = 0; z < points.length; z++) {
+          if (tempattrs.includes(points[z][0])) {
+            nftPoint += points[z][1];
+          }
+        }
+        rank.push({
+          name: this.collection[x].name,
+          point: nftPoint,
+          attrcount: this.collection[x].attributes.length,
+        });
+      }
+      rank.sort((a, b) => {
+        return a.point - b.point;
+      });
+      let sorted=[]
+      for(var x=0;x < rank.length;x++){
+        for(var y=0;y < rank.length;y++){
+          if(rank[x].name == this.collection[y].name){
+            sorted[x]=this.collection[y]
+          }
+        }
+      }
+      this.rankedNfts=sorted
+      
+    },
     async createGallery() {
       if (this.$refs.form.validate()) {
         if (this.src != null) {
@@ -212,65 +265,65 @@ export default {
           var available = parseFloat(lamports * 0.000000001).toFixed(5);
 
           if (total_charge < available) {
-            try {
-              let depositResponse = await depositNativeToken(depositData);
-              try {
-                let currentTime = new Date();
-                let futureTime = new Date(currentTime.getTime() + 0.25 * 60000);
-                let platformResponse = await initNativeTransaction({
-                  sender: this.walletAddress,
-                  receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-                  amount: 0.01,
-                  start: Math.floor(currentTime),
-                  end: Math.floor(futureTime),
-                });
-                console.log('plat:',platformResponse)
-                axios
-                  .post("https://nft-soul.herokuapp.com/api/create-gallery", {
-                    user_id: this.walletAddress,
-                    gallery_name: this.name,
-                    nfts: this.collection,
-                    image: this.src,
-                    description: this.about,
-                    price: this.price,
-                  })
-                  .then((res) => {
-                    this.creating = false;
-                    this.$toast
-                      .success("Your gallery has been created successfully.", {
-                        iconPack: "mdi",
-                        icon: "mdi-image",
-                        theme: "outline",
-                      })
-                      .goAway(3000);
-                    this.$store.commit("content/setSelected", res.data);
-                    this.$router.push({
-                      name: "profile-preview",
-                    });
-                  })
-                  .catch((err) => console.log(err.response));
-              } catch (err) {
-                if ((err.code = 4001)) {
-                  this.$toast
-                    .error(err.message, {
-                      iconPack: "mdi",
-                      icon: "mdi-cancel",
-                      theme: "outline",
-                    })
-                    .goAway(3000);
-                }
-              }
-            } catch (err) {
-              if ((err.code = 4001)) {
+            // try {
+            //   let depositResponse = await depositNativeToken(depositData);
+            //   try {
+            //     let currentTime = new Date();
+            //     let futureTime = new Date(currentTime.getTime() + 0.25 * 60000);
+            //     let platformResponse = await initNativeTransaction({
+            //       sender: this.walletAddress,
+            //       receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
+            //       amount: 0.01,
+            //       start: Math.floor(currentTime),
+            //       end: Math.floor(futureTime),
+            //     });
+
+            axios
+              .post("https://nft-soul.herokuapp.com/api/create-gallery", {
+                user_id: this.walletAddress,
+                gallery_name: this.name,
+                nfts: this.rankedNfts,
+                image: this.src,
+                description: this.about,
+                price: this.price,
+              })
+              .then((res) => {
+                this.creating = false;
                 this.$toast
-                  .error(err.message, {
+                  .success("Your gallery has been created successfully.", {
                     iconPack: "mdi",
-                    icon: "mdi-cancel",
+                    icon: "mdi-image",
                     theme: "outline",
                   })
                   .goAway(3000);
-              }
-            }
+                this.$store.commit("content/setSelected", res.data);
+                this.$router.push({
+                  name: "profile-preview",
+                });
+              })
+              .catch((err) => console.log(err.response));
+            //   } catch (err) {
+            //     if ((err.code = 4001)) {
+            //       this.$toast
+            //         .error(err.message, {
+            //           iconPack: "mdi",
+            //           icon: "mdi-cancel",
+            //           theme: "outline",
+            //         })
+            //         .goAway(3000);
+            //     }
+            //   }
+            // } catch (err) {
+            //   if ((err.code = 4001)) {
+            //     this.$toast
+            //       .error(err.message, {
+            //         iconPack: "mdi",
+            //         icon: "mdi-cancel",
+            //         theme: "outline",
+            //       })
+            //       .goAway(3000);
+            //   }
+            // }
           } else {
             this.$toast
               .error("Insufficient fund.", {

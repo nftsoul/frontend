@@ -166,62 +166,62 @@ export default {
 
         if (total_charge < available) {
           //depositing sol
-          let depositResponse = await zebec.depositNativeToken(depositData);
+          // let depositResponse = await zebec.depositNativeToken(depositData);
 
-          if (depositResponse.status == "success") {
-            let currentTime1 = new Date();
-            let futureTime1 = new Date(currentTime1.getTime() + 5 * 60000);
-            let creatorResponse = await zebec.initNativeTransaction({
-              sender: this.walletAddress,
-              receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-              amount: 0.02 * this.selected.price,
-              start_time: Math.floor(currentTime1),
-              end_time: Math.floor(futureTime1),
-            });
-            if (creatorResponse.status == "success") {
-              let currentTime2 = new Date();
-              let futureTime2 = new Date(currentTime2.getTime() + 5 * 60000);
-              let platformResponse = await zebec.initNativeTransaction({
-                sender: this.walletAddress,
-                receiver: this.selected.user_id,
-                amount: this.selected.price,
-                start_time: Math.floor(currentTime2),
-                end_time: Math.floor(futureTime2),
-              });
-              if (platformResponse.status == "success") {
+          // if (depositResponse.status == "success") {
+          //   let currentTime1 = new Date();
+          //   let futureTime1 = new Date(currentTime1.getTime() + 5 * 60000);
+          //   let creatorResponse = await zebec.initNativeTransaction({
+          //     sender: this.walletAddress,
+          //     receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
+          //     amount: 0.02 * this.selected.price,
+          //     start_time: Math.floor(currentTime1),
+          //     end_time: Math.floor(futureTime1),
+          //   });
+          //   if (creatorResponse.status == "success") {
+          //     let currentTime2 = new Date();
+          //     let futureTime2 = new Date(currentTime2.getTime() + 5 * 60000);
+          //     let platformResponse = await zebec.initNativeTransaction({
+          //       sender: this.walletAddress,
+          //       receiver: this.selected.user_id,
+          //       amount: this.selected.price,
+          //       start_time: Math.floor(currentTime2),
+          //       end_time: Math.floor(futureTime2),
+          //     });
+          //     if (platformResponse.status == "success") {
                 this.saveEarning();
                 this.loading = false;
                 this.$router.push({ name: "profile-stream" });
-              } else {
-                this.loading = false;
-                this.$toast
-                  .error("User rejected the request", {
-                    iconPack: "mdi",
-                    icon: "mdi-cancel",
-                    theme: "outline",
-                  })
-                  .goAway(3000);
-              }
-            } else {
-              this.loading = false;
-              this.$toast
-                .error("User rejected the request", {
-                  iconPack: "mdi",
-                  icon: "mdi-cancel",
-                  theme: "outline",
-                })
-                .goAway(3000);
-            }
-          } else {
-            this.loading = false;
-            this.$toast
-              .error("User rejected the request", {
-                iconPack: "mdi",
-                icon: "mdi-cancel",
-                theme: "outline",
-              })
-              .goAway(3000);
-          }
+            //   } else {
+            //     this.loading = false;
+            //     this.$toast
+            //       .error("User rejected the request", {
+            //         iconPack: "mdi",
+            //         icon: "mdi-cancel",
+            //         theme: "outline",
+            //       })
+            //       .goAway(3000);
+            //   }
+            // } else {
+            //   this.loading = false;
+            //   this.$toast
+            //     .error("User rejected the request", {
+            //       iconPack: "mdi",
+            //       icon: "mdi-cancel",
+            //       theme: "outline",
+            //     })
+            //     .goAway(3000);
+            // }
+          // } else {
+          //   this.loading = false;
+          //   this.$toast
+          //     .error("User rejected the request", {
+          //       iconPack: "mdi",
+          //       icon: "mdi-cancel",
+          //       theme: "outline",
+          //     })
+          //     .goAway(3000);
+          // }
         } else {
           this.loading = false;
           this.$toast
