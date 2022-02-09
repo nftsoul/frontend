@@ -113,9 +113,7 @@
 <script>
 import axios from "axios";
 let zebec = null;
-if (process.client) {
   zebec = require("zebecprotocol-sdk");
-}
 
 const web3 = require("@solana/web3.js");
 
