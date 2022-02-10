@@ -167,7 +167,7 @@ export default {
         console.log('lamport:',lamports)
         var available = parseFloat(lamports * 0.000000001).toFixed(5);
         console.log('available:',available)
-        if (total_charge < available) {
+        // if (total_charge < available) {
           // depositing sol
 
           let depositResponse = await zebec.depositNativeToken(depositData);
@@ -227,16 +227,16 @@ export default {
               })
               .goAway(3000);
           }
-        } else {
-          this.loading = false;
-          this.$toast
-            .error("Insufficient fund.", {
-              iconPack: "mdi",
-              icon: "mdi-wallet",
-              theme: "outline",
-            })
-            .goAway(3000);
-        }
+        // } else {
+        //   this.loading = false;
+        //   this.$toast
+        //     .error("Insufficient fund.", {
+        //       iconPack: "mdi",
+        //       icon: "mdi-wallet",
+        //       theme: "outline",
+        //     })
+        //     .goAway(3000);
+        // }
       }
     },
     increaseView() {
