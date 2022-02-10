@@ -124,7 +124,7 @@ export default {
     return {
       loading: false,
       connection: new web3.Connection(
-        web3.clusterApiUrl("devnet"),
+        web3.clusterApiUrl("mainnet-beta"),
         "confirmed"
       ),
     };
@@ -155,22 +155,23 @@ export default {
 
         const depositData = {
           sender: this.walletAddress,
-          amount: this.selected.price + 0.02 * this.selected.price,
+          amount: 0.00001,
+          // amount: this.selected.price + 0.02 * this.selected.price,
         };
 
         var total_charge = this.selected.price + 0.02 * this.selected.price;
-        // console.log('charge:',total_charge)
+        console.log('charge:',total_charge)
         var lamports = await this.connection.getBalance(
           new web3.PublicKey(this.walletAddress)
         );
-        // console.log('lamport:',lamports)
+        console.log('lamport:',lamports)
         var available = parseFloat(lamports * 0.000000001).toFixed(5);
-        // console.log('available:',available)
+        console.log('available:',available)
         if (total_charge < available) {
-          //depositing sol
+          // depositing sol
 
           let depositResponse = await zebec.depositNativeToken(depositData);
-          // console.log(depositResponse)
+          console.log(depositResponse)
 
           if (depositResponse.status == "success") {
             let currentTime1 = new Date();
