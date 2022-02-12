@@ -155,19 +155,18 @@ export default {
 
         const depositData = {
           sender: this.walletAddress,
-          amount: 0.00001,
-          // amount: this.selected.price + 0.02 * this.selected.price,
+          amount: parseFloat(this.selected.price) + 0.02 * parseFloat(this.selected.price),
         };
 
-        var total_charge = this.selected.price + 0.02 * this.selected.price;
-        console.log('charge:',total_charge)
+        var total_charge = parseFloat(this.selected.price) + 0.02 * parseFloat(this.selected.price);
+        // console.log('charge:',total_charge)
         var lamports = await this.connection.getBalance(
           new web3.PublicKey(this.walletAddress)
         );
-        console.log('lamport:',lamports)
+        // console.log('lamport:',lamports)
         var available = parseFloat(lamports * 0.000000001).toFixed(5);
-        console.log('available:',available)
-        // if (total_charge < available) {
+        // console.log('available:',available)
+        if (total_charge < available) {
           // depositing sol
 
           let depositResponse = await zebec.depositNativeToken(depositData);
@@ -179,7 +178,7 @@ export default {
             let creatorResponse = await zebec.initNativeTransaction({
               sender: this.walletAddress,
               receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-              amount: 0.02 * this.selected.price,
+              amount: parseFloat(0.02 * this.selected.price),
               start_time: Math.floor(currentTime1),
               end_time: Math.floor(futureTime1),
             });
@@ -189,7 +188,7 @@ export default {
               let platformResponse = await zebec.initNativeTransaction({
                 sender: this.walletAddress,
                 receiver: this.selected.user_id,
-                amount: this.selected.price,
+                amount: parseFloat(this.selected.price),
                 start_time: Math.floor(currentTime2),
                 end_time: Math.floor(futureTime2),
               });
@@ -227,16 +226,16 @@ export default {
               })
               .goAway(3000);
           }
-        // } else {
-        //   this.loading = false;
-        //   this.$toast
-        //     .error("Insufficient fund.", {
-        //       iconPack: "mdi",
-        //       icon: "mdi-wallet",
-        //       theme: "outline",
-        //     })
-        //     .goAway(3000);
-        // }
+        } else {
+          this.loading = false;
+          this.$toast
+            .error("Insufficient fund.", {
+              iconPack: "mdi",
+              icon: "mdi-wallet",
+              theme: "outline",
+            })
+            .goAway(3000);
+        }
       }
     },
     increaseView() {
