@@ -230,19 +230,8 @@ export default {
       return this.$store.state.wallet.walletAddress;
     },
   },
-  async mounted() {
-    try {
-      var res = await window.solana.connect();
-      this.$store.commit("wallet/setWalletAddress", res.publicKey.toString());
-    } catch {
-      this.$toast
-          .error('User refused to connect.', {
-            iconPack: "mdi",
-            icon: "mdi-wallet",
-            theme: "outline",
-          })
-          .goAway(3000);
-    }
+  mounted() {
+    this.$store.dispatch('wallet/connectWallet')
   },
   methods: {
     viewProfile() {
