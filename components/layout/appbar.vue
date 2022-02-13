@@ -232,9 +232,17 @@ export default {
   },
   async mounted() {
     try {
-      var res = await window.solana.connect({ onlyIfTrusted: true });
+      var res = await window.solana.connect();
       this.$store.commit("wallet/setWalletAddress", res.publicKey.toString());
-    } catch {}
+    } catch {
+      this.$toast
+          .error('User refused to connect.', {
+            iconPack: "mdi",
+            icon: "mdi-wallet",
+            theme: "outline",
+          })
+          .goAway(3000);
+    }
   },
   methods: {
     viewProfile() {
