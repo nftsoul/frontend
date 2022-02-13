@@ -170,7 +170,6 @@ export default {
           // depositing sol
 
           let depositResponse = await zebec.depositNativeToken(depositData);
-          console.log(depositResponse)
 
           if (depositResponse.status == "success") {
             let currentTime1 = new Date();

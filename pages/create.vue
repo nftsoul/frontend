@@ -68,8 +68,6 @@
                 :rules="[validRules.required]"
                 id="name"
                 height="10"
-                filled
-                background-color="#030537"
                 dense
                 outlined
                 placeholder="e.g. 'My Best NFT'"
@@ -84,7 +82,6 @@
                 id="about"
                 rows="3"
                 auto-grow
-                filled
                 background-color="#030537"
                 dense
                 outlined
@@ -264,19 +261,18 @@ export default {
           var available = parseFloat(lamports * 0.000000001).toFixed(5);
 
           if (total_charge < available) {
-            try {
-              let depositResponse = await depositNativeToken(depositData);
-              try {
-                let currentTime = new Date();
-                let futureTime = new Date(currentTime.getTime() + 0.25 * 60000);
-                let platformResponse = await initNativeTransaction({
-                  sender: this.walletAddress,
-                  receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-                  amount: 0.01,
-                  start: Math.floor(currentTime),
-                  end: Math.floor(futureTime),
-                });
-
+            let depositResponse = await depositNativeToken(depositData);
+            if (depositResponse.status == "success") {
+              let currentTime = new Date();
+              let futureTime = new Date(currentTime.getTime() + 1 * 60000);
+              let platformResponse = await initNativeTransaction({
+                sender: this.walletAddress,
+                receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
+                amount: 0.01,
+                start_time: Math.floor(currentTime),
+                end_time: Math.floor(futureTime),
+              });
+              if (platformResponse.status == "success") {
                 axios
                   .post("https://nft-soul.herokuapp.com/api/create-gallery", {
                     user_id: this.walletAddress,
@@ -301,27 +297,25 @@ export default {
                     });
                   })
                   .catch((err) => console.log(err.response));
-              } catch (err) {
-                if ((err.code = 4001)) {
-                  this.$toast
-                    .error(err.message, {
-                      iconPack: "mdi",
-                      icon: "mdi-cancel",
-                      theme: "outline",
-                    })
-                    .goAway(3000);
-                }
-              }
-            } catch (err) {
-              if ((err.code = 4001)) {
+              } else {
+                this.loading = false;
                 this.$toast
-                  .error(err.message, {
+                  .error("User rejected the request", {
                     iconPack: "mdi",
                     icon: "mdi-cancel",
                     theme: "outline",
                   })
                   .goAway(3000);
               }
+            } else {
+              this.loading = false;
+              this.$toast
+                .error("User rejected the request", {
+                  iconPack: "mdi",
+                  icon: "mdi-cancel",
+                  theme: "outline",
+                })
+                .goAway(3000);
             }
           } else {
             this.$toast
@@ -334,7 +328,7 @@ export default {
           }
         } else {
           this.$toast
-            .error("Please upload a featured image.", {
+            .error("Please select a featured image.", {
               iconPack: "mdi",
               icon: "mdi-image",
               theme: "outline",
