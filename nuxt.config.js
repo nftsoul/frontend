@@ -3,6 +3,9 @@ let API_URL = "https://nft-soul.herokuapp.com/api"
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  server:{
+    port:3001
+  },
   head: {
     titleTemplate: '%s - nftsoul',
     title: 'nftsoul',
