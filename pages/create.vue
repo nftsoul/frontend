@@ -155,7 +155,7 @@ export default {
   data() {
     return {
       connection: new web3.Connection(
-        web3.clusterApiUrl("mainnet-beta"),
+        web3.clusterApiUrl("devnet"),
         "confirmed"
       ),
       attributes: [],
