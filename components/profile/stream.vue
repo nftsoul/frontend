@@ -88,7 +88,7 @@
                         >Attributes</v-chip
                       >
                       <v-spacer></v-spacer>
-                      <h3>Rank {{index+1}}</h3>
+                      <!-- <h3>Rank {{index+1}}</h3> -->
                     </v-row>
                     <v-divider class="mt-3"></v-divider>
                     <v-card-text class="caption">

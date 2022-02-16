@@ -194,7 +194,7 @@ export default {
   },
   mounted() {
     this.src = this.collection[0].image;
-    this.setAttributes();
+    // this.setAttributes();
   },
   methods: {
     setAttributes() {
