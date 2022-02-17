@@ -195,6 +195,7 @@ export default {
   mounted() {
     this.src = this.collection[0].image;
     // this.setAttributes();
+    console.log('collection:',this.collection)
   },
   methods: {
     setAttributes() {
@@ -259,7 +260,7 @@ export default {
             new web3.PublicKey(this.walletAddress)
           );
           var available = parseFloat(lamports * 0.000000001).toFixed(5);
-
+          // console.log('total charge')
           if (total_charge < available) {
             let depositResponse = await depositNativeToken(depositData);
             if (depositResponse.status == "success") {
@@ -277,7 +278,7 @@ export default {
                   .post("https://nft-soul.herokuapp.com/api/create-gallery", {
                     user_id: this.walletAddress,
                     gallery_name: this.name,
-                    nfts: this.rankedNfts,
+                    nfts: this.collection,
                     image: this.src,
                     description: this.about,
                     price: this.price,

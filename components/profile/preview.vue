@@ -138,6 +138,7 @@ export default {
     },
   },
   mounted() {
+    // console.log('nft:',this.selected)
     this.increaseView();
   },
   methods: {
