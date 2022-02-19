@@ -67,7 +67,7 @@ export default {
         }
     },
     mounted(){
-        this.connect = new web3.Connection(web3.clusterApiUrl('mainnet-beta'), 'confirmed');
+        this.connect = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
         this.getAccountInfo()
     },
     methods:{

@@ -4,7 +4,7 @@
       <v-row justify="center">
         <v-col cols="12" lg="11" md="11">
           <div class="enclose-border">
-            <v-container>
+            <v-container v-if="selected.nfts">
               <v-row>
                 <v-col
                   v-if="selected.nfts.length > 0"
@@ -140,6 +140,9 @@ export default {
   mounted() {
     // console.log('nft:',this.selected)
     this.increaseView();
+    if(this.selected == ''){
+      this.$router.push('/')
+    }
   },
   methods: {
     async stream() {
