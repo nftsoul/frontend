@@ -20,7 +20,7 @@
           <v-col cols="12" class="px-5" align="center">
             <carousel-3d
               style="box-shadow: none"
-              autoplay
+              :autoplay="false"
               autoplayHoverPause
               :controls-visible="true"
               :controls-width="40"

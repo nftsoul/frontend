@@ -6,10 +6,11 @@
       </v-row>
       <v-row justify="center">
         <v-col cols="12">
+          <client-only>
           <carousel-3d
             style="box-shadow: none;"
-            autoplay
-            autoplayHoverPause
+            :autoplay="false"
+            :autoplay-timeout="10000"
             :controls-visible="true"
             :controls-width="40"
             :controls-height="40"
@@ -183,6 +184,7 @@
               </template>
             </slide>
           </carousel-3d>
+          </client-only>
         </v-col>
       </v-row>
     </v-container>
