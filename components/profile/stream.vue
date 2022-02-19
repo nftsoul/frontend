@@ -301,4 +301,48 @@ export default {
   font-size: 14px;
   color: #f5f7f8;
 }
+a.next {
+  border: 3px solid #c202d3;
+  padding-right: 7px;
+  border-radius: 50%;
+  line-height: 28px !important;
+}
+
+a.prev {
+  border: 3px solid white;
+  border-radius: 50%;
+  padding-left: 7px;
+  line-height: 28px !important;
+  border: 3px solid #c202d3;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+a.next span {
+  background: linear-gradient(
+    86.47deg,
+    #fe87ff 1.47%,
+    #fd2bff 21.9%,
+    #c202d3 39.06%,
+    #9208e8 57.62%,
+    #5e0fff 84.84%,
+    #1905da 96.24%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+a.prev span {
+  background: linear-gradient(
+    86.47deg,
+    #fe87ff 1.47%,
+    #fd2bff 21.9%,
+    #c202d3 39.06%,
+    #9208e8 57.62%,
+    #5e0fff 84.84%,
+    #1905da 96.24%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 </style>
