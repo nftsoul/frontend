@@ -1,6 +1,6 @@
 <template>
   <div class="dark-bg">
-    <v-card min-height="500" flat color="transparent">
+    <v-card :min-height="screenHeight()" flat color="transparent">
       <v-container class="py-lg-16 py-md-10 py-5">
         <v-row justify="center" class="py-5">
           <v-col cols="12" lg="8" md="10">
@@ -61,15 +61,27 @@
                   </div>
                 </div>
               </v-col>
+              <v-col align="right">
+                <v-btn
+                  text
+                  dark
+                  class="btn-exhibit px-5"
+                  @click="createGallery"
+                >
+                  Add To Gallery
+                </v-btn>
+              </v-col>
             </v-row>
             <v-row v-else>
               <v-col v-if="loading == true" align="center">
                 <div class="spinner-box my-16">
-                  <orbit-spinner
-                    :animation-duration="1200"
-                    :size="55"
-                    color="#fff"
-                  />
+                  <client-only>
+                    <orbit-spinner
+                      :animation-duration="1200"
+                      :size="55"
+                      color="#fff"
+                    />
+                  </client-only>
                 </div>
                 <p>Loading your NFTs...</p>
               </v-col>
@@ -82,11 +94,6 @@
               </v-col>
             </v-row>
           </v-col>
-        </v-row>
-        <v-row justify="end">
-          <v-btn text dark class="btn-exhibit px-5" @click="createGallery">
-            Add To Gallery
-          </v-btn>
         </v-row>
       </v-container>
     </v-card>
@@ -134,6 +141,9 @@ export default {
     this.getAllNftData();
   },
   methods: {
+    screenHeight() {
+      return window.innerHeight - 250;
+    },
     async getAllNftData() {
       await this.getCollected();
       // const publicAddress = await solrayz.resolveToWalletAddress({

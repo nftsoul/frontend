@@ -1,3 +1,22 @@
+html {
+  --scrollbarBG: #CFD8DC;
+  --thumbBG:#000229;
+}
+div::-webkit-scrollbar {
+  width: 11px;
+}
+div {
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+div::-webkit-scrollbar-track {
+  background: var(--scrollbarBG);
+}
+div::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG) ;
+  border-radius: 6px;
+  border: 3px solid var(--scrollbarBG);
+}
 @font-face {
     font-family: "Poppins";
     src: url('~/assets/poppins/Poppins-Regular.ttf');
@@ -24,6 +43,12 @@
 .dark-bg{
   background: #000229;
 
+}
+.link{
+  cursor: pointer;
+}
+.border{
+  border: 1px solid red;
 }
 .outer-btn{
   background: linear-gradient(264.44deg, #FE87FF 2.87%, #C202D3 34.05%, #5E0FFF 67.82%, #1905DA 99.15%);

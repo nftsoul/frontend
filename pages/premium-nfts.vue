@@ -1,23 +1,27 @@
 <template>
   <div class="dark-bg">
-    <v-card min-height="600" flat color="transparent">
+    <v-card :min-height="screenHeight()" flat color="transparent">
       <v-container class="py-16">
         <v-row class="py-16" justify="center">
           <v-col cols="12" lg="12" md="8" align="center">
             <v-row justify="center">
               <p class="title">Premium Collections</p>
             </v-row>
-            <v-row justify="center">
-              <v-col v-if="nfts.length == 0" align="center">
+            <v-row v-if="nfts.length == 0" justify="center">
+              <v-col align="center">
                 <div class="spinner-box my-16">
-                  <orbit-spinner
-                    :animation-duration="1200"
-                    :size="55"
-                    color="#fff"
-                  />
+                  <client-only>
+                    <orbit-spinner
+                      :animation-duration="1200"
+                      :size="55"
+                      color="#fff"
+                    />
+                  </client-only>
                 </div>
                 <p>Loading your Collections...</p>
               </v-col>
+            </v-row>
+            <v-row v-else>
               <v-col
                 cols="12"
                 lg="3"
@@ -32,12 +36,12 @@
                   class="pa-5"
                   max-width="300"
                   height="470"
-                  @click="seePremium(item)"
+                  @click="seeNft(item)"
                 >
                   <div class="outer-card">
                     <div class="inner-card">
                       <v-img
-                        :src="getImg(item)"
+                        :src="item.image"
                         class="mx-auto"
                         width="220"
                         height="220"
@@ -77,8 +81,7 @@
                   </div>
                 </v-card>
               </v-col>
-            </v-row>
-            <v-row justify="center">
+              <v-col align="center">
               <v-pagination
                 v-model="page"
                 dark
@@ -89,6 +92,7 @@
                 @input="input"
                 class="my-5"
               ></v-pagination>
+            </v-col>
             </v-row>
           </v-col>
         </v-row>
@@ -99,12 +103,12 @@
 
 <script>
 import axios from "axios";
-let OrbitSpinner=null
+let OrbitSpinner = null;
 if (process.client) {
-    OrbitSpinner = require('epic-spinners').OrbitSpinner
+  OrbitSpinner = require("epic-spinners").OrbitSpinner;
 }
 export default {
-  components:{OrbitSpinner},
+  components: { OrbitSpinner },
   data() {
     return {
       nfts: [],
@@ -117,6 +121,9 @@ export default {
     this.getPremiumNfts();
   },
   methods: {
+    screenHeight() {
+      return window.innerHeight;
+    },
     getPremiumNfts() {
       axios
         .get(
@@ -131,14 +138,15 @@ export default {
         })
         .catch((err) => console.log(err.response));
     },
-    getImg(item) {
-      return this.$cloudinary.image.url(item.image, {
-        gravity: "auto:subject",
-      });
-    },
     input(e) {
       this.page = e;
       this.getPremiumNfts();
+    },
+    seeNft(item) {
+      this.$store.commit("content/setSelected", item);
+      this.$router.push({
+        name: "preview",
+      });
     },
   },
 };

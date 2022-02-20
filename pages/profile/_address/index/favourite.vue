@@ -1,17 +1,19 @@
 <template>
   <div>
-    <v-card min-height="500" flat color="transparent">
+    <v-card :min-height="screenHeight()" flat color="transparent">
       <v-container>
         <v-row justify="center">
           <v-col cols="12" lg="8" md="6">
             <v-row v-if="collections.length == 0" justify="center">
               <v-col v-if="!noData" align="center">
                 <div class="spinner-box my-16">
+                  <client-only>
                   <orbit-spinner
                     :animation-duration="1200"
                     :size="55"
                     color="#fff"
                   />
+                  </client-only>
                 </div>
                 <p>Loading your Collections...</p>
               </v-col>
@@ -132,6 +134,9 @@ export default {
     this.getCollections();
   },
   methods: {
+     screenHeight(){
+        return window.innerHeight-350;
+    },
     getCollections() {
       axios
         .get(

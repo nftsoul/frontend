@@ -19,7 +19,7 @@
             space="360"
             display="1"
             width="900"
-            height="545"
+            height="535"
             border="0"
           >
             <slide v-for="(item, i) in selected.nfts" :index="i" :key="i">
@@ -42,7 +42,7 @@
                               v-if="favourite.includes(selected._id)"
                             >
                               <template v-slot:activator="{ on, attrs }">
-                                <v-chip dark x-small v-bind="attrs" v-on="on">
+                                <v-chip dark small v-bind="attrs" v-on="on" class="pa-2">
                                   <v-icon small class="mr-1">mdi-heart</v-icon
                                   >Added
                                 </v-chip>
@@ -116,7 +116,8 @@
                             <!-- <h3>Rank {{index+1}}</h3> -->
                           </v-row>
                           <v-divider class="mt-3"></v-divider>
-                          <v-card-text class="caption">
+                          <v-card-text class="caption px-0">
+                            <div class="attr-desc-box">
                             <span v-if="active == 'details'">{{
                               item.description
                             }}</span>
@@ -142,6 +143,7 @@
                                 </v-col>
                               </v-row>
                             </span>
+                            </div>
                           </v-card-text>
                         </v-card>
                         <v-row>
@@ -300,6 +302,12 @@ export default {
 .attr-box p {
   font-size: 14px;
   color: #f5f7f8;
+}
+.attr-desc-box{
+  overflow-y:auto;
+  overflow-x:hidden;
+  height:250px;
+  padding:5px
 }
 a.next {
   border: 3px solid #c202d3;

@@ -1,12 +1,12 @@
 <template>
   <div class="dark-bg">
-    <v-card min-height="500" flat color="transparent">
+    <v-card :min-height="screenHeight()" flat color="transparent">
       <v-container>
         <v-row justify="center">
           <v-col cols="10">
             <v-row v-if="earning.length > 0" justify="center">
               <div class="earn-box">
-                <v-simple-table dark style="background-color: #030537">
+                <v-simple-table dark style="background-color: #030537;">
                   <template v-slot:default>
                     <thead>
                       <tr>
@@ -22,7 +22,13 @@
                         <td>{{ i + 1 }}</td>
                         <td>{{ item.gallery_id.gallery_name }}</td>
                         <td>{{ item.price }}</td>
-                        <td>{{ moment.utc(item.datetime).format('MMMM Do YYYY, h:mm:ss a') }}</td>
+                        <td>
+                          {{
+                            moment
+                              .utc(item.datetime)
+                              .format("MMMM Do YYYY, h:mm:ss a")
+                          }}
+                        </td>
                         <td>{{ item.user_id }}</td>
                       </tr>
                     </tbody>
@@ -32,9 +38,15 @@
             </v-row>
             <v-row v-else justify="center">
               <v-col v-if="loading == true" align="center">
-               <div class="spinner-box my-16">
-                        <orbit-spinner :animation-duration="1200" :size="55" color="#fff" />
-                    </div>
+                <div class="spinner-box my-16">
+                  <client-only>
+                  <orbit-spinner
+                    :animation-duration="1200"
+                    :size="55"
+                    color="#fff"
+                  />
+                  </client-only>
+                </div>
                 <p>Loading your earning logs...</p>
               </v-col>
               <v-col v-else align="center">
@@ -53,7 +65,7 @@
 </template>
 <script>
 import axios from "axios";
-import moment from 'moment'
+import moment from "moment";
 let OrbitSpinner = null;
 if (process.client) {
   OrbitSpinner = require("epic-spinners").OrbitSpinner;
@@ -62,7 +74,7 @@ export default {
   components: { OrbitSpinner },
   data() {
     return {
-      moment:moment,
+      moment: moment,
       earning: [],
       loading: true,
     };
@@ -76,6 +88,9 @@ export default {
     this.getEarnings();
   },
   methods: {
+     screenHeight(){
+        return window.innerHeight-350;
+    },
     getEarnings() {
       axios
         .get(

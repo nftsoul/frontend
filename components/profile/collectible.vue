@@ -1,6 +1,6 @@
 <template>
   <div class="dark-bg">
-    <v-card min-height="500" flat color="transparent">
+    <v-card :min-height="screenHeight()" flat color="transparent">
       <v-container>
         <v-row justify="center">
           <v-col cols="8">
@@ -51,11 +51,13 @@
             </v-row>
             <v-row v-if="loading == true" justify="center">
               <v-col align="center">
+                <client-only>
                 <orbit-spinner
                   :animation-duration="1200"
                   :size="55"
                   color="#fff"
                 />
+                </client-only>
                 <p>Loading your NFTs...</p>
               </v-col>
             </v-row>
@@ -114,6 +116,9 @@ export default {
     this.getAllNftData();
   },
   methods: {
+    screenHeight(){
+        return window.innerHeight-350;
+    },
     async getAllNftData() {
       const conn = new web3.Connection(
         web3.clusterApiUrl("devnet"),

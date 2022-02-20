@@ -1,5 +1,8 @@
 <template>
   <div class="dark-bg">
+    <v-card :min-height="screenHeight()" flat color="transparent">
+
+    
     <v-container>
       <v-row justify="center">
         <v-col cols="12" lg="11" md="11">
@@ -107,6 +110,7 @@
         </v-col>
       </v-row>
     </v-container>
+    </v-card>
   </div>
 </template>
 
@@ -138,7 +142,6 @@ export default {
     },
   },
   mounted() {
-    // console.log('nft:',this.selected)
     this.increaseView();
     if(this.selected == ''){
       this.$router.push('/')
@@ -240,6 +243,9 @@ export default {
             .goAway(3000);
         }
       }
+    },
+    screenHeight() {
+      return window.innerHeight-300;
     },
     increaseView() {
       axios.get(

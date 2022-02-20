@@ -7,12 +7,14 @@
         </v-row>
         <v-row v-if="premium.length == 0" justify="center">
           <v-col align="center">
+            <client-only>
             <orbit-spinner
               class="ma-10"
               :animation-duration="1200"
               :size="55"
               color="#fff"
             />
+            </client-only>
             <p>Loading Premium Collections...</p>
           </v-col>
         </v-row>

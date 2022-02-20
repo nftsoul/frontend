@@ -5,16 +5,15 @@
       style="position: absolute; top: 0"
       app
       flat
-      class="px-lg-16 px-md-5"
+      class="px-md-5"
       extended
     >
-      <v-app-bar-nav-icon class="mx-16 mt-3">
         <v-img
           :src="require('~/assets/images/logo.svg')"
-          style="width: 5%"
+          max-width="200"
           @click="$router.push({ path: '/' })"
+          class="mx-lg-9 mt-3 link"
         ></v-img>
-      </v-app-bar-nav-icon>
       <v-spacer></v-spacer>
       <div class="hidden-md-and-down mt-5">
         <v-btn
@@ -96,14 +95,14 @@
                   <v-img :src="require('~/assets/images/phantom.png')"></v-img>
                 </v-avatar>
               </div>
-              <div class="auth-inside-2" @click="viewProfile">
+              <div class="auth-inside-2">
                 <v-menu transition="slide-y-transition" bottom offset-y>
                   <template v-slot:activator="{ on, attrs }">
                     <p class="wallet-text mt-3" v-bind="attrs" v-on="on">
                       {{ walletAddress.slice(0, 8) + "..." }}
                     </p>
                   </template>
-                  <v-card width="200" color="#636262">
+                  <v-card width="200" color="#636262" class="mt-3">
                     <v-list style="background-color: #636262" dense>
                       <v-list-item @click="disconnect">
                         <v-list-item-title>Disconnect</v-list-item-title
@@ -155,7 +154,7 @@
                   <v-img :src="require('~/assets/images/phantom.png')"></v-img>
                 </v-avatar>
               </div>
-              <div class="auth-inside-2" @click="viewProfile">
+              <div class="auth-inside-2">
                 <p class="wallet-text mt-3">
                   {{ walletAddress.slice(0, 8) + "..." }}
                 </p>
@@ -230,18 +229,10 @@ export default {
       return this.$store.state.wallet.walletAddress;
     },
   },
-  mounted() {
-    this.$store.dispatch('wallet/connectWallet')
+  created(){
+        this.$store.dispatch('wallet/connectWallet')
   },
   methods: {
-    viewProfile() {
-      this.$router.push({
-        name: "profile-address",
-        params: {
-          address: this.walletAddress,
-        },
-      });
-    },
     disconnect() {
       window.solana.request({
         method: "disconnect",

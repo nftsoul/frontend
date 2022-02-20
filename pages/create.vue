@@ -56,7 +56,7 @@
             </client-only>
           </div>
           <p class="caption white--text mb-2">Note:</p>
-          <small class="dark-text">Service fee:2.5%</small><br />
+          <small class="dark-text">Service fee:2%</small><br />
           <!-- <small class="dark-text" sty>You will receive: 25.00eth $50,00</small> -->
         </v-col>
         <v-col cols="12" lg="7">
@@ -78,7 +78,7 @@
               >
               <v-textarea
                 v-model="about"
-                :rules="[validRules.required]"
+                :rules="[validRules.required,validRules.lengthMax100]"
                 id="about"
                 rows="3"
                 auto-grow
@@ -172,6 +172,7 @@ export default {
         required: (value) => !!value || "Required.",
         length10: (v) => (v && v.length == 10) || "Should be 10 characters.",
         positive: (v) => (v && v > -1) || "Price cannot be negative.",
+        lengthMax100: (v) => (v && v.length < 200) || "Should not be more than 200 characters.",
       },
       slickSetting: {
         dots: false,

@@ -3,7 +3,7 @@
     <v-container>
         <v-row class="pt-16" justify="center">
             <v-col cols="6" align="end">
-                <v-card flat>
+                <v-card flat :min-height="screenHeight()">
                     <v-list style="background-color:transparent !important;box-shadow:none !important">
                         <v-list-item>
                             <!-- <v-list-item-avatar tile width="200" height="220">
@@ -71,6 +71,9 @@ export default {
         this.getAccountInfo()
     },
     methods:{
+        screenHeight(){
+            // return window.innerHeight
+        },
         async getAccountInfo(){
             var blc=await this.connect.getBalance(new web3.PublicKey(this.walletAddress))
             this.balance=parseFloat(blc*0.000000001).toFixed(5)

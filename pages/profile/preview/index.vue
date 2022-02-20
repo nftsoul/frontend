@@ -1,5 +1,6 @@
 <template>
   <div class="dark-bg">
+    <v-card :min-height="screenHeight()" flat color="transparent">
     <v-container class="py-16">
       <v-row class="py-16">
         <v-col>
@@ -115,6 +116,7 @@
         </v-col>
       </v-row>
     </v-container>
+    </v-card>
   </div>
 </template>
 
@@ -134,6 +136,10 @@ export default {
       this.$router.push("/");
     }
   },
-  methods: {},
+  methods: {
+    screenHeight(){
+        return window.innerHeight;
+    },
+  },
 };
 </script>
