@@ -127,7 +127,7 @@ export default {
     getPremiumNfts() {
       axios
         .get(
-          "http://nft-soul.herokuapp.com/api/all-premium?page=" +
+          "https://nft-soul.herokuapp.com/api/all-premium?page=" +
             this.page +
             "&limit=" +
             this.limit

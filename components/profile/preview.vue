@@ -249,12 +249,12 @@ export default {
     },
     increaseView() {
       axios.get(
-        "http://nft-soul.herokuapp.com/api/single-gallery/" + this.selected._id
+        "https://nft-soul.herokuapp.com/api/single-gallery/" + this.selected._id
       );
     },
     saveEarning() {
       axios
-        .post("http://nft-soul.herokuapp.com/api/post-earnings", {
+        .post("https://nft-soul.herokuapp.com/api/post-earnings", {
           user_id: this.walletAddress,
           gallery_id: this.selected._id,
           price: this.selected.price,
