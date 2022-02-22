@@ -222,6 +222,7 @@ export default {
       resp: "",
       drawer: false,
       authBtn: null,
+      loaded:false
     };
   },
   computed: {
@@ -232,6 +233,7 @@ export default {
   created(){
         this.$store.dispatch('wallet/connectWallet')
   },
+ 
   methods: {
     disconnect() {
       window.solana.request({

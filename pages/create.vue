@@ -63,15 +63,15 @@
           <div class="enclose-border">
             <v-form v-model="valid" ref="form">
               <label for="name" class="text--disabled">Gallery Name</label>
-              <v-text-field
+              <v-textarea
                 v-model="name"
-                :rules="[validRules.required]"
+                :rules="[validRules.required,validRules.lengthMin3]"
                 id="name"
-                height="10"
+                rows="1"
                 dense
                 outlined
                 placeholder="e.g. 'My Best NFT'"
-              ></v-text-field>
+              ></v-textarea>
 
               <label for="about" class="text--disabled"
                 >About the gallery short info</label
@@ -138,16 +138,10 @@
 
 <script>
 import axios from "axios";
-import {
-  getProvider,
-  depositNativeToken,
-  initNativeTransaction,
-  withdrawNativeTransaction,
-  cancelNativeTransaction,
-  pauseNativeTransaction,
-  resumeNativeTransaction,
-  withdrawNativeTokenDeposit,
-} from "zebecprotocol-sdk";
+let zebec = null;
+if(process.client){
+  zebec = require("zebecprotocol-sdk");
+}
 const web3 = require("@solana/web3.js");
 
 export default {
@@ -170,9 +164,11 @@ export default {
       isSelecting: false,
       validRules: {
         required: (value) => !!value || "Required.",
+        agree: (value) => !!value || "You must agree.",
         length10: (v) => (v && v.length == 10) || "Should be 10 characters.",
         positive: (v) => (v && v > -1) || "Price cannot be negative.",
         lengthMax100: (v) => (v && v.length < 200) || "Should not be more than 200 characters.",
+        lengthMin3: (v) => (v && v.length >2) || "At least 3 characters.",
       },
       slickSetting: {
         dots: false,
@@ -194,9 +190,18 @@ export default {
     },
   },
   mounted() {
-    this.src = this.collection[0].image;
+    if(this.collection.length>0){
+      this.src = this.collection[0].image;
+    }
+    else{
+      this.$router.push({
+        name:'profile-address-exhibit',
+        params:{
+          address:this.walletAddress
+        }
+      })
+    }
     // this.setAttributes();
-    console.log('collection:',this.collection)
   },
   methods: {
     setAttributes() {
@@ -263,11 +268,11 @@ export default {
           var available = parseFloat(lamports * 0.000000001).toFixed(5);
           // console.log('total charge')
           if (total_charge < available) {
-            let depositResponse = await depositNativeToken(depositData);
+            let depositResponse = await zebec.depositNativeToken(depositData);
             if (depositResponse.status == "success") {
               let currentTime = new Date();
               let futureTime = new Date(currentTime.getTime() + 1 * 60000);
-              let platformResponse = await initNativeTransaction({
+              let platformResponse = await zebec.initNativeTransaction({
                 sender: this.walletAddress,
                 receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
                 amount: 0.01,
@@ -300,7 +305,7 @@ export default {
                   })
                   .catch((err) => console.log(err.response));
               } else {
-                this.loading = false;
+                this.creating = false;
                 this.$toast
                   .error("User rejected the request", {
                     iconPack: "mdi",
@@ -310,7 +315,7 @@ export default {
                   .goAway(3000);
               }
             } else {
-              this.loading = false;
+              this.creating = false;
               this.$toast
                 .error("User rejected the request", {
                   iconPack: "mdi",
