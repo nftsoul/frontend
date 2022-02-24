@@ -101,23 +101,26 @@
                             </v-img>
                           </div>
                         </v-col>
-                        <v-col cols="12" lg="7" md="6" class="mt-n5">
+                        <v-col cols="12" lg="7" md="6" class="mt-n12">
                           <v-card outlined class="rounded-lg pa-2">
                             <v-row no-gutters>
-                              <v-chip
-                                dark
-                                small
-                                color="#C202D3"
-                                @click="active = 'details'"
-                                >Details</v-chip
-                              >
                               <v-chip
                                 small
                                 dark
                                 class="mx-2"
+                                :color="getColor('attributes')"
                                 @click="active = 'attributes'"
                                 >Attributes</v-chip
                               >
+
+                              <v-chip
+                                dark
+                                small
+                                :color="getColor('details')"
+                                @click="active = 'details'"
+                                >Details</v-chip
+                              >
+                              
                               <v-spacer></v-spacer>
                               <!-- <h3>Rank {{index+1}}</h3> -->
                             </v-row>
@@ -208,7 +211,7 @@ export default {
       totalTime: 300,
       minuteLeft: 0,
       secondLeft: 0,
-      active: "details",
+      active: "attributes",
       favourite: [],
       loading: false,
       index: 0,
@@ -251,6 +254,11 @@ export default {
     }, 1000);
   },
   methods: {
+    getColor(item){
+      if(item == this.active){
+        return '#C202D3'
+      }
+    },
     viewNext() {
       if (this.selected.nfts.length > this.index + 1) {
         this.index++;

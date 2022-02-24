@@ -11,7 +11,7 @@
               <v-col align="center">
                 <div class="spinner-box my-16">
                   <client-only>
-                    <orbit-spinner
+                    <spinner
                       :animation-duration="1200"
                       :size="55"
                       color="#fff"
@@ -103,12 +103,7 @@
 
 <script>
 import axios from "axios";
-let OrbitSpinner = null;
-if (process.client) {
-  OrbitSpinner = require("epic-spinners").OrbitSpinner;
-}
 export default {
-  components: { OrbitSpinner },
   data() {
     return {
       nfts: [],

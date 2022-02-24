@@ -40,7 +40,7 @@
               <v-col v-if="loading == true" align="center">
                 <div class="spinner-box my-16">
                   <client-only>
-                  <orbit-spinner
+                  <spinner
                     :animation-duration="1200"
                     :size="55"
                     color="#fff"

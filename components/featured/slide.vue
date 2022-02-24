@@ -8,7 +8,7 @@
         <v-row v-if="premium.length == 0" justify="center">
           <v-col align="center">
             <client-only>
-            <orbit-spinner
+            <spinner
               class="ma-10"
               :animation-duration="1200"
               :size="55"
@@ -124,12 +124,7 @@
 
 <script>
 import axios from "axios";
-let OrbitSpinner = null;
-if (process.client) {
-  OrbitSpinner = require("epic-spinners").OrbitSpinner;
-}
 export default {
-  components: { OrbitSpinner },
   data() {
     return {
       premium: [],

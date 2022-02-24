@@ -133,6 +133,27 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <!-- approval dialog -->
+    <v-dialog v-model="approvalDialog" max-width="400" persistent>
+      <div class="border-white rounded-lg">
+        <v-card color="primary" class="rounded-lg">
+          <v-col align="center">
+            <p class="text--disabled">
+              <spinner
+                :animation-duration="1200"
+                :size="30"
+                color="#fff"
+                class="mx-auto"
+              />Do not close this window
+            </p>
+            <p>Your gallery will be created after payment approval</p>
+            <p>{{ approvals }} Approvals Left</p>
+          </v-col>
+        </v-card>
+      </div>
+    </v-dialog>
+    <!-- end approval dialog -->
   </div>
 </template>
 
@@ -179,6 +200,8 @@ export default {
         arrows: true,
       },
       rankedNfts: [],
+      approvalDialog:false,
+      approvals:2
     };
   },
   computed: {
@@ -268,8 +291,10 @@ export default {
           var available = parseFloat(lamports * 0.000000001).toFixed(5);
           // console.log('total charge')
           if (total_charge < available) {
+            this.approvalDialog=true
             let depositResponse = await zebec.depositNativeToken(depositData);
             if (depositResponse.status == "success") {
+              this.approvals -=1
               let currentTime = new Date();
               let futureTime = new Date(currentTime.getTime() + 1 * 60000);
               let platformResponse = await zebec.initNativeTransaction({
@@ -291,6 +316,7 @@ export default {
                   })
                   .then((res) => {
                     this.creating = false;
+                    this.approvalDialog=false
                     this.$toast
                       .success("Your gallery has been created successfully.", {
                         iconPack: "mdi",
@@ -306,6 +332,8 @@ export default {
                   .catch((err) => console.log(err.response));
               } else {
                 this.creating = false;
+                this.approvalDialog=false
+                this.approvals=2
                 this.$toast
                   .error("User rejected the request", {
                     iconPack: "mdi",
@@ -316,6 +344,8 @@ export default {
               }
             } else {
               this.creating = false;
+              this.approvalDialog=false
+                this.approvals=2
               this.$toast
                 .error("User rejected the request", {
                   iconPack: "mdi",

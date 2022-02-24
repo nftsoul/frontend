@@ -52,7 +52,7 @@
             <v-row v-if="loading == true" justify="center">
               <v-col align="center">
                 <client-only>
-                <orbit-spinner
+                <spinner
                   :animation-duration="1200"
                   :size="55"
                   color="#fff"
@@ -82,17 +82,12 @@
 import NFTs from "@primenums/solana-nft-tools"
 const web3 = require("@solana/web3.js");
 
-let OrbitSpinner = null;
 let solrayz = null;
 if (process.client) {
-  OrbitSpinner = require("epic-spinners").OrbitSpinner;
   solrayz = require("@nfteyez/sol-rayz");
 }
 
 export default {
-  components: {
-    OrbitSpinner,
-  },
   data() {
     return {
       nfts: [],

@@ -81,7 +81,7 @@
         </v-row>
         <v-row v-else justify="center">
           <client-only>
-            <orbit-spinner
+            <spinner
               :animation-duration="1200"
               :size="55"
               color="#fff"
@@ -159,7 +159,7 @@
         </v-row>
         <v-row v-else justify="center">
           <client-only>
-            <orbit-spinner
+            <spinner
               :animation-duration="1200"
               :size="55"
               color="#fff"
@@ -173,13 +173,8 @@
 </template>
 
 <script>
-let OrbitSpinner = null;
-if (process.client) {
-  OrbitSpinner = require("epic-spinners").OrbitSpinner;
-}
 import axios from "axios";
 export default {
-  components: { OrbitSpinner },
   data() {
     return {
       trending: [],
