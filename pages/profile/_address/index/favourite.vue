@@ -135,7 +135,7 @@ export default {
     getCollections() {
       axios
         .get(
-          "https://nft-soul.herokuapp.com/api/get-favourite/" +
+          this.$auth.ctx.env.baseUrl+"/get-favourite/" +
             this.walletAddress
         )
         .then((res) => {

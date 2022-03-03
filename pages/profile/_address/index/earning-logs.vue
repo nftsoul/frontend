@@ -94,10 +94,11 @@ export default {
     getEarnings() {
       axios
         .get(
-          "https://nft-soul.herokuapp.com/api/get-earnings/" +
+          this.$auth.ctx.env.baseUrl+"/get-earnings/" +
             this.walletAddress
         )
         .then((res) => {
+          console.log(res.data)
           this.earning = res.data;
           this.loading = false;
         })

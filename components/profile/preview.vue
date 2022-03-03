@@ -152,6 +152,7 @@ export default {
       ),
       approvalDialog: false,
       approvals: 3,
+      streampda:null,
     };
   },
   computed: {
@@ -216,6 +217,7 @@ export default {
               end_time: Math.floor(futureTime1),
             });
             if (creatorResponse.status == "success") {
+              this.streampda=creatorResponse.data.pda
               this.approvals -=1
               let currentTime2 = new Date();
               let futureTime2 = new Date(currentTime2.getTime() + 5 * 60000);
@@ -284,17 +286,18 @@ export default {
     },
     increaseView() {
       axios.get(
-        "https://nft-soul.herokuapp.com/api/single-gallery/" + this.selected._id
-      );
+        this.$auth.ctx.env.baseUrl+"/single-gallery/" + this.selected._id
+      )
     },
     saveEarning() {
       axios
-        .post("https://nft-soul.herokuapp.com/api/post-earnings", {
+        .post(this.$auth.ctx.env.baseUrl+"/post-earnings", {
           user_id: this.walletAddress,
           gallery_id: this.selected._id,
           price: this.selected.price,
           datetime: new Date(),
           withdrawn: false,
+          pda:this.streampda
         })
         .catch((err) => console.log(err.response));
     },

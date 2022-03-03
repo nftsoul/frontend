@@ -1,10 +1,9 @@
 import colors from 'vuetify/es5/util/colors'
-let API_URL = "https://nft-soul.herokuapp.com/api"
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   server:{
-    port:3001
+    port:process.env.PORT
   },
   head: {
     titleTemplate: '%s - nftsoul',
@@ -55,10 +54,30 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/toast',
     '@nuxtjs/cloudinary',
+    '@nuxtjs/auth-next'
   ],
   axios: {
-    baseURL: API_URL,
+    baseURL: process.env.API_URL,
     // credentials: true,
+  },
+  auth: {
+    strategies: {
+      'local': {
+        token: {
+          property: "token",
+          required: true,
+          maxAge: 60 * 60 * 24 * 7
+        },
+        user: {
+          property: false,
+          autoFetch: false
+        },
+        endpoints: {
+         
+        }
+      },
+    },
+    redirect:false
   },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -84,6 +103,6 @@ export default {
   build: {
   },
   env: {
-    baseUrl: API_URL,
+    baseUrl: process.env.API_URL,
   }
 }

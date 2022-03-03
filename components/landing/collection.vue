@@ -199,7 +199,7 @@ export default {
     },
     getCollections() {
       axios
-        .get("https://nft-soul.herokuapp.com/api/get-gallery")
+        .get(this.$auth.ctx.env.baseUrl+'/get-gallery')
         .then((res) => {
           this.trending = res.data.trending;
           this.popular = res.data.premium;

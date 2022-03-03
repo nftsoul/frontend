@@ -127,7 +127,7 @@ export default {
     getPopularNfts() {
       axios
         .get(
-          "https://nft-soul.herokuapp.com/api/all-popular?page=" +
+          this.$auth.ctx.env.baseUrl+"/all-popular?page=" +
             this.page +
             "&limit=" +
             this.limit

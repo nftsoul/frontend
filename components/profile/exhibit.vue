@@ -175,7 +175,7 @@ export default {
     getCollected() {
       axios
         .get(
-          "https://nft-soul.herokuapp.com/api/all-gallery/" + this.walletAddress
+          this.$auth.ctx.env.baseUrl+"/all-gallery/" + this.walletAddress
         )
         .then((res) => {
           for (var x = 0; x < res.data.length; x++) {

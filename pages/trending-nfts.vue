@@ -128,7 +128,7 @@ export default {
     getTrendingNfts() {
       axios
         .get(
-          "https://nft-soul.herokuapp.com/api/all-trending?page=" +
+          this.$auth.ctx.env.baseUrl+"/all-trending?page=" +
             this.page +
             "&limit=" +
             this.limit

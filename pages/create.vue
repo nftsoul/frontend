@@ -306,7 +306,7 @@ export default {
               });
               if (platformResponse.status == "success") {
                 axios
-                  .post("https://nft-soul.herokuapp.com/api/create-gallery", {
+                  .post(this.$auth.ctx.env.baseUrl+"/create-gallery", {
                     user_id: this.walletAddress,
                     gallery_name: this.name,
                     nfts: this.collection,

@@ -267,7 +267,7 @@ export default {
     getFavourite() {
       axios
         .get(
-          "https://nft-soul.herokuapp.com/api/get-favourite-gallery/" +
+          this.$auth.ctx.env.baseUrl+"/get-favourite-gallery/" +
             this.walletAddress
         )
         .then((res) => {
@@ -281,7 +281,7 @@ export default {
     addToFavourite() {
       this.favourite.push(this.selected._id);
       axios
-        .post("https://nft-soul.herokuapp.com/api/save-favourite", {
+        .post(this.$auth.ctx.env.baseUrl+"/save-favourite", {
           user_id: this.walletAddress,
           gallery_id: this.selected._id,
         })
