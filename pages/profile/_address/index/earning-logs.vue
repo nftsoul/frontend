@@ -6,7 +6,7 @@
           <v-col cols="10">
             <v-row v-if="earning.length > 0" justify="center">
               <div class="earn-box">
-                <v-simple-table dark style="background-color: #030537;">
+                <v-simple-table dark style="background-color: #030537">
                   <template v-slot:default>
                     <thead>
                       <tr>
@@ -15,6 +15,7 @@
                         <th class="text-left">Price</th>
                         <th class="text-left">Date & Time</th>
                         <th class="text-left">User</th>
+                        <th class="text-left">Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -30,6 +31,19 @@
                           }}
                         </td>
                         <td>{{ item.user_id }}</td>
+                        <td>
+                          <v-tooltip top v-if="item.withdrawn">
+                            <template v-slot:activator="{ on, attrs }">
+                              <v-icon dark v-bind="attrs" v-on="on"
+                                >mdi-check</v-icon
+                              >
+                            </template>
+                            <span>Already withdrawn</span>
+                          </v-tooltip>
+                          <v-btn v-else small class="btn-exhibit" @click="withdraw(item)"
+                            >Withdraw</v-btn
+                          >
+                        </td>
                       </tr>
                     </tbody>
                   </template>
@@ -40,11 +54,11 @@
               <v-col v-if="loading == true" align="center">
                 <div class="spinner-box my-16">
                   <client-only>
-                  <spinner
-                    :animation-duration="1200"
-                    :size="55"
-                    color="#fff"
-                  />
+                    <spinner
+                      :animation-duration="1200"
+                      :size="55"
+                      color="#fff"
+                    />
                   </client-only>
                 </div>
                 <p>Loading your earning logs...</p>
@@ -70,6 +84,10 @@ let OrbitSpinner = null;
 if (process.client) {
   OrbitSpinner = require("epic-spinners").OrbitSpinner;
 }
+let zebec = null;
+if (process.client) {
+  zebec = require("zebecprotocol-sdk");
+}
 export default {
   components: { OrbitSpinner },
   data() {
@@ -88,26 +106,50 @@ export default {
     this.getEarnings();
   },
   methods: {
-     screenHeight(){
-        return window.innerHeight-350;
+    screenHeight() {
+      return window.innerHeight - 350;
     },
     getEarnings() {
       axios
-        .get(
-          this.$auth.ctx.env.baseUrl+"/get-earnings/" +
-            this.walletAddress
-        )
+        .get(this.$auth.ctx.env.baseUrl + "/get-earnings/" + this.walletAddress)
         .then((res) => {
-          console.log(res.data)
+          console.log('earning:',res.data)
           this.earning = res.data;
           this.loading = false;
         })
         .catch((err) => console.log(err.response));
     },
+    async withdraw(item) {
+      const data = {
+        sender: item.user_id,
+        receiver: this.walletAddress,
+        pda: item.pda,
+        amount: item.price,
+      };
+      const withdrawResponse = await zebec.withdrawNativeTransaction(data)
+      console.log('wr:',withdrawResponse)
+      // if (withdrawResponse.status == "success") {
+      //   axios
+      //     .post(this.$auth.ctx.env.baseUrl + "/withdraw", {
+      //       _id: item._id,
+      //     })
+      //     .then((res) => {
+      //       this.$toast
+      //         .error("You have successfully withdrawn your SOL earned.", {
+      //           iconPack: "mdi",
+      //           icon: "mdi-check",
+      //           theme: "outline",
+      //         })
+      //         .goAway(3000);
+      //       this.earning[this.earning.indexOf(item)].withdrawn = true;
+      //     })
+      //     .catch((err) => console.log(err.response));
+      // }
+    },
   },
 };
 </script>
-<style>
+<style lang="scss">
 .earn-box {
   padding: 1px;
   border-radius: 5px;
@@ -118,5 +160,10 @@ export default {
     #fd2bff 70.6%,
     #c202d3 97.81%
   );
+}
+tbody {
+  tr:hover {
+    background-color: transparent !important;
+  }
 }
 </style>

@@ -82,6 +82,7 @@
                           x-small
                           @click="stream"
                           :loading="loading"
+                          v-if="selected.user_id != this.walletAddress"
                         >
                           <small>Pay and View</small>
                         </v-btn>
@@ -171,6 +172,11 @@ export default {
   },
   methods: {
     async stream() {
+                //   let currentTime1 = new Date();
+                //  console.log('epoch:',Math.floor(currentTime1))
+                //   let futureTime1 = new Date(currentTime1.getTime() + 1 * 60)
+                //   console.log('future:',Math.floor(futureTime1))
+
       if (this.walletAddress == null) {
         this.$toast
           .error("Connect your phantom wallet first.", {
@@ -208,7 +214,7 @@ export default {
           if (depositResponse.status == "success") {
             this.approvals -=1
             let currentTime1 = new Date();
-            let futureTime1 = new Date(currentTime1.getTime() + 5 * 60000);
+            let futureTime1 = new Date(currentTime1.getTime() + 1 * 60);
             let creatorResponse = await zebec.initNativeTransaction({
               sender: this.walletAddress,
               receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
@@ -220,7 +226,7 @@ export default {
               this.streampda=creatorResponse.data.pda
               this.approvals -=1
               let currentTime2 = new Date();
-              let futureTime2 = new Date(currentTime2.getTime() + 5 * 60000);
+              let futureTime2 = new Date(currentTime2.getTime() + 1 * 60);
               let platformResponse = await zebec.initNativeTransaction({
                 sender: this.walletAddress,
                 receiver: this.selected.user_id,
