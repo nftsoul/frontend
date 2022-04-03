@@ -9,10 +9,10 @@
       extended
     >
         <v-img
-          :src="require('~/assets/images/logo.svg')"
-          max-width="200"
+          :src="require('~/assets/images/NFTsoul-horizontal.png')"
+          max-width="250"
           @click="$router.push({ path: '/' })"
-          class="mx-lg-9 mt-3 link"
+          class="mt-3 link"
         ></v-img>
       <v-spacer></v-spacer>
       <div class="hidden-md-and-down mt-5">
