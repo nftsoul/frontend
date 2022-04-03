@@ -122,7 +122,7 @@ export default {
   },
   computed: {
     walletAddress() {
-      return this.$store.state.wallet.walletAddress;
+            return this.$route.params.address
     },
   },
   mounted() {

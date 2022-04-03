@@ -10,15 +10,18 @@
                 <v-row justify="center">
                     <p class="mr-5 mt-1 text-gradient">@mashmer</p>
                     <v-card dark color="black" class="pa-2" height="40">
-                        <p class="mb-n7">{{walletAddress.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
+                        <p v-if="walletAddress" class="mb-n7">{{walletAddress.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
                     </v-card>
                 </v-row>
                 <div class="btn-gradient mt-5">
-                    Edit Profile
+
                 </div>
-                <v-btn class="btn-exhibit px-5" @click="$router.push({name:'profile-address-exhibit',params:{'address':walletAddress}})">
-                    Exhibit
-                </v-btn>
+                <p class="mt-n6 body-2">Edit Profile</p>
+
+                <div class="btn-gradient mt-5">
+
+                </div>
+                <p class="mt-n6 body-2">Link Twitter</p>
             </v-col>
         </v-row>
     </v-container>
@@ -82,13 +85,23 @@ export default {
 }
 
 .btn-gradient {
-    border: 5px solid;
-    border-radius: 50%;
-    border-image-slice: 1;
-    border-width: 5px;
-    border-image-source: linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%);
-    ;
-
+    width: 100px;
+    height: 30px;
+    padding: 3px;
+    border-radius: 7px;
+    /*1*/
+    border: 2px solid transparent;
+    /*2*/
+    background: linear-gradient(45deg, #1905DA,#FE87FF) border-box;
+    /*3*/
+    -webkit-mask:
+        /*4*/
+        linear-gradient(#fff 0 0) padding-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    /*5'*/
+    mask-composite: exclude;
+    /*5*/
 }
 
 .text-gradient {

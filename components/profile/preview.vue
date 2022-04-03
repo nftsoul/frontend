@@ -124,20 +124,14 @@ export default {
     },
     mounted() {
         let currentTime1 = Math.floor(Date.now() / 1000);
-        let futureTime1 = currentTime1 + 60;
-        console.log('cr:',currentTime1,'ft:',futureTime1)
-        this.increaseView();
+        let futureTime1 = currentTime1 + 60
+        this.increaseView()
         if (this.selected == "") {
             this.$router.push("/");
         }
     },
     methods: {
         async stream() {
-            //   let currentTime1 = new Date();
-            //  console.log('epoch:',Math.floor(currentTime1))
-            //   let futureTime1 = new Date(currentTime1.getTime() + 1 * 60)
-            //   console.log('future:',Math.floor(futureTime1))
-
             if (this.walletAddress == null) {
                 this.$toast
                     .error("Connect your phantom wallet first.", {
@@ -183,7 +177,6 @@ export default {
                             end_time: futureTime1,
                         });
                         if (creatorResponse.status == "success") {
-                            this.streampda = creatorResponse.data.pda
                             this.approvals -= 1
                             let currentTime2 = Math.floor(Date.now() / 1000)
                             let futureTime2 = currentTime2 + 60
@@ -195,6 +188,7 @@ export default {
                                 end_time: futureTime2,
                             });
                             if (platformResponse.status == "success") {
+                                this.streampda = platformResponse.data.pda
                                 this.saveEarning();
                                 this.loading = false;
                                 this.approvalDialog = false
