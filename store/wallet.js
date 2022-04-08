@@ -13,8 +13,10 @@ export const mutations = {
   setAccountInfo(state, payload) {
     state.accountBalance = payload.balance
     state.accountDetail = payload.detail
-  }
+  },
+  
 };
+
 
 export const actions = {
   async connectWallet(context) {

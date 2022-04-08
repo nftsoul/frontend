@@ -1,9 +1,9 @@
 <template>
 <v-card  :src="require('~/assets/images/abstract-flowing.jpg')" flat>
     <v-img :height="screenHeight()" :lazy-src="require('~/assets/images/abstract-flowing.png')" :src="require('~/assets/images/abstract-flowing.png')">
-        <v-container class="py-16">
-            <v-row class="py-16">
-                <v-col cols="12" lg="6" md="6" class="py-lg-16">
+        <v-container fluid class="py-16">
+            <v-row class="py-16" justify="center">
+                <v-col lg="11" md="6" class="py-lg-16">
                     <p class="text-lg-h3 text-md-h4 text-sm-h5">Exhibit and Earn From <br>Your NFT Collections</p>
                     <p class="">Create galleries, showcase your best NFTs and earn from them.</p>
                     <v-row class="mt-10">

@@ -1,13 +1,13 @@
 <template>
   <div class="dark-bg">
-    <v-card min-height="500" flat color="transparent">
+    <v-card :min-height="screenHeight()" flat color="transparent">
       <v-container class="py-lg-16 py-md-10 py-5">
         <v-row justify="center" class="py-5">
           <v-col cols="12" lg="8" md="10">
             <v-row v-if="nfts.length > 0" justify="center">
               <v-col cols="12" lg="6" md="6" v-for="(item, i) in nfts" :key="i">
-                <div class="outer-card rounded-lg" style="height: 55px">
-                  <div class="inner-card pa-1 rounded-lg" style="height: 53px">
+                <div class="outer-card rounded-lg" style="height: 55px;">
+                  <div class="inner-card pa-1 rounded-lg" style="height: 53px;">
                     <v-list
                       dense
                       style="
@@ -34,15 +34,10 @@
                           </v-img>
                         </v-list-item-avatar>
                         <v-list-item-content>
-                          <v-list-item-title>{{
-                            item.name
-                          }}</v-list-item-title>
+                          <v-list-item-title>{{ item.name }}</v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
-                          <v-tooltip
-                            top
-                            v-if="collected.includes(item.name)"
-                          >
+                          <v-tooltip top v-if="collected.includes(item.name)">
                             <template v-slot:activator="{ on, attrs }">
                               <v-icon v-bind="attrs" v-on="on" color="red"
                                 >mdi-stop-circle-outline</v-icon
@@ -58,7 +53,7 @@
                             color="green"
                             dark
                             value="red"
-                            style="border-radius: 50% !important"
+                            style="border-radius: 50% !important;"
                           ></v-checkbox>
                         </v-list-item-action>
                       </v-list-item>
@@ -66,12 +61,28 @@
                   </div>
                 </div>
               </v-col>
+              <v-col align="right">
+                <v-btn
+                  text
+                  dark
+                  class="btn-exhibit px-5"
+                  @click="createGallery"
+                >
+                  Add To Gallery
+                </v-btn>
+              </v-col>
             </v-row>
             <v-row v-else>
               <v-col v-if="loading == true" align="center">
                 <div class="spinner-box my-16">
-                        <orbit-spinner :animation-duration="1200" :size="55" color="#fff" />
-                    </div>
+                  <client-only>
+                    <spinner
+                      :animation-duration="1200"
+                      :size="55"
+                      color="#fff"
+                    />
+                  </client-only>
+                </div>
                 <p>Loading your NFTs...</p>
               </v-col>
               <v-col v-else align="center">
@@ -84,31 +95,23 @@
             </v-row>
           </v-col>
         </v-row>
-        <v-row justify="end">
-          <v-btn text dark class="btn-exhibit px-5" @click="createGallery">
-            Add To Gallery
-          </v-btn>
-        </v-row>
       </v-container>
     </v-card>
   </div>
 </template>
 
 <script>
-import axios from "axios"
-let OrbitSpinner = null;
-let solrayz=null
+import axios from "axios";
+import NFTs from "@primenums/solana-nft-tools";
+const web3 = require("@solana/web3.js");
+let solrayz = null;
 if (process.client) {
-  OrbitSpinner = require("epic-spinners").OrbitSpinner;
-  solrayz=require("@nfteyez/sol-rayz")
+  solrayz = require("@nfteyez/sol-rayz");
 }
 export default {
-  components: {
-    OrbitSpinner,
-  },
   data() {
     return {
-      connect:'',
+      connect: "",
       collected: [],
       selected: [],
       nfts: [],
@@ -119,7 +122,7 @@ export default {
   },
   computed: {
     walletAddress() {
-      return this.$store.state.wallet.walletAddress;
+            return this.$route.params.address
     },
   },
   watch: {
@@ -133,30 +136,46 @@ export default {
     this.getAllNftData();
   },
   methods: {
+    screenHeight() {
+      return window.innerHeight - 250;
+    },
     async getAllNftData() {
       await this.getCollected();
-      const publicAddress = await solrayz.resolveToWalletAddress({
-        text: this.walletAddress,
-      });
+      // const publicAddress = await solrayz.resolveToWalletAddress({
+      //   text: this.walletAddress,
+      // });
 
-      this.meta = await solrayz.getParsedNftAccountsByOwner({
-        publicAddress,
-      });
+      // this.meta = await solrayz.getParsedNftAccountsByOwner({
+      //   publicAddress,
+      // });
+      // let promises = [];
+      // for (var x = 0; x < this.meta.length; x++) {
+      //   promises.push(
+      //     await axios.get(this.meta[x].data.uri).then((response) => {
+      //       this.nfts.push(response.data);
+      //     })
+      //   )
+      // }
+      const conn = new web3.Connection(
+        web3.clusterApiUrl("devnet"),
+        "confirmed"
+      );
+      this.nfts = [];
+      // Get all mint tokens (NFTs) from your wallet
+      const walletAddr = this.walletAddress;
+      let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
+
       let promises = [];
-      for (var x = 0; x < this.meta.length; x++) {
-        promises.push(
-          await axios.get(this.meta[x].data.uri).then((response) => {
-            this.nfts.push(response.data);
-          })
-        )
+      for (var x = 0; x < mints.length; x++) {
+        let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
+        this.nfts.push(myNFT);
       }
-      this.loading=false
-  
+      this.loading = false;
     },
     getCollected() {
       axios
         .get(
-          "https://nft-soul.herokuapp.com/api/all-gallery/" + this.walletAddress
+          this.$auth.ctx.env.baseUrl+"/all-gallery/" + this.walletAddress
         )
         .then((res) => {
           for (var x = 0; x < res.data.length; x++) {

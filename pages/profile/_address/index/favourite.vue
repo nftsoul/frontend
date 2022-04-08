@@ -1,17 +1,19 @@
 <template>
   <div>
-    <v-card min-height="500" flat color="transparent">
+    <v-card :min-height="screenHeight()" flat color="transparent">
       <v-container>
         <v-row justify="center">
           <v-col cols="12" lg="8" md="6">
             <v-row v-if="collections.length == 0" justify="center">
               <v-col v-if="!noData" align="center">
                 <div class="spinner-box my-16">
-                  <orbit-spinner
+                  <client-only>
+                  <spinner
                     :animation-duration="1200"
                     :size="55"
                     color="#fff"
                   />
+                  </client-only>
                 </div>
                 <p>Loading your Collections...</p>
               </v-col>
@@ -111,12 +113,7 @@
 
 <script>
 import axios from "axios";
-let OrbitSpinner = null;
-if (process.client) {
-  OrbitSpinner = require("epic-spinners").OrbitSpinner;
-}
 export default {
-  components: { OrbitSpinner },
   data() {
     return {
       collections: [],
@@ -125,17 +122,20 @@ export default {
   },
   computed: {
     walletAddress() {
-      return this.$store.state.wallet.walletAddress;
+            return this.$route.params.address
     },
   },
   mounted() {
     this.getCollections();
   },
   methods: {
+     screenHeight(){
+        return window.innerHeight-350;
+    },
     getCollections() {
       axios
         .get(
-          "https://nft-soul.herokuapp.com/api/get-favourite/" +
+          this.$auth.ctx.env.baseUrl+"/get-favourite/" +
             this.walletAddress
         )
         .then((res) => {

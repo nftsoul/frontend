@@ -1,4 +1,3 @@
 import Vue from 'vue'
-import { OrbitSpinner } from 'epic-spinners'
-Vue.use(OrbitSpinner)
-// Vue.component('spinner', OrbitSpinner) 
+let OrbitSpinner=require('epic-spinners').OrbitSpinner
+Vue.component('spinner', OrbitSpinner) 

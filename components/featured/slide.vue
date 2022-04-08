@@ -7,12 +7,14 @@
         </v-row>
         <v-row v-if="premium.length == 0" justify="center">
           <v-col align="center">
-            <orbit-spinner
+            <client-only>
+            <spinner
               class="ma-10"
               :animation-duration="1200"
               :size="55"
               color="#fff"
             />
+            </client-only>
             <p>Loading Premium Collections...</p>
           </v-col>
         </v-row>
@@ -20,7 +22,7 @@
           <v-col cols="12" class="px-5" align="center">
             <carousel-3d
               style="box-shadow: none"
-              autoplay
+              :autoplay="false"
               autoplayHoverPause
               :controls-visible="true"
               :controls-width="40"
@@ -122,12 +124,7 @@
 
 <script>
 import axios from "axios";
-let OrbitSpinner = null;
-if (process.client) {
-  OrbitSpinner = require("epic-spinners").OrbitSpinner;
-}
 export default {
-  components: { OrbitSpinner },
   data() {
     return {
       premium: [],
