@@ -2,39 +2,26 @@
 <div class="profile-bg">
     <v-container>
         <v-row class="pt-16" justify="center">
-            <v-col cols="6" align="end">
-                <v-card flat>
-                    <v-list style="background-color:transparent !important;box-shadow:none !important">
-                        <v-list-item>
-                            <!-- <v-list-item-avatar tile width="200" height="220">
-                                <v-img :src="require('~/assets/images/profile.png')"></v-img>
-                            </v-list-item-avatar> -->
-                            <v-list-item-content>
-                                <v-list-item-title>
-                                    <b>Wallet ID:</b> {{this.walletAddress}}
-                                </v-list-item-title>
-                                <v-list-item-subtitle>
-                                    <b>Balance:</b> {{this.balance}} SOL
-                                </v-list-item-subtitle>
-                                <!-- <small>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod dolore magna aliqua.
+            <v-col cols="6" align="center">
+                <v-avatar size="150" class="bordered">
+                    <img :src="require('~/assets/images/profile.svg')" alt="Avatar">
+                </v-avatar>
+                <p class="text-h6">Masha Raymers</p>
+                <v-row justify="center">
+                    <p class="mr-5 mt-1 text-gradient">@mashmer</p>
+                    <v-card dark color="black" class="pa-2" height="40">
+                        <p v-if="walletAddress" class="mb-n7">{{walletAddress.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
+                    </v-card>
+                </v-row>
+                <div class="btn-gradient mt-5">
 
-                                </small>
-                                <v-card-actions>
-                                    <v-chip dark :color="chipColor" class="mr-2">
-                                        Following  109
-                                    </v-chip>
-                                    <v-chip dark :color="chipColor">
-                                        Following  116
-                                    </v-chip>
-                                </v-card-actions> -->
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list>
-                </v-card>
-                <v-btn class="btn-exhibit px-5" @click="$router.push({name:'profile-address-exhibit',params:{'address':walletAddress}})">
-                    Exhibit
-                </v-btn>
+                </div>
+                <p class="mt-n6 body-2">Edit Profile</p>
+
+                <div class="btn-gradient mt-5">
+
+                </div>
+                <p class="mt-n6 body-2">Link Twitter</p>
             </v-col>
         </v-row>
     </v-container>
@@ -51,7 +38,7 @@ export default {
             chipColor: 'rgba(160, 160, 160, 0.3)',
             loading: true,
             connect: '',
-            balance:'',
+            balance: '',
         }
     },
     computed: {
@@ -66,21 +53,21 @@ export default {
             }
         }
     },
-    mounted(){
-        this.connect = new web3.Connection(web3.clusterApiUrl('mainnet-beta'), 'confirmed');
+    mounted() {
+        this.connect = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
         this.getAccountInfo()
     },
-    methods:{
-        async getAccountInfo(){
-            var blc=await this.connect.getBalance(new web3.PublicKey(this.walletAddress))
-            this.balance=parseFloat(blc*0.000000001).toFixed(5)
-            
+    methods: {
+        async getAccountInfo() {
+            var blc = await this.connect.getBalance(new web3.PublicKey(this.walletAddress))
+            this.balance = parseFloat(blc * 0.000000001).toFixed(5)
+
         }
     }
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
 .profile-bg {
     background: linear-gradient(261.36deg, #C202D3 3.07%, #300253 64.08%, #16023C 82.04%, #000229 100%);
 }
@@ -88,8 +75,42 @@ export default {
 .profile-card {
     background-color: transparent !important;
 }
-.btn-exhibit{
-background: linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%);
 
+.btn-exhibit {
+    background: linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%);
+}
+
+.bordered {
+    border: 3px solid white;
+}
+
+.btn-gradient {
+    width: 100px;
+    height: 30px;
+    padding: 3px;
+    border-radius: 7px;
+    /*1*/
+    border: 2px solid transparent;
+    /*2*/
+    background: linear-gradient(45deg, #1905DA,#FE87FF) border-box;
+    /*3*/
+    -webkit-mask:
+        /*4*/
+        linear-gradient(#fff 0 0) padding-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    /*5'*/
+    mask-composite: exclude;
+    /*5*/
+}
+
+.text-gradient {
+    font-weight: 600;
+    font-size: 16px;
+    background: linear-gradient(264.44deg, #FE87FF 2.87%, #C202D3 34.05%, #5E0FFF 67.82%, #1905DA 99.15%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
 }
 </style>

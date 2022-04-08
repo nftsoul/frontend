@@ -56,29 +56,29 @@
             </client-only>
           </div>
           <p class="caption white--text mb-2">Note:</p>
-          <small class="dark-text">Service fee:2.5%</small><br />
+          <small class="dark-text">Service fee:2%</small><br />
           <!-- <small class="dark-text" sty>You will receive: 25.00eth $50,00</small> -->
         </v-col>
         <v-col cols="12" lg="7">
           <div class="enclose-border">
             <v-form v-model="valid" ref="form">
               <label for="name" class="text--disabled">Gallery Name</label>
-              <v-text-field
+              <v-textarea
                 v-model="name"
-                :rules="[validRules.required]"
+                :rules="[validRules.required,validRules.lengthMin3]"
                 id="name"
-                height="10"
+                rows="1"
                 dense
                 outlined
                 placeholder="e.g. 'My Best NFT'"
-              ></v-text-field>
+              ></v-textarea>
 
               <label for="about" class="text--disabled"
                 >About the gallery short info</label
               >
               <v-textarea
                 v-model="about"
-                :rules="[validRules.required]"
+                :rules="[validRules.required,validRules.lengthMax100]"
                 id="about"
                 rows="3"
                 auto-grow
@@ -133,21 +133,36 @@
         </v-col>
       </v-row>
     </v-container>
+
+    <!-- approval dialog -->
+    <v-dialog v-model="approvalDialog" max-width="400" persistent>
+      <div class="border-white rounded-lg">
+        <v-card color="primary" class="rounded-lg">
+          <v-col align="center">
+            <p class="text--disabled">
+              <spinner
+                :animation-duration="1200"
+                :size="30"
+                color="#fff"
+                class="mx-auto"
+              />Do not close this window
+            </p>
+            <p>Your gallery will be created after payment approval</p>
+            <p>{{ approvals }} Approvals Left</p>
+          </v-col>
+        </v-card>
+      </div>
+    </v-dialog>
+    <!-- end approval dialog -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import {
-  getProvider,
-  depositNativeToken,
-  initNativeTransaction,
-  withdrawNativeTransaction,
-  cancelNativeTransaction,
-  pauseNativeTransaction,
-  resumeNativeTransaction,
-  withdrawNativeTokenDeposit,
-} from "zebecprotocol-sdk";
+let zebec = null;
+if(process.client){
+  zebec = require("zebecprotocol-sdk");
+}
 const web3 = require("@solana/web3.js");
 
 export default {
@@ -155,7 +170,7 @@ export default {
   data() {
     return {
       connection: new web3.Connection(
-        web3.clusterApiUrl("mainnet-beta"),
+        web3.clusterApiUrl("devnet"),
         "confirmed"
       ),
       attributes: [],
@@ -170,8 +185,11 @@ export default {
       isSelecting: false,
       validRules: {
         required: (value) => !!value || "Required.",
+        agree: (value) => !!value || "You must agree.",
         length10: (v) => (v && v.length == 10) || "Should be 10 characters.",
         positive: (v) => (v && v > -1) || "Price cannot be negative.",
+        lengthMax100: (v) => (v && v.length < 200) || "Should not be more than 200 characters.",
+        lengthMin3: (v) => (v && v.length >2) || "At least 3 characters.",
       },
       slickSetting: {
         dots: false,
@@ -182,6 +200,8 @@ export default {
         arrows: true,
       },
       rankedNfts: [],
+      approvalDialog:false,
+      approvals:2
     };
   },
   computed: {
@@ -193,8 +213,18 @@ export default {
     },
   },
   mounted() {
-    this.src = this.collection[0].image;
-    this.setAttributes();
+    if(this.collection.length>0){
+      this.src = this.collection[0].image;
+    }
+    else{
+      this.$router.push({
+        name:'profile-address-exhibit',
+        params:{
+          address:this.walletAddress
+        }
+      })
+    }
+    // this.setAttributes();
   },
   methods: {
     setAttributes() {
@@ -259,13 +289,15 @@ export default {
             new web3.PublicKey(this.walletAddress)
           );
           var available = parseFloat(lamports * 0.000000001).toFixed(5);
-
+          // console.log('total charge')
           if (total_charge < available) {
-            let depositResponse = await depositNativeToken(depositData);
+            this.approvalDialog=true
+            let depositResponse = await zebec.depositNativeToken(depositData);
             if (depositResponse.status == "success") {
+              this.approvals -=1
               let currentTime = new Date();
               let futureTime = new Date(currentTime.getTime() + 1 * 60000);
-              let platformResponse = await initNativeTransaction({
+              let platformResponse = await zebec.initNativeTransaction({
                 sender: this.walletAddress,
                 receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
                 amount: 0.01,
@@ -274,16 +306,17 @@ export default {
               });
               if (platformResponse.status == "success") {
                 axios
-                  .post("https://nft-soul.herokuapp.com/api/create-gallery", {
+                  .post(this.$auth.ctx.env.baseUrl+"/create-gallery", {
                     user_id: this.walletAddress,
                     gallery_name: this.name,
-                    nfts: this.rankedNfts,
+                    nfts: this.collection,
                     image: this.src,
                     description: this.about,
                     price: this.price,
                   })
                   .then((res) => {
                     this.creating = false;
+                    this.approvalDialog=false
                     this.$toast
                       .success("Your gallery has been created successfully.", {
                         iconPack: "mdi",
@@ -298,7 +331,9 @@ export default {
                   })
                   .catch((err) => console.log(err.response));
               } else {
-                this.loading = false;
+                this.creating = false;
+                this.approvalDialog=false
+                this.approvals=2
                 this.$toast
                   .error("User rejected the request", {
                     iconPack: "mdi",
@@ -308,7 +343,9 @@ export default {
                   .goAway(3000);
               }
             } else {
-              this.loading = false;
+              this.creating = false;
+              this.approvalDialog=false
+                this.approvals=2
               this.$toast
                 .error("User rejected the request", {
                   iconPack: "mdi",

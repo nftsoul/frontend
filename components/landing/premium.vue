@@ -76,7 +76,7 @@
         </v-row>
         <v-row v-else justify="center">
           <client-only>
-            <orbit-spinner
+            <spinner
               :animation-duration="1200"
               :size="55"
               color="#fff"
@@ -91,12 +91,7 @@
 
 <script>
 import axios from "axios";
-let OrbitSpinner = null;
-if (process.client) {
-  OrbitSpinner = require("epic-spinners").OrbitSpinner;
-}
 export default {
-  components: { OrbitSpinner },
   data() {
     return {
       premium: [],
@@ -118,16 +113,11 @@ export default {
     },
     getPremium() {
       axios
-        .get("https://nft-soul.herokuapp.com/api/get-gallery")
+        .get(this.$auth.ctx.env.baseUrl+"/get-gallery")
         .then((res) => {
           this.premium = res.data.premium;
         })
         .catch((err) => console.log(err.response));
-    },
-    getImg(item) {
-      return this.$cloudinary.image.url(item.image, {
-        gravity: "auto:subject",
-      });
     },
   },
 };

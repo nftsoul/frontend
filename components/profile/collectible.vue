@@ -1,6 +1,6 @@
 <template>
   <div class="dark-bg">
-    <v-card min-height="500" flat color="transparent">
+    <v-card :min-height="screenHeight()" flat color="transparent">
       <v-container>
         <v-row justify="center">
           <v-col cols="8">
@@ -51,11 +51,13 @@
             </v-row>
             <v-row v-if="loading == true" justify="center">
               <v-col align="center">
-                <orbit-spinner
+                <client-only>
+                <spinner
                   :animation-duration="1200"
                   :size="55"
                   color="#fff"
                 />
+                </client-only>
                 <p>Loading your NFTs...</p>
               </v-col>
             </v-row>
@@ -77,18 +79,15 @@
 </template>
 
 <script>
-import axios from "axios";
-let OrbitSpinner = null;
-let solrayz=null
+import NFTs from "@primenums/solana-nft-tools"
+const web3 = require("@solana/web3.js");
+
+let solrayz = null;
 if (process.client) {
-  OrbitSpinner = require("epic-spinners").OrbitSpinner;
-  solrayz=require("@nfteyez/sol-rayz")
+  solrayz = require("@nfteyez/sol-rayz");
 }
 
 export default {
-  components: {
-    OrbitSpinner,
-  },
   data() {
     return {
       nfts: [],
@@ -112,7 +111,25 @@ export default {
     this.getAllNftData();
   },
   methods: {
+    screenHeight(){
+        return window.innerHeight-350;
+    },
     async getAllNftData() {
+      const conn = new web3.Connection(
+        web3.clusterApiUrl("devnet"),
+        "confirmed"
+      );
+      this.nfts = [];
+      // Get all mint tokens (NFTs) from your wallet
+      const walletAddr = this.walletAddress;
+      let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
+
+      let promises = [];
+      for (var x = 0; x < mints.length; x++) {
+        let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
+        this.nfts.push(myNFT)
+      }
+      //audius
       // fetchClient
       //   .getCollectibles({
       //     solWallets: [this.walletAddress],
@@ -130,25 +147,26 @@ export default {
       //       }
       //     }
       //   });
+      //solrayz
+      // const publicAddress = await solrayz.resolveToWalletAddress({
+      //   text: this.walletAddress,
+      // });
 
-      const publicAddress = await solrayz.resolveToWalletAddress({
-        text: this.walletAddress,
-      });
+      // this.meta = await solrayz.getParsedNftAccountsByOwner({
+      //   publicAddress,
+      // });
+      // let promises = [];
+      // for (var x = 0; x < this.meta.length; x++) {
+      //   promises.push(
+      //     await axios.get(this.meta[x].data.uri).then((response) => {
+      //       this.nfts.push(response.data);
+      //     })
+      //   )
+      //   // Promise.all(promises).then(() => console.log('nfts:',this.nfts));
 
-      this.meta = await solrayz.getParsedNftAccountsByOwner({
-        publicAddress,
-      });
-      let promises = [];
-      for (var x = 0; x < this.meta.length; x++) {
-        promises.push(
-          await axios.get(this.meta[x].data.uri).then((response) => {
-            this.nfts.push(response.data);
-          })
-        )
-        // Promise.all(promises).then(() => console.log('nfts:',this.nfts));
+      // }
 
-      }
-      this.loading=false
+      this.loading = false;
     },
   },
 };
