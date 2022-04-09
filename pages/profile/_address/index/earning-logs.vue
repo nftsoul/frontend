@@ -104,7 +104,7 @@ export default {
         },
         getEarnings() {
             axios
-                .get(this.$auth.ctx.env.baseUrl + "/get-earnings/" + this.walletAddress)
+                .get(process.env.baseUrl + "/get-earnings/" + this.walletAddress)
                 .then((res) => {
                     this.earning = res.data;
                     this.loading = false;
@@ -122,7 +122,7 @@ export default {
             const withdrawResponse = await zebec.withdrawNativeTransaction(data)
             if (withdrawResponse.status == "success") {
                 axios
-                    .get(this.$auth.ctx.env.baseUrl + "/withdraw/" + item._id)
+                    .get(process.env.baseUrl + "/withdraw/" + item._id)
                     .then((res) => {
                         this.withdrawing = true
                         this.$toast

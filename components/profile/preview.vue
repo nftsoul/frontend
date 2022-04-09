@@ -27,8 +27,8 @@
                                 </v-col>
                                 <v-col cols="12" lg="4" md="6" class="pr-0">
                                     <p>{{ selected.gallery_name }}</p>
-                                    <v-list dense style="box-shadow: none !important">
-                                        <v-list-item dense>
+                                    <v-list dense style="box-shadow: none !important" class="px-2">
+                                        <v-list-item dense @click="seeProfile()">
                                             <v-list-item-avatar>
                                                 <v-icon>mdi-account-tie</v-icon>
                                             </v-list-item-avatar>
@@ -131,6 +131,9 @@ export default {
         }
     },
     methods: {
+        seeProfile(){
+            this.$router.push({name:'profile-address-index-gallery',params:{address:this.selected.user_id}})
+        },
         async stream() {
             if (this.walletAddress == null) {
                 this.$toast
@@ -248,12 +251,12 @@ export default {
         },
         increaseView() {
             axios.get(
-                this.$auth.ctx.env.baseUrl + "/single-gallery/" + this.selected._id
+                process.env.baseUrl + "/single-gallery/" + this.selected._id
             )
         },
         saveEarning() {
             axios
-                .post(this.$auth.ctx.env.baseUrl + "/post-earnings", {
+                .post(process.env.baseUrl + "/post-earnings", {
                     user_id: this.walletAddress,
                     gallery_id: this.selected._id,
                     price: this.selected.price,

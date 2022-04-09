@@ -22,6 +22,8 @@
 
                 </div>
                 <p class="mt-n6 body-2">Link Twitter</p>
+
+                <button @click="authenticate('twitter')">auth Twitter</button>
             </v-col>
         </v-row>
     </v-container>
@@ -29,8 +31,15 @@
 </template>
 
 <script>
+import axios from 'axios';
 const web3 = require("@solana/web3.js");
 
+const LoginWithTwitter = require('login-with-twitter')
+const tw = new LoginWithTwitter({
+    consumerKey: 'vJRAXPUaKdnOSn1V3gdn1kzLW',
+    consumerSecret: 'fF0D0xcMlBVcVYY7mBICr6pF2cMxXWthHpE1QhuMQtGNvDyL7V',
+    callbackUrl: 'http://localhost:3001/profile/7X5Pz19drXvWZrxaP7sdqN3ZG8hSD8DrB18PFS5h3KVW/nfts'
+})
 export default {
     layout: 'user',
     data() {
@@ -62,6 +71,44 @@ export default {
             var blc = await this.connect.getBalance(new web3.PublicKey(this.walletAddress))
             this.balance = parseFloat(blc * 0.000000001).toFixed(5)
 
+        },
+        authenticate(provider) {
+            this.$auth.authenticate(provider).then(function () {
+                // Execute application logic after successful social authentication
+            })
+        },
+        async callTwitterLogin() {
+            // const TwitterStrategy = require('passport-twitter').Strategy;
+
+            // passport.use(new TwitterStrategy({
+            //         consumerKey: 'ZNLeRwvLOgMfKd3eRNFkygKZW',
+            //         consumerSecret: 'SKhF51YNyphKYfVvwKXAtPNOLwYM14W6HiBfvxwhPRawKkEAiq',
+            //         callbackURL: "http://127.0.0.1:3000/twitter/callback"
+            //     },
+            //     function (token, tokenSecret, profile, cb) {
+            //         User.findOrCreate({
+            //             twitterId: profile.id
+            //         }, function (err, user) {
+            //             return cb(err, user);
+            //         });
+            //         console.log(profile)
+            //     }
+            // ));
+            // app.get('/twitter', (req, res) => {
+            tw.login((err, tokenSecret, url) => {
+                if (err) {
+                    // Handle the error your way
+                }
+
+                // Save the OAuth token secret for use in your /twitter/callback route
+                // req.session.tokenSecret = tokenSecret
+
+                // Redirect to the /twitter/callback route, with the OAuth responses as query params
+                // res.redirect(url)
+                console.log(tokenSecret)
+            })
+            // })
+
         }
     }
 }
@@ -92,7 +139,7 @@ export default {
     /*1*/
     border: 2px solid transparent;
     /*2*/
-    background: linear-gradient(45deg, #1905DA,#FE87FF) border-box;
+    background: linear-gradient(45deg, #1905DA, #FE87FF) border-box;
     /*3*/
     -webkit-mask:
         /*4*/

@@ -31,6 +31,7 @@ export default {
     { src: "~/plugins/vue-slick-carousel", mode: "client" },
     { src: "~/plugins/vue-carousel-3d", mode: "client" },
     { src: "~/plugins/spinner", mode: "client" },
+    { src: "~/plugins/twitter-auth.js", mode: "client" },
 
   ],
   cloudinary: {
