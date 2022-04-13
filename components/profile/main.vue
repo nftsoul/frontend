@@ -23,8 +23,8 @@
                 </div>
                 <p class="mt-n6 body-2">Link Twitter</p>
 
-                <button @click="authenticate('twitter')">auth Twitter</button>
             </v-col>
+
         </v-row>
     </v-container>
 </div>
@@ -33,13 +33,12 @@
 <script>
 import axios from 'axios';
 const web3 = require("@solana/web3.js");
+import {
+    TwitterAuthProvider,
+    getAuth,
+    signInWithPopup
+} from "firebase/auth";
 
-const LoginWithTwitter = require('login-with-twitter')
-const tw = new LoginWithTwitter({
-    consumerKey: 'vJRAXPUaKdnOSn1V3gdn1kzLW',
-    consumerSecret: 'fF0D0xcMlBVcVYY7mBICr6pF2cMxXWthHpE1QhuMQtGNvDyL7V',
-    callbackUrl: 'http://localhost:3001/profile/7X5Pz19drXvWZrxaP7sdqN3ZG8hSD8DrB18PFS5h3KVW/nfts'
-})
 export default {
     layout: 'user',
     data() {
@@ -48,6 +47,9 @@ export default {
             loading: true,
             connect: '',
             balance: '',
+            config: {
+
+            }
         }
     },
     computed: {
@@ -65,6 +67,7 @@ export default {
     mounted() {
         this.connect = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
         this.getAccountInfo()
+        // this.auth()
     },
     methods: {
         async getAccountInfo() {
@@ -72,43 +75,33 @@ export default {
             this.balance = parseFloat(blc * 0.000000001).toFixed(5)
 
         },
-        authenticate(provider) {
-            this.$auth.authenticate(provider).then(function () {
-                // Execute application logic after successful social authentication
-            })
-        },
-        async callTwitterLogin() {
-            // const TwitterStrategy = require('passport-twitter').Strategy;
 
-            // passport.use(new TwitterStrategy({
-            //         consumerKey: 'ZNLeRwvLOgMfKd3eRNFkygKZW',
-            //         consumerSecret: 'SKhF51YNyphKYfVvwKXAtPNOLwYM14W6HiBfvxwhPRawKkEAiq',
-            //         callbackURL: "http://127.0.0.1:3000/twitter/callback"
-            //     },
-            //     function (token, tokenSecret, profile, cb) {
-            //         User.findOrCreate({
-            //             twitterId: profile.id
-            //         }, function (err, user) {
-            //             return cb(err, user);
-            //         });
-            //         console.log(profile)
-            //     }
-            // ));
-            // app.get('/twitter', (req, res) => {
-            tw.login((err, tokenSecret, url) => {
-                if (err) {
-                    // Handle the error your way
-                }
+        async auth() {
+            const provider = new TwitterAuthProvider();
+            const auth = getAuth();
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    console.log('result:',result)
+                    // This gives you a the Twitter OAuth 1.0 Access Token and Secret.
+                    // You can use these server side with your app's credentials to access the Twitter API.
+                    const credential = TwitterAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;
+                    const secret = credential.secret;
 
-                // Save the OAuth token secret for use in your /twitter/callback route
-                // req.session.tokenSecret = tokenSecret
-
-                // Redirect to the /twitter/callback route, with the OAuth responses as query params
-                // res.redirect(url)
-                console.log(tokenSecret)
-            })
-            // })
-
+                    // The signed-in user info.
+                    const user = result.user;
+                    // ...
+                }).catch((error) => {
+                    console.log('error:',error)
+                    // Handle Errors here.
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    // The email of the user's account used.
+                    const email = error.email;
+                    // The AuthCredential type that was used.
+                    const credential = TwitterAuthProvider.credentialFromError(error);
+                    // ...
+                });
         }
     }
 }

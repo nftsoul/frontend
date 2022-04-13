@@ -9,17 +9,17 @@
                     <v-tabs-slider color="#000229"></v-tabs-slider>
 
                     <v-tab href="#tab-1" class="text-capitalize" :to="'/profile/'+walletAddress+'/nfts'">
-                        My NFTs
+                        NFTs
                     </v-tab>
 
-                    <v-tab href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/gallery'">
+                    <v-tab v-if="userAddress==walletAddress" href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/gallery'">
                         Collections
                     </v-tab>
 
-                    <v-tab href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/favourite'">
+                    <v-tab v-if="userAddress==walletAddress" href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/favourite'">
                         Favourites
                     </v-tab>
-                    <v-tab href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/earning-logs'">
+                    <v-tab v-if="userAddress==walletAddress" href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/earning-logs'">
                         Earning Logs
                     </v-tab>
                 </v-tabs>
@@ -43,6 +43,9 @@ export default {
         }
     },
     computed: {
+        userAddress(){
+            return this.$route.params.address
+        },
         walletAddress() {
             return this.$store.state.wallet.walletAddress
         }

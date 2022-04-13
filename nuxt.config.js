@@ -31,13 +31,12 @@ export default {
     { src: "~/plugins/vue-slick-carousel", mode: "client" },
     { src: "~/plugins/vue-carousel-3d", mode: "client" },
     { src: "~/plugins/spinner", mode: "client" },
-    { src: "~/plugins/twitter-auth.js", mode: "client" },
 
   ],
   cloudinary: {
-    cloudName: 'dtj1m4wvd',
-    apiKey: '936617525278493',
-    apiSecret: 'ZrJtyCEer4AhvYuQflWkq-EZosU',
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    apiKey: process.env.CLOUDINARY_API_KEY,
+    apiSecret: process.env.CLOUDINARY_API_SECRET,
     useComponent:true
   },
 
@@ -55,31 +54,12 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/toast',
     '@nuxtjs/cloudinary',
-    '@nuxtjs/auth-next'
   ],
   axios: {
     baseURL: process.env.API_URL,
     // credentials: true,
   },
-  auth: {
-    strategies: {
-      'local': {
-        token: {
-          property: "token",
-          required: true,
-          maxAge: 60 * 60 * 24 * 7
-        },
-        user: {
-          property: false,
-          autoFetch: false
-        },
-        endpoints: {
-         
-        }
-      },
-    },
-    redirect:false
-  },
+
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
