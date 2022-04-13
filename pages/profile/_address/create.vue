@@ -112,7 +112,7 @@ export default {
     data() {
         return {
             connection: new web3.Connection(
-                web3.clusterApiUrl("devnet"),
+                web3.clusterApiUrl(process.env.CLUSTER),
                 "confirmed"
             ),
             sol:0,

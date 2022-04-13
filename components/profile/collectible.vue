@@ -97,7 +97,7 @@ export default {
         },
         async getAllNftData() {
             const conn = new web3.Connection(
-                web3.clusterApiUrl("devnet"),
+                web3.clusterApiUrl(process.env.CLUSTER),
                 "confirmed"
             );
             this.nfts = [];
