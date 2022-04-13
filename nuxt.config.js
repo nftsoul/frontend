@@ -6,19 +6,29 @@ export default {
     port:process.env.PORT
   },
   head: {
-    titleTemplate: '%s - nftsoul',
-    title: 'nftsoul',
+    titleTemplate: "Nftsoul | %s",
+    title: "Exhibit your NFT",
     htmlAttrs: {
-      lang: 'en'
+      lang: "en",
     },
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' }
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        hid: "description",
+        name: "description",
+        content:
+          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them. ",
+      },
+      // { name: "format-detection", content: "phone number" },
+      {
+        name: "keywords",
+        content:
+          "nftsoul,nftsoul collection,nft collection,nft marketplace, nft crypto art,nft art nft collection,show nfts, exhibit your nft,nfts,earn from nfts,exhibit and earn from nft collection,showcase your best NFTs and earn from them,nft store",
+      },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/mini-log.png' }
     ]
   },
 
