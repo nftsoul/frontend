@@ -127,7 +127,7 @@ export default {
     getPopularNfts() {
       axios
         .get(
-          this.$auth.ctx.env.baseUrl+"/all-popular?page=" +
+          process.env.baseUrl+"/all-popular?page=" +
             this.page +
             "&limit=" +
             this.limit

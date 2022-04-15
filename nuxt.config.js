@@ -6,19 +6,29 @@ export default {
     port:process.env.PORT
   },
   head: {
-    titleTemplate: '%s - nftsoul',
-    title: 'nftsoul',
+    titleTemplate: "Nftsoul | %s",
+    title: "Exhibit your NFT",
     htmlAttrs: {
-      lang: 'en'
+      lang: "en",
     },
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' }
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        hid: "description",
+        name: "description",
+        content:
+          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them. ",
+      },
+      // { name: "format-detection", content: "phone number" },
+      {
+        name: "keywords",
+        content:
+          "nftsoul,nftsoul collection,nft collection,nft marketplace, nft crypto art,nft art nft collection,show nfts, exhibit your nft,nfts,earn from nfts,exhibit and earn from nft collection,showcase your best NFTs and earn from them,nft store",
+      },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/mini-log.png' }
     ]
   },
 
@@ -34,9 +44,9 @@ export default {
 
   ],
   cloudinary: {
-    cloudName: 'dtj1m4wvd',
-    apiKey: '936617525278493',
-    apiSecret: 'ZrJtyCEer4AhvYuQflWkq-EZosU',
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    apiKey: process.env.CLOUDINARY_API_KEY,
+    apiSecret: process.env.CLOUDINARY_API_SECRET,
     useComponent:true
   },
 
@@ -54,31 +64,12 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/toast',
     '@nuxtjs/cloudinary',
-    '@nuxtjs/auth-next'
   ],
   axios: {
     baseURL: process.env.API_URL,
     // credentials: true,
   },
-  auth: {
-    strategies: {
-      'local': {
-        token: {
-          property: "token",
-          required: true,
-          maxAge: 60 * 60 * 24 * 7
-        },
-        user: {
-          property: false,
-          autoFetch: false
-        },
-        endpoints: {
-         
-        }
-      },
-    },
-    redirect:false
-  },
+
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
