@@ -128,7 +128,7 @@ export default {
     getTrendingNfts() {
       axios
         .get(
-          this.$auth.ctx.env.baseUrl+"/all-trending?page=" +
+          process.env.baseUrl+"/all-trending?page=" +
             this.page +
             "&limit=" +
             this.limit

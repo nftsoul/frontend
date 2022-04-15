@@ -127,7 +127,7 @@ export default {
     getCollections() {
       axios
         .get(
-          this.$auth.ctx.env.baseUrl+"/all-gallery/" + this.walletAddress
+          process.env.baseUrl+"/all-gallery/" + this.walletAddress
         )
         .then((res) => {
           this.collections = res.data;

@@ -113,7 +113,7 @@ export default {
     },
     getPremium() {
       axios
-        .get(this.$auth.ctx.env.baseUrl+"/get-gallery")
+        .get(process.env.baseUrl+"/get-gallery")
         .then((res) => {
           this.premium = res.data.premium;
         })

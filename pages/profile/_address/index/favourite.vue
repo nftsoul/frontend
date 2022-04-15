@@ -135,7 +135,7 @@ export default {
     getCollections() {
       axios
         .get(
-          this.$auth.ctx.env.baseUrl+"/get-favourite/" +
+          process.env.baseUrl+"/get-favourite/" +
             this.walletAddress
         )
         .then((res) => {
