@@ -113,35 +113,35 @@ export default {
         },
         async getAllNftData() {
             await this.getCollected();
-            // const publicAddress = await solrayz.resolveToWalletAddress({
-            //   text: this.walletAddress,
-            // });
+            const publicAddress = await solrayz.resolveToWalletAddress({
+              text: this.walletAddress,
+            });
 
-            // this.meta = await solrayz.getParsedNftAccountsByOwner({
-            //   publicAddress,
-            // });
-            // let promises = [];
-            // for (var x = 0; x < this.meta.length; x++) {
-            //   promises.push(
-            //     await axios.get(this.meta[x].data.uri).then((response) => {
-            //       this.nfts.push(response.data);
-            //     })
-            //   )
-            // }
-            const conn = new web3.Connection(
-                web3.clusterApiUrl("devnet"),
-                "confirmed"
-            );
-            this.nfts = [];
-            // Get all mint tokens (NFTs) from your wallet
-            const walletAddr = this.walletAddress;
-            let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
-
+            this.meta = await solrayz.getParsedNftAccountsByOwner({
+              publicAddress,
+            });
             let promises = [];
-            for (var x = 0; x < mints.length; x++) {
-                let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
-                this.nfts.push(myNFT);
+            for (var x = 0; x < this.meta.length; x++) {
+              promises.push(
+                await axios.get(this.meta[x].data.uri).then((response) => {
+                  this.nfts.push(response.data);
+                })
+              )
             }
+            // const conn = new web3.Connection(
+            //     web3.clusterApiUrl("devnet"),
+            //     "confirmed"
+            // );
+            // this.nfts = [];
+            // // Get all mint tokens (NFTs) from your wallet
+            // const walletAddr = this.walletAddress;
+            // let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
+
+            // let promises = [];
+            // for (var x = 0; x < mints.length; x++) {
+            //     let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
+            //     this.nfts.push(myNFT);
+            // }
             this.loading = false;
         },
         getCollected() {
