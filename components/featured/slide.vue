@@ -136,7 +136,7 @@ export default {
   methods: {
     getPremium() {
       axios
-        .get("https://nft-soul.herokuapp.com/api/get-gallery")
+        .get(process.env.baseUrl+"/get-gallery")
         .then((res) => {
           this.premium = res.data.premium;
         })

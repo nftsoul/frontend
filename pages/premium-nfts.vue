@@ -122,7 +122,7 @@ export default {
     getPremiumNfts() {
       axios
         .get(
-          this.$auth.ctx.env.baseUrl+"/all-premium?page=" +
+          process.env.baseUrl+"/all-premium?page=" +
             this.page +
             "&limit=" +
             this.limit
