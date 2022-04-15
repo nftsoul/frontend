@@ -64,6 +64,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/toast',
     '@nuxtjs/cloudinary',
+    'vue-social-sharing/nuxt'
   ],
   axios: {
     baseURL: process.env.API_URL,
