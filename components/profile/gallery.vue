@@ -140,7 +140,7 @@ export default {
     preview(item){
       this.$store.commit('content/setSelected', item)
             this.$router.push({
-                name: 'profile-preview',
+                name: 'preview',
             })
     },
     createCol() {

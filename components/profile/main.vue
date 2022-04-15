@@ -4,7 +4,11 @@
         <v-row class="pt-16" justify="center">
             <v-col cols="6" align="center" class="pb-8">
                 <v-avatar size="150" class="bordered mb-5">
-                    <img v-if="profile.image_link" :src="profile.image_link" alt="Avatar">
+                    <div v-if="profile">
+                        <img v-if="profile.image_link" :src="profile.image_link" alt="Avatar">
+                        <img v-else :src="require('~/assets/images/profile.svg')" alt="Avatar">
+
+                    </div>
                     <img v-else :src="require('~/assets/images/profile.svg')" alt="Avatar">
                 </v-avatar>
                 <div v-if="profile != null">
@@ -36,7 +40,7 @@
                 </div>
 
                 <ShareNetwork network="twitter" :url="getProfileLink()" title="NFTsoul..Exhibit and earn from your NFT Collections" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
-                    <v-btn color="#00acee" dark>
+                    <v-btn color="#00acee" class="mt-10" dark>
                         <v-icon class="mr-1">mdi-twitter</v-icon>
                         share on twitter
                     </v-btn>
@@ -122,8 +126,8 @@ export default {
         // this.auth()
     },
     methods: {
-        getProfileLink(){
-            return 'https://nftsoul.io/profile/'+this.walletAddress+'/nfts'
+        getProfileLink() {
+            return 'https://nftsoul.io/profile/' + this.walletAddress + '/gallery'
         },
         showProfileDialog() {
             if (this.profile.name) {
