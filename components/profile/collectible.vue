@@ -15,8 +15,9 @@
                                             </v-row>
                                         </template>
                                         <v-expand-transition>
-                                            <div v-if="hover" class="d-flex transition-fast-in-fast-out v-card--reveal text-h6 white--text">
-                                                <p style="cursor:pointer">Set as avatar</p>
+                                            <div v-if="hover" @click="setProfilePic(item)" class="d-flex transition-fast-in-fast-out v-card--reveal text-h6 white--text">
+                                                <v-icon v-if="profiling" class="mdi-spin">mdi-reload</v-icon>
+                                                <p v-else style="cursor:pointer">Set as avatar</p>
                                             </div>
                                         </v-expand-transition>
                                     </v-img>
@@ -74,6 +75,7 @@ export default {
             nfts: [],
             loading: true,
             connect: "",
+            profiling: false
         };
     },
     computed: {
@@ -92,6 +94,20 @@ export default {
         this.getAllNftData();
     },
     methods: {
+        setProfilePic(item) {
+            this.profiling = true
+            this.$axios.patch('/profile/' + this.$route.params.address+'?image_link='+ item.image)
+                .then(res => {
+                    this.profiling = false
+                    this.$store.commit('nft/setProfile', res.data.result)
+                    this.$toast.success("Your avatar has been updated.", {
+                            iconPack: "mdi",
+                            icon: "mdi-image",
+                            theme: "outline",
+                        })
+                        .goAway(3000);
+                }).catch(err => console.log(err.response))
+        },
         screenHeight() {
             return window.innerHeight - 350;
         },
@@ -154,16 +170,15 @@ export default {
 </script>
 
 <style lang="css">
-
 .v-card--reveal {
-  align-items: center;
-  bottom: 0;
-  justify-content: center;
-  opacity: .5;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(180deg, rgba(17, 24, 39, 0) 0%, #111827 100%);
+    align-items: center;
+    bottom: 0;
+    justify-content: center;
+    opacity: .5;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0) 0%, #111827 100%);
 }
 
 .desc-text {
