@@ -2,7 +2,7 @@
 <div class="profile-bg">
     <v-container>
         <v-row class="pt-16" justify="center">
-            <v-col cols="6" align="center">
+            <v-col cols="6" align="center" class="pb-8">
                 <v-avatar size="150" class="bordered mb-5">
                     <div v-if="profile">
                         <img v-if="profile.image_link" :src="profile.image_link" alt="Avatar">
@@ -15,25 +15,29 @@
                     <v-row justify="center">
                         <p class="mr-5 mt-1 text-gradient" v-if="profile.username">@{{profile.username}}</p>
                         <v-card dark color="black" class="pa-2" height="40">
-                            <p v-if="walletAddress" class="mb-n7">{{walletAddress.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
+                            <p v-if="walletAddress" class="mb-n7">{{this.$route.params.address.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
                         </v-card>
                     </v-row>
                 </div>
                 <div v-else>
-
+                    <v-card dark color="black" class="pa-2" height="40">
+                        <p v-if="walletAddress" class="mb-n7">{{this.$route.params.address.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
+                    </v-card>
                 </div>
-                <div class="btn-gradient mt-5" @click="showProfileDialog">
 
+                <div v-if="walletAddress == $route.params.address">
+                    <div class="btn-gradient mt-5" @click="showProfileDialog">
+
+                    </div>
+                    <p class="mt-n6 body-2">Edit Profile</p>
+
+                    <div class="btn-gradient mt-5">
+
+                    </div>
+                    <p class="mt-n6 body-2">Link Twitter</p>
                 </div>
-                <p class="mt-n6 body-2">Edit Profile</p>
-
-                <div class="btn-gradient mt-5">
-
-                </div>
-                <p class="mt-n6 body-2">Link Twitter</p>
-
+                
             </v-col>
-
         </v-row>
     </v-container>
     <v-dialog v-model="profileDialog" max-width="300">
@@ -88,7 +92,7 @@ export default {
         walletAddress() {
             return this.$store.state.wallet.walletAddress
         },
-        profile(){
+        profile() {
             return this.$store.state.nft.profile
         }
     },
@@ -129,14 +133,14 @@ export default {
                         this.$axios.post('/profile?wallet_address=' + this.$route.params.address)
                             .then(res => {
                                 // this.profile = res.data.data
-                                this.$store.commit('nft/setProfile',res.data.data)
+                                this.$store.commit('nft/setProfile', res.data.data)
                             })
                             .catch(err => {
                                 console.log(err.response)
                             })
                     } else {
                         // this.profile = res.data[0]
-                        this.$store.commit('nft/setProfile',res.data[0])
+                        this.$store.commit('nft/setProfile', res.data[0])
 
                     }
                 })
@@ -153,7 +157,7 @@ export default {
                 this.$axios.patch('/profileinfo/' + this.$route.params.address + '?name=' + this.name + '&username=' + this.username)
                     .then(res => {
                         // this.profile = res.data.result
-                        this.$store.commit('nft/setProfile',res.data.result)
+                        this.$store.commit('nft/setProfile', res.data.result)
                         this.updating = false
                         this.profileDialog = false
                     }).catch(err => console.log(err.response))
