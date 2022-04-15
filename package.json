@@ -34,6 +34,7 @@
     "vue-carousel-3d": "^1.0.1",
     "vue-server-renderer": "^2.6.14",
     "vue-slick-carousel": "^1.0.5",
+    "vue-social-sharing": "^3.0.9",
     "vue-template-compiler": "^2.6.14",
     "vueperslides": "^2.15.2",
     "vuetify": "^2.6.1",
