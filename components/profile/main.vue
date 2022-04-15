@@ -126,7 +126,7 @@ export default {
     },
     methods: {
         getProfileLink() {
-            return 'https://nftsoul.io/profile/' + this.walletAddress + '/gallery'
+            return 'https://nftsoul.io/profile/' + this.$route.params.address + '/gallery'
         },
         showProfileDialog() {
             if (this.profile.name) {
