@@ -41,6 +41,7 @@ export default {
     { src: "~/plugins/vue-slick-carousel", mode: "client" },
     { src: "~/plugins/vue-carousel-3d", mode: "client" },
     { src: "~/plugins/spinner", mode: "client" },
+    { src: "~/plugins/social-share", mode: "client" },
 
   ],
   cloudinary: {
@@ -64,7 +65,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/toast',
     '@nuxtjs/cloudinary',
-    'vue-social-sharing/nuxt'
+    // 'vue-social-sharing/nuxt'
   ],
   axios: {
     baseURL: process.env.API_URL,
