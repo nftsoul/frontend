@@ -8,11 +8,11 @@
                 <v-tabs v-model="tab" background-color="#000229" color="white" dark icons-and-text slider-color="white">
                     <v-tabs-slider color="#000229"></v-tabs-slider>
 
-                    <v-tab href="#tab-1" class="text-capitalize" :to="'/profile/'+walletAddress+'/nfts'">
+                    <v-tab href="#tab-1" v-if="userAddress==walletAddress" class="text-capitalize" :to="'/profile/'+walletAddress+'/nfts'">
                         NFTs
                     </v-tab>
 
-                    <v-tab v-if="userAddress==walletAddress" href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/gallery'">
+                    <v-tab href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/gallery'">
                         Collections
                     </v-tab>
 
