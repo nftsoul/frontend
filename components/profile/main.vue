@@ -4,9 +4,7 @@
         <v-row class="pt-16" justify="center">
             <v-col cols="6" align="center" class="pb-8">
                 <v-avatar size="150" class="bordered mb-5">
-                    <div v-if="profile">
-                        <img v-if="profile.image_link" :src="profile.image_link" alt="Avatar">
-                    </div>
+                    <img v-if="profile.image_link" :src="profile.image_link" alt="Avatar">
                     <img v-else :src="require('~/assets/images/profile.svg')" alt="Avatar">
                 </v-avatar>
                 <div v-if="profile != null">
@@ -36,7 +34,14 @@
                     </div>
                     <p class="mt-n6 body-2">Link Twitter</p>
                 </div>
-                
+
+                <ShareNetwork network="twitter" :url="getProfileLink()" title="NFTsoul..Exhibit and earn from your NFT Collections" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
+                    <v-btn color="#00acee" dark>
+                        <v-icon class="mr-1">mdi-twitter</v-icon>
+                        share on twitter
+                    </v-btn>
+                </ShareNetwork>
+
             </v-col>
         </v-row>
     </v-container>
@@ -60,7 +65,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 const web3 = require("@solana/web3.js");
 import {
     TwitterAuthProvider,
@@ -117,6 +121,9 @@ export default {
         // this.auth()
     },
     methods: {
+        getProfileLink(){
+            return 'https://nftsoul.io/profile/'+this.walletAddress+'/nfts'
+        },
         showProfileDialog() {
             if (this.profile.name) {
                 this.name = this.profile.name
@@ -132,14 +139,12 @@ export default {
                     if (res.data.length == 0) {
                         this.$axios.post('/profile?wallet_address=' + this.$route.params.address)
                             .then(res => {
-                                // this.profile = res.data.data
                                 this.$store.commit('nft/setProfile', res.data.data)
                             })
                             .catch(err => {
                                 console.log(err.response)
                             })
                     } else {
-                        // this.profile = res.data[0]
                         this.$store.commit('nft/setProfile', res.data[0])
 
                     }
@@ -242,5 +247,9 @@ export default {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-fill-color: transparent;
+}
+
+a:-webkit-any-link {
+    text-decoration: none !important;
 }
 </style>
