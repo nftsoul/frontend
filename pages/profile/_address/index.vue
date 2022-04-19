@@ -24,7 +24,7 @@
                     </v-tab>
                 </v-tabs>
             </v-col>
-            <v-btn class="btn-exhibit px-5 mt-8" @click="$router.push({name:'profile-address-exhibit',params:{'address':walletAddress}})">
+            <v-btn class="btn-exhibit px-5 mt-8" @click="$router.push({name:'profile-address-index-exhibit',params:{'address':walletAddress}})">
                     Exhibit
                 </v-btn>
         </v-row>

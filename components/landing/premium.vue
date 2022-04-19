@@ -76,12 +76,7 @@
         </v-row>
         <v-row v-else justify="center">
           <client-only>
-            <spinner
-              :animation-duration="1200"
-              :size="55"
-              color="#fff"
-              class="my-16"
-            />
+              <v-skeleton-loader v-for="(item,i) in 4" :key="i" class="mx-5" width="220" dark type="card, article"></v-skeleton-loader>
           </client-only>
         </v-row>
       </div>
