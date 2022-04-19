@@ -160,9 +160,10 @@ export default {
                 var lamports = await this.connection.getBalance(
                     new web3.PublicKey(this.walletAddress)
                 );
-                // console.log('lamport:',lamports)
+                
                 var available = parseFloat(lamports * 0.000000001).toFixed(5);
-                // console.log('available:',available)
+                console.log('available:',available)
+                console.log('charge:',total_charge)
                 if (total_charge < available) {
                     // depositing sol
                     this.approvalDialog = true

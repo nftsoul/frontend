@@ -3,7 +3,7 @@
     <v-container>
         <v-row class="pt-16" justify="center">
             <v-col cols="6" align="center" class="pb-8">
-                <div v-if="profile">
+                <div v-if="profile" class="mb-3">
                     <img v-if="profile.image_link" class="rounded-circle" :src="profile.image_link" alt="Avatar" width="170">
                     <img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" alt="Avatar">
                 </div>
@@ -38,16 +38,16 @@
                         </div>
                         <p class="mt-n6 body-2">Edit Profile</p>
                     </v-col>
-                    <v-col cols="3" align="center">
-                        <div class="btn-gradient mt-5">
+                    <!-- <v-col cols="3" align="center">
+                        <div class="btn-gradient mt-5" @click="auth()">
 
                         </div>
                         <p class="mt-n6 body-2">Link Twitter</p>
-                    </v-col>
+                    </v-col> -->
 
                 </v-row>
 
-                <ShareNetwork network="twitter" :url="getProfileLink()" title="NFTsoul..Exhibit and earn from your NFT Collections" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
+                <ShareNetwork class="mb-2" network="twitter" :url="getProfileLink()" title="NFTsoul..Exhibit and earn from your NFT Collections" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
                     <v-btn fab color="#1da1f2" small dark class="rounded-circle mr-n8" style="z-index:500;">
                         <v-icon>
                             mdi-twitter
@@ -82,11 +82,15 @@
 
 <script>
 const web3 = require("@solana/web3.js");
+import { initializeApp } from 'firebase/app';
+import firebaseConfig from './firebaseConfig';
 import {
     TwitterAuthProvider,
     getAuth,
     signInWithPopup
 } from "firebase/auth";
+
+const app = initializeApp(firebaseConfig);
 
 export default {
     layout: 'user',
