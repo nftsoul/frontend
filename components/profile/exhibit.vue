@@ -10,7 +10,7 @@
                             <!-- sticky header -->
                             <v-row no-gutters class="pb-3" style="position:sticky">
                                 <div class="rounded-pill card-back px-1">
-                                    <v-text-field v-model="search" rounded placeholder="Search your nft.." class="mt-n2 mb-n5" dark background-color="primary"></v-text-field>
+                                    <v-text-field v-model="search" rounded placeholder="Search your nft.." class="mt-n2 mb-n5" color="white" dark background-color="primary"></v-text-field>
 
                                     <!-- <v-row no-gutters>
                                 <v-btn small icon class="mx-2 mt-1">
@@ -114,7 +114,7 @@ export default {
             color: "linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%)",
             search: '',
             originalList:[],
-            filteredList:[]
+            searchedNft:[]
         };
     },
     computed: {
@@ -135,10 +135,16 @@ export default {
             } else {
                 this.filterNft()
             }
+        },
+        originalList(){
+            if(this.search==''){
+                this.nfts=this.originalList
+            }
         }
     },
     mounted() {
         this.getAllNftData();
+        this.filterNft()
     },
     methods: {
         screenHeight() {
@@ -173,7 +179,6 @@ export default {
             let promises = [];
             for (var x = 0; x < mints.length; x++) {
                 let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
-                this.nfts.push(myNFT)
                 this.originalList.push(myNFT)
             }
             this.loading = false;
@@ -220,14 +225,16 @@ export default {
             }
         },
         filterNft() {
-            this.nfts=[]
+            this.searchedNft=[]
             for(var x=0;x < this.originalList.length;x++){
                 let lowerSearch=this.search.toLowerCase()
                 let lowerName=this.originalList[x].name.toLowerCase()
                 if(lowerName.indexOf(lowerSearch) >= 0){
-                    this.nfts.push(this.originalList[x])
+                    this.searchedNft.push(this.originalList[x])
                 }
+                this.nfts=this.searchedNft
             }
+            
             if(this.nfts.length==0){
                 this.noNft='No NFT found with that search. Try different keyword.'
             }
