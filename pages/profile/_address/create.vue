@@ -53,25 +53,20 @@
                         <label for="name" class="text--disabled">Gallery Name</label>
                         <v-textarea v-model="name" :rules="[validRules.required,validRules.lengthMin3]" id="name" rows="1" dense outlined placeholder="e.g. 'My Best NFT'"></v-textarea>
 
-                        <label for="about" class="text--disabled">About the gallery short info</label>
-                        <v-textarea v-model="about" :rules="[validRules.required,validRules.lengthMax100]" id="about" rows="3" auto-grow background-color="#030537" dense outlined placeholder="e.g.'After purchasing the item you can get the item....'"></v-textarea>
+                        <label for="about" class="text--disabled">Short story about your collection</label>
+                        <v-textarea v-model="about" :rules="[validRules.required,validRules.lengthMax100]" id="about" rows="3" auto-grow background-color="#030537" dense outlined placeholder="e.g.'The fact that makes this collection worth watch...'"></v-textarea>
 
                         <label for="price" class="text--disabled">Price</label>
-                        <v-text-field v-model="price" type="number" :rules="[validRules.required, validRules.positive,validRules.sollimit]" :hint="getHint()" persistent-hint id="price" filled background-color="#030537" dense outlined placeholder="e.g. '0.01 SOL'"></v-text-field>
-                        
+                        <v-text-field v-model="price" type="number" v-if="!priceDisabled" :rules="[validRules.required, validRules.positive,validRules.sollimit]" :hint="getHint()" persistent-hint id="price" filled background-color="#030537" dense outlined placeholder="e.g. '0.01 SOL'"></v-text-field>
+                        <v-row class="mt-2" no-gutters>
+                            <v-checkbox class="mt-n2" color="white" v-model="premium"></v-checkbox>
+                            <small>Free Listing</small>
+                        </v-row>
                         <v-row class="mt-2" no-gutters>
                             <v-checkbox class="mt-n2" :rules="[validRules.required]" color="white" v-model="agree"></v-checkbox>
                             <small>I understand that and I am ready to pay 0.01 SOL to create
                                 this premium gallery.</small>
                         </v-row>
-                        <!-- <v-row no-gutters>
-                            <small class="mr-5">
-                                <v-checkbox label="Put on sale" dense dark></v-checkbox>
-                            </small>
-                            <small>
-                                <v-checkbox label="Free Listing" dark dense></v-checkbox>
-                            </small>
-                        </v-row> -->
                     </v-form>
                     <v-row>
                         <v-btn class="mx-auto my-5 btn-exhibit" @click="createGallery()" :loading="creating">Create Gallery</v-btn>
@@ -100,7 +95,6 @@
 </template>
 
 <script>
-import axios from "axios";
 let zebec = null;
 if (process.client) {
     zebec = require("zebecprotocol-sdk");
@@ -145,7 +139,9 @@ export default {
             },
             rankedNfts: [],
             approvalDialog: false,
-            approvals: 2
+            approvals: 2,
+            priceDisabled:false,
+            premium:false
         };
     },
     computed: {
@@ -155,6 +151,16 @@ export default {
         walletAddress() {
             return this.$route.params.address
         },
+    },
+    watch:{
+        premium(){
+            if(this.premium==true){
+                this.priceDisabled=true
+            }
+            else{
+                this.priceDisabled=false
+            }
+        }
     },
     mounted() {
         if (this.collection.length > 0) {
@@ -173,7 +179,7 @@ export default {
     },
     methods: {
         getSolValue() {
-            axios.get('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd')
+            this.$axios.get('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd')
                 .then(res => this.sol=res.data.solana.usd)
                 .catch(err=>console.log(err.response))
         },
@@ -258,14 +264,19 @@ export default {
                                 end_time: Math.floor(futureTime),
                             });
                             if (platformResponse.status == "success") {
-                                axios
-                                    .post(this.$auth.ctx.env.baseUrl + "/create-gallery", {
-                                        user_id: this.walletAddress,
-                                        gallery_name: this.name,
-                                        nfts: this.collection,
-                                        image: this.src,
-                                        description: this.about,
-                                        price: this.price,
+                                let premium=false
+                                if(this.price>0){
+                                    premium=true
+                                }
+                                this.$axios
+                                    .post(process.env.baseUrl + "/create-gallery", {
+                                        'user_id': this.walletAddress,
+                                        'gallery_name': this.name,
+                                        'nfts': this.collection,
+                                        'image': this.src,
+                                        'description': this.about,
+                                        'price': this.price,
+                                        'premium':premium
                                     })
                                     .then((res) => {
                                         this.creating = false;
