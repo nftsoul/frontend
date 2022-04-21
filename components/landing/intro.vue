@@ -7,7 +7,7 @@
                     <p class="text-lg-h3 text-md-h4 text-sm-h5">Exhibit and Earn From <br>Your NFT Collections</p>
                     <p class="">Create galleries, showcase your best NFTs and earn from them.</p>
                     <v-row class="mt-10">
-                        <v-btn class="btn-exhibit ma-3" width="100" @click="detectWallet()">Exhibit</v-btn>
+                        <v-btn class="btn-exhibit ma-3" width="100" @click="$router.push({name:'profile-address-index-exhibit',params:{'address':walletAddress}})">Exhibit</v-btn>
                         <div class="outer-btn ma-3" @click="$router.push({path:'/featured'})">
                             <div class="inner-btn">
                                 <p class="ml-3 mt-n1" style="font-size:14px">Explore</p>

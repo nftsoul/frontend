@@ -3,47 +3,59 @@
     <v-container>
         <v-row class="pt-16" justify="center">
             <v-col cols="6" align="center" class="pb-8">
-                <v-avatar size="150" class="bordered mb-5">
-                    <div v-if="profile">
-                        <img v-if="profile.image_link" :src="profile.image_link" alt="Avatar">
-                        <img v-else :src="require('~/assets/images/profile.svg')" alt="Avatar">
-
-                    </div>
-                    <img v-else :src="require('~/assets/images/profile.svg')" alt="Avatar">
-                </v-avatar>
+                <div v-if="profile" class="mb-3">
+                    <img v-if="profile.image_link" class="rounded-circle" :src="profile.image_link" alt="Avatar" width="170">
+                    <img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" alt="Avatar">
+                </div>
+                <img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" alt="Avatar">
                 <div v-if="profile != null">
                     <p class="text-h6" v-if="profile.name">{{profile.name}}</p>
 
                     <v-row justify="center">
                         <p class="mr-5 mt-1 text-gradient" v-if="profile.username">@{{profile.username}}</p>
-                        <v-card dark color="black" class="pa-2" height="40">
+                        <v-card max-width="200" dark color="black" class="pa-2" height="40">
                             <p v-if="walletAddress" class="mb-n7">{{this.$route.params.address.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
+                            <client-only v-else>
+                                <spinner :animation-duration="1200" :size="20" color="#fff" />
+                            </client-only>
+
                         </v-card>
                     </v-row>
                 </div>
                 <div v-else>
-                    <v-card dark color="black" class="pa-2" height="40">
+                    <v-card dark max-width="200" color="black" class="pa-2" height="40">
                         <p v-if="walletAddress" class="mb-n7">{{this.$route.params.address.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
+                        <client-only v-else>
+                            <spinner :animation-duration="1200" :size="20" color="#fff" />
+                        </client-only>
                     </v-card>
                 </div>
 
-                <div v-if="walletAddress == $route.params.address">
-                    <div class="btn-gradient mt-5" @click="showProfileDialog">
+                <v-row justify="center" v-if="walletAddress == $route.params.address">
+                    <v-col cols="3" align="center">
+                        <div class="btn-gradient mt-5" @click="showProfileDialog">
 
-                    </div>
-                    <p class="mt-n6 body-2">Edit Profile</p>
+                        </div>
+                        <p class="mt-n6 body-2">Edit Profile</p>
+                    </v-col>
+                    <!-- <v-col cols="3" align="center">
+                        <div class="btn-gradient mt-5" @click="auth()">
 
-                    <div class="btn-gradient mt-5">
+                        </div>
+                        <p class="mt-n6 body-2">Link Twitter</p>
+                    </v-col> -->
 
-                    </div>
-                    <p class="mt-n6 body-2">Link Twitter</p>
-                </div>
+                </v-row>
 
-                <ShareNetwork network="twitter" :url="getProfileLink()" title="NFTsoul..Exhibit and earn from your NFT Collections" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
-                    <v-btn color="#00acee" class="mt-10" dark>
-                        <v-icon class="mr-1">mdi-twitter</v-icon>
-                        share on twitter
+                <ShareNetwork class="mb-2" network="twitter" :url="getProfileLink()" title="NFTsoul..Exhibit and earn from your NFT Collections" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
+                    <v-btn fab color="#1da1f2" small dark class="rounded-circle mr-n8" style="z-index:500;">
+                        <v-icon>
+                            mdi-twitter
+                        </v-icon>
                     </v-btn>
+                    <v-chip light color="white" style="cursor:pointer">
+                        <span class="ml-5" style="color:#1da1f2">Share on twitter</span>
+                    </v-chip>
                 </ShareNetwork>
 
             </v-col>
@@ -70,11 +82,15 @@
 
 <script>
 const web3 = require("@solana/web3.js");
+import { initializeApp } from 'firebase/app';
+import firebaseConfig from './firebaseConfig';
 import {
     TwitterAuthProvider,
     getAuth,
     signInWithPopup
 } from "firebase/auth";
+
+const app = initializeApp(firebaseConfig);
 
 export default {
     layout: 'user',
@@ -255,5 +271,9 @@ export default {
 
 a:-webkit-any-link {
     text-decoration: none !important;
+}
+
+.rounded-circle {
+    border: 2px solid white;
 }
 </style>
