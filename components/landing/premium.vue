@@ -108,8 +108,9 @@ export default {
     },
     getPremium() {
       axios
-        .get(process.env.baseUrl+"/get-gallery")
+        .get(process.env.baseUrl+"/premium4")
         .then((res) => {
+          // console.log('pre:',res.data)
           this.premium = res.data.premium;
         })
         .catch((err) => console.log(err.response));
