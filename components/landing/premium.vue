@@ -103,6 +103,7 @@ export default {
   methods: {
     seePremium(item) {
       this.$store.commit("content/setSelected", item);
+      
       this.$router.push({
         name: "preview",
       });
@@ -112,9 +113,9 @@ export default {
         .get(process.env.baseUrl+"/premium4")
         .then((res) => {
           // console.log('pre:',res.data)
-          this.premium = res.data.premium;
+          this.premium = res.data.premium
         })
-        .catch((err) => console.log(err.response));
+        .catch((err) => console.log(err.response))
     },
   },
 };
