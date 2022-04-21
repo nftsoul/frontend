@@ -45,11 +45,17 @@
                                     <v-row class="mt-5">
                                         <v-col cols="5">
                                             <p class="mb-0 caption text--disabled">start with</p>
-                                            <p class="text-h5">{{ selected.price }} SOL</p>
+                                            <p class="text-h5" v-if="selected.price>0">{{ selected.price }} SOL</p>
+                                            <p class="text-h5" v-else>{{ 0 }} SOL</p>
 
-                                            <v-btn small color="green" class="mt-7" rounded x-small @click="stream" :loading="loading" v-if="selected.user_id != walletAddress">
-                                                <small>Pay and View</small>
-                                            </v-btn>
+                                            <div v-if="selected.user_id != walletAddress">
+                                                <v-btn v-if="selected.premium==true" small color="green" class="mt-7" rounded x-small @click="stream" :loading="loading">
+                                                    <small>Pay and View</small>
+                                                </v-btn>
+                                                <v-btn v-else small color="green" class="mt-7" rounded x-small @click="stream" :loading="loading">
+                                                    <small>Free View</small>
+                                                </v-btn>
+                                            </div>
                                             <p class="mt-2 body-2">
                                                 Total Items: {{ selected.nfts.length }}
                                             </p>
@@ -124,16 +130,19 @@ export default {
         },
     },
     mounted() {
-        let currentTime1 = Math.floor(Date.now() / 1000);
-        let futureTime1 = currentTime1 + 60
         this.increaseView()
         if (this.selected == "") {
             this.$router.push("/");
         }
     },
     methods: {
-        seeProfile(){
-            this.$router.push({name:'profile-address-index-gallery',params:{address:this.selected.user_id}})
+        seeProfile() {
+            this.$router.push({
+                name: 'profile-address-index-gallery',
+                params: {
+                    address: this.selected.user_id
+                }
+            })
         },
         async stream() {
             if (this.walletAddress == null) {
@@ -160,49 +169,62 @@ export default {
                 var lamports = await this.connection.getBalance(
                     new web3.PublicKey(this.walletAddress)
                 );
-                
+
                 var available = parseFloat(lamports * 0.000000001).toFixed(5);
-                console.log('available:',available)
-                console.log('charge:',total_charge)
-                if (total_charge < available) {
-                    // depositing sol
-                    this.approvalDialog = true
 
-                    let depositResponse = await zebec.depositNativeToken(depositData);
+                if (this.selected.premium) {
 
-                    if (depositResponse.status == "success") {
-                        this.approvals -= 1
-                        let currentTime1 = Math.floor(Date.now() / 1000);
-                        let futureTime1 = currentTime1 + 60;
-                        let creatorResponse = await zebec.initNativeTransaction({
-                            sender: this.walletAddress,
-                            receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-                            amount: parseFloat(0.02 * this.selected.price),
-                            start_time: currentTime1,
-                            end_time: futureTime1,
-                        });
-                        if (creatorResponse.status == "success") {
+                    if (total_charge < available) {
+                        // depositing sol
+                        this.approvalDialog = true
+
+                        let depositResponse = await zebec.depositNativeToken(depositData);
+
+                        if (depositResponse.status == "success") {
                             this.approvals -= 1
-                            let currentTime2 = Math.floor(Date.now() / 1000)
-                            let futureTime2 = currentTime2 + 60
-                            let platformResponse = await zebec.initNativeTransaction({
+                            let currentTime1 = Math.floor(Date.now() / 1000);
+                            let futureTime1 = currentTime1 + 60;
+                            let creatorResponse = await zebec.initNativeTransaction({
                                 sender: this.walletAddress,
-                                receiver: this.selected.user_id,
-                                amount: parseFloat(this.selected.price),
-                                start_time: currentTime2,
-                                end_time: futureTime2,
+                                receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
+                                amount: parseFloat(0.02 * this.selected.price),
+                                start_time: currentTime1,
+                                end_time: futureTime1,
                             });
-                            if (platformResponse.status == "success") {
-                                this.streampda = platformResponse.data.pda
-                                this.saveEarning();
-                                this.loading = false;
-                                this.approvalDialog = false
-                                this.$router.push({
-                                    name: "profile-stream"
+                            if (creatorResponse.status == "success") {
+                                this.approvals -= 1
+                                let currentTime2 = Math.floor(Date.now() / 1000)
+                                let futureTime2 = currentTime2 + 60
+                                let platformResponse = await zebec.initNativeTransaction({
+                                    sender: this.walletAddress,
+                                    receiver: this.selected.user_id,
+                                    amount: parseFloat(this.selected.price),
+                                    start_time: currentTime2,
+                                    end_time: futureTime2,
                                 });
+                                if (platformResponse.status == "success") {
+                                    this.streampda = platformResponse.data.pda
+                                    this.saveEarning();
+                                    this.loading = false;
+                                    this.approvalDialog = false
+                                    this.$router.push({
+                                        name: "profile-stream"
+                                    });
+                                } else {
+                                    this.loading = false;
+                                    this.approvalDialog = false
+                                    this.approvals = 3
+                                    this.$toast
+                                        .error("User rejected the request", {
+                                            iconPack: "mdi",
+                                            icon: "mdi-cancel",
+                                            theme: "outline",
+                                        })
+                                        .goAway(3000);
+                                }
                             } else {
-                                this.loading = false;
                                 this.approvalDialog = false
+                                this.loading = false;
                                 this.approvals = 3
                                 this.$toast
                                     .error("User rejected the request", {
@@ -213,8 +235,8 @@ export default {
                                     .goAway(3000);
                             }
                         } else {
-                            this.approvalDialog = false
                             this.loading = false;
+                            this.approvalDialog = false
                             this.approvals = 3
                             this.$toast
                                 .error("User rejected the request", {
@@ -226,25 +248,18 @@ export default {
                         }
                     } else {
                         this.loading = false;
-                        this.approvalDialog = false
-                        this.approvals = 3
                         this.$toast
-                            .error("User rejected the request", {
+                            .error("Insufficient fund.", {
                                 iconPack: "mdi",
-                                icon: "mdi-cancel",
+                                icon: "mdi-wallet",
                                 theme: "outline",
                             })
                             .goAway(3000);
                     }
                 } else {
-                    this.loading = false;
-                    this.$toast
-                        .error("Insufficient fund.", {
-                            iconPack: "mdi",
-                            icon: "mdi-wallet",
-                            theme: "outline",
-                        })
-                        .goAway(3000);
+                    this.$router.push({
+                        name: "profile-stream"
+                    });
                 }
             }
         },

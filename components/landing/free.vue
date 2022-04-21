@@ -46,7 +46,7 @@
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
-                        <div class="outer-btn" @click="$router.push('/popular-nfts')">
+                        <div class="outer-btn" @click="$router.push('/free-nfts')">
                             <div class="inner-btn">
                                 <p class="mt-n1 mr-3" style="font-size: 14px">View All</p>
                             </div>
@@ -90,10 +90,9 @@ export default {
         },
         getCollections() {
             this.$axios
-                .get(process.env.baseUrl + '/get-gallery')
+                .get(process.env.baseUrl + '/free4-collection')
                 .then((res) => {
-                    this.trending = res.data.trending;
-                    this.popular = res.data.premium;
+                    this.popular = res.data.free4Galleries
                 })
                 .catch((err) => console.log(err.response));
         },

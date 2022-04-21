@@ -124,9 +124,10 @@ export default {
         },
         getCollections() {
             axios
-                .get(process.env.baseUrl + '/free4-collection')
+                .get(process.env.baseUrl + '/get-gallery')
                 .then((res) => {
-                    this.popular = res.data.free4Galleries
+                    this.trending = res.data.trending;
+                    this.popular = res.data.premium;
                 })
                 .catch((err) => console.log(err.response));
         },

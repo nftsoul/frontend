@@ -109,7 +109,7 @@ export default {
                 web3.clusterApiUrl(process.env.CLUSTER),
                 "confirmed"
             ),
-            sol:0,
+            sol: 0,
             attributes: [],
             agree: true,
             valid: true,
@@ -127,7 +127,7 @@ export default {
                 positive: (v) => (v && v > -1) || "Price cannot be negative.",
                 lengthMax100: (v) => (v && v.length < 200) || "Should not be more than 200 characters.",
                 lengthMin3: (v) => (v && v.length > 2) || "At least 3 characters.",
-                sollimit:(v)=> (v && v <= 20/this.sol) || "SOL should not worth more than 20$. Current price: 20$="+(20/this.sol).toFixed(4) +" SOL"
+                sollimit: (v) => (v && v <= 20 / this.sol) || "SOL should not worth more than 20$. Current price: 20$=" + (20 / this.sol).toFixed(4) + " SOL"
             },
             slickSetting: {
                 dots: false,
@@ -140,8 +140,8 @@ export default {
             rankedNfts: [],
             approvalDialog: false,
             approvals: 2,
-            priceDisabled:false,
-            premium:false
+            priceDisabled: false,
+            premium: false
         };
     },
     computed: {
@@ -152,13 +152,12 @@ export default {
             return this.$route.params.address
         },
     },
-    watch:{
-        premium(){
-            if(this.premium==true){
-                this.priceDisabled=true
-            }
-            else{
-                this.priceDisabled=false
+    watch: {
+        premium() {
+            if (this.premium == true) {
+                this.priceDisabled = true
+            } else {
+                this.priceDisabled = false
             }
         }
     },
@@ -173,18 +172,18 @@ export default {
                 }
             })
         }
-                this.getSolValue()
+        this.getSolValue()
 
         // this.setAttributes();
     },
     methods: {
         getSolValue() {
             this.$axios.get('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd')
-                .then(res => this.sol=res.data.solana.usd)
-                .catch(err=>console.log(err.response))
+                .then(res => this.sol = res.data.solana.usd)
+                .catch(err => console.log(err.response))
         },
-        getHint(){
-            return "SOL should not worth more than 20$. Current price: 20$="+(20/this.sol).toFixed(4) +" SOL"
+        getHint() {
+            return "SOL should not worth more than 20$. Current price: 20$=" + (20 / this.sol).toFixed(4) + " SOL"
         },
         setAttributes() {
             // getting all trait value
@@ -249,51 +248,62 @@ export default {
                     );
                     var available = parseFloat(lamports * 0.000000001).toFixed(5);
                     // console.log('total charge')
-                    if (total_charge < available) {
-                        this.approvalDialog = true
-                        let depositResponse = await zebec.depositNativeToken(depositData);
-                        if (depositResponse.status == "success") {
-                            this.approvals -= 1
-                            let currentTime = new Date();
-                            let futureTime = new Date(currentTime.getTime() + 1 * 60000);
-                            let platformResponse = await zebec.initNativeTransaction({
-                                sender: this.walletAddress,
-                                receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-                                amount: 0.01,
-                                start_time: Math.floor(currentTime),
-                                end_time: Math.floor(futureTime),
-                            });
-                            if (platformResponse.status == "success") {
-                                let premium=false
-                                if(this.price>0){
-                                    premium=true
+                    if (this.price > 0) {
+
+                        if (total_charge < available) {
+                            this.approvalDialog = true
+                            let depositResponse = await zebec.depositNativeToken(depositData);
+                            if (depositResponse.status == "success") {
+                                this.approvals -= 1
+                                let currentTime = new Date();
+                                let futureTime = new Date(currentTime.getTime() + 1 * 60000);
+                                let platformResponse = await zebec.initNativeTransaction({
+                                    sender: this.walletAddress,
+                                    receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
+                                    amount: 0.01,
+                                    start_time: Math.floor(currentTime),
+                                    end_time: Math.floor(futureTime),
+                                });
+                                if (platformResponse.status == "success") {
+
+                                    this.$axios
+                                        .post(process.env.baseUrl + "/create-gallery", {
+                                            'user_id': this.walletAddress,
+                                            'gallery_name': this.name,
+                                            'nfts': this.collection,
+                                            'image': this.src,
+                                            'description': this.about,
+                                            'price': this.price,
+                                            'premium': true
+                                        })
+                                        .then((res) => {
+                                            this.creating = false;
+                                            this.approvalDialog = false
+                                            this.$toast
+                                                .success("Your gallery has been created successfully.", {
+                                                    iconPack: "mdi",
+                                                    icon: "mdi-image",
+                                                    theme: "outline",
+                                                })
+                                                .goAway(3000);
+                                            this.$store.commit("content/setSelected", res.data);
+                                            this.$router.push({
+                                                name: "profile-preview",
+                                            });
+                                        })
+                                        .catch((err) => console.log(err.response));
+                                } else {
+                                    this.creating = false;
+                                    this.approvalDialog = false
+                                    this.approvals = 2
+                                    this.$toast
+                                        .error("User rejected the request", {
+                                            iconPack: "mdi",
+                                            icon: "mdi-cancel",
+                                            theme: "outline",
+                                        })
+                                        .goAway(3000);
                                 }
-                                this.$axios
-                                    .post(process.env.baseUrl + "/create-gallery", {
-                                        'user_id': this.walletAddress,
-                                        'gallery_name': this.name,
-                                        'nfts': this.collection,
-                                        'image': this.src,
-                                        'description': this.about,
-                                        'price': this.price,
-                                        'premium':premium
-                                    })
-                                    .then((res) => {
-                                        this.creating = false;
-                                        this.approvalDialog = false
-                                        this.$toast
-                                            .success("Your gallery has been created successfully.", {
-                                                iconPack: "mdi",
-                                                icon: "mdi-image",
-                                                theme: "outline",
-                                            })
-                                            .goAway(3000);
-                                        this.$store.commit("content/setSelected", res.data);
-                                        this.$router.push({
-                                            name: "profile-preview",
-                                        });
-                                    })
-                                    .catch((err) => console.log(err.response));
                             } else {
                                 this.creating = false;
                                 this.approvalDialog = false
@@ -307,26 +317,43 @@ export default {
                                     .goAway(3000);
                             }
                         } else {
-                            this.creating = false;
-                            this.approvalDialog = false
-                            this.approvals = 2
                             this.$toast
-                                .error("User rejected the request", {
+                                .error("Insufficient fund.", {
                                     iconPack: "mdi",
-                                    icon: "mdi-cancel",
+                                    icon: "mdi-wallet",
                                     theme: "outline",
                                 })
                                 .goAway(3000);
                         }
                     } else {
-                        this.$toast
-                            .error("Insufficient fund.", {
-                                iconPack: "mdi",
-                                icon: "mdi-wallet",
-                                theme: "outline",
+                        this.$axios
+                            .post(process.env.baseUrl + "/create-gallery", {
+                                'user_id': this.walletAddress,
+                                'gallery_name': this.name,
+                                'nfts': this.collection,
+                                'image': this.src,
+                                'description': this.about,
+                                'price': 0,
+                                'premium': false
                             })
-                            .goAway(3000);
+                            .then((res) => {
+                                this.creating = false;
+                                this.approvalDialog = false
+                                this.$toast
+                                    .success("Your gallery has been created successfully.", {
+                                        iconPack: "mdi",
+                                        icon: "mdi-image",
+                                        theme: "outline",
+                                    })
+                                    .goAway(3000);
+                                this.$store.commit("content/setSelected", res.data);
+                                this.$router.push({
+                                    name: "profile-preview",
+                                });
+                            })
+                            .catch((err) => console.log(err.response));
                     }
+
                 } else {
                     this.$toast
                         .error("Please select a featured image.", {
