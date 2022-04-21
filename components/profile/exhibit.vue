@@ -160,9 +160,12 @@ export default {
               publicAddress,
             });
             let promises = [];
-            for (var x = 0; x < mints.length; x++) {
-                let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
-                this.originalList.push(myNFT)
+            for (var x = 0; x < this.meta.length; x++) {
+              promises.push(
+                await this.$axios.get(this.meta[x].data.uri).then((response) => {
+                  this.originalList.push(response.data);
+                })
+              )
             }
             // const conn = new web3.Connection(
             //     web3.clusterApiUrl("devnet"),
