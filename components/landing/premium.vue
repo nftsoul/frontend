@@ -16,7 +16,7 @@
                     class="pa-5"
                     max-width="300"
                     height="470"
-                    @click="seePremium()"
+                    @click="seePremium(item)"
                   >
                     <div class="outer-card">
                       <div class="inner-card">
@@ -101,7 +101,8 @@ export default {
     this.getPremium();
   },
   methods: {
-    seePremium() {
+    seePremium(item) {
+      this.$store.commit("content/setSelected", item);
       this.$router.push({
         name: "preview",
       });
