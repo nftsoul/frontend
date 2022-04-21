@@ -81,6 +81,8 @@
                   </div>
                 </v-card>
               </v-col>
+            </v-row>
+            <v-row>
               <v-col align="center">
                 <v-pagination
                   v-model="page"
@@ -127,14 +129,14 @@ export default {
     getPopularNfts() {
       axios
         .get(
-          process.env.baseUrl+"/all-popular?page=" +
+          process.env.baseUrl+"/free-collection?page=" +
             this.page +
             "&limit=" +
             this.limit
         )
         .then((res) => {
-          this.total = Math.floor(res.data.galleryCount / this.limit) + 1;
-          this.nfts = res.data.popular;
+          this.total = res.data.freeGalleryCount
+          this.nfts = res.data.free
         })
         .catch((err) => console.log(err.response));
     },
