@@ -16,7 +16,7 @@
                     class="pa-5"
                     max-width="300"
                     height="470"
-                    @click="seePremium()"
+                    @click="seePremium(item)"
                   >
                     <div class="outer-card">
                       <div class="inner-card">
@@ -76,12 +76,7 @@
         </v-row>
         <v-row v-else justify="center">
           <client-only>
-            <spinner
-              :animation-duration="1200"
-              :size="55"
-              color="#fff"
-              class="my-16"
-            />
+              <v-skeleton-loader v-for="(item,i) in 4" :key="i" class="mx-5" width="220" dark type="card, article"></v-skeleton-loader>
           </client-only>
         </v-row>
       </div>
@@ -106,18 +101,21 @@ export default {
     this.getPremium();
   },
   methods: {
-    seePremium() {
+    seePremium(item) {
+      this.$store.commit("content/setSelected", item);
+      
       this.$router.push({
         name: "preview",
       });
     },
     getPremium() {
       axios
-        .get(process.env.baseUrl+"/get-gallery")
+        .get(process.env.baseUrl+"/premium4")
         .then((res) => {
-          this.premium = res.data.premium;
+          // console.log('pre:',res.data)
+          this.premium = res.data.premium
         })
-        .catch((err) => console.log(err.response));
+        .catch((err) => console.log(err.response))
     },
   },
 };

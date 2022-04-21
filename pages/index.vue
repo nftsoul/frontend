@@ -1,7 +1,8 @@
 <template>
 <div>
     <LandingIntro />
-    <LandingCollection />
+    <LandingPopular />
+    <LandingFree />
     <LandingPremium />
     <LandingWorking />
     <LandingPartner />

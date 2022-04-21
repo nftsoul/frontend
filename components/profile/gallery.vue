@@ -145,7 +145,7 @@ export default {
     },
     createCol() {
       this.$router.push({
-        name: "profile-address-exhibit",
+        name: "profile-address-index-exhibit",
         params: this.walletAddress,
       });
     },

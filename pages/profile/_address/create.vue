@@ -53,25 +53,20 @@
                         <label for="name" class="text--disabled">Gallery Name</label>
                         <v-textarea v-model="name" :rules="[validRules.required,validRules.lengthMin3]" id="name" rows="1" dense outlined placeholder="e.g. 'My Best NFT'"></v-textarea>
 
-                        <label for="about" class="text--disabled">About the gallery short info</label>
-                        <v-textarea v-model="about" :rules="[validRules.required,validRules.lengthMax100]" id="about" rows="3" auto-grow background-color="#030537" dense outlined placeholder="e.g.'After purchasing the item you can get the item....'"></v-textarea>
+                        <label for="about" class="text--disabled">Short story about your collection</label>
+                        <v-textarea v-model="about" :rules="[validRules.required,validRules.lengthMax100]" id="about" rows="3" auto-grow background-color="#030537" dense outlined placeholder="e.g.'The fact that makes this collection worth watch...'"></v-textarea>
 
                         <label for="price" class="text--disabled">Price</label>
-                        <v-text-field v-model="price" type="number" :rules="[validRules.required, validRules.positive,validRules.sollimit]" :hint="getHint()" persistent-hint id="price" filled background-color="#030537" dense outlined placeholder="e.g. '0.01 SOL'"></v-text-field>
-                        
+                        <v-text-field v-model="price" type="number" v-if="!priceDisabled" :rules="[validRules.required, validRules.positive,validRules.sollimit]" :hint="getHint()" persistent-hint id="price" filled background-color="#030537" dense outlined placeholder="e.g. '0.01 SOL'"></v-text-field>
+                        <v-row class="mt-2" no-gutters>
+                            <v-checkbox class="mt-n2" color="white" v-model="premium"></v-checkbox>
+                            <small>Free Listing</small>
+                        </v-row>
                         <v-row class="mt-2" no-gutters>
                             <v-checkbox class="mt-n2" :rules="[validRules.required]" color="white" v-model="agree"></v-checkbox>
                             <small>I understand that and I am ready to pay 0.01 SOL to create
                                 this premium gallery.</small>
                         </v-row>
-                        <!-- <v-row no-gutters>
-                            <small class="mr-5">
-                                <v-checkbox label="Put on sale" dense dark></v-checkbox>
-                            </small>
-                            <small>
-                                <v-checkbox label="Free Listing" dark dense></v-checkbox>
-                            </small>
-                        </v-row> -->
                     </v-form>
                     <v-row>
                         <v-btn class="mx-auto my-5 btn-exhibit" @click="createGallery()" :loading="creating">Create Gallery</v-btn>
@@ -100,7 +95,6 @@
 </template>
 
 <script>
-import axios from "axios";
 let zebec = null;
 if (process.client) {
     zebec = require("zebecprotocol-sdk");
@@ -115,7 +109,7 @@ export default {
                 web3.clusterApiUrl(process.env.CLUSTER),
                 "confirmed"
             ),
-            sol:0,
+            sol: 0,
             attributes: [],
             agree: true,
             valid: true,
@@ -133,7 +127,7 @@ export default {
                 positive: (v) => (v && v > -1) || "Price cannot be negative.",
                 lengthMax100: (v) => (v && v.length < 200) || "Should not be more than 200 characters.",
                 lengthMin3: (v) => (v && v.length > 2) || "At least 3 characters.",
-                sollimit:(v)=> (v && v <= 20/this.sol) || "SOL should not worth more than 20$. Current price: 20$="+(20/this.sol).toFixed(4) +" SOL"
+                sollimit: (v) => (v && v <= 20 / this.sol) || "SOL should not worth more than 20$. Current price: 20$=" + (20 / this.sol).toFixed(4) + " SOL"
             },
             slickSetting: {
                 dots: false,
@@ -145,7 +139,9 @@ export default {
             },
             rankedNfts: [],
             approvalDialog: false,
-            approvals: 2
+            approvals: 2,
+            priceDisabled: false,
+            premium: false
         };
     },
     computed: {
@@ -155,6 +151,15 @@ export default {
         walletAddress() {
             return this.$route.params.address
         },
+    },
+    watch: {
+        premium() {
+            if (this.premium == true) {
+                this.priceDisabled = true
+            } else {
+                this.priceDisabled = false
+            }
+        }
     },
     mounted() {
         if (this.collection.length > 0) {
@@ -167,18 +172,18 @@ export default {
                 }
             })
         }
-                this.getSolValue()
+        this.getSolValue()
 
         // this.setAttributes();
     },
     methods: {
         getSolValue() {
-            axios.get('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd')
-                .then(res => this.sol=res.data.solana.usd)
-                .catch(err=>console.log(err.response))
+            this.$axios.get('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd')
+                .then(res => this.sol = res.data.solana.usd)
+                .catch(err => console.log(err.response))
         },
-        getHint(){
-            return "SOL should not worth more than 20$. Current price: 20$="+(20/this.sol).toFixed(4) +" SOL"
+        getHint() {
+            return "SOL should not worth more than 20$. Current price: 20$=" + (20 / this.sol).toFixed(4) + " SOL"
         },
         setAttributes() {
             // getting all trait value
@@ -243,46 +248,62 @@ export default {
                     );
                     var available = parseFloat(lamports * 0.000000001).toFixed(5);
                     // console.log('total charge')
-                    if (total_charge < available) {
-                        this.approvalDialog = true
-                        let depositResponse = await zebec.depositNativeToken(depositData);
-                        if (depositResponse.status == "success") {
-                            this.approvals -= 1
-                            let currentTime = new Date();
-                            let futureTime = new Date(currentTime.getTime() + 1 * 60000);
-                            let platformResponse = await zebec.initNativeTransaction({
-                                sender: this.walletAddress,
-                                receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-                                amount: 0.01,
-                                start_time: Math.floor(currentTime),
-                                end_time: Math.floor(futureTime),
-                            });
-                            if (platformResponse.status == "success") {
-                                axios
-                                    .post(this.$auth.ctx.env.baseUrl + "/create-gallery", {
-                                        user_id: this.walletAddress,
-                                        gallery_name: this.name,
-                                        nfts: this.collection,
-                                        image: this.src,
-                                        description: this.about,
-                                        price: this.price,
-                                    })
-                                    .then((res) => {
-                                        this.creating = false;
-                                        this.approvalDialog = false
-                                        this.$toast
-                                            .success("Your gallery has been created successfully.", {
-                                                iconPack: "mdi",
-                                                icon: "mdi-image",
-                                                theme: "outline",
-                                            })
-                                            .goAway(3000);
-                                        this.$store.commit("content/setSelected", res.data);
-                                        this.$router.push({
-                                            name: "profile-preview",
-                                        });
-                                    })
-                                    .catch((err) => console.log(err.response));
+                    if (this.price > 0) {
+
+                        if (total_charge < available) {
+                            this.approvalDialog = true
+                            let depositResponse = await zebec.depositNativeToken(depositData);
+                            if (depositResponse.status == "success") {
+                                this.approvals -= 1
+                                let currentTime = new Date();
+                                let futureTime = new Date(currentTime.getTime() + 1 * 60000);
+                                let platformResponse = await zebec.initNativeTransaction({
+                                    sender: this.walletAddress,
+                                    receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
+                                    amount: 0.01,
+                                    start_time: Math.floor(currentTime),
+                                    end_time: Math.floor(futureTime),
+                                });
+                                if (platformResponse.status == "success") {
+
+                                    this.$axios
+                                        .post(process.env.baseUrl + "/create-gallery", {
+                                            'user_id': this.walletAddress,
+                                            'gallery_name': this.name,
+                                            'nfts': this.collection,
+                                            'image': this.src,
+                                            'description': this.about,
+                                            'price': this.price,
+                                            'premium': true
+                                        })
+                                        .then((res) => {
+                                            this.creating = false;
+                                            this.approvalDialog = false
+                                            this.$toast
+                                                .success("Your gallery has been created successfully.", {
+                                                    iconPack: "mdi",
+                                                    icon: "mdi-image",
+                                                    theme: "outline",
+                                                })
+                                                .goAway(3000);
+                                            this.$store.commit("content/setSelected", res.data);
+                                            this.$router.push({
+                                                name: "profile-preview",
+                                            });
+                                        })
+                                        .catch((err) => console.log(err.response));
+                                } else {
+                                    this.creating = false;
+                                    this.approvalDialog = false
+                                    this.approvals = 2
+                                    this.$toast
+                                        .error("User rejected the request", {
+                                            iconPack: "mdi",
+                                            icon: "mdi-cancel",
+                                            theme: "outline",
+                                        })
+                                        .goAway(3000);
+                                }
                             } else {
                                 this.creating = false;
                                 this.approvalDialog = false
@@ -296,26 +317,43 @@ export default {
                                     .goAway(3000);
                             }
                         } else {
-                            this.creating = false;
-                            this.approvalDialog = false
-                            this.approvals = 2
                             this.$toast
-                                .error("User rejected the request", {
+                                .error("Insufficient fund.", {
                                     iconPack: "mdi",
-                                    icon: "mdi-cancel",
+                                    icon: "mdi-wallet",
                                     theme: "outline",
                                 })
                                 .goAway(3000);
                         }
                     } else {
-                        this.$toast
-                            .error("Insufficient fund.", {
-                                iconPack: "mdi",
-                                icon: "mdi-wallet",
-                                theme: "outline",
+                        this.$axios
+                            .post(process.env.baseUrl + "/create-gallery", {
+                                'user_id': this.walletAddress,
+                                'gallery_name': this.name,
+                                'nfts': this.collection,
+                                'image': this.src,
+                                'description': this.about,
+                                'price': 0,
+                                'premium': false
                             })
-                            .goAway(3000);
+                            .then((res) => {
+                                this.creating = false;
+                                this.approvalDialog = false
+                                this.$toast
+                                    .success("Your gallery has been created successfully.", {
+                                        iconPack: "mdi",
+                                        icon: "mdi-image",
+                                        theme: "outline",
+                                    })
+                                    .goAway(3000);
+                                this.$store.commit("content/setSelected", res.data);
+                                this.$router.push({
+                                    name: "profile-preview",
+                                });
+                            })
+                            .catch((err) => console.log(err.response));
                     }
+
                 } else {
                     this.$toast
                         .error("Please select a featured image.", {

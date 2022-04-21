@@ -1,19 +1,37 @@
 <template>
 <div class="dark-bg">
+
     <v-card :min-height="screenHeight()" flat color="transparent">
-        <v-container class="py-lg-16 py-md-10 py-5">
-            <v-row justify="center" class="py-5">
+        <v-container>
+            <v-row justify="center">
                 <v-col cols="12" lg="8" md="10">
-                    <v-row v-if="nfts.length > 0" justify="center">
-                      <v-col>
-                        <v-row>
-                            <v-col align="right">
-                                <v-btn text dark class="btn-exhibit px-5" @click="createGallery">
-                                    Add To Gallery
+                    <div class="placeholder-content">
+                        <section class="sticky-content">
+                            <!-- sticky header -->
+                            <v-row no-gutters class="pb-3" style="position:sticky">
+                                <div class="rounded-pill card-back px-1">
+                                    <v-text-field v-model="search" rounded placeholder="Search your nft.." class="mt-n2 mb-n5" color="white" dark background-color="primary"></v-text-field>
+
+                                    <!-- <v-row no-gutters>
+                                <v-btn small icon class="mx-2 mt-1">
+                                    <v-icon color="#fe87ff">mdi-nfc-search-variant</v-icon>
                                 </v-btn>
-                            </v-col>
-                        </v-row>
-                        <v-row>
+                            </v-row> -->
+
+                                </div>
+                                <v-spacer></v-spacer>
+                                <div class="btn-gradient" style="width:150px;height:40px" @click="createGallery">
+
+                                </div>
+                                <div class="body-2 mt-2" style="margin-left:-135px">
+                                    <v-icon>mdi-plus</v-icon>
+                                    <span>Add to Gallery</span>
+                                </div>
+                            </v-row>
+                            <!-- end sticky header -->
+                        </section>
+                        <!-- nfts list -->
+                        <v-row v-if="nfts.length > 0" justify="center">
 
                             <v-col cols="12" lg="6" md="6" v-for="(item, i) in nfts" :key="i">
                                 <div class="outer-card rounded-lg" style="height: 55px;">
@@ -49,23 +67,26 @@
                                     </div>
                                 </div>
                             </v-col>
+
                         </v-row>
-                      </v-col>
-                    </v-row>
-                    <v-row v-else>
-                        <v-col v-if="loading == true" align="center">
-                            <div class="spinner-box my-16">
-                                <client-only>
-                                    <spinner :animation-duration="1200" :size="55" color="#fff" />
-                                </client-only>
-                            </div>
-                            <p>Loading your NFTs...</p>
-                        </v-col>
-                        <v-col v-else align="center">
-                            <v-img :src="require('~/assets/images/sad.svg')" max-width="300"></v-img>
-                            <p>Yo do not have any NFTs. Get some and then come back.</p>
-                        </v-col>
-                    </v-row>
+                        <!-- end nfts list -->
+
+                        <v-row v-else>
+                            <v-col v-if="loading == true" align="center">
+                                <div class="spinner-box my-16">
+                                    <client-only>
+                                        <spinner :animation-duration="1200" :size="55" color="#fff" />
+                                    </client-only>
+                                </div>
+                                <p>Loading your NFTs...</p>
+                            </v-col>
+                            <v-col v-else align="center">
+                                <v-img :src="require('~/assets/images/sad.svg')" max-width="300"></v-img>
+                                <p>{{noNft}}</p>
+                            </v-col>
+                        </v-row>
+                    </div>
+
                 </v-col>
             </v-row>
         </v-container>
@@ -88,8 +109,12 @@ export default {
             collected: [],
             selected: [],
             nfts: [],
+            noNft:'Yo do not have any NFTs. Get some and then come back.',
             loading: true,
             color: "linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%)",
+            search: '',
+            originalList:[],
+            searchedNft:[]
         };
     },
     computed: {
@@ -103,13 +128,27 @@ export default {
                 this.getAllNftData();
             }
         },
+        search(newValue, oldValue) {
+            if (newValue.length < 1) {
+                this.nfts=this.originalList
+                this.noNft='Yo do not have any NFTs. Get some and then come back.'
+            } else {
+                this.filterNft()
+            }
+        },
+        originalList(){
+            if(this.search==''){
+                this.nfts=this.originalList
+            }
+        }
     },
     mounted() {
         this.getAllNftData();
+        this.filterNft()
     },
     methods: {
         screenHeight() {
-            return window.innerHeight - 250;
+            return window.innerHeight;
         },
         async getAllNftData() {
             await this.getCollected();
@@ -121,12 +160,9 @@ export default {
               publicAddress,
             });
             let promises = [];
-            for (var x = 0; x < this.meta.length; x++) {
-              promises.push(
-                await axios.get(this.meta[x].data.uri).then((response) => {
-                  this.nfts.push(response.data);
-                })
-              )
+            for (var x = 0; x < mints.length; x++) {
+                let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
+                this.originalList.push(myNFT)
             }
             // const conn = new web3.Connection(
             //     web3.clusterApiUrl("devnet"),
@@ -169,7 +205,12 @@ export default {
                     .goAway(3000);
             } else {
                 this.$store.commit("nft/setCollection", this.selected);
-                this.$router.push({name:'profile-address-create',params:{'address':this.walletAddress}})
+                this.$router.push({
+                    name: 'profile-address-create',
+                    params: {
+                        'address': this.walletAddress
+                    }
+                })
             }
         },
 
@@ -180,11 +221,31 @@ export default {
                 this.selected.push(item);
             }
         },
+        filterNft() {
+            this.searchedNft=[]
+            for(var x=0;x < this.originalList.length;x++){
+                let lowerSearch=this.search.toLowerCase()
+                let lowerName=this.originalList[x].name.toLowerCase()
+                if(lowerName.indexOf(lowerSearch) >= 0){
+                    this.searchedNft.push(this.originalList[x])
+                }
+                this.nfts=this.searchedNft
+            }
+            
+            if(this.nfts.length==0){
+                this.noNft='No NFT found with that search. Try different keyword.'
+            }
+        }
     },
 };
 </script>
 
 <style lang="css">
+.card-back {
+    background: linear-gradient(90deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%) !important;
+
+}
+
 .btn-plus {
     background: linear-gradient(264.75deg,
             #fe87ff 3.04%,
@@ -194,5 +255,17 @@ export default {
             #1905da 99.63%) !important;
     border-radius: 50%;
     padding: 0px 2px;
+}
+
+.sticky-content {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 2rem 0px;
+    background-color: #000229;
+}
+
+.placeholder-content {
+    height: 1000px;
 }
 </style>
