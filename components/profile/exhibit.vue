@@ -151,33 +151,33 @@ export default {
             return window.innerHeight;
         },
         async getAllNftData() {
-            await this.getCollected();
-            const publicAddress = await solrayz.resolveToWalletAddress({
-              text: this.walletAddress,
-            });
+            // await this.getCollected();
+            // const publicAddress = await solrayz.resolveToWalletAddress({
+            //   text: this.walletAddress,
+            // });
 
-            this.meta = await solrayz.getParsedNftAccountsByOwner({
-              publicAddress,
-            });
+            // this.meta = await solrayz.getParsedNftAccountsByOwner({
+            //   publicAddress,
+            // });
+            // let promises = [];
+            // for (var x = 0; x < mints.length; x++) {
+            //     let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
+            //     this.originalList.push(myNFT)
+            // }
+            const conn = new web3.Connection(
+                web3.clusterApiUrl("devnet"),
+                "confirmed"
+            );
+            this.nfts = [];
+            // Get all mint tokens (NFTs) from your wallet
+            const walletAddr = this.walletAddress;
+            let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
+
             let promises = [];
             for (var x = 0; x < mints.length; x++) {
                 let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
                 this.originalList.push(myNFT)
             }
-            // const conn = new web3.Connection(
-            //     web3.clusterApiUrl("devnet"),
-            //     "confirmed"
-            // );
-            // this.nfts = [];
-            // // Get all mint tokens (NFTs) from your wallet
-            // const walletAddr = this.walletAddress;
-            // let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
-
-            // let promises = [];
-            // for (var x = 0; x < mints.length; x++) {
-            //     let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
-            //     this.nfts.push(myNFT);
-            // }
             this.loading = false;
         },
         getCollected() {
