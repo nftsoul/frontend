@@ -151,7 +151,7 @@ export default {
             return window.innerHeight;
         },
         async getAllNftData() {
-            // await this.getCollected();
+            await this.getCollected();
             // const publicAddress = await solrayz.resolveToWalletAddress({
             //   text: this.walletAddress,
             // });
