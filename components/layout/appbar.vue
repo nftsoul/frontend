@@ -58,7 +58,7 @@
                 <v-list-item
                   @click="
                     $router.push({
-                      name: 'profile-address-exhibit',
+                      name: 'profile-address-index-exhibit',
                       params: { address: walletAddress },
                     })
                   "
@@ -187,7 +187,7 @@
         <v-list-item
           @click="
             $router.push({
-              name: 'profile-address-exhibit',
+              name: 'profile-address-index-exhibit',
               params: { address: walletAddress },
             })
           "

@@ -113,7 +113,7 @@ export default {
         return {
             loading: false,
             connection: new web3.Connection(
-                web3.clusterApiUrl(process.env.CLUSTER),
+                web3.clusterApiUrl('devnet'),
                 "confirmed"
             ),
             approvalDialog: false,
