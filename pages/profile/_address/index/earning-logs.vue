@@ -38,7 +38,7 @@
                                                     </template>
                                                     <span>Already withdrawn</span>
                                                 </v-tooltip>
-                                                <v-btn v-else small :loading="withdrawing" class="btn-exhibit" @click="withdraw(item)">Withdraw</v-btn>
+                                                <v-btn v-else small class="btn-exhibit" @click="withdraw(item)">Withdraw</v-btn>
                                             </td>
                                         </tr>
                                     </tbody>

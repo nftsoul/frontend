@@ -62,7 +62,7 @@
                             <v-checkbox class="mt-n2" color="white" v-model="premium"></v-checkbox>
                             <small>Free Listing</small>
                         </v-row>
-                        <v-row class="mt-2" no-gutters>
+                        <v-row class="mt-2" no-gutters v-if="!priceDisabled">
                             <v-checkbox class="mt-n2" :rules="[validRules.required]" color="white" v-model="agree"></v-checkbox>
                             <small>I understand that and I am ready to pay 0.01 SOL to create
                                 this premium gallery.</small>
