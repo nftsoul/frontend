@@ -106,7 +106,7 @@ export default {
     data() {
         return {
             connection: new web3.Connection(
-                web3.clusterApiUrl(process.env.CLUSTER),
+                web3.clusterApiUrl('mainnet-beta'),
                 "confirmed"
             ),
             sol: 0,
