@@ -3,32 +3,53 @@
     <v-container>
         <v-row class="pt-16" justify="center">
             <v-col cols="6" align="center" class="pb-8">
+                <client-only>
                 <div v-if="profile" class="mb-3">
-                    <img v-if="profile.image_link" class="rounded-circle" :src="profile.image_link" alt="Avatar" width="170">
-                    <img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" alt="Avatar">
+                    <v-img v-if="profile.image_link" :lazy-src="profile.image_link" class="rounded-circle" :src="profile.image_link" alt="Avatar" max-width="170" max-height="170">
+                        <template v-slot:placeholder>
+                            <v-row class="fill-height ma-0" align="center" justify="center">
+                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                            </v-row>
+                        </template>
+                    </v-img>
+                    <v-img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" :lazy-src="require('~/assets/images/profile.svg')" max-width="170" max-height="170" alt="Avatar">
+                        <template v-slot:placeholder>
+                            <v-row class="fill-height ma-0" align="center" justify="center">
+                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                            </v-row>
+                        </template>
+                    </v-img>
                 </div>
-                <img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" alt="Avatar">
+                <v-img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" :lazy-src="require('~/assets/images/profile.svg')" max-width="170" max-height="170" alt="Avatar">
+                    <template v-slot:placeholder>
+                        <v-row class="fill-height ma-0" align="center" justify="center">
+                            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                        </v-row>
+                    </template>
+                </v-img>
+                </client-only>
                 <div v-if="profile != null">
                     <p class="text-h6" v-if="profile.name">{{profile.name}}</p>
 
-                    <v-row justify="center">
-                        <p class="mr-5 mt-1 text-gradient" v-if="profile.username">@{{profile.username}}</p>
-                        <v-card max-width="200" dark color="black" class="pa-2" height="40">
+                    <v-row justify="center py-3">
+                        <p class="mr-5 mt-1 text-gradient link" @click="tutorProfile()" v-if="profile.username">@{{profile.username}}</p>
+                        <v-card max-width="200" dark color="black" class="pa-2" height="40" @click="copy()">
                             <p v-if="walletAddress" class="mb-n7">{{this.$route.params.address.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
                             <client-only v-else>
                                 <spinner :animation-duration="1200" :size="20" color="#fff" />
                             </client-only>
-
                         </v-card>
                     </v-row>
                 </div>
                 <div v-else>
-                    <v-card dark max-width="200" color="black" class="pa-2" height="40">
+
+                    <v-card dark max-width="200" color="black" class="pa-2" height="40" @click="copy()">
                         <p v-if="walletAddress" class="mb-n7">{{this.$route.params.address.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
                         <client-only v-else>
                             <spinner :animation-duration="1200" :size="20" color="#fff" />
                         </client-only>
                     </v-card>
+
                 </div>
 
                 <v-row justify="center" v-if="walletAddress == $route.params.address">
@@ -61,7 +82,7 @@
             </v-col>
         </v-row>
     </v-container>
-    <v-dialog v-model="profileDialog" max-width="300">
+    <v-dialog v-model="profileDialog" max-width="300" style="z-index:501">
         <v-card class="background" dark>
             <v-card-title>Update profile</v-card-title>
             <v-card-text>
@@ -82,7 +103,9 @@
 
 <script>
 const web3 = require("@solana/web3.js");
-import { initializeApp } from 'firebase/app';
+import {
+    initializeApp
+} from 'firebase/app';
 import firebaseConfig from './firebaseConfig';
 import {
     TwitterAuthProvider,
@@ -141,6 +164,18 @@ export default {
         // this.auth()
     },
     methods: {
+        tutorProfile(){
+            // window.open('https://twitter.com/'+this.profile.username)
+        },
+        copy(){
+            navigator.clipboard.writeText(this.walletAddress)
+            this.$toast.success("Address copied.", {
+                    iconPack: "mdi",
+                    icon: "mdi-content-copy",
+                    theme: "outline"
+                })
+                .goAway(1000)
+        },
         getProfileLink() {
             return 'https://nftsoul.io/profile/' + this.$route.params.address + '/gallery'
         },
@@ -275,5 +310,8 @@ a:-webkit-any-link {
 
 .rounded-circle {
     border: 2px solid white;
+}
+.link:hover{
+    cursor: pointer;
 }
 </style>

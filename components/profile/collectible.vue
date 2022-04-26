@@ -4,7 +4,7 @@
         <v-container>
             <v-row justify="center">
                 <v-col cols="8">
-                    <v-row v-if="nfts.length > 0" justify="center">
+                    <v-row v-if="nfts.length > 0">
                         <v-col cols="12" lg="4" md="6" v-for="(item, i) in nfts" :key="i" align="center">
                             <v-card max-width="300" class="art-card" height="390">
                                 <v-hover v-slot="{ hover }">
@@ -112,20 +112,20 @@ export default {
             return window.innerHeight - 350;
         },
         async getAllNftData() {
-            const conn = new web3.Connection(
-                web3.clusterApiUrl(process.env.CLUSTER),
-                "confirmed"
-            );
-            this.nfts = [];
-            // Get all mint tokens (NFTs) from your wallet
-            const walletAddr = this.walletAddress;
-            let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
+            // const conn = new web3.Connection(
+            //     web3.clusterApiUrl(process.env.CLUSTER),
+            //     "confirmed"
+            // );
+            // this.nfts = [];
+            // // Get all mint tokens (NFTs) from your wallet
+            // const walletAddr = this.walletAddress;
+            // let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
 
-            let promises = [];
-            for (var x = 0; x < mints.length; x++) {
-                let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
-                this.nfts.push(myNFT)
-            }
+            // let promises = [];
+            // for (var x = 0; x < mints.length; x++) {
+            //     let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
+            //     this.nfts.push(myNFT)
+            // }
             //audius
             // fetchClient
             //   .getCollectibles({
@@ -145,23 +145,23 @@ export default {
             //     }
             //   });
             //solrayz
-            // const publicAddress = await solrayz.resolveToWalletAddress({
-            //   text: this.walletAddress,
-            // });
+            const publicAddress = await solrayz.resolveToWalletAddress({
+              text: this.walletAddress,
+            });
 
-            // this.meta = await solrayz.getParsedNftAccountsByOwner({
-            //   publicAddress,
-            // });
-            // let promises = [];
-            // for (var x = 0; x < this.meta.length; x++) {
-            //   promises.push(
-            //     await this.$axios.get(this.meta[x].data.uri).then((response) => {
-            //       this.nfts.push(response.data);
-            //     })
-            //   )
-              // Promise.all(promises).then(() => console.log('nfts:',this.nfts));
+            this.meta = await solrayz.getParsedNftAccountsByOwner({
+              publicAddress,
+            });
+            let promises = [];
+            for (var x = 0; x < this.meta.length; x++) {
+              promises.push(
+                await this.$axios.get(this.meta[x].data.uri).then((response) => {
+                  this.nfts.push(response.data);
+                })
+              )
+              Promise.all(promises)
 
-            // }
+            }
 
             this.loading = false;
         },
