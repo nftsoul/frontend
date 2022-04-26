@@ -166,7 +166,7 @@ export default {
             this.src = this.collection[0].image;
         } else {
             this.$router.push({
-                name: 'profile-address-exhibit',
+                name: 'profile-address-index-exhibit',
                 params: {
                     address: this.walletAddress
                 }
