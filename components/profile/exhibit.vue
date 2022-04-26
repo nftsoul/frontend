@@ -4,9 +4,9 @@
     <v-card :min-height="screenHeight()" flat color="transparent">
         <v-container>
             <v-row justify="center">
-                <v-col cols="12" lg="8" md="10">
+                <v-col cols="12" lg="6" md="10">
                     <div class="placeholder-content">
-                        <section class="sticky-content">
+                        <section class="sticky-content py-2">
                             <!-- sticky header -->
                             <v-row no-gutters class="pb-3" style="position:sticky">
                                 <div class="rounded-pill card-back px-1">
@@ -31,7 +31,7 @@
                             <!-- end sticky header -->
                         </section>
                         <!-- nfts list -->
-                        <v-row v-if="nfts.length > 0" justify="center">
+                        <v-row v-if="nfts.length > 0" class="pt-8">
 
                             <v-col cols="12" lg="6" md="6" v-for="(item, i) in nfts" :key="i">
                                 <div class="outer-card rounded-lg" style="height: 55px;">
@@ -58,7 +58,7 @@
                                                         <template v-slot:activator="{ on, attrs }">
                                                             <v-icon v-bind="attrs" v-on="on" color="red">mdi-stop-circle-outline</v-icon>
                                                         </template>
-                                                        <span class="caption">Already belongs to a collection</span>
+                                                        <span class="caption" style="z-index:5000">Already belongs to a collection</span>
                                                     </v-tooltip>
                                                     <v-checkbox v-else @change="selectNft(item)" color="green" dark value="red" style="border-radius: 50% !important;"></v-checkbox>
                                                 </v-list-item-action>
@@ -173,11 +173,36 @@ export default {
             const walletAddr = this.walletAddress;
             let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
 
+            this.meta = await solrayz.getParsedNftAccountsByOwner({
+              publicAddress,
+            });
             let promises = [];
-            for (var x = 0; x < mints.length; x++) {
-                let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
-                this.originalList.push(myNFT)
+            for (var x = 0; x < this.meta.length; x++) {
+              promises.push(
+                await this.$axios.get(this.meta[x].data.uri).then((response) => {
+                  this.originalList.push(response.data);
+                })
+              )
+              Promise.all(promises);
+
             }
+            // const conn = new web3.Connection(
+            //     web3.clusterApiUrl("devnet"),
+            //     "confirmed"
+            // );
+            // this.nfts = [];
+            // // Get all mint tokens (NFTs) from your wallet
+            // const walletAddr = this.walletAddress;
+            // let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
+
+            // let promises = [];
+            // for (var x = 0; x < this.meta.length; x++) {
+            //   promises.push(
+            //     await this.$axios.get(this.meta[x].data.uri).then((response) => {
+            //       this.originalList.push(response.data);
+            //     })
+            //   )
+            // }
             this.loading = false;
         },
         getCollected() {
