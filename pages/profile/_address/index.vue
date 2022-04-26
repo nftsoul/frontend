@@ -5,7 +5,7 @@
         <v-row justify="center">
             <v-col cols="12" lg="8" md="6">
 
-                <v-tabs v-model="tab" background-color="#000229" color="white" dark icons-and-text slider-color="white">
+                <v-tabs v-model="tab" background-color="#000229" tile color="purple" group>
                     <v-tabs-slider color="#000229"></v-tabs-slider>
 
                     <v-tab href="#tab-1" v-if="userAddress==walletAddress" class="text-capitalize" :to="'/profile/'+walletAddress+'/nfts'">

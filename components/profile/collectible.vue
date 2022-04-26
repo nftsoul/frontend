@@ -4,7 +4,7 @@
         <v-container>
             <v-row justify="center">
                 <v-col cols="8">
-                    <v-row v-if="nfts.length > 0" justify="center">
+                    <v-row v-if="nfts.length > 0">
                         <v-col cols="12" lg="4" md="6" v-for="(item, i) in nfts" :key="i" align="center">
                             <v-card max-width="300" class="art-card" height="390">
                                 <v-hover v-slot="{ hover }">
