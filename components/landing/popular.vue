@@ -15,21 +15,22 @@
                 </v-col>
                 <v-col cols="12" lg="4" md="6">
                     <v-row no-gutters>
+
                         <small class="float-left mt-2">In Last:</small>
                         <v-btn-toggle v-model="duration" dense tile group dark color="#FE87FF">
-                            <v-btn small>
+                            <v-btn small value="one">
                                 <small>24 Hours</small>
                             </v-btn>
 
-                            <v-btn small>
+                            <v-btn small value="seven">
                                 <small>7 Days</small>
                             </v-btn>
 
-                            <v-btn small>
+                            <v-btn small value="thirty">
                                 <small>30 Days</small>
                             </v-btn>
 
-                            <v-btn small>
+                            <v-btn small value="all">
                                 <small>All Time</small>
                             </v-btn>
                         </v-btn-toggle>
@@ -103,7 +104,7 @@ export default {
         return {
             trending: [],
             popular: [],
-            duration: 0
+            duration: 'one',
         };
     },
     computed: {
@@ -111,8 +112,24 @@ export default {
             return this.$store.state.plugins.slickSetting;
         },
     },
+    watch: {
+        duration() {
+            if (this.duration == 'one') {
+                this.getCollections('24hrs')
+            }
+            else if(this.duration=='seven'){
+                this.getCollections('7days')
+            }
+            else if(this.duration=='thirty'){
+                this.getCollections('30days')
+            }
+            else{
+                this.getCollections()
+            }
+        }
+    },
     mounted() {
-        this.getCollections();
+        this.getCollections('24hrs');
     },
     methods: {
         seePremium(item) {
@@ -122,12 +139,14 @@ export default {
                 name: "preview",
             });
         },
-        getCollections() {
+        getCollections(item) {
+            this.popular = []
             axios
-                .get(process.env.baseUrl + '/get-gallery')
+                .get(process.env.baseUrl + '/trending', {
+                    query: item
+                })
                 .then((res) => {
-                    this.trending = res.data.trending;
-                    this.popular = res.data.premium;
+                    this.popular = res.data.trending_galleries;
                 })
                 .catch((err) => console.log(err.response));
         },
