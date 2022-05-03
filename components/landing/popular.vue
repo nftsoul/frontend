@@ -114,7 +114,7 @@ export default {
     },
     watch: {
         duration() {
-            if (this.duration == 'one') {
+            if (this.duration == 'one') {cd 
                 this.getCollections('24hrs')
             }
             else if(this.duration=='seven'){

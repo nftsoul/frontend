@@ -2,36 +2,74 @@
 <div class="dark-bg py-16">
     <v-container class="py-16">
         <v-row justify="center">
+            <v-col cols="12" lg="7">
+                <div class="enclose-border">
+                    <v-form v-model="valid" ref="form">
+                        <label for="name" class="text--disabled">Gallery Name</label>
+                        <v-textarea v-model="name" :rules="[validRules.required,validRules.lengthMin3]" id="name" rows="1" dense outlined placeholder="e.g. 'My Best NFT'"></v-textarea>
+
+                        <label for="about" class="text--disabled">Short story about your collection</label>
+                        <v-textarea v-model="about" :rules="[validRules.required,validRules.lengthMax100]" id="about" rows="3" auto-grow background-color="#030537" dense outlined placeholder="e.g.'The fact that makes this collection worth watch...'"></v-textarea>
+
+                        <label for="type" class="text--disabled">Select</label>
+                        <v-radio-group class="py-0" v-model="premium" row dense id="type">
+                            <v-radio label="Premium Collection" color="#c202d3" :value="false"></v-radio>
+                            <v-radio label="Free Collection" color="#c202d3" :value="true"></v-radio>
+                        </v-radio-group>
+
+                        <label for="price" class="text--disabled">Price</label>
+                        <v-text-field v-model="price" type="number" v-if="!priceDisabled" :rules="[validRules.required, validRules.positive,validRules.sollimit]" :hint="getHint()" persistent-hint id="price" filled background-color="#030537" dense outlined placeholder="e.g. '0.01 SOL'"></v-text-field>
+
+                        <v-row class="py-4">
+                            <v-col cols="12" class="py-0">
+                                <label for="story" class="text--disabled text-left">Story</label>
+                            </v-col>
+                            <v-col cols="5" align="center" class="px-15">
+                                <client-only>
+                                    <VueSlickCarousel v-bind="slickSetting2" ref="carousel">
+                                        <div v-for="(item, i) in collection" :key="i" class="py-3">
+                                            <v-img :src="item.image"></v-img>
+                                            <span>{{i+1}} of {{collection.length}}</span>
+                                        </div>
+                                    </VueSlickCarousel>
+                                </client-only>
+
+                            </v-col>
+                            <v-col cols="7">
+                                <v-textarea v-model="story" @input="addStory()" color="#030537" rows="4" background-color="#030537" solo dark placeholder="Tell us your short story about nft"></v-textarea>
+                                <v-row justify="end" no-gutters>
+                                    <div class="outer-btn" @click="prev()">
+                                        <div class="inner-btn">
+                                            <p class="mt-n1 ml-2" style="font-size: 14px"><v-icon>mdi-chevron-double-left</v-icon>Prev</p>
+                                        </div>
+                                    </div>
+                                    <div class="outer-btn ml-2" @click="next()">
+                                        <div class="inner-btn">
+                                            <p class="mt-n1 ml-2" style="font-size: 14px">Next<v-icon>mdi-chevron-double-right</v-icon></p>
+                                        </div>
+                                    </div>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+
+                        <v-row class="mt-2" no-gutters v-if="!priceDisabled">
+                            <v-checkbox class="mt-n2" :rules="[validRules.required]" color="white" v-model="agree"></v-checkbox>
+                            <small>I understand that and I am ready to pay 0.01 SOL to create
+                                this premium gallery.</small>
+                        </v-row>
+                    </v-form>
+                    <v-row>
+                        <v-btn class="mx-auto my-5 btn-exhibit" @click="createGallery()" :loading="creating">Create Gallery</v-btn>
+                    </v-row>
+                </div>
+            </v-col>
+            <v-spacer></v-spacer>
             <v-col cols="12" lg="3" md="3">
                 <p class="caption dark-text mb-0">Featured Gallery Image</p>
                 <p>
-                    <small class="text--disabled">Drag or choose your file to upload</small>
+                    <small class="text--disabled">Choose your file to upload</small>
                 </p>
                 <div class="upload-box pa-3">
-                    <!-- <div v-if="src == null">
-              <p class="text-center mt-10 mb-0">
-                <v-btn
-                  x-large
-                  icon
-                  :loading="isSelecting"
-                  @click="onButtonClick"
-                >
-                  <v-icon size="50" color="#1103A2">mdi-upload</v-icon>
-                </v-btn>
-
-                <input
-                  ref="uploader"
-                  class="d-none"
-                  type="file"
-                  accept="image/*"
-                  @change="onFileChanged"
-                />
-              </p>
-              <p class="caption text-center dark-text">Choose a file</p>
-              <p class="body-2 text--disabled text-center">
-                JPG, GIF, WEBP, MP4 OR MP3 <br />MAX 3MB
-              </p>
-            </div> -->
                     <v-img :src="src"></v-img>
                 </div>
                 <div class="mx-3">
@@ -46,32 +84,6 @@
                 <p class="caption white--text mb-2">Note:</p>
                 <small class="dark-text">Service fee:2%</small><br />
                 <!-- <small class="dark-text" sty>You will receive: 25.00eth $50,00</small> -->
-            </v-col>
-            <v-col cols="12" lg="7">
-                <div class="enclose-border">
-                    <v-form v-model="valid" ref="form">
-                        <label for="name" class="text--disabled">Gallery Name</label>
-                        <v-textarea v-model="name" :rules="[validRules.required,validRules.lengthMin3]" id="name" rows="1" dense outlined placeholder="e.g. 'My Best NFT'"></v-textarea>
-
-                        <label for="about" class="text--disabled">Short story about your collection</label>
-                        <v-textarea v-model="about" :rules="[validRules.required,validRules.lengthMax100]" id="about" rows="3" auto-grow background-color="#030537" dense outlined placeholder="e.g.'The fact that makes this collection worth watch...'"></v-textarea>
-
-                        <label for="price" class="text--disabled">Price</label>
-                        <v-text-field v-model="price" type="number" v-if="!priceDisabled" :rules="[validRules.required, validRules.positive,validRules.sollimit]" :hint="getHint()" persistent-hint id="price" filled background-color="#030537" dense outlined placeholder="e.g. '0.01 SOL'"></v-text-field>
-                        <v-row class="mt-2" no-gutters>
-                            <v-checkbox class="mt-n2" color="white" v-model="premium"></v-checkbox>
-                            <small>Free Listing</small>
-                        </v-row>
-                        <v-row class="mt-2" no-gutters v-if="!priceDisabled">
-                            <v-checkbox class="mt-n2" :rules="[validRules.required]" color="white" v-model="agree"></v-checkbox>
-                            <small>I understand that and I am ready to pay 0.01 SOL to create
-                                this premium gallery.</small>
-                        </v-row>
-                    </v-form>
-                    <v-row>
-                        <v-btn class="mx-auto my-5 btn-exhibit" @click="createGallery()" :loading="creating">Create Gallery</v-btn>
-                    </v-row>
-                </div>
             </v-col>
         </v-row>
     </v-container>
@@ -116,6 +128,7 @@ export default {
             name: "",
             about: "",
             price: "",
+            story:'',
             src: null,
             public_id: "",
             creating: false,
@@ -137,11 +150,20 @@ export default {
                 slidesToScroll: 1,
                 arrows: true,
             },
+            slickSetting2: {
+                dots: false,
+                infinite: false,
+                speed: 500,
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                arrows: true,
+            },
             rankedNfts: [],
             approvalDialog: false,
             approvals: 2,
             priceDisabled: false,
-            premium: false
+            premium: false,
+            selectedIndex: 0
         };
     },
     computed: {
@@ -177,6 +199,28 @@ export default {
         // this.setAttributes();
     },
     methods: {
+        next(){
+            this.$refs.carousel.next()
+            this.selectedIndex +=1
+            if(this.collection.length == this.selectedIndex){
+                this.selectedIndex -=1
+            }
+            this.story=this.collection[this.selectedIndex].story
+            
+        },
+        prev(){
+            this.$refs.carousel.prev()
+            this.selectedIndex -=1
+            if(this.selectedIndex < 0){
+                this.selectedIndex +=1
+            }
+            this.story=this.collection[this.selectedIndex].story
+
+        },
+        addStory(){
+            this.collection[this.selectedIndex]['story']=this.story
+            
+        },
         getSolValue() {
             this.$axios.get('https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd')
                 .then(res => this.sol = res.data.solana.usd)
@@ -386,5 +430,12 @@ export default {
 .v-input__slot {
     box-shadow: none !important;
     caret-color: white;
+}
+.outer-btn{
+    border-radius:25px;
+}
+.inner-btn{
+    border-radius:25px;
+
 }
 </style>
