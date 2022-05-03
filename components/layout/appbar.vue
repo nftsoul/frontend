@@ -14,6 +14,9 @@
           @click="$router.push({ path: '/' })"
           class="mt-3 link"
         ></v-img>
+        <div class="outer-btn px-2 mt-3 ml-n4">
+            <p class="mb-0">Nftsoul Beta</p>        
+        </div>
       <v-spacer></v-spacer>
       <div class="hidden-md-and-down mt-5">
         <v-btn

@@ -152,20 +152,9 @@ export default {
         },
         async getAllNftData() {
             await this.getCollected();
-            // const publicAddress = await solrayz.resolveToWalletAddress({
-            //   text: this.walletAddress,
-            // });
-
-            // this.meta = await solrayz.getParsedNftAccountsByOwner({
-            //   publicAddress,
-            // });
-            // let promises = [];
-            // for (var x = 0; x < mints.length; x++) {
-            //     let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
-            //     this.originalList.push(myNFT)
-            // }
+            
             const conn = new web3.Connection(
-                web3.clusterApiUrl("devnet"),
+                web3.clusterApiUrl('devnet'),
                 "confirmed"
             );
             this.nfts = [];
@@ -173,36 +162,11 @@ export default {
             const walletAddr = this.walletAddress;
             let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
 
-            this.meta = await solrayz.getParsedNftAccountsByOwner({
-              publicAddress,
-            });
             let promises = [];
-            for (var x = 0; x < this.meta.length; x++) {
-              promises.push(
-                await this.$axios.get(this.meta[x].data.uri).then((response) => {
-                  this.originalList.push(response.data);
-                })
-              )
-              Promise.all(promises);
-
+            for (var x = 0; x < mints.length; x++) {
+                let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
+                this.originalList.push(myNFT)
             }
-            // const conn = new web3.Connection(
-            //     web3.clusterApiUrl("devnet"),
-            //     "confirmed"
-            // );
-            // this.nfts = [];
-            // // Get all mint tokens (NFTs) from your wallet
-            // const walletAddr = this.walletAddress;
-            // let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
-
-            // let promises = [];
-            // for (var x = 0; x < this.meta.length; x++) {
-            //   promises.push(
-            //     await this.$axios.get(this.meta[x].data.uri).then((response) => {
-            //       this.originalList.push(response.data);
-            //     })
-            //   )
-            // }
             this.loading = false;
         },
         getCollected() {

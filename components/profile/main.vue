@@ -4,14 +4,22 @@
         <v-row class="pt-16" justify="center">
             <v-col cols="6" align="center" class="pb-8">
                 <client-only>
-                <div v-if="profile" class="mb-3">
-                    <v-img v-if="profile.image_link" :lazy-src="profile.image_link" class="rounded-circle" :src="profile.image_link" alt="Avatar" max-width="170" max-height="170">
-                        <template v-slot:placeholder>
-                            <v-row class="fill-height ma-0" align="center" justify="center">
-                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                            </v-row>
-                        </template>
-                    </v-img>
+                    <div v-if="profile" class="mb-3">
+                        <v-img v-if="profile.image_link" :lazy-src="profile.image_link" class="rounded-circle" :src="profile.image_link" alt="Avatar" max-width="170" max-height="170">
+                            <template v-slot:placeholder>
+                                <v-row class="fill-height ma-0" align="center" justify="center">
+                                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                </v-row>
+                            </template>
+                        </v-img>
+                        <v-img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" :lazy-src="require('~/assets/images/profile.svg')" max-width="170" max-height="170" alt="Avatar">
+                            <template v-slot:placeholder>
+                                <v-row class="fill-height ma-0" align="center" justify="center">
+                                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                </v-row>
+                            </template>
+                        </v-img>
+                    </div>
                     <v-img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" :lazy-src="require('~/assets/images/profile.svg')" max-width="170" max-height="170" alt="Avatar">
                         <template v-slot:placeholder>
                             <v-row class="fill-height ma-0" align="center" justify="center">
@@ -19,14 +27,6 @@
                             </v-row>
                         </template>
                     </v-img>
-                </div>
-                <v-img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" :lazy-src="require('~/assets/images/profile.svg')" max-width="170" max-height="170" alt="Avatar">
-                    <template v-slot:placeholder>
-                        <v-row class="fill-height ma-0" align="center" justify="center">
-                            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                        </v-row>
-                    </template>
-                </v-img>
                 </client-only>
                 <div v-if="profile != null">
                     <p class="text-h6" v-if="profile.name">{{profile.name}}</p>
@@ -82,6 +82,7 @@
             </v-col>
         </v-row>
     </v-container>
+
     <v-dialog v-model="profileDialog" max-width="300" style="z-index:501">
         <v-card class="background" dark>
             <v-card-title>Update profile</v-card-title>
@@ -164,10 +165,10 @@ export default {
         // this.auth()
     },
     methods: {
-        tutorProfile(){
+        tutorProfile() {
             // window.open('https://twitter.com/'+this.profile.username)
         },
-        copy(){
+        copy() {
             navigator.clipboard.writeText(this.walletAddress)
             this.$toast.success("Address copied.", {
                     iconPack: "mdi",
@@ -311,7 +312,8 @@ a:-webkit-any-link {
 .rounded-circle {
     border: 2px solid white;
 }
-.link:hover{
+
+.link:hover {
     cursor: pointer;
 }
 </style>
