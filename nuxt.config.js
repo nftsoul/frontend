@@ -44,12 +44,12 @@ export default {
     { src: "~/plugins/social-share", mode: "client" },
 
   ],
-  cloudinary: {
-    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-    apiKey: process.env.CLOUDINARY_API_KEY,
-    apiSecret: process.env.CLOUDINARY_API_SECRET,
-    useComponent:true
-  },
+  // cloudinary: {
+  //   cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+  //   apiKey: process.env.CLOUDINARY_API_KEY,
+  //   apiSecret: process.env.CLOUDINARY_API_SECRET,
+  //   useComponent:true
+  // },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -64,7 +64,7 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/toast',
-    '@nuxtjs/cloudinary',
+    // '@nuxtjs/cloudinary',
     // 'vue-social-sharing/nuxt'
   ],
   axios: {
