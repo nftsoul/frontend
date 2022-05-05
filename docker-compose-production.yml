@@ -1,7 +1,7 @@
 version: '3.1'
 
 services:
-  reconwithme-stage:
+  reconwithme-production:
     container_name: nftsoul-production
     hostname: nftsoul-production
     build:
