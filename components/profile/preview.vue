@@ -110,7 +110,7 @@ export default {
         return {
             loading: false,
             connection: new web3.Connection(
-                web3.clusterApiUrl('mainnet-beta'),
+                web3.clusterApiUrl(process.env.CLUSTER),
                 "confirmed"
             ),
             approvalDialog: false,
