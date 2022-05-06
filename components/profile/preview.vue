@@ -104,12 +104,7 @@
 import axios from "axios";
 let zebec = null;
 if (process.client) {
-    if(process.env.CLUSTER=='devnet'){
-        zebec = require("zebecprotocol-sdk");
-    }
-    else{
-        zebec = require("zebecprotocol-mainnet");
-    }
+    zebec = require("zebecprotocol-sdk");
 }
 
 const web3 = require("@solana/web3.js");
@@ -125,7 +120,7 @@ export default {
             approvalDialog: false,
             approvals: 3,
             streampda: null,
-            comments:[]
+            comments: []
         };
     },
     computed: {
@@ -144,16 +139,16 @@ export default {
         this.getComments()
     },
     methods: {
-        getComments(){
-            this.$axios.get(process.env.baseUrl+'/comments/'+this.selected._id,{
-                page:1,
-                limit:4
-            })
-            .then(res=>{
-                console.log('res:',res.data.result)
-                this.comments=res.data.result
+        getComments() {
+            this.$axios.get(process.env.baseUrl + '/comments/' + this.selected._id, {
+                    page: 1,
+                    limit: 4
                 })
-            .catch(err=>err.response)
+                .then(res => {
+                    console.log('res:', res.data.result)
+                    this.comments = res.data.result
+                })
+                .catch(err => err.response)
         },
         seeProfile() {
             this.$router.push({

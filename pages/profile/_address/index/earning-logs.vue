@@ -76,13 +76,7 @@ if (process.client) {
 }
 let zebec = null;
 if (process.client) {
-    if(process.env.CLUSTER=='devnet'){
-        zebec = require("zebecprotocol-sdk");
-    }
-    else{
-        zebec = require("zebecprotocol-mainnet");
-    }
-    
+    zebec = require("zebecprotocol-sdk");
 }
 export default {
     components: {
