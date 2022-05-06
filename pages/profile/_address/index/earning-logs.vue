@@ -76,7 +76,13 @@ if (process.client) {
 }
 let zebec = null;
 if (process.client) {
-    zebec = require("zebecprotocol-sdk");
+    if(process.env.CLUSTER=='devnet'){
+        zebec = require("zebecprotocol-sdk");
+    }
+    else{
+        zebec = require("zebecprotocol-mainnet");
+    }
+    
 }
 export default {
     components: {
@@ -96,6 +102,7 @@ export default {
         },
     },
     mounted() {
+        console.log('zebec:',zebec)
         this.getEarnings()
     },
     methods: {
