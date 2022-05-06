@@ -109,12 +109,7 @@
 <script>
 let zebec = null;
 if (process.client) {
-    if(process.env.CLUSTER=='devnet'){
-        zebec = require("zebecprotocol-sdk");
-    }
-    else{
-        zebec = require("zebecprotocol-mainnet");
-    }
+    zebec = require("zebecprotocol-sdk");
 }
 const web3 = require("@solana/web3.js");
 
