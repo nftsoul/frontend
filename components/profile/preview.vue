@@ -100,7 +100,12 @@
 import axios from "axios";
 let zebec = null;
 if (process.client) {
-    zebec = require("zebecprotocol-sdk");
+    if(process.env.CLUSTER=='devnet'){
+        zebec = require("zebecprotocol-sdk");
+    }
+    else{
+        zebec = require("zebecprotocol-mainnet");
+    }
 }
 
 const web3 = require("@solana/web3.js");
@@ -110,7 +115,7 @@ export default {
         return {
             loading: false,
             connection: new web3.Connection(
-                web3.clusterApiUrl('mainnet-beta'),
+                web3.clusterApiUrl(process.env.CLUSTER),
                 "confirmed"
             ),
             approvalDialog: false,

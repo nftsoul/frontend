@@ -65,6 +65,7 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/toast',
+    '@nuxtjs/dotenv'
     // '@nuxtjs/cloudinary',
     // 'vue-social-sharing/nuxt'
   ],

@@ -109,7 +109,12 @@
 <script>
 let zebec = null;
 if (process.client) {
-    zebec = require("zebecprotocol-sdk");
+    if(process.env.CLUSTER=='devnet'){
+        zebec = require("zebecprotocol-sdk");
+    }
+    else{
+        zebec = require("zebecprotocol-mainnet");
+    }
 }
 const web3 = require("@solana/web3.js");
 
@@ -118,7 +123,7 @@ export default {
     data() {
         return {
             connection: new web3.Connection(
-                web3.clusterApiUrl('mainnet-beta'),
+                web3.clusterApiUrl(process.env.CLUSTER),
                 "confirmed"
             ),
             sol: 0,
@@ -299,14 +304,14 @@ export default {
                             let depositResponse = await zebec.depositNativeToken(depositData);
                             if (depositResponse.status == "success") {
                                 this.approvals -= 1
-                                let currentTime = new Date();
-                                let futureTime = new Date(currentTime.getTime() + 1 * 60000);
+                                let currentTime = Math.floor(Date.now() / 1000);
+                                let futureTime = currentTime + 60;
                                 let platformResponse = await zebec.initNativeTransaction({
                                     sender: this.walletAddress,
                                     receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
                                     amount: 0.01,
-                                    start_time: Math.floor(currentTime),
-                                    end_time: Math.floor(futureTime),
+                                    start_time: currentTime,
+                                    end_time: futureTime,
                                 });
                                 if (platformResponse.status == "success") {
 

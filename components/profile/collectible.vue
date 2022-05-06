@@ -75,13 +75,15 @@ export default {
             nfts: [],
             loading: true,
             connect: "",
-            profiling: false
+            profiling: false,
+            cluster:null
         };
     },
     computed: {
         walletAddress() {
             return this.$route.params.address;
         },
+
     },
     watch: {
         walletAddress(newValue, oldValue) {
@@ -91,6 +93,7 @@ export default {
         },
     },
     mounted() {
+        this.cluster=process.env.CLUSTER
         this.getAllNftData();
     },
     methods: {
@@ -112,57 +115,40 @@ export default {
             return window.innerHeight - 350;
         },
         async getAllNftData() {
-            const conn = new web3.Connection(
-                web3.clusterApiUrl('devnet'),
-                "confirmed"
-            );
-            this.nfts = [];
-            // Get all mint tokens (NFTs) from your wallet
-            const walletAddr = this.walletAddress;
-            let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
+            if (this.cluster == 'devnet') {
+                const conn = new web3.Connection(
+                    web3.clusterApiUrl('devnet'),
+                    "confirmed"
+                );
+                this.nfts = [];
+                // Get all mint tokens (NFTs) from your wallet
+                const walletAddr = this.walletAddress;
+                let mints = await NFTs.getMintTokensByOwner(conn, walletAddr);
 
-            let promises = [];
-            for (var x = 0; x < mints.length; x++) {
-                let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
-                this.nfts.push(myNFT)
+                let promises = [];
+                for (var x = 0; x < mints.length; x++) {
+                    let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
+                    this.nfts.push(myNFT)
+                }
+            } else {
+                const publicAddress = await solrayz.resolveToWalletAddress({
+                    text: this.walletAddress,
+                });
+
+                this.meta = await solrayz.getParsedNftAccountsByOwner({
+                    publicAddress,
+                });
+                let promises = [];
+                for (var x = 0; x < this.meta.length; x++) {
+                    promises.push(
+                        await this.$axios.get(this.meta[x].data.uri).then((response) => {
+                            this.nfts.push(response.data);
+                        })
+                    )
+                    Promise.all(promises)
+
+                }
             }
-            //audius
-            // fetchClient
-            //   .getCollectibles({
-            //     solWallets: [this.walletAddress],
-            //   })
-            //   .then((res) => {
-            //     this.loading = false;
-            //     console.log(res.solCollectibles[this.walletAddress]);
-            //     for (
-            //       var x = 0;
-            //       x < res.solCollectibles[this.walletAddress].length;
-            //       x++
-            //     ) {
-            //       if (res.solCollectibles[this.walletAddress][x].isOwned == true) {
-            //         this.nfts.push(res.solCollectibles[this.walletAddress][x]);
-            //       }
-            //     }
-            //   });
-            //solrayz
-            // const publicAddress = await solrayz.resolveToWalletAddress({
-            //   text: this.walletAddress,
-            // });
-
-            // this.meta = await solrayz.getParsedNftAccountsByOwner({
-            //   publicAddress,
-            // });
-            // let promises = [];
-            // for (var x = 0; x < this.meta.length; x++) {
-            //   promises.push(
-            //     await this.$axios.get(this.meta[x].data.uri).then((response) => {
-            //       this.nfts.push(response.data);
-            //     })
-            //   )
-            //   Promise.all(promises)
-
-            // }
-
             this.loading = false;
         },
     },
