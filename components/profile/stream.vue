@@ -130,6 +130,36 @@
                 </client-only>
             </v-col>
         </v-row>
+        <v-row>
+            <v-card outlined dark>
+                <v-list dense style="background-color:transparent;border:none">
+                    <v-list-item v-for="(item,i) in 5" :key="i">
+                        <v-list-item-avatar>
+                            <v-img :src="require('~/assets/images/profile.svg')"></v-img>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                            <v-list-item-title>name</v-list-item-title>
+                            <v-list-item-subtitle>comment</v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list>
+                <v-card-actions>
+                    <v-btn text small>
+                        See More Comments</v-btn>
+                    <v-icon>mdi-arrow-down</v-icon>
+                </v-card-actions>
+                <v-row no-gutters>
+                    <v-avatar>
+                        <v-img :src="require('~/assets/images/profile.svg')"></v-img>
+                    </v-avatar>
+                    <v-textarea outlined v-model="comment" placeholder="What do you think about the gallery?"></v-textarea>
+                </v-row>
+                <v-row>
+                    <v-spacer></v-spacer>
+                    <v-btn small outlined rounded color="#A0A0A0" dark>Post a comment</v-btn>
+                </v-row>
+            </v-card>
+        </v-row>
     </v-container>
 </div>
 </template>
@@ -149,6 +179,7 @@ export default {
             index: 0,
             current: "",
             attributes: [],
+            comment:''
         };
     },
     computed: {
