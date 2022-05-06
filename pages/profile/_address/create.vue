@@ -300,7 +300,7 @@ export default {
                             if (depositResponse.status == "success") {
                                 this.approvals -= 1
                                 let currentTime = Math.floor(Date.now() / 1000);
-                                let futureTime = currentTime1 + 60;
+                                let futureTime = currentTime + 60;
                                 let platformResponse = await zebec.initNativeTransaction({
                                     sender: this.walletAddress,
                                     receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
