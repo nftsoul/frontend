@@ -159,7 +159,6 @@ export default {
             return this.$store.state.wallet.walletAddress;
         },
     },
-
     mounted() {
         if (this.selected == "") {
             this.$router.push("/");

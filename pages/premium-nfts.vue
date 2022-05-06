@@ -81,6 +81,8 @@
                   </div>
                 </v-card>
               </v-col>
+            </v-row>
+            <v-row>
               <v-col align="center">
               <v-pagination
                 v-model="page"
