@@ -8,16 +8,7 @@
                         <v-container v-if="selected.nfts">
                             <v-row>
                                 <v-col v-if="selected.nfts.length > 0" cols="12" lg="4" md="6" align="center" class="px-5">
-                                    <v-img :src="selected.nfts[0].image" class="rounded-lg">
-                                        <template v-slot:placeholder>
-                                            <v-row class="fill-height ma-0" align="center" justify="center">
-                                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                                            </v-row>
-                                        </template>
-                                    </v-img>
-                                </v-col>
-                                <v-col v-if="selected.nfts.length > 1" cols="12" lg="4" md="6" align="center" class="px-5">
-                                    <v-img :src="selected.nfts[1].image" class="rounded-lg">
+                                    <v-img :src="selected.image" class="rounded-lg">
                                         <template v-slot:placeholder>
                                             <v-row class="fill-height ma-0" align="center" justify="center">
                                                 <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -70,6 +61,19 @@
                                         </v-col>
                                     </v-row>
                                 </v-col>
+                                <v-col cols="12" lg="4" md="6" class="px-3">
+                                    <v-list dense style="background-color:transparent;border:none">
+                                        <v-list-item v-for="(item,i) in 5" :key="i">
+                                            <v-list-item-avatar>
+                                                <v-img :src="require('~/assets/images/profile.svg')"></v-img>
+                                            </v-list-item-avatar>
+                                            <v-list-item-content>
+                                                <v-list-item-title>name</v-list-item-title>
+                                                <v-list-item-subtitle>comment</v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-col>
                             </v-row>
                         </v-container>
                     </div>
@@ -121,6 +125,7 @@ export default {
             approvalDialog: false,
             approvals: 3,
             streampda: null,
+            comments:[]
         };
     },
     computed: {
@@ -132,12 +137,24 @@ export default {
         },
     },
     mounted() {
-        this.increaseView()
         if (this.selected == "") {
             this.$router.push("/");
         }
+        this.increaseView()
+        this.getComments()
     },
     methods: {
+        getComments(){
+            this.$axios.get(process.env.baseUrl+'/comments/'+this.selected._id,{
+                page:1,
+                limit:4
+            })
+            .then(res=>{
+                console.log('res:',res.data.result)
+                this.comments=res.data.result
+                })
+            .catch(err=>err.response)
+        },
         seeProfile() {
             this.$router.push({
                 name: 'profile-address-index-gallery',
