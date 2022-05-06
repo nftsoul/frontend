@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+  reconwithme-production:
+    container_name: nftsoul-production
+    hostname: nftsoul-production
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=development
+        - IMG=14
+        - LOCATION=nftsoul-production
+    restart: always
+    user: root:root
+    env_file:
+      - ./.env
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - COMPOSE_PROJECT_NAME=nftsoul-production
+    ports:
+      - ${PORT}:${PORT}

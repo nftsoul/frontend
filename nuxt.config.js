@@ -3,8 +3,9 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   server:{
-    port:process.env.PORT
-  },
+    port:process.env.PORT,
+		host: "0.0.0.0"
+	},
   head: {
     titleTemplate: "Nftsoul | %s",
     title: "Exhibit your NFT",
@@ -44,12 +45,12 @@ export default {
     { src: "~/plugins/social-share", mode: "client" },
 
   ],
-  cloudinary: {
-    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-    apiKey: process.env.CLOUDINARY_API_KEY,
-    apiSecret: process.env.CLOUDINARY_API_SECRET,
-    useComponent:true
-  },
+  // cloudinary: {
+  //   cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+  //   apiKey: process.env.CLOUDINARY_API_KEY,
+  //   apiSecret: process.env.CLOUDINARY_API_SECRET,
+  //   useComponent:true
+  // },
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -64,7 +65,7 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/toast',
-    '@nuxtjs/cloudinary',
+    // '@nuxtjs/cloudinary',
     // 'vue-social-sharing/nuxt'
   ],
   axios: {
