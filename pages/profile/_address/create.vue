@@ -109,7 +109,7 @@
 <script>
 let zebec = null;
 if (process.client) {
-    zebec = require("zebecprotocol-sdk");
+    zebec = require("@zebec-protocol/stream");
 }
 const web3 = require("@solana/web3.js");
 
@@ -280,6 +280,7 @@ export default {
         },
         async createGallery() {
             if (this.$refs.form.validate()) {
+                const zeb=new zebec.NativeStream(window.solana,process.env.CLUSTER_URL)
                 if (this.src != null) {
                     this.creating = true;
                     const depositData = {
@@ -296,12 +297,12 @@ export default {
 
                         if (total_charge < available) {
                             this.approvalDialog = true
-                            let depositResponse = await zebec.depositNativeToken(depositData);
+                            let depositResponse = await zeb.deposit(depositData);
                             if (depositResponse.status == "success") {
                                 this.approvals -= 1
                                 let currentTime = Math.floor(Date.now() / 1000);
                                 let futureTime = currentTime + 60;
-                                let platformResponse = await zebec.initNativeTransaction({
+                                let platformResponse = await zeb.init({
                                     sender: this.walletAddress,
                                     receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
                                     amount: 0.01,
