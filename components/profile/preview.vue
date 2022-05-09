@@ -8,16 +8,7 @@
                         <v-container v-if="selected.nfts">
                             <v-row>
                                 <v-col v-if="selected.nfts.length > 0" cols="12" lg="4" md="6" align="center" class="px-5">
-                                    <v-img :src="selected.nfts[0].image" class="rounded-lg">
-                                        <template v-slot:placeholder>
-                                            <v-row class="fill-height ma-0" align="center" justify="center">
-                                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                                            </v-row>
-                                        </template>
-                                    </v-img>
-                                </v-col>
-                                <v-col v-if="selected.nfts.length > 1" cols="12" lg="4" md="6" align="center" class="px-5">
-                                    <v-img :src="selected.nfts[1].image" class="rounded-lg">
+                                    <v-img :src="selected.image" class="rounded-lg">
                                         <template v-slot:placeholder>
                                             <v-row class="fill-height ma-0" align="center" justify="center">
                                                 <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -70,6 +61,36 @@
                                         </v-col>
                                     </v-row>
                                 </v-col>
+                                <v-col cols="12" lg="4" md="6" class="px-3">
+                                    <h5 class="mx-5">Comments</h5>
+                                    <div style="border-left:1px solid #500083;height:300px;" class="px-3">
+                                        <div v-if="comments.length>0">
+                                            <v-list-item v-for="(item,i) in comments" :key="i">
+                                                <v-list-item-avatar>
+                                                    <v-img v-if="item.user_id" :src="getLink(item)" max-width="40" max-height="40"></v-img>
+                                                    <v-img v-else :src="require('~/assets/images/profile.svg')"></v-img>
+                                                </v-list-item-avatar>
+                                                <v-list-item-content>
+                                                    <v-list-item-title>
+                                                        <span v-if="item.user_id">
+                                                            <span v-if="item.user_id.name">{{item.user_id.name}}</span>
+                                                            <span v-else>Unknown</span>
+                                                        </span>
+                                                        <span v-else>Unknown</span>
+                                                    </v-list-item-title>
+                                                    <v-list-item-subtitle>{{item.body}}</v-list-item-subtitle>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </div>
+                                        <div v-else>
+                                            <div v-if="!loaded">
+                                                <v-skeleton-loader v-for="(item,i) in 5" :key="i" dark type="list-item-avatar"></v-skeleton-loader>
+                                            </div>
+                                            <small v-else>No comments yet</small>
+                                        </div>
+
+                                    </div>
+                                </v-col>
                             </v-row>
                         </v-container>
                     </div>
@@ -100,16 +121,10 @@
 import axios from "axios";
 let zebec = null;
 if (process.client) {
-    if(process.env.CLUSTER=='devnet'){
-        zebec = require("zebecprotocol-sdk");
-    }
-    else{
-        zebec = require("zebecprotocol-mainnet");
-    }
+    zebec = require("@zebec-protocol/stream");
 }
 
 const web3 = require("@solana/web3.js");
-
 export default {
     data() {
         return {
@@ -121,6 +136,8 @@ export default {
             approvalDialog: false,
             approvals: 3,
             streampda: null,
+            comments: [],
+            loaded: false
         };
     },
     computed: {
@@ -132,12 +149,31 @@ export default {
         },
     },
     mounted() {
-        this.increaseView()
         if (this.selected == "") {
             this.$router.push("/");
         }
+        this.increaseView()
+        this.getComments()
     },
     methods: {
+        getLink(item) {
+            if (item.image_link) {
+                return item.image_link
+            } else {
+                return require('~/assets/images/profile.svg')
+            }
+        },
+        getComments() {
+            this.$axios.get(process.env.baseUrl + '/comments/' + this.selected._id, {
+                    page: 1,
+                    limit: 4
+                })
+                .then(res => {
+                    this.comments = res.data.result
+                    this.loaded = true
+                })
+                .catch(err => err.response)
+        },
         seeProfile() {
             this.$router.push({
                 name: 'profile-address-index-gallery',
@@ -158,6 +194,7 @@ export default {
             }
         },
         async stream() {
+            const zeb = new zebec.NativeStream(window.solana, process.env.CLUSTER_URL)
             if (this.walletAddress == null) {
                 this.$toast
                     .error("Connect your phantom wallet first.", {
@@ -169,10 +206,10 @@ export default {
             } else {
                 this.loading = true;
 
+                 console.log(Number(this.selected.price) +Number(0.02*this.selected.price))
                 const depositData = {
                     sender: this.walletAddress,
-                    amount: parseFloat(this.selected.price) +
-                        0.02 * parseFloat(this.selected.price),
+                    amount: Number(this.selected.price) +Number(0.02*this.selected.price)
                 };
 
                 var total_charge =
@@ -192,16 +229,16 @@ export default {
                             // depositing sol
                             this.approvalDialog = true
 
-                            let depositResponse = await zebec.depositNativeToken(depositData);
+                            let depositResponse = await zeb.deposit(depositData);
 
                             if (depositResponse.status == "success") {
                                 this.approvals -= 1
                                 let currentTime1 = Math.floor(Date.now() / 1000);
                                 let futureTime1 = currentTime1 + 60;
-                                let creatorResponse = await zebec.initNativeTransaction({
+                                let creatorResponse = await zeb.init({
                                     sender: this.walletAddress,
                                     receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-                                    amount: parseFloat(0.02 * this.selected.price),
+                                    amount: 0.02 * this.selected.price,
                                     start_time: currentTime1,
                                     end_time: futureTime1,
                                 });
@@ -209,7 +246,7 @@ export default {
                                     this.approvals -= 1
                                     let currentTime2 = Math.floor(Date.now() / 1000)
                                     let futureTime2 = currentTime2 + 60
-                                    let platformResponse = await zebec.initNativeTransaction({
+                                    let platformResponse = await zeb.init({
                                         sender: this.walletAddress,
                                         receiver: this.selected.user_id,
                                         amount: parseFloat(this.selected.price),

@@ -141,7 +141,7 @@ export default {
             return this.$store.state.wallet.walletAddress
         },
         profile() {
-            return this.$store.state.nft.profile
+            return this.$store.state.wallet.profile
         }
     },
     watch: {
@@ -155,9 +155,6 @@ export default {
                 this.$refs.form.reset()
             }
         }
-    },
-    created() {
-        this.getProfile()
     },
     mounted() {
         this.connect = new web3.Connection(web3.clusterApiUrl(process.env.CLUSTER), 'confirmed');
@@ -189,24 +186,6 @@ export default {
             }
             this.profileDialog = true
         },
-        getProfile() {
-            this.$axios.get('/profile/' + this.$route.params.address)
-                .then(res => {
-                    if (res.data.length == 0) {
-                        this.$axios.post('/profile?wallet_address=' + this.$route.params.address)
-                            .then(res => {
-                                this.$store.commit('nft/setProfile', res.data.data)
-                            })
-                            .catch(err => {
-                                console.log(err.response)
-                            })
-                    } else {
-                        this.$store.commit('nft/setProfile', res.data[0])
-
-                    }
-                })
-                .catch(err => console.log(err.response))
-        },
         async getAccountInfo() {
             var blc = await this.connect.getBalance(new web3.PublicKey(this.walletAddress))
             this.balance = parseFloat(blc * 0.000000001).toFixed(5)
@@ -215,10 +194,10 @@ export default {
         updateProfileDetail() {
             if (this.$refs.form.validate()) {
                 this.updating = true
-                this.$axios.patch('/profileinfo/' + this.$route.params.address + '?name=' + this.name + '&username=' + this.username)
+                this.$axios.patch(process.env.API_URL+'/profileinfo/' + this.$route.params.address + '?name=' + this.name + '&username=' + this.username)
                     .then(res => {
                         // this.profile = res.data.result
-                        this.$store.commit('nft/setProfile', res.data.result)
+                        this.$store.commit('wallet/setProfile', res.data.result)
                         this.updating = false
                         this.profileDialog = false
                     }).catch(err => console.log(err.response))

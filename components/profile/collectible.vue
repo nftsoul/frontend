@@ -102,7 +102,7 @@ export default {
             this.$axios.patch('/profile/' + this.$route.params.address + '?image_link=' + item.image)
                 .then(res => {
                     this.profiling = false
-                    this.$store.commit('nft/setProfile', res.data.result)
+                    this.$store.commit('wallet/setProfile', res.data.result)
                     this.$toast.success("Your avatar has been updated.", {
                             iconPack: "mdi",
                             icon: "mdi-image",
@@ -131,6 +131,7 @@ export default {
                     this.nfts.push(myNFT)
                 }
             } else {
+
                 const publicAddress = await solrayz.resolveToWalletAddress({
                     text: this.walletAddress,
                 });

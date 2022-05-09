@@ -76,13 +76,7 @@ if (process.client) {
 }
 let zebec = null;
 if (process.client) {
-    if(process.env.CLUSTER=='devnet'){
-        zebec = require("zebecprotocol-sdk");
-    }
-    else{
-        zebec = require("zebecprotocol-mainnet");
-    }
-    
+    zebec = require("@zebec-protocol/stream");
 }
 export default {
     components: {
@@ -102,7 +96,6 @@ export default {
         },
     },
     mounted() {
-        console.log('zebec:',zebec)
         this.getEarnings()
     },
     methods: {
@@ -119,6 +112,7 @@ export default {
                 .catch((err) => console.log(err.response));
         },
         async withdraw(item) {
+            const zeb=new zebec.NativeStream(window.solana,process.env.CLUSTER_URL)
             this.withdrawing = true
             const data = {
                 sender: item.user_id,
@@ -126,7 +120,7 @@ export default {
                 pda: item.pda,
                 amount: item.price,
             };
-            const withdrawResponse = await zebec.withdrawNativeTransaction(data)
+            const withdrawResponse = await zeb.withdraw(data)
             if (withdrawResponse.status == "success") {
                 axios
                     .get(process.env.baseUrl + "/withdraw/" + item._id)

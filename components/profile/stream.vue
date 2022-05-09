@@ -130,6 +130,57 @@
                 </client-only>
             </v-col>
         </v-row>
+        <v-row justify="center">
+            <v-col cols="10" class="px-8">
+                <v-card dark outlined class="max-width:800">
+                    <div v-if="comments.length>0">
+                        <v-list-item v-for="(item,i) in comments" :key="i">
+                            <v-list-item-avatar>
+                                <v-img v-if="item.user_id" :src="getLink(item.user_id)" max-width="40" max-height="40"></v-img>
+                                <v-img v-else :src="require('~/assets/images/profile.svg')"></v-img>
+                            </v-list-item-avatar>
+                            <v-list-item-content>
+                                <v-list-item-title>
+                                    <span v-if="item.user_id">
+                                        <span v-if="item.user_id.name">{{item.user_id.name}}</span>
+                                        <span v-else>Unknown</span>
+                                    </span>
+                                    <span v-else>Unknown</span>
+                                </v-list-item-title>
+                                <v-list-item-subtitle>{{item.body}}</v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </div>
+                    <div v-else class="ma-5">
+                        <div v-if="!loaded">
+                            <v-skeleton-loader v-for="(item,i) in 5" :key="i" dark type="list-item-avatar"></v-skeleton-loader>
+                        </div>
+                        <small v-else>No comments yet...</small>
+                    </div>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn text x-small v-if="comments.length==5">
+                            See More Comments
+                            <v-icon small>mdi-arrow-down</v-icon>
+                        </v-btn>
+                        <v-spacer></v-spacer>
+
+                    </v-card-actions>
+                    <v-row no-gutters class="px-5">
+                        <v-avatar>
+                            <v-img :src="require('~/assets/images/profile.svg')"></v-img>
+                        </v-avatar>
+                        <v-textarea dark rows="2" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?"></v-textarea>
+                    </v-row>
+                    <v-row no-gutters class="px-5 pb-5">
+                        <v-spacer></v-spacer>
+                        <v-btn small rounded color="#A0A0A0" dark class="mt-n3" :loading="commenting" @click="makeComment()">Post a comment</v-btn>
+                    </v-row>
+                </v-card>
+
+            </v-col>
+
+        </v-row>
     </v-container>
 </div>
 </template>
@@ -149,6 +200,12 @@ export default {
             index: 0,
             current: "",
             attributes: [],
+            comment: '',
+            comments: [],
+            loaded: false,
+            page: 0,
+            commenting: false,
+            error: ''
         };
     },
     computed: {
@@ -158,12 +215,16 @@ export default {
         walletAddress() {
             return this.$store.state.wallet.walletAddress;
         },
+        profile(){
+            return this.$store.state.wallet.profile
+        }
     },
     mounted() {
         if (this.selected == "") {
             this.$router.push("/");
         }
         this.current = this.selected.nfts[this.index];
+        this.getComments()
         this.getFavourite();
         window.setInterval(() => {
             this.minuteLeft = Math.floor(this.totalTime / 60);
@@ -185,6 +246,45 @@ export default {
         }, 1000);
     },
     methods: {
+        getComments() {
+            this.page++
+            this.$axios.get(process.env.baseUrl + '/comments/' + this.selected._id, {
+                    page: this.page,
+                    limit: 5
+                })
+                .then(res => {
+                    console.log('res:', res.data.result)
+                    this.comments = res.data.result
+                    this.loaded = true
+                })
+                .catch(err => err.response)
+        },
+        makeComment() {
+            if (this.comment == '') {
+                this.error = 'Nothing to comment'
+            } else {
+                this.commenting=true
+                this.$axios.post(process.env.baseUrl + '/comments',{
+                    'body':this.comment,
+                    'user_id':this.profile._id,
+                    'gallery_id':this.selected._id
+                })
+                    .then(res => {
+                        this.comments.push(res.data.result)
+                        this.commenting=false
+                        this.comment=''
+                    })
+                    .catch(err => err.response)
+            }
+
+        },
+        getLink(item) {
+            if (item.image_link) {
+                return item.image_link
+            } else {
+                return require('~/assets/images/profile.svg')
+            }
+        },
         getColor(item) {
             if (item == this.active) {
                 return '#C202D3'
