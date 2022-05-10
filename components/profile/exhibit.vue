@@ -60,9 +60,8 @@
                                                         </template>
                                                         <span class="caption" style="z-index:5000">Already belongs to a collection</span>
                                                     </v-tooltip>
-                                                    <div v-else @click="selectNft(item)">
-                                                        <v-checkbox v-if="selected.includes(item)"  :value="true" disabled color="green" dark style="border-radius: 50% !important;"></v-checkbox>
-                                                        <v-checkbox v-else disabled color="green" dark style="border-radius: 50% !important;"></v-checkbox>
+                                                    <div v-else>
+                                                        <v-checkbox @change="selectNft(item)" color="green" dark :value="item" style="border-radius: 50% !important;"></v-checkbox>
                                                         <!-- <v-checkbox v-else @change="selectNft(item)" color="green" dark :value="false" style="border-radius: 50% !important;"></v-checkbox> -->
                                                     </div>
 
