@@ -34,7 +34,7 @@
                         <v-row v-if="nfts.length > 0" class="pt-8">
 
                             <v-col cols="12" lg="6" md="6" v-for="(item, i) in nfts" :key="i">
-                                <div class="outer-card rounded-lg" style="height: 55px;">
+                                <v-card class="outer-card rounded-lg" style="height: 55px;">
                                     <div class="inner-card pa-1 rounded-lg" style="height: 53px;">
                                         <v-list dense style="
                         background-color: transparent;
@@ -69,7 +69,7 @@
                                             </v-list-item>
                                         </v-list>
                                     </div>
-                                </div>
+                                </v-card>
                             </v-col>
 
                         </v-row>
