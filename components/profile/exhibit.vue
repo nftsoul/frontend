@@ -60,8 +60,10 @@
                                                         </template>
                                                         <span class="caption" style="z-index:5000">Already belongs to a collection</span>
                                                     </v-tooltip>
-                                                    <div v-else>
-                                                        <v-checkbox @change="selectNft(item)" color="green" dark :value="item" style="border-radius: 50% !important;"></v-checkbox>
+                                                    <div v-else @click="selectNft(item)" class="link">
+                                                        <v-checkbox v-if="selected.includes(item)" disabled v-model="yes" color="green" dark style="border-radius: 50% !important;"></v-checkbox>
+                                                        <v-checkbox v-else disabled v-model="no" color="green" dark style="border-radius: 50% !important;"></v-checkbox>
+
                                                         <!-- <v-checkbox v-else @change="selectNft(item)" color="green" dark :value="false" style="border-radius: 50% !important;"></v-checkbox> -->
                                                     </div>
 
@@ -121,6 +123,8 @@ export default {
             searchedNft: [],
             cluster: null,
             selecting: [],
+            yes:true,
+            no:false
         };
     },
     computed: {
@@ -135,7 +139,6 @@ export default {
             }
         },
         search(newValue, oldValue) {
-            this.selecting=this.selected
             if (newValue.length < 1) {
                 this.nfts = this.originalList
                 this.noNft = 'Yo do not have any NFTs. Get some and then come back.'
@@ -239,7 +242,7 @@ export default {
                 this.selected.push(item);
                 // this.selecting.push(item)
             }
-            // console.log("selecting:",this.selecting)
+            console.log("selected:",this.selected)
         },
         filterNft() {
             this.searchedNft = []
@@ -288,5 +291,8 @@ export default {
 
 .placeholder-content {
     height: 1000px;
+}
+.theme--dark.v-input--is-disabled {
+    color: rgb(147, 248, 147);
 }
 </style>
