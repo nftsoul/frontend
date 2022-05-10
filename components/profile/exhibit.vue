@@ -1,7 +1,7 @@
 <template>
 <div class="dark-bg">
 
-    <v-card :min-height="screenHeight()" flat color="transparent">
+    <v-card :max-height="screenHeight()" flat color="transparent" style="overflow:auto">
         <v-container>
             <v-row justify="center">
                 <v-col cols="12" lg="6" md="10">

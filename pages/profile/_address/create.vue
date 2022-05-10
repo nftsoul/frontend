@@ -181,6 +181,7 @@ export default {
             } else {
                 this.priceDisabled = false
             }
+            this.price=""
         }
     },
     mounted() {
@@ -319,7 +320,7 @@ export default {
                                             'image': this.src,
                                             'description': this.about,
                                             'price': this.price,
-                                            'premium': true
+                                            'premium': this.premium
                                         })
                                         .then((res) => {
                                             this.creating = false;
