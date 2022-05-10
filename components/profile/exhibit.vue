@@ -61,10 +61,9 @@
                                                         <span class="caption" style="z-index:5000">Already belongs to a collection</span>
                                                     </v-tooltip>
                                                     <div v-else>
-
+                                                        <v-checkbox @change="selectNft(item)" color="green" dark :value="item" style="border-radius: 50% !important;"></v-checkbox>
+                                                        <!-- <v-checkbox v-else @change="selectNft(item)" color="green" dark :value="false" style="border-radius: 50% !important;"></v-checkbox> -->
                                                     </div>
-                                                    <v-checkbox v-if="selecting.includes(item.id)"  @change="selectNft(item)" color="green" dark :value="true" style="border-radius: 50% !important;"></v-checkbox>
-                                                    <v-checkbox v-else @change="selectNft(item)" color="green" dark :value="false" style="border-radius: 50% !important;"></v-checkbox>
 
                                                 </v-list-item-action>
                                             </v-list-item>
@@ -114,14 +113,14 @@ export default {
             collected: [],
             selected: [],
             nfts: [],
-            noNft:'Yo do not have any NFTs. Get some and then come back.',
+            noNft: 'Yo do not have any NFTs. Get some and then come back.',
             loading: true,
             color: "linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%)",
             search: '',
-            originalList:[],
-            searchedNft:[],
-            cluster:null,
-            selecting:[]
+            originalList: [],
+            searchedNft: [],
+            cluster: null,
+            selecting: [],
         };
     },
     computed: {
@@ -136,21 +135,22 @@ export default {
             }
         },
         search(newValue, oldValue) {
+            this.selecting=this.selected
             if (newValue.length < 1) {
-                this.nfts=this.originalList
-                this.noNft='Yo do not have any NFTs. Get some and then come back.'
+                this.nfts = this.originalList
+                this.noNft = 'Yo do not have any NFTs. Get some and then come back.'
             } else {
                 this.filterNft()
             }
         },
-        originalList(){
-            if(this.search==''){
-                this.nfts=this.originalList
+        originalList() {
+            if (this.search == '') {
+                this.nfts = this.originalList
             }
         }
     },
     mounted() {
-        this.cluster=process.env.CLUSTER
+        this.cluster = process.env.CLUSTER
         this.getAllNftData();
         this.filterNft()
     },
@@ -160,8 +160,8 @@ export default {
         },
         async getAllNftData() {
             await this.getCollected();
-            
-             if (this.cluster == 'devnet') {
+
+            if (this.cluster == 'devnet') {
                 const conn = new web3.Connection(
                     web3.clusterApiUrl('devnet'),
                     "confirmed"
@@ -233,26 +233,28 @@ export default {
 
         selectNft(item) {
             if (this.selected.includes(item)) {
-                this.selecting.splice(this.selecting.indexOf(item.id),1)
+                // this.selecting.splice(this.selecting.indexOf(item), 1)
                 this.selected.splice(this.selected.indexOf(item), 1);
             } else {
                 this.selected.push(item);
-                this.selecting.push(item.id)
+                // this.selecting.push(item)
             }
+            // console.log("selecting:",this.selecting)
         },
         filterNft() {
-            this.searchedNft=[]
-            for(var x=0;x < this.originalList.length;x++){
-                let lowerSearch=this.search.toLowerCase()
-                let lowerName=this.originalList[x].name.toLowerCase()
-                if(lowerName.indexOf(lowerSearch) >= 0){
+            this.searchedNft = []
+            for (var x = 0; x < this.originalList.length; x++) {
+                let lowerSearch = this.search.toLowerCase()
+                let lowerName = this.originalList[x].name.toLowerCase()
+                if (lowerName.indexOf(lowerSearch) >= 0) {
+                
                     this.searchedNft.push(this.originalList[x])
                 }
-                this.nfts=this.searchedNft
+                this.nfts = this.searchedNft
             }
-            
-            if(this.nfts.length==0){
-                this.noNft='No NFT found with that search. Try different keyword.'
+
+            if (this.nfts.length == 0) {
+                this.noNft = 'No NFT found with that search. Try different keyword.'
             }
         }
     },
