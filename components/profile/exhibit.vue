@@ -60,7 +60,12 @@
                                                         </template>
                                                         <span class="caption" style="z-index:5000">Already belongs to a collection</span>
                                                     </v-tooltip>
-                                                    <v-checkbox v-else @change="selectNft(item)" color="green" dark value="red" style="border-radius: 50% !important;"></v-checkbox>
+                                                    <div v-else>
+
+                                                    </div>
+                                                    <v-checkbox v-if="selecting.includes(item.id)"  @change="selectNft(item)" color="green" dark :value="true" style="border-radius: 50% !important;"></v-checkbox>
+                                                    <v-checkbox v-else @change="selectNft(item)" color="green" dark :value="false" style="border-radius: 50% !important;"></v-checkbox>
+
                                                 </v-list-item-action>
                                             </v-list-item>
                                         </v-list>
@@ -115,7 +120,8 @@ export default {
             search: '',
             originalList:[],
             searchedNft:[],
-            cluster:null
+            cluster:null,
+            selecting:[]
         };
     },
     computed: {
@@ -227,9 +233,11 @@ export default {
 
         selectNft(item) {
             if (this.selected.includes(item)) {
+                this.selecting.splice(this.selecting.indexOf(item.id),1)
                 this.selected.splice(this.selected.indexOf(item), 1);
             } else {
                 this.selected.push(item);
+                this.selecting.push(item.id)
             }
         },
         filterNft() {
