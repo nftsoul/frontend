@@ -90,13 +90,13 @@
                                                         </div>
                                                     </v-card-text>
                                                 </v-card>
-                                                <v-row>
+                                                <!-- <v-row>
                                                     <v-col>
                                                         <p class="mb-0"><small>Countdown</small></p>
                                                         <p class="text-h6 font-weight-bold" style="color: #c202d3;">
                                                             {{ minuteLeft }}:{{ secondLeft }}
                                                         </p>
-                                                    </v-col>
+                                                    </v-col> -->
                                                     <!-- <v-col align="right">
                             <v-btn
                               small
@@ -106,7 +106,7 @@
                               >View Next NFT</v-btn
                             >
                           </v-col> -->
-                                                </v-row>
+                                                <!-- </v-row> -->
 
                                                 <v-divider class="mt-n3"></v-divider>
 
@@ -226,24 +226,24 @@ export default {
         this.current = this.selected.nfts[this.index];
         this.getComments()
         this.getFavourite();
-        window.setInterval(() => {
-            this.minuteLeft = Math.floor(this.totalTime / 60);
-            this.secondLeft = this.totalTime % 60;
-            this.totalTime -= 1;
-            if (this.totalTime == 0) {
-                window.clearInterval();
-                this.$router.push({
-                    name: "preview",
-                });
-                this.$toast
-                    .success("Your stream has ended.", {
-                        iconPack: "mdi",
-                        icon: "mdi-image",
-                        theme: "outline",
-                    })
-                    .goAway(3000);
-            }
-        }, 1000);
+        // window.setInterval(() => {
+        //     this.minuteLeft = Math.floor(this.totalTime / 60);
+        //     this.secondLeft = this.totalTime % 60;
+        //     this.totalTime -= 1;
+        //     if (this.totalTime == 0) {
+        //         window.clearInterval();
+        //         this.$router.push({
+        //             name: "preview",
+        //         });
+        //         this.$toast
+        //             .success("Your stream has ended.", {
+        //                 iconPack: "mdi",
+        //                 icon: "mdi-image",
+        //                 theme: "outline",
+        //             })
+        //             .goAway(3000);
+        //     }
+        // }, 1000);
     },
     methods: {
         getComments() {
