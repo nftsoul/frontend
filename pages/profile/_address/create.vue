@@ -13,12 +13,12 @@
 
                         <label for="type" class="text--disabled">Select</label>
                         <v-radio-group class="py-0" v-model="premium" row dense id="type">
-                            <v-radio label="Premium Collection" color="#c202d3" :value="false"></v-radio>
-                            <v-radio label="Free Collection" color="#c202d3" :value="true"></v-radio>
+                            <v-radio label="Premium Collection" color="#c202d3" :value="true"></v-radio>
+                            <v-radio label="Free Collection" color="#c202d3" :value="false"></v-radio>
                         </v-radio-group>
 
-                        <label for="price" class="text--disabled">Price</label>
-                        <v-text-field v-model="price" type="number" v-if="!priceDisabled" :rules="[validRules.required, validRules.positive,validRules.sollimit]" :hint="getHint()" persistent-hint id="price" filled background-color="#030537" dense outlined placeholder="e.g. '0.01 SOL'"></v-text-field>
+                        <label for="price" v-if="premium" class="text--disabled">Price</label>
+                        <v-text-field v-model="price" type="number" v-if="premium" :rules="[validRules.required, validRules.positive,validRules.sollimit]" :hint="getHint()" persistent-hint id="price" filled background-color="#030537" dense outlined placeholder="e.g. '0.01 SOL'"></v-text-field>
 
                         <v-row class="py-4">
                             <v-col cols="12" class="py-0">
@@ -52,7 +52,7 @@
                             </v-col>
                         </v-row>
 
-                        <v-row class="mt-2" no-gutters v-if="!priceDisabled">
+                        <v-row class="mt-2" no-gutters v-if="premium">
                             <v-checkbox class="mt-n2" :rules="[validRules.required]" color="white" v-model="agree"></v-checkbox>
                             <small>I understand that and I am ready to pay 0.01 SOL to create
                                 this premium gallery.</small>
@@ -162,7 +162,7 @@ export default {
             approvalDialog: false,
             approvals: 2,
             priceDisabled: false,
-            premium: false,
+            premium: true,
             selectedIndex: 0
         };
     },
