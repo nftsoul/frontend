@@ -214,8 +214,4 @@ export default {
     height: 446px;
     overflow: hidden;
 }
-
-.theme--dark.v-skeleton-loader .v-skeleton-loader__article {
-    background: #000229
-}
 </style>

@@ -232,9 +232,22 @@ export default {
     walletAddress() {
       return this.$store.state.wallet.walletAddress;
     },
+    creating(){
+      return this.$store.state.nft.creating
+    }
   },
   created(){
         this.$store.dispatch('wallet/connectWallet')
+  },
+  watch:{
+      $route(){
+        if(this.$route.name=='profile-address-index-exhibit'){
+            this.$store.commit('nft/setCreating', true)
+        }
+        else{
+            this.$store.commit('nft/setCreating', false)
+        }
+      }
   },
  
   methods: {
