@@ -137,13 +137,12 @@
                         <v-list-item v-for="(item,i) in comments" :key="i">
                             <v-list-item-avatar>
                                 <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="40" max-height="40"></v-img>
-                                <v-icon large>mdi-account</v-icon>
+                                <v-icon v-else large>mdi-account</v-icon>
                             </v-list-item-avatar>
                             <v-list-item-content>
                                 <v-list-item-title>
                                     <span v-if="item.user_id.name">{{item.user_id.name}}</span>
-                                    <span v-else>asd2q</span>
-                                    <!-- <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span> -->
+                                    <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span>
                                 </v-list-item-title>
                                 <v-list-item-subtitle>{{item.body}}</v-list-item-subtitle>
                             </v-list-item-content>
@@ -277,7 +276,9 @@ export default {
                         'gallery_id': this.selected._id
                     })
                     .then(res => {
-                        this.comments.push(res.data.result)
+                        let resp=res.data.result
+                        resp.user_id=this.profile
+                        this.comments.push(resp)
                         this.commenting = false
                         this.comment = ''
                     })

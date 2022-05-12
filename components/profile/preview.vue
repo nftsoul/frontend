@@ -73,8 +73,7 @@
                                                 <v-list-item-content>
                                                     <v-list-item-title>
                                                             <span v-if="item.user_id.name">{{item.user_id.name}}</span>
-                                                            <span v-else>asd2q</span>
-                                                            <!-- <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span> -->
+                                                            <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span>
                                                     </v-list-item-title>
                                                     <v-list-item-subtitle>{{item.body}}</v-list-item-subtitle>
                                                 </v-list-item-content>
