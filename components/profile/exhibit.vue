@@ -123,8 +123,8 @@ export default {
             searchedNft: [],
             cluster: null,
             selecting: [],
-            yes:true,
-            no:false
+            yes: true,
+            no: false
         };
     },
     computed: {
@@ -242,7 +242,7 @@ export default {
                 this.selected.push(item);
                 // this.selecting.push(item)
             }
-            console.log("selected:",this.selected)
+            console.log("selected:", this.selected)
         },
         filterNft() {
             this.searchedNft = []
@@ -250,7 +250,7 @@ export default {
                 let lowerSearch = this.search.toLowerCase()
                 let lowerName = this.originalList[x].name.toLowerCase()
                 if (lowerName.indexOf(lowerSearch) >= 0) {
-                
+
                     this.searchedNft.push(this.originalList[x])
                 }
                 this.nfts = this.searchedNft
@@ -292,6 +292,7 @@ export default {
 .placeholder-content {
     height: 1000px;
 }
+
 .theme--dark.v-input--is-disabled {
     color: rgb(147, 248, 147);
 }

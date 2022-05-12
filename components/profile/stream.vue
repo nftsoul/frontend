@@ -97,7 +97,7 @@
                                                             {{ minuteLeft }}:{{ secondLeft }}
                                                         </p>
                                                     </v-col> -->
-                                                    <!-- <v-col align="right">
+                                                <!-- <v-col align="right">
                             <v-btn
                               small
                               rounded
@@ -136,16 +136,13 @@
                     <div v-if="comments.length>0">
                         <v-list-item v-for="(item,i) in comments" :key="i">
                             <v-list-item-avatar>
-                                <v-img v-if="item.user_id" :src="getLink(item.user_id)" max-width="40" max-height="40"></v-img>
-                                <v-img v-else :src="require('~/assets/images/profile.svg')"></v-img>
+                                <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="40" max-height="40"></v-img>
+                                <v-icon v-else large>mdi-account</v-icon>
                             </v-list-item-avatar>
                             <v-list-item-content>
                                 <v-list-item-title>
-                                    <span v-if="item.user_id">
-                                        <span v-if="item.user_id.name">{{item.user_id.name}}</span>
-                                        <span v-else>Unknown</span>
-                                    </span>
-                                    <span v-else>Unknown</span>
+                                    <span v-if="item.user_id.name">{{item.user_id.name}}</span>
+                                    <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span>
                                 </v-list-item-title>
                                 <v-list-item-subtitle>{{item.body}}</v-list-item-subtitle>
                             </v-list-item-content>
@@ -159,7 +156,7 @@
                     </div>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn text x-small v-if="comments.length==5">
+                        <v-btn text x-small v-if="comments.length>4 && totalComments != comments.length" @click="getComments()" :loading="more">
                             See More Comments
                             <v-icon small>mdi-arrow-down</v-icon>
                         </v-btn>
@@ -168,7 +165,8 @@
                     </v-card-actions>
                     <v-row no-gutters class="px-5">
                         <v-avatar>
-                            <v-img :src="require('~/assets/images/profile.svg')"></v-img>
+                            <v-img v-if="profile.image_link" :src="profile.image_link"></v-img>
+                            <v-icon v-else large>mdi-account</v-icon>
                         </v-avatar>
                         <v-textarea dark rows="2" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?"></v-textarea>
                     </v-row>
@@ -205,7 +203,9 @@ export default {
             loaded: false,
             page: 0,
             commenting: false,
-            error: ''
+            error: '',
+            totalComments:0,
+            more:false
         };
     },
     computed: {
@@ -215,7 +215,7 @@ export default {
         walletAddress() {
             return this.$store.state.wallet.walletAddress;
         },
-        profile(){
+        profile() {
             return this.$store.state.wallet.profile
         }
     },
@@ -248,14 +248,20 @@ export default {
     methods: {
         getComments() {
             this.page++
+            this.more=true
             this.$axios.get(process.env.baseUrl + '/comments/' + this.selected._id, {
-                    page: this.page,
-                    limit: 5
+                    params: {
+                        page: this.page,
+                        limit: 5
+                    }
                 })
                 .then(res => {
-                    console.log('res:', res.data.result)
-                    this.comments = res.data.result
+                    this.totalComments = res.data.totalComments
+                    for(var x=0;x<res.data.result.length;x++){
+                        this.comments.push(res.data.result[x])
+                    }
                     this.loaded = true
+                    this.more=false
                 })
                 .catch(err => err.response)
         },
@@ -263,16 +269,18 @@ export default {
             if (this.comment == '') {
                 this.error = 'Nothing to comment'
             } else {
-                this.commenting=true
-                this.$axios.post(process.env.baseUrl + '/comments',{
-                    'body':this.comment,
-                    'user_id':this.profile._id,
-                    'gallery_id':this.selected._id
-                })
+                this.commenting = true
+                this.$axios.post(process.env.baseUrl + '/comments', {
+                        'body': this.comment,
+                        'user_id': this.profile._id,
+                        'gallery_id': this.selected._id
+                    })
                     .then(res => {
-                        this.comments.push(res.data.result)
-                        this.commenting=false
-                        this.comment=''
+                        let resp=res.data.result
+                        resp.user_id=this.profile
+                        this.comments.push(resp)
+                        this.commenting = false
+                        this.comment = ''
                     })
                     .catch(err => err.response)
             }

@@ -67,16 +67,13 @@
                                         <div v-if="comments.length>0">
                                             <v-list-item v-for="(item,i) in comments" :key="i">
                                                 <v-list-item-avatar>
-                                                    <v-img v-if="item.user_id" :src="getLink(item)" max-width="40" max-height="40"></v-img>
-                                                    <v-img v-else :src="require('~/assets/images/profile.svg')"></v-img>
+                                                    <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="40" max-height="40"></v-img>
+                                                    <v-icon v-else large>mdi-account</v-icon>
                                                 </v-list-item-avatar>
                                                 <v-list-item-content>
                                                     <v-list-item-title>
-                                                        <span v-if="item.user_id">
                                                             <span v-if="item.user_id.name">{{item.user_id.name}}</span>
-                                                            <span v-else>Unknown</span>
-                                                        </span>
-                                                        <span v-else>Unknown</span>
+                                                            <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span>
                                                     </v-list-item-title>
                                                     <v-list-item-subtitle>{{item.body}}</v-list-item-subtitle>
                                                 </v-list-item-content>
@@ -165,8 +162,10 @@ export default {
         },
         getComments() {
             this.$axios.get(process.env.baseUrl + '/comments/' + this.selected._id, {
-                    page: 1,
-                    limit: 4
+                    params: {
+                        page: 1,
+                        limit: 5
+                    }
                 })
                 .then(res => {
                     this.comments = res.data.result
@@ -206,10 +205,9 @@ export default {
             } else {
                 this.loading = true;
 
-                 console.log(Number(this.selected.price) +Number(0.02*this.selected.price))
                 const depositData = {
                     sender: this.walletAddress,
-                    amount: Number(this.selected.price) +Number(0.02*this.selected.price)
+                    amount: Number(this.selected.price) + Number(0.02 * this.selected.price)
                 };
 
                 var total_charge =
@@ -233,8 +231,8 @@ export default {
 
                             if (depositResponse.status == "success") {
                                 this.approvals -= 1
-                                let currentTime1 = Math.floor(Date.now() / 1000);
-                                let futureTime1 = currentTime1 + 60;
+                                let currentTime1 = Math.floor(Date.now() / 1000)+120;
+                                let futureTime1 = currentTime1 + 1200;
                                 let creatorResponse = await zeb.init({
                                     sender: this.walletAddress,
                                     receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
@@ -244,8 +242,8 @@ export default {
                                 });
                                 if (creatorResponse.status == "success") {
                                     this.approvals -= 1
-                                    let currentTime2 = Math.floor(Date.now() / 1000)
-                                    let futureTime2 = currentTime2 + 60
+                                    let currentTime2 = Math.floor(Date.now() / 1000)+120
+                                    let futureTime2 = currentTime2 + 1200
                                     let platformResponse = await zeb.init({
                                         sender: this.walletAddress,
                                         receiver: this.selected.user_id,

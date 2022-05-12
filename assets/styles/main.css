@@ -76,4 +76,7 @@ border-radius: 7px;
   width:60px;
   height: 60px;
 }
+.theme--dark.v-skeleton-loader .v-skeleton-loader__article {
+  background: #000229
+}
 

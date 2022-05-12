@@ -24,8 +24,8 @@
                     </v-tab>
                 </v-tabs>
             </v-col>
-            <v-btn class="btn-exhibit px-5 mt-8" @click="$router.push({name:'profile-address-index-exhibit',params:{'address':walletAddress}})">
-                    Exhibit
+            <v-btn class="btn-exhibit px-5 mt-8" v-if="creating==false" @click="$router.push({name:'profile-address-index-exhibit',params:{'address':walletAddress}})">
+                    Create Gallery
                 </v-btn>
         </v-row>
     </v-container>
@@ -48,6 +48,9 @@ export default {
         },
         walletAddress() {
             return this.$store.state.wallet.walletAddress
+        },
+        creating(){
+            return this.$store.state.nft.creating
         }
     },
     
