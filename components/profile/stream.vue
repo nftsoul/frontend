@@ -144,7 +144,7 @@
                                     <span v-if="item.user_id.name">{{item.user_id.name}}</span>
                                     <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span>
                                 </v-list-item-title>
-                                <v-list-item-subtitle>{{item.body}}</v-list-item-subtitle>
+                                <small class="text--disabled" v-html="item.body"></small>
                             </v-list-item-content>
                         </v-list-item>
                     </div>
@@ -271,7 +271,7 @@ export default {
             } else {
                 this.commenting = true
                 this.$axios.post(process.env.baseUrl + '/comments', {
-                        'body': this.comment,
+                        'body': this.comment.replace(/\n/g, '<br>\n'),
                         'user_id': this.profile._id,
                         'gallery_id': this.selected._id
                     })

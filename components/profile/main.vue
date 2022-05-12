@@ -5,14 +5,14 @@
             <v-col cols="6" align="center" class="pb-8">
                 <client-only>
                     <div v-if="profile" class="mb-3">
-                        <v-img v-if="profile.image_link" :lazy-src="profile.image_link" class="rounded-circle" :src="profile.image_link" alt="Avatar" max-width="170" max-height="170">
+                        <v-img v-if="profile.image_link" :lazy-src="profile.image_link" class="rounded-circle" :src="profile.image_link" alt="Avatar" max-width="160" max-height="160">
                             <template v-slot:placeholder>
                                 <v-row class="fill-height ma-0" align="center" justify="center">
                                     <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
                                 </v-row>
                             </template>
                         </v-img>
-                        <v-img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" :lazy-src="require('~/assets/images/profile.svg')" max-width="170" max-height="170" alt="Avatar">
+                        <v-img v-else :lazy-src="require('~/assets/images/avatar.png')" class="rounded-circle" :src="require('~/assets/images/avatar.png')" alt="Avatar" max-width="160" max-height="160">
                             <template v-slot:placeholder>
                                 <v-row class="fill-height ma-0" align="center" justify="center">
                                     <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -20,7 +20,7 @@
                             </template>
                         </v-img>
                     </div>
-                    <v-img v-else class="rounded-circle" :src="require('~/assets/images/profile.svg')" :lazy-src="require('~/assets/images/profile.svg')" max-width="170" max-height="170" alt="Avatar">
+                    <v-img v-else :lazy-src="require('~/assets/images/avatar.png')" class="rounded-circle" :src="require('~/assets/images/avatar.png')" alt="Avatar" max-width="160" max-height="160">
                         <template v-slot:placeholder>
                             <v-row class="fill-height ma-0" align="center" justify="center">
                                 <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -166,7 +166,7 @@ export default {
             // window.open('https://twitter.com/'+this.profile.username)
         },
         copy() {
-            navigator.clipboard.writeText(this.walletAddress)
+            navigator.clipboard.writeText(this.walletAddress).then(res=>{}).catch(err=>console.log(err.response))
             this.$toast.success("Address copied.", {
                     iconPack: "mdi",
                     icon: "mdi-content-copy",
@@ -194,7 +194,7 @@ export default {
         updateProfileDetail() {
             if (this.$refs.form.validate()) {
                 this.updating = true
-                this.$axios.patch(process.env.API_URL+'/profileinfo/' + this.$route.params.address + '?name=' + this.name + '&username=' + this.username)
+                this.$axios.patch(process.env.API_URL + '/profileinfo/' + this.$route.params.address + '?name=' + this.name + '&username=' + this.username)
                     .then(res => {
                         // this.profile = res.data.result
                         this.$store.commit('wallet/setProfile', res.data.result)

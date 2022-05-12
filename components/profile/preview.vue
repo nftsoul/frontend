@@ -63,7 +63,7 @@
                                 </v-col>
                                 <v-col cols="12" lg="4" md="6" class="px-3">
                                     <h5 class="mx-5">Comments</h5>
-                                    <div style="border-left:1px solid #500083;height:300px;" class="px-3">
+                                    <div style="border-left:1px solid #500083;height:300px;overflow:auto" class="px-3">
                                         <div v-if="comments.length>0">
                                             <v-list-item v-for="(item,i) in comments" :key="i">
                                                 <v-list-item-avatar>
@@ -72,10 +72,10 @@
                                                 </v-list-item-avatar>
                                                 <v-list-item-content>
                                                     <v-list-item-title>
-                                                            <span v-if="item.user_id.name">{{item.user_id.name}}</span>
-                                                            <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span>
+                                                        <span v-if="item.user_id.name">{{item.user_id.name}}</span>
+                                                        <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span>
                                                     </v-list-item-title>
-                                                    <v-list-item-subtitle>{{item.body}}</v-list-item-subtitle>
+                                                    <small class="text--disabled" v-html="item.body"></small>
                                                 </v-list-item-content>
                                             </v-list-item>
                                         </div>
@@ -231,7 +231,7 @@ export default {
 
                             if (depositResponse.status == "success") {
                                 this.approvals -= 1
-                                let currentTime1 = Math.floor(Date.now() / 1000)+120;
+                                let currentTime1 = Math.floor(Date.now() / 1000) + 120;
                                 let futureTime1 = currentTime1 + 1200;
                                 let creatorResponse = await zeb.init({
                                     sender: this.walletAddress,
@@ -242,7 +242,7 @@ export default {
                                 });
                                 if (creatorResponse.status == "success") {
                                     this.approvals -= 1
-                                    let currentTime2 = Math.floor(Date.now() / 1000)+120
+                                    let currentTime2 = Math.floor(Date.now() / 1000) + 120
                                     let futureTime2 = currentTime2 + 1200
                                     let platformResponse = await zeb.init({
                                         sender: this.walletAddress,
