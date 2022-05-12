@@ -58,7 +58,7 @@
                         <v-row class="mt-2" no-gutters>
                             <v-checkbox class="mt-n2" :rules="[validRules.required]" color="white" v-model="agree"></v-checkbox>
                             <small>I understand that and I am ready to pay 0.01 SOL to create
-                                this premium gallery.</small>
+                                this gallery.</small>
                         </v-row>
                     </v-form>
                     <v-row>
@@ -397,6 +397,7 @@ export default {
                                 .goAway(3000);
                         }
                     } else {
+                        this.creating = false;
                         this.$toast
                             .error("Insufficient fund.", {
                                 iconPack: "mdi",
