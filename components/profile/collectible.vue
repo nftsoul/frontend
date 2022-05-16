@@ -76,7 +76,7 @@ export default {
             loading: true,
             connect: "",
             profiling: false,
-            cluster:null
+            cluster: null
         };
     },
     computed: {
@@ -93,7 +93,7 @@ export default {
         },
     },
     mounted() {
-        this.cluster=process.env.CLUSTER
+        this.cluster = process.env.CLUSTER
         this.getAllNftData();
     },
     methods: {
@@ -135,20 +135,25 @@ export default {
                 const publicAddress = await solrayz.resolveToWalletAddress({
                     text: this.walletAddress,
                 });
-                console.log('first:',publicAddress)
+                console.log('first:', publicAddress)
                 this.meta = await solrayz.getParsedNftAccountsByOwner({
                     publicAddress,
                 });
-                console.log('meta:',this.meta)
+                console.log('meta:', this.meta)
                 let promises = [];
                 for (var x = 0; x < this.meta.length; x++) {
-                    promises.push(
-                        await this.$axios.get(this.meta[x].data.uri).then((response) => {
-                            if(response.data){
-                                this.nfts.push(response.data);
-                            }
-                        })
-                    )
+                    try {
+                        promises.push(
+                            await this.$axios.get(this.meta[x].data.uri).then((response) => {
+                                if (response.data) {
+                                    this.nfts.push(response.data);
+                                }
+                            })
+
+                        )
+                    } catch (e) {
+                        console.log(e)
+                    }
                     Promise.all(promises)
 
                 }
