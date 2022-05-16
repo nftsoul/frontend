@@ -13,7 +13,7 @@
                     </v-tab>
 
                     <v-tab href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/gallery'">
-                        Collections
+                        Galleries
                     </v-tab>
 
                     <v-tab v-if="userAddress==walletAddress" href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/favourite'">

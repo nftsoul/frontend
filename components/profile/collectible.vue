@@ -135,11 +135,9 @@ export default {
                 const publicAddress = await solrayz.resolveToWalletAddress({
                     text: this.walletAddress,
                 });
-                console.log('first:', publicAddress)
                 this.meta = await solrayz.getParsedNftAccountsByOwner({
                     publicAddress,
                 });
-                console.log('meta:', this.meta)
                 let promises = [];
                 for (var x = 0; x < this.meta.length; x++) {
                     try {
