@@ -135,15 +135,18 @@ export default {
                 const publicAddress = await solrayz.resolveToWalletAddress({
                     text: this.walletAddress,
                 });
-
+                console.log('first:',publicAddress)
                 this.meta = await solrayz.getParsedNftAccountsByOwner({
                     publicAddress,
                 });
+                console.log('meta:',this.meta)
                 let promises = [];
                 for (var x = 0; x < this.meta.length; x++) {
                     promises.push(
                         await this.$axios.get(this.meta[x].data.uri).then((response) => {
-                            this.nfts.push(response.data);
+                            if(response.data){
+                                this.nfts.push(response.data);
+                            }
                         })
                     )
                     Promise.all(promises)
