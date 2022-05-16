@@ -189,11 +189,17 @@ export default {
                 });
                 let promises = [];
                 for (var x = 0; x < this.meta.length; x++) {
-                    promises.push(
-                        await this.$axios.get(this.meta[x].data.uri).then((response) => {
-                            this.originalList.push(response.data);
-                        })
-                    )
+                    try {
+                        promises.push(
+                            await this.$axios.get(this.meta[x].data.uri).then((response) => {
+                                if (response.data) {
+                                    this.originalList.push(response.data);
+                                }
+                            })
+                        )
+                    } catch (e) {
+                        console.log(e)
+                    }
                     Promise.all(promises)
 
                 }
