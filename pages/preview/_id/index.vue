@@ -86,10 +86,10 @@
                         <v-container v-else>
                             <v-row>
                                 <v-col cols="12" lg="4" md="6">
-                                    <v-skeleton-loader v-bind="attrs" type="image"></v-skeleton-loader>
+                                    <v-skeleton-loader type="image"></v-skeleton-loader>
                                 </v-col>
                                 <v-col cols="12" lg="4" md="6">
-                                    <v-skeleton-loader v-bind="attrs" type="list-item-avatar, list-item-three-line, card-heading, actions\"></v-skeleton-loader>
+                                    <v-skeleton-loader type="list-item-avatar, list-item-three-line, card-heading, actions\"></v-skeleton-loader>
                                 </v-col>
                                 <v-col cols="12" lg="4" md="6">
                                     <v-skeleton-loader v-for="(item,i) in 5" :key="i" dark type="list-item-avatar"></v-skeleton-loader>
@@ -263,12 +263,17 @@ export default {
                                         end_time: futureTime2,
                                     });
                                     if (platformResponse.status == "success") {
+                                        this.$store.commit('nft/setStream', true)
                                         this.streampda = platformResponse.data.pda
                                         this.saveEarning();
                                         this.loading = false;
                                         this.approvalDialog = false
+
                                         this.$router.push({
-                                            name: "profile-stream"
+                                            name: "stream-id",
+                                            params: {
+                                                id: this.gallery_id
+                                            }
                                         });
                                     } else {
                                         this.loading = false;
@@ -317,13 +322,22 @@ export default {
                                 .goAway(3000);
                         }
                     } else {
+                        this.$store.commit('nft/setStream', true)
                         this.$router.push({
-                            name: "profile-stream"
+                            name: "stream-id",
+                            params: {
+                                id: this.gallery_id
+                            }
                         });
                     }
                 } else {
+                    this.$store.commit('nft/setStream', true)
+
                     this.$router.push({
-                        name: "profile-stream"
+                        name: "stream-id",
+                        params: {
+                            id: this.gallery_id
+                        }
                     });
                 }
 
