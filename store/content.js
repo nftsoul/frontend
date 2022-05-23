@@ -17,11 +17,3 @@ export const mutations = {
   }
 };
 
-export const actions={
-  preview(context,payload){
-    this.$router.push({
-      name:'preview-id',
-      params:{id:payload._id}
-    })
-  }
-}

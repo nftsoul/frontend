@@ -10,7 +10,7 @@
                     <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
                             <div v-for="(item, i) in free" :key="i">
-                                <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="$store.dispath('content/preview',item)">
+                                <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="$router.push({name:'preview-id',params:{id:item._id}})">
                                     <div class="outer-card">
                                         <div class="inner-card">
                                             <v-img :src="item.image" class="mx-auto" width="220" height="220"></v-img>
@@ -86,7 +86,6 @@ export default {
                 .get("/free-collection?page=1&limit=4")
                 .then((res) => {
                     this.free = res.data.free
-                    console.log('free:',res.data)
                 })
                 .catch((err) => console.log(err.response));
         },

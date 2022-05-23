@@ -19,7 +19,7 @@
                     </v-row>
                     <v-row v-else>
                         <v-col cols="12" lg="3" md="6" v-for="(item, i) in nfts" :key="i" align="center">
-                            <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="seeNft(item)">
+                            <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="$router.push({name:'preview-id',params:{id:item._id}})">
                                 <div class="outer-card">
                                     <div class="inner-card">
                                         <v-img :src="item.image" class="mx-auto" width="220" height="220"></v-img>
@@ -107,19 +107,12 @@ export default {
                     }
                     this.nfts = res.data.free;
                     this.loading = false;
-                    console.log('free:',res.data)
                 })
                 .catch((err) => console.log(err.response));
         },
         input(e) {
             this.page = e;
             this.getFreeNfts();
-        },
-        seeNft(item) {
-            this.$store.commit("content/setSelected", item);
-            this.$router.push({
-                name: "preview",
-            });
         },
     },
 };
