@@ -1,7 +1,7 @@
 export const state = () => ({
   collection: [],
-  creating:false
-  // profile:null
+  creating:false,
+  streaming:false
 });
 
 export const mutations = {
@@ -13,6 +13,9 @@ export const mutations = {
   },
   setCreating(state,payload){
     state.creating=payload
+  },
+  setStream(state,payload){
+    state.streaming=payload
   }
 };
 

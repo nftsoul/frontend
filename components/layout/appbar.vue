@@ -234,6 +234,9 @@ export default {
     },
     creating(){
       return this.$store.state.nft.creating
+    },
+    live(){
+      return this.$store.state.nft.live
     }
   },
   created(){
@@ -241,6 +244,9 @@ export default {
   },
   watch:{
       $route(){
+        if(this.$route.name=='stream-id'){
+            this.$store.commit('nft/setCreating', false)
+        }
         if(this.$route.name=='profile-address-index-exhibit'){
             this.$store.commit('nft/setCreating', true)
         }
