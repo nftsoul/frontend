@@ -1,21 +1,25 @@
 <template>
 <v-card  :src="require('~/assets/images/abstract-flowing.jpg')" flat>
-    <v-img :height="screenHeight()" :lazy-src="require('~/assets/images/abstract-flowing.png')" :src="require('~/assets/images/abstract-flowing.png')">
+    <v-img :height="screenHeight()" :lazy-src="require('~/assets/images/banner.png')" :src="require('~/assets/images/banner.png')">
         <v-container fluid class="py-16">
-            <v-row class="py-16" justify="center">
-                <v-col lg="11" md="6" class="py-lg-16">
-                    <p class="text-lg-h3 text-md-h4 text-sm-h5">Exhibit and Earn From <br>Your NFT Collections</p>
+            <v-row class="py-16">
+                <v-col cols="6" lg="11" md="6" class="py-lg-16 px-lg-16">
+                    <p class="text-lg-h3 text-md-h4 text-h5">Exhibit and Earn From <br>Your NFT Collections</p>
                     <p class="">Create galleries, showcase your best NFTs and earn from them.</p>
                     <v-row class="mt-10">
                         <v-btn class="btn-exhibit ma-3" width="100" @click="$router.push({name:'profile-address-index-exhibit',params:{'address':walletAddress}})">Exhibit</v-btn>
-                        <div class="outer-btn ma-3" @click="$router.push({path:'/featured'})">
+                        <!-- <div class="outer-btn ma-3" @click="$router.push({path:'/featured'})">
                             <div class="inner-btn">
                                 <p class="ml-3 mt-n1" style="font-size:14px">Explore</p>
                             </div>
+                        </div> -->
+
+                        <div class="btn-gradient mt-3 mr-n3" style="height:38px" @click="$router.push({path:'/featured'})">
                         </div>
+                        <p class="body-1 ml-n16 mt-4">Explore</p>
                     </v-row>
                 </v-col>
-            </v-row>
+            </v-row> 
         </v-container>
     </v-img>
 
@@ -110,5 +114,4 @@ export default {
     background: linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%);
     border-radius: 7px;
 }
-
 </style>

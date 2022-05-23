@@ -5,7 +5,7 @@
             <v-row class="py-16" justify="center">
                 <v-col cols="12" lg="12" md="8" align="center">
                     <v-row justify="center">
-                        <p class="title">Free Collections</p>
+                        <p class="title">Free Galleries</p>
                     </v-row>
                     <v-row v-if="nfts.length == 0" justify="center">
                         <v-col align="center">
@@ -14,7 +14,7 @@
                                     <spinner :animation-duration="1200" :size="55" color="#fff" />
                                 </client-only>
                             </div>
-                            <p>Loading your Collections...</p>
+                            <p>Loading Galleries...</p>
                         </v-col>
                     </v-row>
                     <v-row v-else>
@@ -28,13 +28,13 @@
                                             <v-list dense class="py-1">
                                                 <v-list-item dense class="pa-0">
                                                     <v-list-item-avatar class="my-0 ml-2">
-                                                        <v-icon>mdi-account-tie</v-icon>
-                                                    </v-list-item-avatar>
-                                                    <v-list-item-content>
-                                                        <v-list-item-title class="ml-n2">{{
-                                item.user_id.slice(0, 5)
-                              }}</v-list-item-title>
-                                                    </v-list-item-content>
+                                                            <v-img v-if="item.created_by.image_link" :src="item.created_by.image_link"></v-img>
+                                                            <v-icon v-else>mdi-account-tie</v-icon>
+                                                        </v-list-item-avatar>
+                                                        <v-list-item-content>
+                                                            <v-list-item-title class="ml-n2" v-if="item.created_by.name">{{item.created_by.name.slice(0,10)}}</v-list-item-title>
+                                                            <v-list-item-title class="ml-n2" v-else>{{item.user_id.slice(0, 5)}}</v-list-item-title>
+                                                        </v-list-item-content>
                                                 </v-list-item>
                                             </v-list>
                                         </v-card>
@@ -54,7 +54,7 @@
                     </v-row>
                     <v-row>
                         <v-col align="center">
-                            <v-pagination v-model="page" dark :length="total" prev-icon="mdi-menu-left" next-icon="mdi-menu-right" :total-visible="10" @input="input" class="my-5"></v-pagination>
+                            <v-pagination v-model="page" dark :length="pages" prev-icon="mdi-menu-left" next-icon="mdi-menu-right" :total-visible="10" @input="input" class="my-5"></v-pagination>
                         </v-col>
                     </v-row>
                 </v-col>
@@ -65,7 +65,6 @@
 </template>
 
 <script>
-import axios from "axios";
 let OrbitSpinner = null;
 if (process.client) {
     OrbitSpinner = require("epic-spinners").OrbitSpinner;
@@ -78,36 +77,43 @@ export default {
         return {
             nfts: [],
             page: 1,
-            limit: 15,
+            limit: 20,
             total: 0,
             loading: true,
+            pages:1
         };
     },
     mounted() {
-        this.getTrendingNfts();
+        this.getFreeNfts();
     },
     methods: {
         screenHeight() {
             return window.innerHeight;
         },
-        getTrendingNfts() {
-            axios
+        getFreeNfts() {
+            this.$axios
                 .get(
-                    process.env.baseUrl + "/free-collection?page=" +
+                    "/free-collection?page=" +
                     this.page +
                     "&limit=" +
                     this.limit
                 )
                 .then((res) => {
-                    this.total = Math.floor(res.data.freeGalleryCount / this.limit) + 1;
+                    this.total = res.data.freeGalleryCount
+                     if (this.total % 20 == 0) {
+                        this.page = this.total / 20
+                    } else {
+                        this.pages = Math.floor(this.total / 20)+1
+                    }
                     this.nfts = res.data.free;
                     this.loading = false;
+                    console.log('free:',res.data)
                 })
                 .catch((err) => console.log(err.response));
         },
         input(e) {
             this.page = e;
-            this.getTrendingNfts();
+            this.getFreeNfts();
         },
         seeNft(item) {
             this.$store.commit("content/setSelected", item);

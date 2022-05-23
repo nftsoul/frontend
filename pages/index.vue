@@ -2,6 +2,7 @@
 <div>
     <LandingIntro />
     <LandingPopular />
+    <LandingRecent />
     <LandingFree />
     <LandingPremium />
     <LandingWorking />

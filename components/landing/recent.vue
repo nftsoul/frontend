@@ -3,13 +3,13 @@
     <v-container>
         <div class="enclose-border">
             <v-row justify="center">
-                <p class="title">Free Galleries</p>
+                <p class="title">New Galleries</p>
             </v-row>
-            <v-row justify="center" v-if="free.length > 0">
+            <v-row justify="center" v-if="recent.length > 0">
                 <v-col cols="12" align="center">
                     <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
-                            <div v-for="(item, i) in free" :key="i">
+                            <div v-for="(item, i) in recent" :key="i">
                                 <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="$store.dispath('content/preview',item)">
                                     <div class="outer-card">
                                         <div class="inner-card">
@@ -46,7 +46,7 @@
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
-                        <div class="outer-btn" @click="$router.push('/free-galleries')">
+                        <div class="outer-btn" @click="$router.push('/new-galleries')">
                             <div class="inner-btn">
                                 <p class="mt-n1 mr-3" style="font-size: 14px">View All</p>
                             </div>
@@ -68,7 +68,7 @@
 export default {
     data() {
         return {
-            free: [],
+            recent: [],
         };
     },
     computed: {
@@ -80,13 +80,19 @@ export default {
         this.getCollections();
     },
     methods: {
+        seePremium(item) {
+            this.$store.commit("content/setSelected", item);
 
+            this.$router.push({
+                name: "preview",
+            });
+        },
         getCollections() {
             this.$axios
-                .get("/free-collection?page=1&limit=4")
+                .get('/new-galleries?page=1&limit=4')
                 .then((res) => {
-                    this.free = res.data.free
-                    console.log('free:',res.data)
+                    this.recent = res.data.galleries
+                    console.log('new:',this.recent)
                 })
                 .catch((err) => console.log(err.response));
         },
