@@ -1,11 +1,11 @@
 <template>
 <div class="dark-bg">
-    <v-card :min-height="screenHeight()" flat color="transparent">
-        <v-container>
+    <v-card :min-height="screenHeight()" flat color="transparent" class="pt-16">
+        <v-container class="pt-16">
             <v-row justify="center">
                 <v-col cols="12" lg="11" md="11">
                     <div class="enclose-border">
-                        <v-container v-if="preview.nfts">
+                        <v-container v-if="preview != ''">
                             <v-row>
                                 <v-col v-if="preview.nfts.length > 0" cols="12" lg="4" md="6" align="center" class="px-5">
                                     <v-img :src="preview.image" class="rounded-lg">
@@ -20,17 +20,15 @@
                                     <p>{{ preview.gallery_name }}</p>
                                     <v-list dense style="box-shadow: none !important" class="px-2">
                                         <v-list-item dense @click="seeProfile()">
-                                            <v-list-item-avatar>
-                                                <v-icon>mdi-account-tie</v-icon>
+                                            <v-list-item-avatar class="my-0 ml-2">
+                                                <v-img v-if="preview.created_by.image_link" :src="preview.created_by.image_link"></v-img>
+                                                <v-icon v-else>mdi-account-tie</v-icon>
                                             </v-list-item-avatar>
                                             <v-list-item-content>
-                                                <v-list-item-title>
-                                                    {{ preview.user_id.slice(0, 5) }}
-                                                </v-list-item-title>
-                                                <!-- <v-list-item-subtitle>
-                                                @Rayna
-                                            </v-list-item-subtitle> -->
+                                                <v-list-item-title v-if="preview.created_by.name">{{preview.created_by.name.slice(0,20)}}</v-list-item-title>
+                                                <v-list-item-title v-else>{{preview.user_id.slice(0, 5)}}</v-list-item-title>
                                             </v-list-item-content>
+                                        </v-list-item>
                                         </v-list-item>
                                     </v-list>
                                     <v-row class="mt-5">
@@ -55,9 +53,6 @@
                                             <p style="line-height: 15px">
                                                 <small>{{ preview.description }}</small>
                                             </p>
-                                            <!-- <v-btn small rounded color="#A0A0A0">
-                                            <small>Add To Favourite</small>
-                                        </v-btn> -->
                                         </v-col>
                                     </v-row>
                                 </v-col>
@@ -80,13 +75,25 @@
                                             </v-list-item>
                                         </div>
                                         <div v-else>
-                                            <div v-if="!loaded">
-                                                <v-skeleton-loader v-for="(item,i) in 5" :key="i" dark type="list-item-avatar"></v-skeleton-loader>
-                                            </div>
-                                            <small v-else>No comments yet</small>
+
+                                            <small>No comments yet</small>
                                         </div>
 
                                     </div>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                        <v-container v-else>
+                            <v-row>
+                                <v-col cols="12" lg="4" md="6">
+                                    <v-skeleton-loader v-bind="attrs" type="image"></v-skeleton-loader>
+                                </v-col>
+                                <v-col cols="12" lg="4" md="6">
+                                    <v-skeleton-loader v-bind="attrs" type="list-item-avatar, list-item-three-line, card-heading, actions\"></v-skeleton-loader>
+                                </v-col>
+                                <v-col cols="12" lg="4" md="6">
+                                    <v-skeleton-loader v-for="(item,i) in 5" :key="i" dark type="list-item-avatar"></v-skeleton-loader>
+
                                 </v-col>
                             </v-row>
                         </v-container>
@@ -134,14 +141,14 @@ export default {
             streampda: null,
             comments: [],
             loaded: false,
-            preview:''
+            preview: ''
         };
     },
     computed: {
         walletAddress() {
             return this.$store.state.wallet.walletAddress;
         },
-        gallery_id(){
+        gallery_id() {
             return this.$route.params.id
         }
     },
@@ -150,10 +157,12 @@ export default {
         this.getComments()
     },
     methods: {
-        getNft(){
+        getNft() {
             this.$axios.get(
-                "/single-gallery/" + this.preview._id
-            ).then(res=>console.log('preview:',res.data))
+                "/single-gallery/" + this.gallery_id
+            ).then(res => {
+                this.preview = res.data.gallery[0]
+            })
         },
         getLink(item) {
             if (item.image_link) {
@@ -321,7 +330,7 @@ export default {
             }
         },
         screenHeight() {
-            return window.innerHeight - 300;
+            return window.innerHeight;
         },
 
         saveEarning() {

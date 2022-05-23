@@ -10,7 +10,7 @@
                     <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
                             <div v-for="(item, i) in recent" :key="i">
-                                <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="$store.dispath('content/preview',item)">
+                                <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="$router.push({name:'preview-id',params:{id:item._id}})">
                                     <div class="outer-card">
                                         <div class="inner-card">
                                             <v-img :src="item.image" class="mx-auto" width="220" height="220"></v-img>
@@ -80,19 +80,11 @@ export default {
         this.getCollections();
     },
     methods: {
-        seePremium(item) {
-            this.$store.commit("content/setSelected", item);
-
-            this.$router.push({
-                name: "preview",
-            });
-        },
         getCollections() {
             this.$axios
                 .get('/new-galleries?page=1&limit=4')
                 .then((res) => {
                     this.recent = res.data.galleries
-                    console.log('new:',this.recent)
                 })
                 .catch((err) => console.log(err.response));
         },
