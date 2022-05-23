@@ -1,3 +1,4 @@
+
 export const state = () => ({
   detailDialog: false,
   freshNft: "",
@@ -15,3 +16,12 @@ export const mutations = {
     state.selected=payload
   }
 };
+
+export const actions={
+  preview(context,payload){
+    this.$router.push({
+      name:'preview-id',
+      params:{id:payload._id}
+    })
+  }
+}

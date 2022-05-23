@@ -3,7 +3,7 @@
     <v-container>
         <v-row justify="center" class="py-5">
             <div class="line-box mt-3"></div>
-            <p class="grand-title-text mx-3">Our Top Collection</p>
+            <p class="grand-title-text mx-3">Our Top Galleries</p>
             <div class="line-box mt-3"></div>
         </v-row>
 
@@ -43,7 +43,7 @@
                     <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
                             <div v-for="(item, i) in popular" :key="i">
-                                <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="seePremium(item)">
+                                <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="$store.dispath('content/preview',item)">
                                     <div class="outer-card">
                                         <div class="inner-card">
                                             <v-img :src="item.image" class="mx-auto" width="220" height="220"></v-img>
@@ -52,12 +52,12 @@
                                                 <v-list dense class="py-1">
                                                     <v-list-item dense class="pa-0">
                                                         <v-list-item-avatar class="my-0 ml-2">
-                                                            <v-icon>mdi-account-tie</v-icon>
+                                                            <v-img v-if="item.created_by.image_link" :src="item.created_by.image_link"></v-img>
+                                                            <v-icon v-else>mdi-account-tie</v-icon>
                                                         </v-list-item-avatar>
                                                         <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2">{{
-                                  item.user_id.slice(0, 5)
-                                }}</v-list-item-title>
+                                                            <v-list-item-title class="ml-n2" v-if="item.created_by.name">{{item.created_by.name.slice(0,10)}}</v-list-item-title>
+                                                            <v-list-item-title class="ml-n2" v-else>{{item.user_id.slice(0, 5)}}</v-list-item-title>
                                                         </v-list-item-content>
                                                     </v-list-item>
                                                 </v-list>
@@ -79,7 +79,7 @@
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
-                        <div class="outer-btn" @click="$router.push('/popular-nfts')">
+                        <div class="outer-btn" @click="$router.push('/popular-galleries')">
                             <div class="inner-btn">
                                 <p class="mt-n1 mr-3" style="font-size: 14px">View All</p>
                             </div>
@@ -98,7 +98,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
     data() {
         return {
@@ -114,7 +113,7 @@ export default {
     },
     watch: {
         duration() {
-            if (this.duration == 'one') {cd 
+            if (this.duration == 'one') {
                 this.getCollections('24hrs')
             }
             else if(this.duration=='seven'){
@@ -132,86 +131,16 @@ export default {
         this.getCollections('24hrs');
     },
     methods: {
-        seePremium(item) {
-            this.$store.commit("content/setSelected", item);
-
-            this.$router.push({
-                name: "preview",
-            });
-        },
         getCollections(item) {
-            this.popular = []
-            axios
-                .get(process.env.baseUrl + '/trending', {
-                    query: item
-                })
+            this.$axios
+                .get('/all-trending?page=1&limit=4', {
+                    query: item})
                 .then((res) => {
-                    this.popular = res.data.trending_galleries;
+                    this.popular = res.data.trending
+                    console.log('pop:',res.data)
                 })
                 .catch((err) => console.log(err.response));
         },
     },
 };
 </script>
-
-<style lang="css">
-.enclose-border {
-    border: 1px solid #500083;
-    box-sizing: border-box;
-    filter: drop-shadow(0px 1px 10px #500083);
-    border-radius: 10px;
-    padding: 20px 40px;
-}
-
-.slider-card {
-    background-color: transparent !important;
-    border: 1px solid linear-gradient(264.75deg,
-            #fe87ff 3.04%,
-            #fd2bff 23.86%,
-            #c202d3 41.34%,
-            #5e0fff 68.89%,
-            #1905da 99.63%);
-}
-
-.title {
-    font-weight: 600;
-    font-size: 24px;
-    line-height: 36px;
-    color: #fe87ff;
-    font-family: "Poppins", sans-serif !important;
-}
-
-.v-card {
-    background-color: transparent !important;
-}
-
-.line-box {
-    width: 80px;
-    height: 1px;
-    background: linear-gradient(264.75deg,
-            #fe87ff 3.04%,
-            #fd2bff 23.86%,
-            #c202d3 41.34%,
-            #5e0fff 68.89%,
-            #1905da 99.63%);
-}
-
-.outer-card {
-    max-width: 300px;
-    height: 448px;
-    background: linear-gradient(264.44deg,
-            #fe87ff 2.87%,
-            #c202d3 34.05%,
-            #5e0fff 67.82%,
-            #1905da 99.15%);
-    padding: 1px;
-}
-
-.inner-card {
-    background: #000229;
-    width: 100%;
-    padding: 20px;
-    height: 446px;
-    overflow: hidden;
-}
-</style>

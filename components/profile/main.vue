@@ -260,7 +260,7 @@ export default {
     padding: 3px;
     border-radius: 7px;
     /*1*/
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     /*2*/
     background: linear-gradient(45deg, #1905DA, #FE87FF) border-box;
     /*3*/
