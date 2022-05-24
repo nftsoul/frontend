@@ -15,8 +15,8 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
+          username: ${{ secrets.USERNAME }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          key: ${{ secrets.ID_ED25519 }}
+          key: ${{ secrets.PRIVATEKEY }}
           port: ${{ secrets.PORT }}
           script: sudo sh deploy-scripts/deploy-production.sh
