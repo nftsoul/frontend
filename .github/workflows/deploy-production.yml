@@ -16,6 +16,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
+          passphrase: ${{ secrets.PASSPHRASE }}
           key: ${{ secrets.PRIVATEKEY }}
           port: ${{ secrets.PORT }}
           script: sudo sh deploy-scripts/deploy-production.sh
