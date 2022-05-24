@@ -14,9 +14,9 @@ jobs:
       - name: executing remote ssh commands using ssh key
         uses: garygrossgarten/github-action-ssh@release
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          passphrase: ${{ secrets.PASSPHRASE }}
-          key: ${{ secrets.ID_ED25519 }}
-          port: ${{ secrets.PORT }}
+          host: ${{ secrets.host }}
+          username: ${{ secrets.username }}
+          passphrase: ${{ secrets.passphrase }}
+          key: ${{ secrets.privateKey }}
+          port: ${{ secrets.port }}
           script: sudo sh deploy-scripts/deploy-production.sh
