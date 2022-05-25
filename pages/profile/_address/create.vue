@@ -350,7 +350,7 @@ export default {
             this.setFields()
         }
         // this.setAttributes();
-                    console.log('create:',this.collection)
+        console.log('create:', this.collection)
 
     },
     methods: {
@@ -481,7 +481,7 @@ export default {
                                 if (platformResponse.status == "success") {
 
                                     this.$axios
-                                        .post(process.env.baseUrl + "/create-gallery", {
+                                        .post("/create-gallery", {
                                             'user_id': this.walletAddress,
                                             'gallery_name': this.name,
                                             'nfts': this.collection,
@@ -541,8 +541,32 @@ export default {
                                 .goAway(3000);
                         }
                     } else {
-                        console.log('updating code')
-                        this.creating = false
+                        this.$axios
+                            .post("/create-gallery/"+this.selected._id, {
+                                'user_id': this.walletAddress,
+                                'gallery_name': this.name,
+                                'nfts': this.collection,
+                                'image': this.src,
+                                'description': this.about,
+                                'price': this.price,
+                                'premium': this.premium
+                            })
+                            .then((res) => {
+                                this.creating = false;
+                                this.approvalDialog = false
+                                this.$toast
+                                    .success("Your gallery has been updated successfully.", {
+                                        iconPack: "mdi",
+                                        icon: "mdi-image",
+                                        theme: "outline",
+                                    })
+                                    .goAway(3000);
+                                this.$store.commit("content/setSelected", res.data.gallery);
+                                this.$router.push({
+                                    name: "profile-preview",
+                                });
+                            })
+                            .catch((err) => console.log(err.response));
                     }
 
                 } else {

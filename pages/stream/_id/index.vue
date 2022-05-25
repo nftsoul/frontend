@@ -320,7 +320,7 @@ export default {
       totalTime: 300,
       minuteLeft: 0,
       secondLeft: 0,
-      active: "attributes",
+      active: "story",
       favourite: [],
       loading: false,
       index: 0,
