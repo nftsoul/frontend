@@ -61,7 +61,7 @@
                                                         <span class="caption" style="z-index:5000">Already belongs to a collection</span>
                                                     </v-tooltip>
                                                     <div v-else @click="selectNft(item)" class="link">
-                                                        <v-checkbox v-if="selected.includes(item)" disabled v-model="yes" color="green" dark style="border-radius: 50% !important;"></v-checkbox>
+                                                        <v-checkbox v-if="collectionIds.includes(item.id)" disabled v-model="yes" color="green" dark style="border-radius: 50% !important;"></v-checkbox>
                                                         <v-checkbox v-else disabled v-model="no" color="green" dark style="border-radius: 50% !important;"></v-checkbox>
 
                                                         <!-- <v-checkbox v-else @change="selectNft(item)" color="green" dark :value="false" style="border-radius: 50% !important;"></v-checkbox> -->
@@ -101,7 +101,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import NFTs from "@primenums/solana-nft-tools";
 const web3 = require("@solana/web3.js");
 let solrayz = null;
@@ -131,6 +130,15 @@ export default {
         walletAddress() {
             return this.$route.params.address
         },
+        editing() {
+            return this.$store.state.content.editing
+        },
+        collection() {
+            return this.$store.state.nft.collection
+        },
+        collectionIds() {
+            return this.$store.state.nft.collectionIds
+        }
     },
     watch: {
         walletAddress(newValue, oldValue) {
@@ -152,7 +160,12 @@ export default {
             }
         }
     },
+
     mounted() {
+        if (this.$route.name == 'profile-address-index-exhibit') {
+            this.$store.commit('nft/setCollection',[])
+            this.$store.commit('nft/setCollectionIds',[])
+        }
         this.cluster = process.env.CLUSTER
         this.getAllNftData();
         this.filterNft()
@@ -207,21 +220,21 @@ export default {
             this.loading = false;
         },
         getCollected() {
-            axios
+            this.$axios
                 .get(
-                    process.env.baseUrl + "/all-gallery/" + this.walletAddress
+                    "/all-gallery/" + this.walletAddress
                 )
                 .then((res) => {
-                    for (var x = 0; x < res.data.length; x++) {
-                        for (var y = 0; y < res.data[x].nfts.length; y++) {
-                            this.collected.push(res.data[x].nfts[y].name);
+                    for (var x = 0; x < res.data.galleries.length; x++) {
+                        for (var y = 0; y < res.data.galleries[x].nfts.length; y++) {
+                            this.collected.push(res.data.galleries[x].nfts[y].name);
                         }
                     }
                 })
                 .catch((err) => console.log(err.response));
         },
         createGallery() {
-            if (this.selected.length == 0) {
+            if (this.collection.length == 0) {
                 this.$toast
                     .error("Please select some nfts to create gallery.", {
                         iconPack: "mdi",
@@ -230,7 +243,6 @@ export default {
                     })
                     .goAway(3000);
             } else {
-                this.$store.commit("nft/setCollection", this.selected);
                 this.$router.push({
                     name: 'profile-address-create',
                     params: {
@@ -241,14 +253,11 @@ export default {
         },
 
         selectNft(item) {
-            if (this.selected.includes(item)) {
-                // this.selecting.splice(this.selecting.indexOf(item), 1)
-                this.selected.splice(this.selected.indexOf(item), 1);
+            if (this.collectionIds.includes(item.id)) {
+                this.$store.commit('nft/deselectNft', item)
             } else {
-                this.selected.push(item);
-                // this.selecting.push(item)
+                this.$store.commit('nft/selectNft', item)
             }
-            console.log("selected:", this.selected)
         },
         filterNft() {
             this.searchedNft = []
