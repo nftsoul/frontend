@@ -3,7 +3,7 @@
     <v-card :min-height="screenHeight()" flat color="transparent" class="pt-16">
         <v-container class="pt-16">
             <v-row justify="center">
-                <v-col cols="12" lg="11" md="11">
+                <v-col cols="12" lg="12" md="11">
                     <div class="enclose-border">
                         <v-container v-if="preview != ''">
                             <v-row>
@@ -16,8 +16,27 @@
                                         </template>
                                     </v-img>
                                 </v-col>
-                                <v-col cols="12" lg="4" md="6" class="pr-0">
-                                    <p>{{ preview.gallery_name }}</p>
+                                <v-col cols="12" lg="5" md="6" class="pr-0">
+                                    <v-row no-gutters class="pb-2">
+                                        <p>{{ preview.gallery_name }}</p>
+                                        <v-spacer></v-spacer>
+                                        <ShareNetwork class="mb-2" network="twitter" :url="getShareLink()" :title="preview.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
+
+                                            <div @mouseenter="expand=true" @mouseleave="expand=false">
+                                                <v-row no-gutters>
+                                                    <div class="twitter-share">
+                                                        <v-icon color="white">mdi-twitter</v-icon>
+                                                    </div>
+                                                    <v-expand-y-transition>
+                                                        <div v-show="expand" class="twitter-share-expanded">
+                                                            <small>Share on twitter</small>
+                                                        </div>
+                                                    </v-expand-y-transition>
+                                                </v-row>
+                                            </div>
+                                        </ShareNetwork>
+
+                                    </v-row>
                                     <v-list dense style="box-shadow: none !important" class="px-2">
                                         <v-list-item dense @click="seeProfile()">
                                             <v-list-item-avatar class="my-0 ml-2">
@@ -56,7 +75,7 @@
                                         </v-col>
                                     </v-row>
                                 </v-col>
-                                <v-col cols="12" lg="4" md="6" class="px-3">
+                                <v-col cols="12" lg="3" md="6" class="px-3">
                                     <h5 class="mx-5">Comments</h5>
                                     <div style="border-left:1px solid #500083;height:300px;overflow:auto" class="px-3">
                                         <div v-if="comments.length>0">
@@ -141,7 +160,8 @@ export default {
             streampda: null,
             comments: [],
             loaded: false,
-            preview: ''
+            preview: '',
+            expand: false
         };
     },
     computed: {
@@ -163,6 +183,9 @@ export default {
             ).then(res => {
                 this.preview = res.data.gallery[0]
             })
+        },
+        getShareLink(){
+            return 'https://nftsoul.io/preview/' + this.gallery_id
         },
         getLink(item) {
             if (item.image_link) {
@@ -367,4 +390,6 @@ export default {
 .border-white {
     border: 1px solid white !important;
 }
+
+
 </style>
