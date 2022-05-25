@@ -2,7 +2,8 @@
 export const state = () => ({
   detailDialog: false,
   freshNft: "",
-  selected:''
+  selected:'',
+  editing:false,
 });
 
 export const mutations = {
@@ -14,6 +15,9 @@ export const mutations = {
   },
   setSelected(state,payload){
     state.selected=payload
+  },
+  setEditing(state,payload){
+    state.editing=payload
   }
 };
 

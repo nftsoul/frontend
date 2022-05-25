@@ -112,7 +112,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   data() {
     return {
@@ -133,12 +132,13 @@ export default {
         return window.innerHeight-350;
     },
     getCollections() {
-      axios
+      this.$axios
         .get(
-          process.env.baseUrl+"/get-favourite/" +
+          "/get-favourite/" +
             this.walletAddress
         )
         .then((res) => {
+          console.log('fav:',res.data)
           this.collections = res.data;
           if (res.data.length == 0) {
             this.noData = true;

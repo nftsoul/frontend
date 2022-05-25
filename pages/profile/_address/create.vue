@@ -8,13 +8,13 @@
                         <label for="name" class="text--disabled">Gallery Name</label>
                         <v-textarea v-model="name" :rules="[validRules.required,validRules.lengthMin3]" id="name" rows="1" dense outlined placeholder="e.g. 'My Best NFT'"></v-textarea>
 
-                        <label for="about" class="text--disabled">Short story about your collection</label>
-                        <v-textarea v-model="about" :rules="[validRules.required,validRules.lengthMax100]" id="about" rows="3" auto-grow background-color="#030537" dense outlined placeholder="e.g.'The fact that makes this collection worth watch...'"></v-textarea>
+                        <label for="about" class="text--disabled">Short story about your Gallery</label>
+                        <v-textarea v-model="about" :rules="[validRules.required,validRules.lengthMax100]" id="about" rows="3" auto-grow background-color="#030537" dense outlined placeholder="e.g.'The fact that makes this gallery worth watch...'"></v-textarea>
 
                         <label for="type" class="text--disabled">Select</label>
                         <v-radio-group class="py-0" v-model="premium" row dense id="type">
-                            <v-radio label="Premium Collection" color="#c202d3" :value="true"></v-radio>
-                            <v-radio label="Free Collection" color="#c202d3" :value="false"></v-radio>
+                            <v-radio label="Premium Gallery" color="#c202d3" :value="true"></v-radio>
+                            <v-radio label="Free Gallery" color="#c202d3" :value="false"></v-radio>
                         </v-radio-group>
 
                         <label for="price" v-if="premium" class="text--disabled">Price</label>
@@ -67,30 +67,49 @@
                 </div>
             </v-col>
             <v-spacer></v-spacer>
-            <v-col cols="12" lg="3" md="3">
-                <p class="caption dark-text mb-0">Featured Gallery Image</p>
+            <v-col cols="12" lg="5" md="3" align="center">
                 <p>
-                    <small class="text--disabled">Choose your file to upload</small>
+                    <small class="text--disabled">Choose your featured gallery image</small>
                 </p>
                 <div class="upload-box pa-3">
-                    <v-img :src="src"></v-img>
+                    <v-img :src="src" max-width="150"></v-img>
                 </div>
-                <div class="mx-3">
+                <div class="enclose-border ma-3">
+                    <v-row no-gutters>
+                        <small>Total: {{collection.length}} items</small>
+                        <v-spacer></v-spacer>
+                        <v-menu offset-y>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn x-small text dark v-bind="attrs" v-on="on">
+                                    <small>More Actions</small>
+                                    <v-icon small>mdi-chevron-down</v-icon>
+                                </v-btn>
+                            </template>
+                            <v-list dense>
+                                <v-list-item @click="addDialog=true">
+                                    <v-list-item-title>Add Nfts</v-list-item-title>
+                                </v-list-item>
+                                <v-list-item @click="deleteDialog = true">
+                                    <v-list-item-title>Delete Nfts</v-list-item-title>
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
+                    </v-row>
                     <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
                             <div v-for="(item, i) in collection" :key="i" class="py-3" @click="selectImage(item)">
-                                <v-img :src="item.image" class="mx-auto" width="50" height="50"></v-img>
+                                <v-img :src="item.image" class="mx-auto" width="75" height="75"></v-img>
                             </div>
                         </VueSlickCarousel>
                     </client-only>
                 </div>
-                <p class="caption white--text mb-2">Note:</p>
-                <small class="dark-text">Service fee:2%</small><br />
+                <!-- <p class="caption white--text mb-2 text-left">Note:</p>
+                <small class="dark-text text-left">Service fee:2%</small><br /> -->
                 <!-- <small class="dark-text" sty>You will receive: 25.00eth $50,00</small> -->
             </v-col>
         </v-row>
     </v-container>
-
+    <!-- submit confirm -->
     <v-dialog v-model="confirmDialog" max-width="400" persistent>
         <div class="dark-bg">
             <v-card outlined class="rounded-lg pa-4">
@@ -116,6 +135,7 @@
         </div>
 
     </v-dialog>
+    <!-- end submit confirm -->
 
     <!-- approval dialog -->
     <v-dialog v-model="approvalDialog" max-width="400" persistent>
@@ -132,10 +152,81 @@
         </div>
     </v-dialog>
     <!-- end approval dialog -->
+
+    <!-- delete nft -->
+    <v-dialog v-model="deleteDialog" max-width="600" persistent>
+        <v-card color="background">
+            <v-card-title>Remove Nfts</v-card-title>
+            <v-card-text>
+                <v-container>
+                    <v-row>
+                        <v-col cols="6" v-for="(item,i) in collection" :key="i">
+                            <v-card class="outer-card rounded-lg" style="height: 55px;">
+                                <div class="inner-card pa-1 rounded-lg" style="height: 53px;">
+                                    <v-list dense style="
+                        background-color: transparent;
+                        box-shadow: none !important;
+                      " class="py-0">
+                                        <v-list-item class="px-0">
+                                            <v-list-item-avatar tile class="rounded-lg my-0">
+                                                <v-img :src="item.image" :lazy-src="item.image">
+                                                    <template v-slot:placeholder>
+                                                        <v-row class="fill-height ma-0" align="center" justify="center">
+                                                            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                                        </v-row>
+                                                    </template>
+                                                </v-img>
+                                            </v-list-item-avatar>
+                                            <v-list-item-content>
+                                                <v-list-item-title>{{ item.name }}</v-list-item-title>
+                                            </v-list-item-content>
+                                            <v-list-item-action>
+                                                <div v-if="collection.includes(item)" @click="$store.commit('nft/deselectNft', item)">
+                                                    <v-checkbox color="green" disabled v-model="yes" dark></v-checkbox>
+                                                </div>
+                                                <div v-else @click="$store.commit('nft/selectNft', item)">
+                                                    <v-checkbox color="green" v-model="no" disabled dark></v-checkbox>
+                                                </div>
+
+                                            </v-list-item-action>
+                                        </v-list-item>
+                                    </v-list>
+                                </div>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn small outlined dark @click="deleteDialog=false">Done</v-btn>
+                <v-spacer></v-spacer>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <!-- end delete nft -->
+
+    <!-- add nft -->
+    <v-dialog v-model="addDialog" max-width="1200" persistent>
+        <v-card color="background">
+            <p class="text-center">Add Nfts</p>
+            <v-card-text style="max-height:500px;overflow:hidden">
+                <Exhibit />
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn small outlined dark @click="addDialog=false">Done</v-btn>
+                <v-spacer></v-spacer>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <!-- end delete nft -->
+
 </div>
 </template>
 
 <script>
+import Exhibit from '../../../components/profile/exhibit.vue'
 let zebec = null;
 if (process.client) {
     zebec = require("@zebec-protocol/stream");
@@ -143,6 +234,9 @@ if (process.client) {
 const web3 = require("@solana/web3.js");
 
 export default {
+    components: {
+        Exhibit
+    },
     layout: "user",
     data() {
         return {
@@ -178,6 +272,7 @@ export default {
                 slidesToShow: 3,
                 slidesToScroll: 1,
                 arrows: true,
+                rows: 2
             },
             slickSetting2: {
                 dots: false,
@@ -193,7 +288,12 @@ export default {
             priceDisabled: false,
             premium: true,
             selectedIndex: 0,
-            confirmDialog: false
+            confirmDialog: false,
+            deleteDialog: false,
+            templist: [],
+            yes: true,
+            no: true,
+            addDialog: false
         };
     },
     computed: {
@@ -203,8 +303,24 @@ export default {
         walletAddress() {
             return this.$route.params.address
         },
+        selected() {
+            return this.$store.state.content.selected
+        },
+        editing() {
+            return this.$store.state.content.editing
+        }
     },
     watch: {
+        collection() {
+            if (this.collection.length == 0) {
+                this.$router.push({
+                    name: 'profile-address-index-exhibit',
+                    params: {
+                        address: this.walletAddress
+                    }
+                })
+            }
+        },
         premium() {
             if (this.premium == true) {
                 this.priceDisabled = true
@@ -213,6 +329,10 @@ export default {
             }
             this.price = ""
         }
+    },
+    beforeRouteLeave(to, from, next) {
+        this.$store.commit("content/setEditing", false);
+        next();
     },
     mounted() {
         if (this.collection.length > 0) {
@@ -226,10 +346,24 @@ export default {
             })
         }
         this.getSolValue()
-
+        if (this.editing == true) {
+            this.setFields()
+        }
         // this.setAttributes();
+                    console.log('create:',this.collection)
+
     },
     methods: {
+        addNewNft() {
+
+        },
+        setFields() {
+            this.name = this.selected.gallery_name
+            this.about = this.selected.description
+            this.premium = this.selected.premium
+            this.src = this.selected.image
+            this.price = this.selected.price
+        },
         next() {
             this.$refs.carousel.next()
             this.selectedIndex += 1
@@ -326,52 +460,64 @@ export default {
                     );
                     var available = parseFloat(lamports * 0.000000001).toFixed(5);
                     // console.log('total charge')
+                    if (this.editing == false) {
+                        if (total_charge < available) {
+                            if (this.premium == false) {
+                                this.price = 0
+                            }
+                            this.approvalDialog = true
+                            let depositResponse = await zeb.deposit(depositData);
+                            if (depositResponse.status == "success") {
+                                this.approvals -= 1
+                                let currentTime = Math.floor(Date.now() / 1000) + 120
+                                let futureTime = currentTime + 1200;
+                                let platformResponse = await zeb.init({
+                                    sender: this.walletAddress,
+                                    receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
+                                    amount: 0.01,
+                                    start_time: currentTime,
+                                    end_time: futureTime,
+                                });
+                                if (platformResponse.status == "success") {
 
-                    if (total_charge < available) {
-                        if(this.premium==false){
-                            this.price=0
-                        }
-                        this.approvalDialog = true
-                        let depositResponse = await zeb.deposit(depositData);
-                        if (depositResponse.status == "success") {
-                            this.approvals -= 1
-                            let currentTime = Math.floor(Date.now() / 1000) + 120
-                            let futureTime = currentTime + 1200;
-                            let platformResponse = await zeb.init({
-                                sender: this.walletAddress,
-                                receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-                                amount: 0.01,
-                                start_time: currentTime,
-                                end_time: futureTime,
-                            });
-                            if (platformResponse.status == "success") {
-
-                                this.$axios
-                                    .post(process.env.baseUrl + "/create-gallery", {
-                                        'user_id': this.walletAddress,
-                                        'gallery_name': this.name,
-                                        'nfts': this.collection,
-                                        'image': this.src,
-                                        'description': this.about,
-                                        'price': this.price,
-                                        'premium': this.premium
-                                    })
-                                    .then((res) => {
-                                        this.creating = false;
-                                        this.approvalDialog = false
-                                        this.$toast
-                                            .success("Your gallery has been created successfully.", {
-                                                iconPack: "mdi",
-                                                icon: "mdi-image",
-                                                theme: "outline",
-                                            })
-                                            .goAway(3000);
-                                        this.$store.commit("content/setSelected", res.data);
-                                        this.$router.push({
-                                            name: "profile-preview",
-                                        });
-                                    })
-                                    .catch((err) => console.log(err.response));
+                                    this.$axios
+                                        .post(process.env.baseUrl + "/create-gallery", {
+                                            'user_id': this.walletAddress,
+                                            'gallery_name': this.name,
+                                            'nfts': this.collection,
+                                            'image': this.src,
+                                            'description': this.about,
+                                            'price': this.price,
+                                            'premium': this.premium
+                                        })
+                                        .then((res) => {
+                                            this.creating = false;
+                                            this.approvalDialog = false
+                                            this.$toast
+                                                .success("Your gallery has been created successfully.", {
+                                                    iconPack: "mdi",
+                                                    icon: "mdi-image",
+                                                    theme: "outline",
+                                                })
+                                                .goAway(3000);
+                                            this.$store.commit("content/setSelected", res.data.gallery);
+                                            this.$router.push({
+                                                name: "profile-preview",
+                                            });
+                                        })
+                                        .catch((err) => console.log(err.response));
+                                } else {
+                                    this.creating = false;
+                                    this.approvalDialog = false
+                                    this.approvals = 2
+                                    this.$toast
+                                        .error("User rejected the request", {
+                                            iconPack: "mdi",
+                                            icon: "mdi-cancel",
+                                            theme: "outline",
+                                        })
+                                        .goAway(3000);
+                                }
                             } else {
                                 this.creating = false;
                                 this.approvalDialog = false
@@ -386,25 +532,17 @@ export default {
                             }
                         } else {
                             this.creating = false;
-                            this.approvalDialog = false
-                            this.approvals = 2
                             this.$toast
-                                .error("User rejected the request", {
+                                .error("Insufficient fund.", {
                                     iconPack: "mdi",
-                                    icon: "mdi-cancel",
+                                    icon: "mdi-wallet",
                                     theme: "outline",
                                 })
                                 .goAway(3000);
                         }
                     } else {
-                        this.creating = false;
-                        this.$toast
-                            .error("Insufficient fund.", {
-                                iconPack: "mdi",
-                                icon: "mdi-wallet",
-                                theme: "outline",
-                            })
-                            .goAway(3000);
+                        console.log('updating code')
+                        this.creating = false
                     }
 
                 } else {
@@ -427,7 +565,7 @@ export default {
 
 <style lang="css">
 .upload-box {
-    width: 250px;
+    width: 175px;
     min-height: 200px;
     border: 1px dashed #c202d3;
 }
