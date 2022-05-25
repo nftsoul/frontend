@@ -350,7 +350,6 @@ export default {
             this.setFields()
         }
         // this.setAttributes();
-        console.log('create:', this.collection)
 
     },
     methods: {

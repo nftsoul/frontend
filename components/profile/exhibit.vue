@@ -20,10 +20,10 @@
 
                                 </div>
                                 <v-spacer></v-spacer>
-                                <div class="btn-gradient" style="width:150px;height:40px" @click="createGallery">
+                                <div v-if="editing==false" class="btn-gradient" style="width:150px;height:40px" @click="createGallery">
 
                                 </div>
-                                <div class="body-2 mt-2" style="margin-left:-135px">
+                                <div v-if="editing==false" class="body-2 mt-2" style="margin-left:-135px">
                                     <v-icon>mdi-plus</v-icon>
                                     <span>Add to Gallery</span>
                                 </div>
