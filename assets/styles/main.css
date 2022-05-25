@@ -161,4 +161,24 @@ background: #000229
   padding: 0 10px;
   font-size: 12px;
 }
+.twitter-share {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: rgb(29, 161, 242);
+  padding-left: 6px;
+  padding-top: 5px;
+  margin-top: -3px;
+  z-index: 500
+}
 
+.twitter-share-expanded {
+  width: 130px;
+  height: 30px;
+  color: rgb(29, 161, 242);
+  border-radius: 20px;
+  background-color: white;
+  font-weight: bold;
+  padding-left: 25px;
+  margin-left: -20px;
+}
