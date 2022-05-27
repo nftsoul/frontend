@@ -10,12 +10,14 @@
 
                         <label for="about" class="text--disabled">Short story about your Gallery</label>
                         <v-textarea v-model="about" :rules="[validRules.required,validRules.lengthMax100]" id="about" rows="3" auto-grow background-color="#030537" dense outlined placeholder="e.g.'The fact that makes this gallery worth watch...'"></v-textarea>
-
+                        
+                        <div v-if="!editing">
                         <label for="type" class="text--disabled">Select</label>
                         <v-radio-group class="py-0" v-model="premium" row dense id="type">
                             <v-radio label="Premium Gallery" color="#c202d3" :value="true"></v-radio>
                             <v-radio label="Free Gallery" color="#c202d3" :value="false"></v-radio>
                         </v-radio-group>
+                        </div>
 
                         <label for="price" v-if="premium" class="text--disabled">Price</label>
                         <v-text-field v-model="price" type="number" v-if="premium" :rules="[validRules.required, validRules.positive,validRules.sollimit]" :hint="getHint()" persistent-hint id="price" filled background-color="#030537" dense outlined placeholder="e.g. '0.01 SOL'"></v-text-field>
@@ -62,7 +64,7 @@
                         </v-row>
                     </v-form>
                     <v-row>
-                        <v-btn class="mx-auto my-5 btn-exhibit" @click="createGallery()" :loading="creating">Create Gallery</v-btn>
+                        <v-btn class="mx-auto my-5 btn-exhibit" @click="createGallery()" :loading="creating">{{btnText}}</v-btn>
                     </v-row>
                 </div>
             </v-col>
@@ -280,7 +282,7 @@ export default {
                 speed: 500,
                 slidesToShow: 1,
                 slidesToScroll: 1,
-                arrows: true,
+                arrows: false,
             },
             rankedNfts: [],
             approvalDialog: false,
@@ -293,7 +295,8 @@ export default {
             templist: [],
             yes: true,
             no: true,
-            addDialog: false
+            addDialog: false,
+            btnText:'Create Gallery'
         };
     },
     computed: {
@@ -335,6 +338,9 @@ export default {
         next();
     },
     mounted() {
+        if(this.editing){
+            this.btnText='Update'
+        }
         if (this.collection.length > 0) {
             this.src = this.collection[0].image;
         } else {
@@ -541,7 +547,7 @@ export default {
                         }
                     } else {
                         this.$axios
-                            .post("/create-gallery/"+this.selected._id, {
+                            .patch("/gallery/"+this.selected._id, {
                                 'user_id': this.walletAddress,
                                 'gallery_name': this.name,
                                 'nfts': this.collection,
@@ -560,7 +566,7 @@ export default {
                                         theme: "outline",
                                     })
                                     .goAway(3000);
-                                this.$store.commit("content/setSelected", res.data.gallery);
+                                this.$store.commit("content/setSelected", res.data.result);
                                 this.$router.push({
                                     name: "profile-preview",
                                 });

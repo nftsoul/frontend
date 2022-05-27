@@ -128,7 +128,7 @@ export default {
                 )
                 .then((res) => {
                     this.collections = res.data.galleries
-                    if (res.data.length == 0) {
+                    if (this.collections.length == 0) {
                         this.noData = true;
                     }
                 })
