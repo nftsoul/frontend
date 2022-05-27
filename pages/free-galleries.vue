@@ -28,13 +28,13 @@
                                             <v-list dense class="py-1">
                                                 <v-list-item dense class="pa-0">
                                                     <v-list-item-avatar class="my-0 ml-2">
-                                                            <v-img v-if="item.created_by.image_link" :src="item.created_by.image_link"></v-img>
-                                                            <v-icon v-else>mdi-account-tie</v-icon>
-                                                        </v-list-item-avatar>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title class="ml-n2" v-if="item.created_by.name">{{item.created_by.name.slice(0,10)}}</v-list-item-title>
-                                                            <v-list-item-title class="ml-n2" v-else>{{item.user_id.slice(0, 5)}}</v-list-item-title>
-                                                        </v-list-item-content>
+                                                        <v-img v-if="item.created_by.image_link" :src="item.created_by.image_link"></v-img>
+                                                        <v-icon v-else>mdi-account-tie</v-icon>
+                                                    </v-list-item-avatar>
+                                                    <v-list-item-content>
+                                                        <v-list-item-title class="ml-n2" v-if="item.created_by.name">{{item.created_by.name.slice(0,10)}}</v-list-item-title>
+                                                        <v-list-item-title class="ml-n2" v-else>{{item.user_id.slice(0, 5)}}</v-list-item-title>
+                                                    </v-list-item-content>
                                                 </v-list-item>
                                             </v-list>
                                         </v-card>
@@ -42,10 +42,25 @@
                         item.gallery_name
                       }}</v-card-subtitle>
                                         <v-row>
-                                            <div class="prem-sup-card rounded-lg" v-for="(nft, i) in item.nfts" :key="i">
-                                                <span v-if="i < 4">{{ nft.name }}</span>
+                                            <div class="prem-sup-card rounded-lg px-2" v-for="(nft, i) in item.nfts.slice(0,4)" :key="i">
+                                                <small v-if="nft.name.length>10">{{ nft.name.slice(0,10) }}..</small>
+                                                <small v-else>{{ nft.name }}</small>
                                             </div>
                                         </v-row>
+
+                                        <br>
+
+                                        <v-col class="pa-0">
+                                            <v-divider class="mb-1"></v-divider>
+                                            <v-row no-gutters>
+                                                <small class="mr-1">{{item.views}}</small>
+                                                <v-icon small>mdi-eye</v-icon>
+                                                <v-spacer></v-spacer>
+                                                <small class="mr-1">{{item.favourites}}</small>
+                                                <v-icon small>mdi-heart-outline</v-icon>
+                                            </v-row>
+
+                                        </v-col>
                                     </div>
                                 </div>
                             </v-card>
@@ -80,7 +95,7 @@ export default {
             limit: 20,
             total: 0,
             loading: true,
-            pages:1
+            pages: 1
         };
     },
     mounted() {
@@ -100,10 +115,10 @@ export default {
                 )
                 .then((res) => {
                     this.total = res.data.freeGalleryCount
-                     if (this.total % 20 == 0) {
+                    if (this.total % 20 == 0) {
                         this.page = this.total / 20
                     } else {
-                        this.pages = Math.floor(this.total / 20)+1
+                        this.pages = Math.floor(this.total / 20) + 1
                     }
                     this.nfts = res.data.free;
                     this.loading = false;
