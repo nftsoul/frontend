@@ -27,7 +27,7 @@
                                         <div class="inner-card">
 
                                             <v-img :src="item.image" :lazy-src="item.image" class="mx-auto" width="220" height="220">
-                                                <v-expand-transition>
+                                                <v-expand-transition v-if="walletAddress == $route.params.address">
                                                     <div v-if="hover" class="d-flex transition-fast-in-fast-out dark-bg darken-2 v-card--reveal white--text" style="height: 100%;">
                                                         <v-btn small color="background" class="mr-1" @click="editItem(item)" :loading="editing">
                                                             <v-icon x-small>mdi-pencil</v-icon>
@@ -126,7 +126,7 @@ export default {
     },
     computed: {
         walletAddress() {
-            return this.$route.params.address
+            return this.$store.state.wallet.walletAddress
         },
     },
     mounted() {
@@ -139,7 +139,7 @@ export default {
         getCollections() {
             this.$axios
                 .get(
-                    "/all-gallery/" + this.walletAddress
+                    "/all-gallery/" + this.$route.params.address
                 )
                 .then((res) => {
                     this.collections = res.data.galleries
