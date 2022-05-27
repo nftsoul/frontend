@@ -63,20 +63,23 @@
                                                 </v-list>
                                             </v-card>
                                             <v-card-subtitle class="text-left">{{item.gallery_name.slice(0,20)}}<span v-if="item.gallery_name.length>20">....</span></v-card-subtitle>
+
                                             <v-row>
-                                                <div class="prem-sup-card rounded-lg" v-for="(nft, i) in item.nfts" :key="i">
-                                                    <span v-if="i < 4">{{ nft.name }}</span>
+                                                <div class="prem-sup-card rounded-lg px-2" v-for="(nft, i) in item.nfts.slice(0,4)" :key="i">
+                                                    <small v-if="nft.name.length>10">{{ nft.name.slice(0,10) }}..</small>
+                                                    <small v-else>{{ nft.name }}</small>
                                                 </div>
                                             </v-row>
+
                                             <br>
 
                                             <v-col class="pa-0">
                                                 <v-divider class="mb-1"></v-divider>
                                                 <v-row no-gutters>
-                                                    <small class="mr-1">25</small>
+                                                    <small class="mr-1">{{item.views}}</small>
                                                     <v-icon small>mdi-eye</v-icon>
                                                     <v-spacer></v-spacer>
-                                                    <small class="mr-1">40</small>
+                                                    <small class="mr-1">{{item.favourites}}</small>
                                                     <v-icon small>mdi-heart-outline</v-icon>
                                                 </v-row>
 
