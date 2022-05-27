@@ -185,7 +185,7 @@ export default {
             })
         },
         getShareLink(){
-            return 'https://nftsoul.io/preview/' + this.gallery_id
+            return process.env.SITE_URL+'/preview/' + this.gallery_id
         },
         getLink(item) {
             if (item.image_link) {

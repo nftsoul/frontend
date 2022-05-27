@@ -134,7 +134,6 @@ border-radius: 7px;
   width: 100%;
   padding: 20px;
   height: 446px;
-  overflow: hidden;
 }
 .theme--dark.v-skeleton-loader .v-skeleton-loader__article{
 background: #000229

@@ -75,9 +75,9 @@
                                                     <v-card outlined class="rounded-lg pa-2">
                                                         <v-row no-gutters>
                                                             <v-chip dark small :color="getColor('story')" @click="active = 'story'">Nft Story</v-chip>
-                                                            <v-chip small dark :color="getColor('attributes')" @click="active = 'attributes'">Attributes</v-chip>
+                                                            <v-chip small dark class="mx-2" :color="getColor('attributes')" @click="active = 'attributes'">Attributes</v-chip>
 
-                                                            <v-chip dark small class="mx-2" :color="getColor('details')" @click="active = 'details'">Details</v-chip>
+                                                            <v-chip dark small  :color="getColor('details')" @click="active = 'details'">Details</v-chip>
 
                                                             <v-spacer></v-spacer>
                                                         </v-row>
@@ -187,7 +187,7 @@
                     </v-row>
                     <v-row no-gutters class="px-5 pb-5">
                         <v-spacer></v-spacer>
-                        <v-btn small rounded color="#A0A0A0" dark class="mt-n3" :loading="commenting" @click="makeComment()">Post a comment</v-btn>
+                        <v-btn small rounded dark class="mt-n3 connect-wallet" :loading="commenting" @click="makeComment()">Post a comment</v-btn>
                     </v-row>
                 </v-card>
             </v-col>
@@ -269,7 +269,7 @@ export default {
     },
     methods: {
       getShareLink(){
-            return 'https://nftsoul.io/preview/' + this.gallery_id
+            return process.env.SITE_URL+'/preview/' + this.gallery_id
         },
         getStream() {
             this.$axios

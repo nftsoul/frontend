@@ -45,7 +45,7 @@
                             <div v-for="(item, i) in popular" :key="i">
                                 <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="$router.push({name:'preview-id',params:{id:item._id}})">
                                     <div class="outer-card">
-                                        <div class="inner-card">
+                                        <div class="inner-card ">
                                             <v-img :src="item.image" class="mx-auto" width="220" height="220"></v-img>
 
                                             <v-card class="rounded-pill mt-n6" max-width="150">
@@ -62,14 +62,26 @@
                                                     </v-list-item>
                                                 </v-list>
                                             </v-card>
-                                            <v-card-subtitle class="text-left">{{
-                          item.gallery_name
-                        }}</v-card-subtitle>
+                                            <v-card-subtitle class="text-left">{{item.gallery_name.slice(0,20)}}<span v-if="item.gallery_name.length>20">....</span></v-card-subtitle>
                                             <v-row>
                                                 <div class="prem-sup-card rounded-lg" v-for="(nft, i) in item.nfts" :key="i">
                                                     <span v-if="i < 4">{{ nft.name }}</span>
                                                 </div>
                                             </v-row>
+                                            <br>
+
+                                            <v-col class="pa-0">
+                                                <v-divider class="mb-1"></v-divider>
+                                                <v-row no-gutters>
+                                                    <small class="mr-1">25</small>
+                                                    <v-icon small>mdi-eye</v-icon>
+                                                    <v-spacer></v-spacer>
+                                                    <small class="mr-1">40</small>
+                                                    <v-icon small>mdi-heart-outline</v-icon>
+                                                </v-row>
+
+                                            </v-col>
+
                                         </div>
                                     </div>
                                 </v-card>
@@ -115,14 +127,11 @@ export default {
         duration() {
             if (this.duration == 'one') {
                 this.getCollections('24hrs')
-            }
-            else if(this.duration=='seven'){
+            } else if (this.duration == 'seven') {
                 this.getCollections('7days')
-            }
-            else if(this.duration=='thirty'){
+            } else if (this.duration == 'thirty') {
                 this.getCollections('30days')
-            }
-            else{
+            } else {
                 this.getCollections()
             }
         }
@@ -134,7 +143,8 @@ export default {
         getCollections(item) {
             this.$axios
                 .get('/all-trending?page=1&limit=4', {
-                    query: item})
+                    query: item
+                })
                 .then((res) => {
                     this.popular = res.data.trending
                 })
