@@ -1,13 +1,13 @@
 <template>
 <div>
     <LandingIntro />
-    <LandingPopular />
+    <!-- <LandingPopular /> -->
     <LandingRecent />
-    <LandingFree />
+    <!-- <LandingFree />
     <LandingPremium />
     <LandingWorking />
     <LandingPartner />
-    <CommonProfile />
+    <CommonProfile /> -->
 </div>
 </template>
 
