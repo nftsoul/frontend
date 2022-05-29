@@ -28,7 +28,7 @@
                         </template>
                     </v-img>
                 </client-only>
-                <div v-if="profile != null" class="mb-3">
+                <div v-if="profile != null" class="my-3">
                     <p class="text-h6" v-if="profile.name">{{profile.name}}</p>
 
                     <v-row justify="center py-3">
