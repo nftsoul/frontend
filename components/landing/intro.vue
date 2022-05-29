@@ -1,6 +1,6 @@
 <template>
 <v-card  :src="require('~/assets/images/abstract-flowing.jpg')" flat>
-    <v-img :height="screenHeight()" :lazy-src="require('~/assets/images/banner.png')" :src="require('~/assets/images/main-banner.png')">
+    <v-img :height="screenHeight()" :lazy-src="require('~/assets/images/dark-banner.png')" :src="require('~/assets/images/dark-banner.png')">
         <v-container fluid class="py-16">
             <v-row class="py-16">
                 <v-col cols="6" lg="11" md="6" class="py-lg-16 px-lg-16">
