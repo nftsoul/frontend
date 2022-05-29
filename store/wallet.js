@@ -26,6 +26,7 @@ export const actions = {
       try {
         var res = await window.solana.connect();
         context.commit("setWalletAddress", res.publicKey.toString());
+        context.dispatch("getProfile", res.publicKey.toString());
         this.$toast
           .success("Phantom wallet successfully connected.", {
             iconPack: "mdi",
@@ -56,21 +57,18 @@ export const actions = {
   },
   getProfile(context, address) {
     // fetch profile if not available create new and then fetch
-    let wallet = context.state.walletAddress;
     this.$axios
       .get(process.env.API_URL + "/profile/" + address)
       .then((res) => {
-        if (wallet == address) {
-          if (res.data.length == 0) {
-            this.$axios
-              .post(process.env.API_URL + "/profile?wallet_address=" + wallet)
-              .then((res) => {
-                context.commit("setProfile", res.data.data);
-              })
-              .catch((err) => {
-                console.log(err.response);
-              });
-          }
+        if (res.data.length == 0) {
+          this.$axios
+            .post(process.env.API_URL + "/profile?wallet_address=" + address)
+            .then((res) => {
+              context.commit("setProfile", res.data.data);
+            })
+            .catch((err) => {
+              console.log(err.response);
+            });
         } else {
           context.commit("setProfile", res.data[0]);
         }
