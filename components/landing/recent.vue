@@ -1,51 +1,18 @@
 <template>
 <div class="dark-bg">
     <v-container>
-        <v-row justify="center" class="py-5">
-            <div class="line-box mt-3"></div>
-            <p class="grand-title-text mx-3">Our Top Galleries</p>
-            <div class="line-box mt-3"></div>
-        </v-row>
-
         <div class="enclose-border">
-            <v-row no-gutters>
-                <v-spacer></v-spacer>
-                <v-col cols="12" lg="4" md="6" align="center">
-                    <p class="title">Popular Collections</p>
-                </v-col>
-                <v-col cols="12" lg="4" md="6">
-                    <v-row no-gutters>
-
-                        <small class="float-left mt-2">In Last:</small>
-                        <v-btn-toggle v-model="duration" dense tile group dark color="#FE87FF">
-                            <v-btn small value="one">
-                                <small>24 Hours</small>
-                            </v-btn>
-
-                            <v-btn small value="seven">
-                                <small>7 Days</small>
-                            </v-btn>
-
-                            <v-btn small value="thirty">
-                                <small>30 Days</small>
-                            </v-btn>
-
-                            <v-btn small value="all">
-                                <small>All Time</small>
-                            </v-btn>
-                        </v-btn-toggle>
-                    </v-row>
-                </v-col>
+            <v-row justify="center">
+                <p class="title">New Galleries</p>
             </v-row>
-
-            <v-row justify="center" v-if="popular.length > 0">
+            <v-row justify="center" v-if="recent.length > 0">
                 <v-col cols="12" align="center">
                     <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
-                            <div v-for="(item, i) in popular" :key="i">
+                            <div v-for="(item, i) in recent" :key="i">
                                 <v-card color="transparent" flat class="pa-5" max-width="300" height="470" @click="$router.push({name:'preview-id',params:{id:item._id}})">
                                     <div class="outer-card">
-                                        <div class="inner-card ">
+                                        <div class="inner-card">
                                             <v-img :src="item.image" class="mx-auto" width="220" height="220"></v-img>
 
                                             <v-card class="rounded-pill mt-n6" max-width="150">
@@ -62,11 +29,12 @@
                                                     </v-list-item>
                                                 </v-list>
                                             </v-card>
-                                            <v-card-subtitle class="text-left">{{item.gallery_name.slice(0,20)}}<span v-if="item.gallery_name.length>20">....</span></v-card-subtitle>
-
+                                            <v-card-subtitle class="text-left">{{
+                          item.gallery_name
+                        }}</v-card-subtitle>
                                             <v-row>
                                                 <div class="prem-sup-card rounded-lg px-2" v-for="(nft, i) in item.nfts.slice(0,4)" :key="i">
-                                                    <small v-if="nft.name.length>10">{{ nft.name.slice(0,10) }}..</small>
+                                                    <small v-if="nft.name.length>10">{{nft.name.slice(0,10)}}..</small>
                                                     <small v-else>{{ nft.name }}</small>
                                                 </div>
                                             </v-row>
@@ -84,7 +52,6 @@
                                                 </v-row>
 
                                             </v-col>
-
                                         </div>
                                     </div>
                                 </v-card>
@@ -94,7 +61,7 @@
                 </v-col>
                 <v-col cols="12" align="right">
                     <v-row justify="end">
-                        <div class="outer-btn" @click="$router.push('/popular-galleries')">
+                        <div class="outer-btn" @click="$router.push('/new-galleries')">
                             <div class="inner-btn">
                                 <p class="mt-n1 mr-3" style="font-size: 14px">View All</p>
                             </div>
@@ -116,9 +83,7 @@
 export default {
     data() {
         return {
-            trending: [],
-            popular: [],
-            duration: 'one',
+            recent: [],
         };
     },
     computed: {
@@ -126,30 +91,15 @@ export default {
             return this.$store.state.plugins.slickSetting;
         },
     },
-    watch: {
-        duration() {
-            if (this.duration == 'one') {
-                this.getCollections('24hrs')
-            } else if (this.duration == 'seven') {
-                this.getCollections('7days')
-            } else if (this.duration == 'thirty') {
-                this.getCollections('30days')
-            } else {
-                this.getCollections()
-            }
-        }
-    },
     mounted() {
-        this.getCollections('24hrs');
+        this.getCollections();
     },
     methods: {
-        getCollections(item) {
+        getCollections() {
             this.$axios
-                .get('/all-trending?page=1&limit=4', {
-                    query: item
-                })
+                .get('/new-galleries?page=1&limit=4')
                 .then((res) => {
-                    this.popular = res.data.trending
+                    this.recent = res.data.galleries
                 })
                 .catch((err) => console.log(err.response));
         },

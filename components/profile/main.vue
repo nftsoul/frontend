@@ -28,7 +28,7 @@
                         </template>
                     </v-img>
                 </client-only>
-                <div v-if="profile != null">
+                <div v-if="profile != null" class="mb-3">
                     <p class="text-h6" v-if="profile.name">{{profile.name}}</p>
 
                     <v-row justify="center py-3">
@@ -52,7 +52,7 @@
 
                 </div>
 
-                <v-row justify="center" v-if="walletAddress == $route.params.address">
+                <v-row justify="center" v-if="walletAddress == $route.params.address" no-gutters class="mt-n5">
                     <v-col cols="3" align="center">
                         <div class="btn-gradient mt-5" @click="showProfileDialog">
 
@@ -68,7 +68,7 @@
 
                 </v-row>
 
-                <ShareNetwork class="mb-2" network="twitter" :url="getProfileLink()" title="NFTsoul..Exhibit and earn from your NFT Collections" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
+                <ShareNetwork network="twitter" :url="getProfileLink()" title="NFTsoul..Exhibit and earn from your NFT Collections" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
                     <v-btn fab color="#1da1f2" small dark class="rounded-circle mr-n8" style="z-index:500;">
                         <v-icon>
                             mdi-twitter
@@ -157,6 +157,8 @@ export default {
         }
     },
     mounted() {
+        this.$store.commit('wallet/setProfile',null)
+        this.$store.dispatch('wallet/getProfile',this.$route.params.address)
         this.connect = new web3.Connection(web3.clusterApiUrl(process.env.CLUSTER), 'confirmed');
         this.getAccountInfo()
         // this.auth()
@@ -260,7 +262,7 @@ export default {
     padding: 3px;
     border-radius: 7px;
     /*1*/
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     /*2*/
     background: linear-gradient(45deg, #1905DA, #FE87FF) border-box;
     /*3*/
