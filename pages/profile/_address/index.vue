@@ -25,8 +25,8 @@
                 </v-tabs>
             </v-col>
             <v-btn class="btn-exhibit px-5 mt-8" v-if="creating==false" @click="$router.push({name:'profile-address-index-exhibit',params:{'address':walletAddress}})">
-                    Create Gallery
-                </v-btn>
+                Create Gallery
+            </v-btn>
         </v-row>
     </v-container>
     <NuxtChild />
@@ -43,22 +43,26 @@ export default {
         }
     },
     computed: {
-        userAddress(){
+        userAddress() {
             return this.$route.params.address
         },
         walletAddress() {
             return this.$store.state.wallet.walletAddress
         },
-        creating(){
+        creating() {
             return this.$store.state.nft.creating
         }
     },
-    
+    mounted() {
+        this.$store.dispatch('wallet/getProfile', this.$route.params.address)
+    }
+
 }
 </script>
+
 <style lang="css">
-    .v-tav--active{
-        background-color: red !important;
-  color: white !important;
-    }
+.v-tav--active {
+    background-color: red !important;
+    color: white !important;
+}
 </style>

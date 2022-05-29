@@ -118,6 +118,9 @@ const app = initializeApp(firebaseConfig);
 
 export default {
     layout: 'user',
+    middleware() {
+        this.$store.commit("setProfile", null);
+    },
     data() {
         return {
             chipColor: 'rgba(160, 160, 160, 0.3)',
@@ -157,8 +160,6 @@ export default {
         }
     },
     mounted() {
-        this.$store.commit('wallet/setProfile',null)
-        this.$store.dispatch('wallet/getProfile',this.$route.params.address)
         this.connect = new web3.Connection(web3.clusterApiUrl(process.env.CLUSTER), 'confirmed');
         this.getAccountInfo()
         // this.auth()
@@ -168,7 +169,7 @@ export default {
             // window.open('https://twitter.com/'+this.profile.username)
         },
         copy() {
-            navigator.clipboard.writeText(this.walletAddress).then(res=>{}).catch(err=>console.log(err.response))
+            navigator.clipboard.writeText(this.walletAddress).then(res => {}).catch(err => console.log(err.response))
             this.$toast.success("Address copied.", {
                     iconPack: "mdi",
                     icon: "mdi-content-copy",
