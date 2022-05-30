@@ -61,7 +61,7 @@
                                                         <span class="caption" style="z-index:5000">Already belongs to a collection</span>
                                                     </v-tooltip>
                                                     <div v-else @click="selectNft(item)" class="link">
-                                                        <v-checkbox v-if="collectionIds.includes(item.id)" disabled v-model="yes" color="green" dark style="border-radius: 50% !important;"></v-checkbox>
+                                                        <v-checkbox v-if="collectionIds.includes(item.image)" disabled v-model="yes" color="green" dark style="border-radius: 50% !important;"></v-checkbox>
                                                         <v-checkbox v-else disabled v-model="no" color="green" dark style="border-radius: 50% !important;"></v-checkbox>
 
                                                         <!-- <v-checkbox v-else @change="selectNft(item)" color="green" dark :value="false" style="border-radius: 50% !important;"></v-checkbox> -->
@@ -253,7 +253,7 @@ export default {
         },
 
         selectNft(item) {
-            if (this.collectionIds.includes(item.id)) {
+            if (this.collectionIds.includes(item.image)) {
                 this.$store.commit('nft/deselectNft', item)
             } else {
                 this.$store.commit('nft/selectNft', item)
