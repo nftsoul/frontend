@@ -22,6 +22,8 @@ export const mutations = {
   selectNft(state,payload){
     state.collection.push(payload)
     state.collectionIds.push(payload.id)
+    console.log('collection:',state.collection)
+    console.log('collection-ids',state.collectionIds)
   },
   deselectNft(state,payload){
     state.collection.splice(state.collection.indexOf(payload),1)
