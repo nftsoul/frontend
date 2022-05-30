@@ -148,6 +148,10 @@ if (process.client) {
 
 const web3 = require("@solana/web3.js");
 export default {
+    // {property:'og:title',content:'Site Title'},
+    //   {property:'og:url',content:'http://nftsoul.io'},
+    //   {property:'og:image:url',content:'image url'},
+    //   {property:'og:description',content:'site description'}
     data() {
         return {
             loading: false,
