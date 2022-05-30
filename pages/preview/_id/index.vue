@@ -48,7 +48,6 @@
                                                 <v-list-item-title v-else>{{preview.user_id.slice(0, 5)}}</v-list-item-title>
                                             </v-list-item-content>
                                         </v-list-item>
-                                        </v-list-item>
                                     </v-list>
                                     <v-row class="mt-5">
                                         <v-col cols="5">
@@ -148,6 +147,10 @@ if (process.client) {
 
 const web3 = require("@solana/web3.js");
 export default {
+    // {property:'og:title',content:'Site Title'},
+    //   {property:'og:url',content:'http://nftsoul.io'},
+    //   {property:'og:image:url',content:'image url'},
+    //   {property:'og:description',content:'site description'}
     data() {
         return {
             loading: false,
