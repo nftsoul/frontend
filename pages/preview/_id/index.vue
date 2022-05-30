@@ -48,7 +48,6 @@
                                                 <v-list-item-title v-else>{{preview.user_id.slice(0, 5)}}</v-list-item-title>
                                             </v-list-item-content>
                                         </v-list-item>
-                                        </v-list-item>
                                     </v-list>
                                     <v-row class="mt-5">
                                         <v-col cols="5">
