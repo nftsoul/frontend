@@ -78,35 +78,36 @@
                                     <h5 class="mx-5">Comments</h5>
                                     <div style="border-left:1px solid #500083;height:300px;overflow:auto" class="px-3">
                                         <div v-if="comments.length>0">
-
                                             <v-list-item v-for="(item,i) in comments" :key="i">
                                                 <v-list-item-avatar size="50">
                                                     <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="60" max-height="60"></v-img>
                                                     <v-icon v-else large>mdi-account</v-icon>
                                                 </v-list-item-avatar>
-                                                <v-list-item-content>
+                                                <v-list-item-content @mouseenter="selectedIndex=i" @mouseleave="selectedIndex=null,replying=false">
                                                     <v-list-item-title>
                                                         <span v-if="item.user_id.name">{{item.user_id.name}}</span>
                                                         <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span>
                                                         <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
                                                     </v-list-item-title>
-                                                    <v-list-item-subtitle v-html="item.body"></v-list-item-subtitle>
-                                                    <p class="reply-btn" v-if="i != selectedIndex" @click="selectedIndex=i,replying=true">Reply</p>
-                                                    <div>
-                                                        <div v-if="i==selectedIndex">
-                                                            <v-list-item dense class="pr-0" v-if="profile">
-                                                                <v-list-item-avatar size="30" class="my-0 mr-1">
-                                                                    <v-img v-if="profile.image_link" :src="profile.image_link" :lazy-src="profile.image_link"></v-img>
-                                                                    <v-icon v-else large>mdi-account</v-icon>
-                                                                </v-list-item-avatar>
-                                                                <v-list-item-content class="py-1">
-                                                                    <v-text-field dark color="white" class="mb-n5" v-model="reply" outlined dense placeholder="Reply"></v-text-field>
+                                                    <v-list-item-subtitle v-html="item.body"></v-list-item-subtitle><br>
+                                                    <small v-if="item.reply_count>0" @click="getReplies(item)" class="reply-btn">{{item.reply_count}} Replied</small>
 
-                                                                </v-list-item-content>
-                                                            </v-list-item>
-                                                        </div>
-
+                                                    <!-- make reply -->
+                                                    <small class="reply-btn position-abs text--disabled mb-0" v-if="selectedIndex==i && replying==false" @click="replying=true">
+                                                        <v-icon small>mdi-reply</v-icon>Reply
+                                                    </small>
+                                                    <div v-if="replying==true && selectedIndex==i">
+                                                        <v-list-item dense class="px-0" v-if="profile">
+                                                            <v-list-item-avatar size="30" class="my-0 mr-1">
+                                                                <v-img v-if="profile.image_link" :src="profile.image_link" :lazy-src="profile.image_link"></v-img>
+                                                                <v-icon v-else large>mdi-account</v-icon>
+                                                            </v-list-item-avatar>
+                                                            <v-list-item-content class="py-1">
+                                                                <v-text-field dark color="white" append-icon="mdi-check" @click:append="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply"></v-text-field>
+                                                            </v-list-item-content>
+                                                        </v-list-item>
                                                     </div>
+                                                    <!-- end make reply -->
 
                                                 </v-list-item-content>
                                             </v-list-item>
@@ -187,7 +188,8 @@ export default {
             expand: false,
             selectedIndex: null,
             replying: false,
-            reply: ''
+            reply: '',
+            replies: []
         };
     },
     computed: {
@@ -201,11 +203,20 @@ export default {
             return this.$store.state.wallet.profile
         }
     },
+
     mounted() {
         this.getNft()
         this.getComments()
     },
     methods: {
+
+        getReplies(item) {
+            this.$axios.get(
+                "/comment/reply/" + item._id
+            ).then(res => {
+                console.log('replies:',res.data)
+            })
+        },
         getNft() {
             this.$axios.get(
                 "/single-gallery/" + this.gallery_id
@@ -221,6 +232,20 @@ export default {
                 return item.image_link
             } else {
                 return require('~/assets/images/profile.svg')
+            }
+        },
+        makeReply(item) {
+            if (this.reply != '') {
+                this.$axios
+                    .post("/comments/reply/" + item._id, {
+                        body: this.reply,
+                        user_id: this.profile._id,
+                    })
+                    .then((res) => {
+                        console.log('replied:', res.data)
+                        this.reply = ''
+                    })
+                    .catch((err) => err.response);
             }
         },
         getComments() {
@@ -419,5 +444,11 @@ export default {
 <style scoped>
 .border-white {
     border: 1px solid white !important;
+}
+
+.position-abs {
+    position: absolute;
+    right: 0;
+    top: 40px;
 }
 </style>
