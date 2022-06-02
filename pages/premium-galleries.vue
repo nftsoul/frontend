@@ -8,13 +8,8 @@
                         <p class="title">Premium Galleries</p>
                     </v-row>
                     <v-row v-if="nfts.length == 0" justify="center">
-                        <v-col align="center">
-                            <div class="spinner-box my-16">
-                                <client-only>
-                                    <spinner :animation-duration="1200" :size="55" color="#fff" />
-                                </client-only>
-                            </div>
-                            <p>Loading Galleries...</p>
+                        <v-col align="center" v-for="(item,i) in 8" :key="i">
+                                <v-skeleton-loader  class="mx-5" width="220" dark type="card, article"></v-skeleton-loader>
                         </v-col>
                     </v-row>
                     <v-row v-else>

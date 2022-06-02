@@ -7,7 +7,7 @@
                     <div class="enclose-border">
                         <v-container v-if="preview != ''">
                             <v-row>
-                                <v-col v-if="preview.nfts.length > 0" cols="12" lg="4" md="6" align="center" class="px-5">
+                                <v-col v-if="preview.nfts.length > 0" cols="12" lg="3" md="6" align="center" class="px-5">
                                     <v-img :src="preview.image" class="rounded-lg">
                                         <template v-slot:placeholder>
                                             <v-row class="fill-height ma-0" align="center" justify="center">
@@ -74,23 +74,43 @@
                                         </v-col>
                                     </v-row>
                                 </v-col>
-                                <v-col cols="12" lg="3" md="6" class="px-3">
+                                <v-col cols="12" lg="4" md="6" class="px-3">
                                     <h5 class="mx-5">Comments</h5>
                                     <div style="border-left:1px solid #500083;height:300px;overflow:auto" class="px-3">
                                         <div v-if="comments.length>0">
+
                                             <v-list-item v-for="(item,i) in comments" :key="i">
-                                                <v-list-item-avatar>
-                                                    <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="40" max-height="40"></v-img>
+                                                <v-list-item-avatar size="50">
+                                                    <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="60" max-height="60"></v-img>
                                                     <v-icon v-else large>mdi-account</v-icon>
                                                 </v-list-item-avatar>
                                                 <v-list-item-content>
                                                     <v-list-item-title>
                                                         <span v-if="item.user_id.name">{{item.user_id.name}}</span>
                                                         <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span>
+                                                        <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
                                                     </v-list-item-title>
-                                                    <small class="text--disabled" v-html="item.body"></small>
+                                                    <v-list-item-subtitle v-html="item.body"></v-list-item-subtitle>
+                                                    <p class="reply-btn" v-if="replying==false" @click="replying=true,selectedIndex==i">Reply</p>
+                                                    <div v-else>
+                                                        <div v-if="i==selectedIndex">
+                                                            <v-list-item dense class="pr-0" v-if="profile">
+                                                                <v-list-item-avatar size="30" class="my-0 mr-1">
+                                                                    <v-img v-if="profile.image_link" :src="profile.image_link" :lazy-src="profile.image_link"></v-img>
+                                                                    <v-icon v-else large>mdi-account</v-icon>
+                                                                </v-list-item-avatar>
+                                                                <v-list-item-content class="py-1">
+                                                                    <v-text-field dark color="white" class="mb-n5" v-model="reply" outlined dense placeholder="Reply"></v-text-field>
+
+                                                                </v-list-item-content>
+                                                            </v-list-item>
+                                                        </div>
+
+                                                    </div>
+
                                                 </v-list-item-content>
                                             </v-list-item>
+
                                         </div>
                                         <div v-else>
 
@@ -164,7 +184,10 @@ export default {
             comments: [],
             loaded: false,
             preview: '',
-            expand: false
+            expand: false,
+            selectedIndex: null,
+            replying: false,
+            reply: ''
         };
     },
     computed: {
@@ -173,6 +196,9 @@ export default {
         },
         gallery_id() {
             return this.$route.params.id
+        },
+        profile() {
+            return this.$store.state.wallet.profile
         }
     },
     mounted() {
@@ -187,8 +213,8 @@ export default {
                 this.preview = res.data.gallery[0]
             })
         },
-        getShareLink(){
-            return process.env.SITE_URL+'/preview/' + this.gallery_id
+        getShareLink() {
+            return process.env.SITE_URL + '/preview/' + this.gallery_id
         },
         getLink(item) {
             if (item.image_link) {
@@ -205,6 +231,7 @@ export default {
                     }
                 })
                 .then(res => {
+                    console.log('com:', res.data)
                     this.comments = res.data.result
                     this.loaded = true
                 })
@@ -393,6 +420,4 @@ export default {
 .border-white {
     border: 1px solid white !important;
 }
-
-
 </style>
