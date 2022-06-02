@@ -315,7 +315,7 @@ export default {
                         gallery_id: this.gallery_id,
                     })
                     .then((res) => {
-                        let resp = res.data.result;
+                        let resp = res.data.comment;
                         resp.user_id = this.profile;
                         this.comments.push(resp);
                         this.commenting = false;
