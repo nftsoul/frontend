@@ -90,7 +90,7 @@
                                                         <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
                                                     </v-list-item-title>
                                                     <v-list-item-subtitle v-html="item.body"></v-list-item-subtitle><br>
-                                                    <small v-if="item.reply_count>0" @click="getReplies(item)" class="reply-btn">{{item.reply_count}} Replied</small>
+                                                    <small v-if="item.reply_count>0" @click="getReplies(item,i)" class="reply-btn">{{item.reply_count}} Replied</small>
 
                                                     <!-- make reply -->
                                                     <small class="reply-btn position-abs text--disabled mb-0" v-if="selectedIndex==i && replying==false" @click="replying=true">
@@ -108,6 +108,22 @@
                                                         </v-list-item>
                                                     </div>
                                                     <!-- end make reply -->
+
+                                                    <!-- replies -->
+                                                    <div v-if="item.replies">
+                                                        <v-list-item dense v-for="(reply,j) in item.replies" :key="j">
+                                                            <v-list-item-avatar size="30">
+                                                                <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link" max-width="60" max-height="60"></v-img>
+                                                                <v-icon v-else>mdi-account</v-icon>
+                                                            </v-list-item-avatar>
+                                                            <v-list-item-content>
+                                                                <v-list-item-subtitle v-html="reply.body"></v-list-item-subtitle>
+                                                            </v-list-item-content>
+                                                        </v-list-item>
+                                                        <v-btn v-if="item.reply_count>5 && item.replies.length < item.reply_count" @click="getReplies(item,i)">See More</v-btn>
+
+                                                    </div>
+                                                    <!-- end replies -->
 
                                                 </v-list-item-content>
                                             </v-list-item>
@@ -189,7 +205,8 @@ export default {
             selectedIndex: null,
             replying: false,
             reply: '',
-            replies: []
+            selectedComment: '',
+            replyPage: 0
         };
     },
     computed: {
@@ -209,12 +226,29 @@ export default {
         this.getComments()
     },
     methods: {
-
-        getReplies(item) {
+        getReplies(item, i) {
+            if(this.selectedComment != item._id){
+                this.replyPage=1
+                this.selectedComment=item._id
+            }
+            else{
+                this.replyPage +=1
+            }
             this.$axios.get(
-                "/comment/reply/" + item._id
+                "/comment/reply/" + item._id, {
+                    params: {
+                        page: this.replyPage,
+                    },
+                }
             ).then(res => {
-                console.log('replies:',res.data)
+                const index = this.comments.indexOf(item)
+                let rep = res.data.replies.replies
+                if (!this.comments[index].replies) {
+                    this.comments[index]['replies'] = []
+                }
+                for (var x = 0; x < rep.length; x++) {
+                    this.comments[index].replies.push(rep[x])
+                }
             })
         },
         getNft() {
@@ -235,6 +269,7 @@ export default {
             }
         },
         makeReply(item) {
+            this.selectedComment = item
             if (this.reply != '') {
                 this.$axios
                     .post("/comments/reply/" + item._id, {
@@ -242,8 +277,17 @@ export default {
                         user_id: this.profile._id,
                     })
                     .then((res) => {
-                        console.log('replied:', res.data)
+                        let rep = res.data.reply
                         this.reply = ''
+                        rep['user_id'] = this.profile
+                        const index = this.comments.indexOf(item)
+                        if (this.comments[index].replies) {
+                            this.comments[index].replies.push(rep)
+                        } else {
+                            this.comments[index]['replies'] = []
+                            this.comments[index].replies.push(rep)
+                        }
+                        this.comments[index].reply_count += 1
                     })
                     .catch((err) => err.response);
             }
@@ -256,7 +300,6 @@ export default {
                     }
                 })
                 .then(res => {
-                    console.log('com:', res.data)
                     this.comments = res.data.result
                     this.loaded = true
                 })

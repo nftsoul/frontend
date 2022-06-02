@@ -90,6 +90,9 @@ export default {
     computed:{
         walletAddress(){
           return this.$store.state.wallet.walletAddress
+        },
+        profile(){
+            return this.$store.state.wallet.profile
         }
     },
     mounted() {
@@ -102,7 +105,7 @@ export default {
                     params: {
                         page:this.page,
                         limit:8,
-                        id: this.walletAddress
+                        id: '627a155d4655603baaa513e6'
                     },
                 })
                 .then(res => {
