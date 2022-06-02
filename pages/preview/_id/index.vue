@@ -91,8 +91,8 @@
                                                         <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
                                                     </v-list-item-title>
                                                     <v-list-item-subtitle v-html="item.body"></v-list-item-subtitle>
-                                                    <p class="reply-btn" v-if="replying==false" @click="replying=true,selectedIndex==i">Reply</p>
-                                                    <div v-else>
+                                                    <p class="reply-btn" v-if="i != selectedIndex" @click="selectedIndex=i,replying=true">Reply</p>
+                                                    <div>
                                                         <div v-if="i==selectedIndex">
                                                             <v-list-item dense class="pr-0" v-if="profile">
                                                                 <v-list-item-avatar size="30" class="my-0 mr-1">
