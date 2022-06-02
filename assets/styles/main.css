@@ -181,3 +181,8 @@ background: #000229
   padding-left: 25px;
   margin-left: -20px;
 }
+.reply-btn{
+  cursor: pointer;
+  font-size: 10px;
+  margin-bottom: 0px;
+}

@@ -27,6 +27,23 @@ export const actions = {
         var res = await window.solana.connect();
         context.commit("setWalletAddress", res.publicKey.toString());
         context.dispatch("getProfile", res.publicKey.toString());
+        //signing hash
+        const message = `Let me sign in !!!`
+            const encodedMessage = new TextEncoder().encode(message);
+            const signedMessage = await window.solana.signMessage(
+              encodedMessage,
+              "utf8"
+            );
+            console.log('sign',signedMessage)
+            this.$axios.post('https://staging-api.nftsoul.io/auth/login',{
+              message:this.message,
+              signature:signedMessage.signature,
+              publicKey:signedMessage.publicKey
+            }).then(res=>{
+              console.log('token',res.data)
+              .catch(err=>console.log(err.response))
+            })
+
         this.$toast
           .success("Phantom wallet successfully connected.", {
             iconPack: "mdi",
