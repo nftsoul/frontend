@@ -128,6 +128,7 @@ export default {
     },
     watch: {
         duration() {
+            this.popular=[]
             if (this.duration == 'one') {
                 this.getCollections('24hrs')
             } else if (this.duration == 'seven') {
