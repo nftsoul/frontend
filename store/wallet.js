@@ -1,3 +1,4 @@
+import util from 'tweetnacl-util'
 export const state = () => ({
   walletAddress: null,
   provider: null,
@@ -21,28 +22,38 @@ export const mutations = {
 
 export const actions = {
   async connectWallet(context) {
-    const isPhantomInstalled = window.solana && window.solana.isPhantom;
+    const isPhantomInstalled =await window.solana && window.solana.isPhantom;
+    console.log('phantom:',window.solana)
     if (isPhantomInstalled) {
       try {
         var res = await window.solana.connect();
         context.commit("setWalletAddress", res.publicKey.toString());
         context.dispatch("getProfile", res.publicKey.toString());
-        //signing hash
-        const message = `Let me sign in !!!`
-            const encodedMessage = new TextEncoder().encode(message);
-            const signedMessage = await window.solana.signMessage(
-              encodedMessage,
-              "utf8"
-            );
-            console.log('sign',signedMessage)
-            this.$axios.post('https://staging-api.nftsoul.io/auth/login',{
-              message:this.message,
-              signature:signedMessage.signature,
-              publicKey:signedMessage.publicKey
-            }).then(res=>{
-              console.log('token',res.data)
-              .catch(err=>console.log(err.response))
-            })
+        // //signing hash
+        // const message = `Let me sign in !!!`
+        //     const encodedMessage = new TextEncoder().encode(message);
+        //     const signedMessage = await window.solana.signMessage(
+        //       encodedMessage,
+        //       "utf8"
+        //     );
+        //     var enc=new TextEncoder("utf-8")
+        //     let encMesaage=enc.encode(this.message)
+        //     let encPublicKey=util.encodeBase64(signedMessage.publicKey.toBuffer())
+        //     let encSignature=util.encodeBase64(signedMessage.signature)
+
+        //     console.log('encoded signature:',signedMessage.signature)
+        //     console.log('encoded message:',encMesaage)
+        //     console.log('encoded public key:',encPublicKey)
+
+        //     this.$axios.post('https://staging-api.nftsoul.io/auth/login',{
+        //       message:encMesaage,
+        //       signature:encSignature,
+        //       publicKey:encPublicKey,
+        //       wallet_address:signedMessage.publicKey.toString()
+        //     }).then(res=>{
+        //       console.log('token',res.data)
+        //     }).catch(err=>console.log(err.response))
+
 
         this.$toast
           .success("Phantom wallet successfully connected.", {
