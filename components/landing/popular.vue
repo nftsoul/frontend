@@ -146,11 +146,11 @@ export default {
     methods: {
         getCollections(item) {
             this.$axios
-                .get('/all-trending?page=1&limit=4', {
+                .get('/trending?page=1&limit=4', {
                     query: item
                 })
                 .then((res) => {
-                    this.popular = res.data.trending
+                    this.popular = res.data.trending_galleries
                 })
                 .catch((err) => console.log(err.response));
         },

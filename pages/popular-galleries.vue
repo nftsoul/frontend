@@ -100,7 +100,7 @@ export default {
         getPopularNfts() {
             this.$axios
                 .get(
-                    "/all-trending?page="+this.page+"&limit=2")
+                    "/trending?page="+this.page+"&limit=2")
                 .then((res) => {
                     this.total = res.data.galleryCount
                     if (this.total % 20 == 0) {
