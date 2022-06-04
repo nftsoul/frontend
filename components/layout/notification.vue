@@ -1,32 +1,22 @@
 <template>
 <div>
-    <v-menu transition="slide-y-transition" bottom offset-y>
-        <template v-slot:activator="{ on, attrs }">
-            <div class="mx-4">
-                <v-badge color="green" content="6" overlap>
-                    <v-icon dark v-bind="attrs" v-on="on" size="28" class="mx-2 mt-1">mdi-bell</v-icon>
-                </v-badge>
-            </div>
-        </template>
-
-        <v-card width="400" class="mx-auto pt-2" dark color="primary">
-            <v-row justify="space-between" class="pb-2 pt-3 px-5">
-                <v-btn text small class="text-capitalize">See All</v-btn>
-                <p class="text-center body-1 font-weight-bold">Notifications</p>
-                <v-btn text small class="text-capitalize" @click="markAllAsRead()">Mark all as read</v-btn>
-            </v-row>
-            <!-- <v-divider></v-divider>
+    <v-card width="400" class="mx-auto pt-2" dark color="primary">
+        <v-row justify="space-between" no-gutters>
+            <v-btn text small class="text-capitalize">Your Notification</v-btn>
+            <v-btn text small class="text-capitalize" @click="markAllAsRead()">Mark all as read</v-btn>
+        </v-row>
+        <v-divider class="mt-2"></v-divider>
         <v-virtual-scroll v-if="notifications.length>0" :items="notifications" :item-height="58" height="400" class="hidden-scroll">
             <template v-slot="{item}">
                 <v-list dense class="py-0">
                     <v-hover v-slot="{ hover }">
-                        <div class="list-border">
-                            <v-card class="list-border" :color="getColor(item)" flat tile>
+                        <div>
+                            <v-card :color="getColor(item)" flat tile>
                                 <v-list-item :key="item.id" color="background" dense link @click="goToLink(item)">
                                     <v-list-item-avatar>
                                         <v-divider></v-divider>
-                                        <v-img v-if="item.user.profile" :src="item.user.profile"></v-img>
-                                        <v-img v-else :src="require('~/assets/images/student-avatar.svg')"></v-img>
+                                        <v-img v-if="item.from.image_link" :src="item.from.image_link" :lazy-src="item.from.image_link"></v-img>
+                                        <v-icon v-else large>mdi-account</v-icon>
                                     </v-list-item-avatar>
 
                                     <v-list-item-content>
@@ -34,7 +24,7 @@
                                             <p class="mb-0" style="font-size:12px" v-html="getDescription(item)"></p>
                                         </div>
                                     </v-list-item-content>
-                                    <v-list-item-action>
+                                    <!-- <v-list-item-action>
                                         <v-list-item-action-text>
                                             <span v-if="!hover">{{ moment.utc(item.created_at).fromNow() }}</span>
                                             <v-tooltip top v-if="hover">
@@ -45,10 +35,8 @@
                                                 </template>
                                                 <span class="caption">Remove</span>
                                             </v-tooltip>
-
                                         </v-list-item-action-text>
-                                    </v-list-item-action>
-
+                                    </v-list-item-action> -->
                                 </v-list-item>
                             </v-card>
                         </div>
@@ -56,19 +44,17 @@
                 </v-list>
             </template>
         </v-virtual-scroll>
-        <v-container fluid v-else>
+        <v-container fluid v-else >
             <v-row>
-                <v-col cols="12" align="center">
-                    <div v-if="dataEnd ==false" v-intersect.quiet="{handler: onIntersect,options: {threshold: [0, 0.5, 1.0]}}" class="mb-2">
-            <spinner :animation-duration="1000" :size="40" :color="'#3bac76'" />
+                <v-col cols="12" align="center" v-intersect.quiet="{handler: onIntersect,options: {threshold: [0, 0.5, 1.0]}}">
+                    <div v-if="dataEnd ==false"  class="mb-2">
+                        <v-skeleton-loader v-for="i in 8" :key="i" class="mt-2" dark type="list-item-avatar"></v-skeleton-loader>
                     </div>
                     <p v-if="dataEnd==true" class="text--disabled">No Notifications</p>
                 </v-col>
             </v-row>
-        </v-container> -->
-        </v-card>
-    </v-menu>
-
+        </v-container>
+    </v-card>
 </div>
 </template>
 
@@ -87,36 +73,36 @@ export default {
 
         }
     },
-    computed:{
-        walletAddress(){
-          return this.$store.state.wallet.walletAddress
+    computed: {
+        walletAddress() {
+            return this.$store.state.wallet.walletAddress
         },
-        profile(){
+        profile() {
             return this.$store.state.wallet.profile
         }
     },
     mounted() {
-        this.getNotifications()
+        // this.getNotifications()
     },
     methods: {
         getNotifications() {
             this.page += 1
             this.$axios.get('/nofitications', {
                     params: {
-                        page:this.page,
-                        limit:8,
+                        page: this.page,
+                        limit: 8,
                         id: '627a155d4655603baaa513e6'
                     },
                 })
                 .then(res => {
-                    console.log('npt:',res.data)
-                    this.total = res.data.total
+                    console.log('npt:', res.data)
+                    this.total = res.data.total_notifications
                     if (this.page == 1) {
-                        this.notifications = res.data.data
+                        this.notifications = res.data.notifications
                     } else {
-                        if (res.data.data.length > 0) {
-                            for (var x = 0; x < res.data.data.length; x++) {
-                                this.notifications.push(res.data.data[x])
+                        if (res.data.notifications.length > 0) {
+                            for (var x = 0; x < res.data.notifications.length; x++) {
+                                this.notifications.push(res.data.notifications[x])
                             }
                         }
                         if (this.notifications.length == 0) {
@@ -131,157 +117,20 @@ export default {
             this.getNotifications()
         },
         getDescription(item) {
+            console.log('notify:',item)
             let desc;
-            switch (item.notification_type.type) {
-                //community
-                case 'Post Applaud':
-                    desc = "<b>" + item.user.name + "</b> admired your <b>post</b>.";
+            switch (item.type) {
+                case 'commented':
+                    desc = 'commented'+ "</b> admired your <b>post</b>.";
                     break;
 
-                case 'Post Comment Owner':
-                    //aafno post ma comment vaeko notification
-                    desc = "<b>" + item.user.name + "</b> commented on your <b>post</b>.";
+                case 'replied':
+                    desc = "<b>" + item.from.name + "</b> commented on your <b>post</b>.";
                     break;
 
-                case 'Post Comment Commentator':
-                    //maile kunai post ma comment gare. tyo post ma post ma post owner le comment gareko notification
-                    if (item.sender_id == item.post_owner_id) {
-                        desc = "<b>" + item.user.name + "</b> also commented on his <b>post</b>.";
-                    } else {
-                        //maile kunai post ma comment gare. tyo post ma post ma aru le comment gareko notification
-                        desc = "<b>" + item.user.name + "</b> also commented on <b>" + item.post_owner.name + "</b>'s <b>post</b>.";
-                    }
+                case 'fav_added':
+                    desc = 'commented'+ "</b> admired your <b>post</b>.";
                     break;
-
-                case 'Post Repost':
-                    desc = "<b>" + item.user.name + "</b> reposted your <b>post</b>.";
-                    break;
-
-                case 'Post Shared':
-                    desc = "<b>" + item.user.name + "</b> shared your <b>post</b>";
-                    break;
-
-                case 'Comment Replied Post Owner':
-                    //aafno comment ma aruko reply
-                    if (item.comment_owner.id == this.$auth.user.id) {
-                        desc = "<b>" + item.user.name + "</b> replied to your comment on your <b>post</b>.";
-                    } else {
-                        //aruko comment ma aruko reply
-                        desc = "<b>" + item.user.name + "</b> replied to a comment on your <b>post</b>."
-                    }
-                    console.log('comment:', item)
-                    break;
-
-                case 'Comment Replied Commentator':
-                    //aruko post ma aafno comment ko reply
-                    if (item.sender_id == item.post_owner.id) {
-                        desc = "<b>" + item.user.name + "</b> replied to your comment on his <b>post</b>.";
-                    } else {
-                        desc = "<b>" + item.user.name + "</b> replied to your comment on " + item.post_owner.name + "'s <b>post</b>.";
-                    }
-                    break;
-
-                case 'Comment Replied Repliers':
-                    if (item.sender_id == item.post_owner.id) {
-                        if (item.sender_id == item.comment_owner.id) {
-                            desc = "<b>" + item.user.name + "</b> also replied to his own comment on his <p>post</p>.";
-                        } else {
-                            if (item.comment_owner.id == this.user.id) {
-                                desc = "<b>" + item.user.name + "</b> also replied to your comment on his <b>post</b>.";
-                            } else {
-                                desc = "<b>" + item.user.name + "</b> also replied to <b>" + item.comment_owner.id + "</b>'s comment on his <b>post</b>.";
-                            }
-
-                        }
-
-                    } else {
-                        if (item.sender_id == item.comment_owner.id) {
-                            desc = "<b>" + item.user.name + "</b> also replied to his own comment on <b>" + item.post_owner.name + "</b>'s <b>post</b>";
-                        } else {
-                            if (item.comment_owner.id == this.user.id) {
-                                desc = "<b>" + item.user.name + "</b> also replied to your comment on <b>" + item.post_owner.name + "</b>'s <b>post</b>";
-
-                            } else {
-                                desc = "<b>" + item.user.name + "</b> also replied to <b>" + item.comment_owner.name + "</b>'s comment on <b>" + item.post_owner.name + "</b>'s post";
-                            }
-                        }
-                    }
-                    break;
-
-                    // Classroom notification
-                case 'Class Post Tutor':
-                    desc = "<b>" + item.user.name + "</b> posted in your class:<b> " + item.classroom.title + "</b>";
-                    break;
-                case 'Class Post Member':
-                    if (item.user.role_id == 3) {
-                        desc = "<b>" + item.user.name + "</b> also posted in your class:<b> " + item.classroom.title + "</b>";
-                    } else {
-                        desc = "<b>" + item.user.name + "</b> Sir posted in your class:<b> " + item.classroom.title + "</b>";
-                    }
-                    break;
-                case 'Live Class':
-                    desc = "Your class" + item.classroom.title + " is now live";
-                    break;
-                case 'Kicked From Class':
-                    desc = "You have been kicked out from class: <b>" + item.class.title + "</b>.";
-                    break;
-                case 'Left Class':
-                    desc = '<b>' + item.user.name + '</b> left your class: <b>' + item.class.title + '</b>.'
-                    break;
-                    //Q & A
-                case 'Question Answered':
-                    desc = "<b>" + item.user.name + "</b> answered to your <b>question</b>.";
-                    break;
-
-                case 'Answer Upvoted':
-                    desc = "Your answer to <b>" + item.user.name + "'s</b> question is <b>upvoted.</b>";
-                    break;
-
-                case 'Answer Downvoted':
-                    desc = "Your answer to <b>" + item.user.name + "'s</b> question is <b>downvoted.</b>";
-                    break;
-
-                case 'Answer Call':
-                    desc = "<b>" + item.user.name + "</b> called you to answer a <b>question</b>.";
-                    break;
-
-                case 'Answer Notified':
-                    if (item.sender_id == this.user.id) {
-                        desc = "You posted an answer to a question you didn't know before."
-                    } else {
-                        desc = "<b>" + item.user.name + "</b> posted an answer to a question you want to know.";
-                    }
-                    break;
-
-                    //Requests
-                case 'Mate Accepted':
-                    desc = "<b>" + item.user.name + "</b> accepted your mate request.";
-                    break;
-
-                case 'Tutor Followed':
-                    desc = "<b>" + item.user.name + "</b> followed you.";
-                    break;
-
-                case 'Student Accepted':
-                    desc = "<b>" + item.user.name + "</b> accepted you as his student.";
-                    break;
-
-                    // group notifications
-                case 'Added To Group':
-                    desc = "<b>" + item.user.name + "</b> added you to the group: <b>" + item.group.title + "</b>";
-                    break;
-
-                case 'Group Post':
-                    desc = "<b>" + item.user.name + "</b> posted in your group: <b>" + item.group.title + "</b>";
-                    break;
-
-                case 'Kicked From Group':
-                    desc = "You have been kicked out from group: <b>" + item.group.title + "</b>.";
-                    break;
-
-                    //course
-                case 'Subscription End':
-                    desc = 'You subscription to a course:<b>' + item.course.title + '</b> will end in <b>' + item.days + '</b> days.'
 
             }
             return desc;
@@ -499,4 +348,7 @@ export default {
     height: 30px;
     overflow: hidden;
 }
+ div.v-skeleton-loader__list-item-avatar.v-skeleton-loader__bone{
+     background:#5E0FFF;
+ }
 </style>

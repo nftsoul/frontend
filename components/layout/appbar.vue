@@ -56,7 +56,18 @@
                             </v-list>
                         </v-card>
                     </v-menu>
-                    <LayoutNotification />
+
+                    <!-- <v-menu transition="slide-y-transition" bottom offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                            <div class="mx-4">
+                                <v-badge color="green" content="6" overlap>
+                                    <v-icon dark v-bind="attrs" v-on="on" size="28" class="mx-2 mt-1">mdi-bell</v-icon>
+                                </v-badge>
+                            </div>
+                        </template>
+                        <LayoutNotification />
+                    </v-menu> -->
+                    
                     <div class="auth-box mt-n2 ml-1">
                         <div class="auth-inside">
                             <div class="auth-inside-1" @click="

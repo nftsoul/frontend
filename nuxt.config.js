@@ -1,11 +1,11 @@
-import colors from 'vuetify/es5/util/colors'
+import colors from "vuetify/es5/util/colors";
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
-  server:{
-    port:process.env.PORT,
-		host: "0.0.0.0"
-	},
+  server: {
+    port: process.env.PORT,
+    host: "0.0.0.0",
+  },
   head: {
     titleTemplate: "Nftsoul | %s",
     title: "Exhibit your NFT",
@@ -21,21 +21,34 @@ export default {
         content:
           "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them. ",
       },
-      // { name: "format-detection", content: "phone number" },
+      {
+        property: "og:title",
+        content: "NFTsoul | Exhibit your NFT",
+      },
+      {
+        property: "og:url",
+        content: process.env.SITE_URL,
+      },
+      {
+        property: "og:image:url",
+        content: "/minilog.png",
+      },
+      {
+        property: "og:description",
+        content:
+          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+      },
       {
         name: "keywords",
         content:
           "nftsoul,nftsoul collection,nft collection,nft marketplace, nft crypto art,nft art nft collection,show nfts, exhibit your nft,nfts,earn from nfts,exhibit and earn from nft collection,showcase your best NFTs and earn from them,nft store",
       },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/mini-log.png' }
-    ]
+    link: [{ rel: "icon", type: "image/x-icon", href: "/mini-log.png" }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-  ],
+  css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -43,7 +56,6 @@ export default {
     { src: "~/plugins/vue-carousel-3d", mode: "client" },
     { src: "~/plugins/spinner", mode: "client" },
     { src: "~/plugins/social-share", mode: "client" },
-
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -52,16 +64,12 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify',
-    '@nuxtjs/moment'
+    "@nuxtjs/vuetify",
+    "@nuxtjs/moment",
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/toast',
-    '@nuxtjs/dotenv'
-  ],
+  modules: ["@nuxtjs/axios", "@nuxtjs/toast", "@nuxtjs/dotenv"],
   axios: {
     baseURL: process.env.API_URL,
     // credentials: true,
@@ -69,29 +77,27 @@ export default {
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: ["~/assets/variables.scss"],
     theme: {
       dark: true,
       themes: {
         dark: {
-          primary: '#030537',
-          background:'#000229',
+          primary: "#030537",
+          background: "#000229",
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3
-        }
-      }
-    }
+          success: colors.green.accent3,
+        },
+      },
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-    
-  },
+  build: {},
   env: {
     baseUrl: process.env.API_URL,
-  }
-}
+  },
+};

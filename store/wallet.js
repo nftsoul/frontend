@@ -23,7 +23,6 @@ export const mutations = {
 export const actions = {
   async connectWallet(context) {
     const isPhantomInstalled =await window.solana && window.solana.isPhantom;
-    console.log('phantom:',window.solana)
     if (isPhantomInstalled) {
       try {
         var res = await window.solana.connect();
