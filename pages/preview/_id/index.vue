@@ -94,24 +94,27 @@
                                                                 <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
                                                             </v-list-item-title>
                                                             <v-list-item-subtitle v-html="item.body"></v-list-item-subtitle><br>
-                                                            <small v-if="item.reply_count>0" @click="getReplies(item,i)" class="reply-btn">{{item.reply_count}} Replied</small>
+                                                            <v-row no-gutters>
+                                                                <small v-if="item.reply_count>0" @click="getReplies(item,i)" class="reply-btn">{{item.reply_count}} Replied</small>
+                                                                <v-btn x-small text v-if="replyPage==1 && selectedIndex==i" :loading="more"></v-btn>
+                                                            </v-row>
 
                                                             <!-- make reply -->
-                                                            <small class="reply-btn position-abs text--disabled mb-0" v-if="selectedIndex==i && replying==false" @click="replying=true">
+                                                            <small class="reply-btn position-abs text--disabled mb-0" v-if="selectedIndex==i" @click="replying=true">
                                                                 <v-icon small>mdi-reply</v-icon>Reply
                                                             </small>
                                                             <div v-if="replying==true && selectedIndex==i">
                                                                 <v-list-item dense class="px-0" v-if="profile">
                                                                     <v-row no-gutters>
                                                                         <v-col cols="2" class="pa-0">
-                                                                            <v-list-item-avatar size="30" class="my-0 mr-1">
+                                                                            <v-list-item-avatar size="30" class="mb-0 mt-2 mr-1">
                                                                                 <v-img v-if="profile.image_link" :src="profile.image_link" :lazy-src="profile.image_link"></v-img>
                                                                                 <v-icon v-else large>mdi-account</v-icon>
                                                                             </v-list-item-avatar>
                                                                         </v-col>
                                                                         <v-col>
                                                                             <v-list-item-content class="py-1">
-                                                                                <v-text-field dark color="white" append-icon="mdi-check" @click:append="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply"></v-text-field>
+                                                                                <v-text-field dark color="white" :loading="makingReply" append-icon="mdi-check" @click:append="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply"></v-text-field>
                                                                             </v-list-item-content>
                                                                         </v-col>
                                                                     </v-row>
@@ -130,7 +133,13 @@
                                                                         <v-list-item-subtitle v-html="reply.body"></v-list-item-subtitle>
                                                                     </v-list-item-content>
                                                                 </v-list-item>
-                                                                <v-btn v-if="item.reply_count>5 && item.replies.length < item.reply_count" @click="getReplies(item,i)">See More</v-btn>
+                                                                <v-row no-gutters>
+                                                                    <v-btn v-if="item.reply_count>5 && item.replies.length < item.reply_count" @click="getReplies(item,i)" x-small text>
+                                                                        <v-icon small>mdi-arrow-down</v-icon>
+                                                                        <small>See More</small>
+                                                                    </v-btn>
+                                                                    <v-btn v-if="replyPage>1" x-small text :loading="more"></v-btn>
+                                                                </v-row>
 
                                                             </div>
                                                             <!-- end replies -->
@@ -219,7 +228,9 @@ export default {
             replying: false,
             reply: '',
             selectedComment: '',
-            replyPage: 0
+            replyPage: 0,
+            more: false,
+            makingReply: false
         };
     },
     computed: {
@@ -240,6 +251,7 @@ export default {
     },
     methods: {
         getReplies(item, i) {
+            this.more = true
             if (this.selectedComment != item._id) {
                 this.replyPage = 1
                 this.selectedComment = item._id
@@ -253,6 +265,7 @@ export default {
                     },
                 }
             ).then(res => {
+                this.more = false
                 const index = this.comments.indexOf(item)
                 let rep = res.data.replies.replies
                 if (!this.comments[index].replies) {
@@ -281,6 +294,7 @@ export default {
             }
         },
         makeReply(item) {
+            this.makingReply = true
             this.selectedComment = item
             if (this.reply != '') {
                 this.$axios
@@ -289,6 +303,7 @@ export default {
                         user_id: this.profile._id,
                     })
                     .then((res) => {
+                        this.makingReply = false
                         let rep = res.data.reply
                         this.reply = ''
                         rep['user_id'] = this.profile
@@ -301,7 +316,7 @@ export default {
                         }
                         this.comments[index].reply_count += 1
                     })
-                    .catch((err) => err.response);
+                    .catch((err) => err.response)
             }
         },
         getComments() {
