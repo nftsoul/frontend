@@ -16,32 +16,65 @@ export default {
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
-        hid: "description",
         name: "description",
         content:
-          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them. ",
+          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
       },
-      {
-        property: "og:title",
-        content: "NFTsoul | Exhibit your NFT",
-      },
-      {
-        property: "og:url",
-        content: process.env.SITE_URL,
-      },
-      {
-        property: "og:image:url",
-        content: "/minilog.png",
-      },
+      { property: "og:locale", content: "en_US" },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: "NFTsoul | Exhibit your NFT" },
       {
         property: "og:description",
         content:
           "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
       },
+      { property: "og:url", content: process.env.SITE_URL },
+      {
+        property: "og:site_name",
+        content:
+          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+      },
+      { name: "twitter:card", content: "NFTsoul" },
+      { name: "twitter:title", content: "Exhibit your NFT" },
+      {
+        name: "twitter:description",
+        content:
+          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+      },
+      {
+        name: "twitter:image",
+        content: "https://nftsoul.io/static/mini-log.png",
+      },
+      { name: "theme-color", content: "#000229" },
+      {
+        property: "og:image:url",
+        content: "https://nftsoul.io/static/mini-log.png",
+      },
       {
         name: "keywords",
         content:
           "nftsoul,nftsoul collection,nft collection,nft marketplace, nft crypto art,nft art nft collection,show nfts, exhibit your nft,nfts,earn from nfts,exhibit and earn from nft collection,showcase your best NFTs and earn from them,nft store",
+      },
+      {name:'robots',content:"index,follow"}
+    ],
+    script: [
+      {
+        "@context": process.env.SITE_URL,
+        "@type": "WebSite",
+        url: process.env.SITE_URL,
+        name: "NFTsoul | Exhibit your NFT",
+        // potentialAction: {
+        //   "@type": "SearchAction",
+        //   target: "http://localhost/search/{search_term_string}/",
+        //   "query-input": "required name=search_term_string",
+        // },
+      },
+      {
+        "@context": process.env.SITE_URL,
+        "@type": "Organization",
+        url: process.env.SITE_URL,
+        name: "NFTsoul | Exhibit your NFT",
+        logo: "https://nftsoul.io/static/mini-log.png",
       },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/mini-log.png" }],
