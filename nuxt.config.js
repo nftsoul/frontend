@@ -34,8 +34,8 @@ export default {
         content:
           "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
       },
-      { name: "twitter:card", content: "NFTsoul" },
-      { name: "twitter:title", content: "Exhibit your NFT" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "NFTsoul | Exhibit your NFT" },
       {
         name: "twitter:description",
         content:
