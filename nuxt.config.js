@@ -43,12 +43,12 @@ export default {
       },
       {
         name: "twitter:image",
-        content: "https://nftsoul.io/static/mini-log.png",
+        content: require('~/assets/images/mini-log.png'),
       },
       { name: "theme-color", content: "#000229" },
       {
         property: "og:image:url",
-        content: "https://nftsoul.io/static/mini-log.png",
+        content: require('~/assets/images/mini-log.png'),
       },
       {
         name: "keywords",
@@ -74,7 +74,7 @@ export default {
         "@type": "Organization",
         url: process.env.SITE_URL,
         name: "NFTsoul | Exhibit your NFT",
-        logo: "https://nftsoul.io/static/mini-log.png",
+        logo: require('~/assets/images/mini-log.png'),
       },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/mini-log.png" }],
