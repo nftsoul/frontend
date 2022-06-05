@@ -1,10 +1,11 @@
-import util from 'tweetnacl-util'
+import util from "tweetnacl-util";
 export const state = () => ({
   walletAddress: null,
   provider: null,
   accountBalance: "",
   accountDetail: "",
   profile: null,
+  notificationCount: 0,
 });
 
 export const mutations = {
@@ -18,11 +19,14 @@ export const mutations = {
   setProfile(state, payload) {
     state.profile = payload;
   },
+  setNoficationCount(state,payload){
+    state.notificationCount=payload
+  }
 };
 
 export const actions = {
   async connectWallet(context) {
-    const isPhantomInstalled =await window.solana && window.solana.isPhantom;
+    const isPhantomInstalled = (await window.solana) && window.solana.isPhantom;
     if (isPhantomInstalled) {
       try {
         var res = await window.solana.connect();
@@ -52,7 +56,6 @@ export const actions = {
         //     }).then(res=>{
         //       console.log('token',res.data)
         //     }).catch(err=>console.log(err.response))
-
 
         this.$toast
           .success("Phantom wallet successfully connected.", {
@@ -85,21 +88,31 @@ export const actions = {
   getProfile(context, address) {
     // fetch profile if not available create new and then fetch
     this.$axios
-      .get(process.env.API_URL + "/profile/" + address)
+      .get("/profile/" + address)
       .then((res) => {
         if (res.data.length == 0) {
           this.$axios
             .post(process.env.API_URL + "/profile?wallet_address=" + address)
             .then((res) => {
               context.commit("setProfile", res.data.data);
+              context.dispatch("getNotificationCount",res.data.data)
             })
             .catch((err) => {
               console.log(err.response);
             });
         } else {
           context.commit("setProfile", res.data[0]);
+          context.dispatch("getNotificationCount",res.data[0])
+
         }
       })
       .catch((err) => console.log(err.response));
+  },
+  getNotificationCount(context,payload) {
+    this.$axios
+      .get("/notification/new/" + payload._id)
+      .then(res =>{
+        context.commit('setNoficationCount',res.data.newNotifications)
+      } );
   },
 };

@@ -149,7 +149,6 @@ export default {
             this.getNotifications()
         },
         getDescription(item) {
-            console.log('notify:', item)
             let desc, user;
             if (item.from.name) {
                 user = item.from.name
@@ -182,7 +181,7 @@ export default {
                 case 'commented':
                 case 'replied':
                     this.$router.push({
-                        name: 'preview-id-index',
+                        name: 'preview-id',
                         params: {
                             id: item.data.gallery_id
                         }

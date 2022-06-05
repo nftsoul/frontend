@@ -14,7 +14,7 @@
             <div v-else>
                 <v-row no-gutters>
 
-                    <v-menu transition="slide-y-transition" bottom offset-y>
+                    <v-menu transition="slide-y-transition" bottom offset-y :close-on-click="false" :close-on-content-click="false">
                         <template v-slot:activator="{ on, attrs }">
                             <v-icon large dark v-bind="attrs" class="mr-n3" v-on="on">mdi-account</v-icon>
                         </template>
@@ -61,7 +61,7 @@
                         <template v-slot:activator="{ on, attrs }">
                             <div class="mx-4">
                                 <v-badge v-if="notificationCount>1" color="green" :content="notificationCount" overlap>
-                                    <v-icon dark v-bind="attrs" v-on="on" size="28" class="mx-2 mt-1">mdi-bell</v-icon>
+                                    <v-icon @click="$store.commit('wallet/setNoficationCount',0)" dark v-bind="attrs" v-on="on" size="28" class="mx-2 mt-1">mdi-bell</v-icon>
                                 </v-badge>
                                 <v-icon v-else size="28" v-bind="attrs" v-on="on" class="mx-2 mt-1">mdi-bell</v-icon>
                             </div>
@@ -191,7 +191,6 @@ export default {
             drawer: false,
             authBtn: null,
             loaded: false,
-            notificationCount:0
         };
     },
     computed: {
@@ -203,9 +202,12 @@ export default {
         },
         currentRoute() {
             return this.$store.state.nft.currentRoute
+        },
+        notificationCount(){
+            return this.$store.state.wallet.notificationCount
         }
     },
-    created() {
+     created() {
         this.$store.dispatch('wallet/connectWallet')
     },
     watch: {
