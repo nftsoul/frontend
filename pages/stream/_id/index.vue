@@ -462,7 +462,7 @@ export default {
             this.favourite.push(this.stream._id);
             this.$axios
                 .post("/save-favourite", {
-                    user_id: this.walletAddress,
+                    user_id: this.profile._id,
                     gallery_id: this.stream._id,
                 })
                 .then((res) => {
