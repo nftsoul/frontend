@@ -239,6 +239,7 @@ export default {
     mounted() {
         this.getNft()
         this.getComments()
+        console.log(this.$route.name)
     },
     methods: {
         getReplies(item, i) {
