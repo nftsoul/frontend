@@ -57,17 +57,18 @@
                         </v-card>
                     </v-menu>
 
-                    <!-- <v-menu transition="slide-y-transition" bottom offset-y>
+                    <v-menu transition="slide-y-transition" bottom offset-y>
                         <template v-slot:activator="{ on, attrs }">
                             <div class="mx-4">
-                                <v-badge color="green" content="6" overlap>
+                                <v-badge v-if="notificationCount>1" color="green" :content="notificationCount" overlap>
                                     <v-icon dark v-bind="attrs" v-on="on" size="28" class="mx-2 mt-1">mdi-bell</v-icon>
                                 </v-badge>
+                                <v-icon v-else size="28" v-bind="attrs" v-on="on" class="mx-2 mt-1">mdi-bell</v-icon>
                             </div>
                         </template>
                         <LayoutNotification />
-                    </v-menu> -->
-                    
+                    </v-menu>
+
                     <div class="auth-box mt-n2 ml-1">
                         <div class="auth-inside">
                             <div class="auth-inside-1" @click="
@@ -163,7 +164,15 @@
           ">
                 <v-list-item-title>Earning Logs</v-list-item-title><br /><br />
             </v-list-item>
+
             <v-divider></v-divider>
+
+            <v-list-item @click="$router.push('/all-notifications')">
+                <v-list-item-title>Notifications</v-list-item-title>
+            </v-list-item>
+
+            <v-divider></v-divider>
+
             <v-list-item @click="disconnect">
                 <v-list-item-title>Disconnect</v-list-item-title><br /><br />
             </v-list-item>
@@ -181,7 +190,8 @@ export default {
             resp: "",
             drawer: false,
             authBtn: null,
-            loaded: false
+            loaded: false,
+            notificationCount:0
         };
     },
     computed: {

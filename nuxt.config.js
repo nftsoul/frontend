@@ -1,5 +1,4 @@
 import colors from "vuetify/es5/util/colors";
-import ogImage from "@/assets/images/mini-log.png"
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   server: {
@@ -43,12 +42,12 @@ export default {
       },
       {
         name: "twitter:image",
-        content: process.env.SITE_URL+ogImage
+        content: "/mini-log.png"
       },
       { name: "theme-color", content: "#000229" },
       {
         property: "og:image:url",
-        content: process.env.SITE_URL+ogImage,
+        content: "/mini-log.png",
       },
       {
         name: "keywords",
@@ -74,7 +73,7 @@ export default {
         "@type": "Organization",
         url: process.env.SITE_URL,
         name: "NFTsoul | Exhibit your NFT",
-        logo: process.env.SITE_URL+ogImage,
+        logo: '/mini-log.png',
       },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/mini-log.png" }],
@@ -117,6 +116,7 @@ export default {
         dark: {
           primary: "#030537",
           background: "#000229",
+          notification:"#1b024d",
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
