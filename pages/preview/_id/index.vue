@@ -17,10 +17,11 @@
                                     </v-img>
                                 </v-col>
                                 <v-col cols="12" lg="5" md="6" class="pr-0">
-                                    <v-row no-gutters class="pb-2">
-                                        <p>{{ preview.gallery_name }}</p>
+                                    <v-row class="pb-2 mb-2">
+                                        <p v-if="preview.gallery_name.length > 34">{{ preview.gallery_name.slice(0,35) }}<br>{{ preview.gallery_name.slice(35,-1) }}</p>
+                                        <p v-else>{{preview.gallery_name}}</p>
                                         <v-spacer></v-spacer>
-                                        <ShareNetwork class="mb-2" network="twitter" :url="getShareLink()" :title="preview.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
+                                        <ShareNetwork class="mx-3" network="twitter" :url="getShareLink()" :title="preview.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
 
                                             <div @mouseenter="expand=true" @mouseleave="expand=false">
                                                 <v-row no-gutters>
@@ -175,21 +176,6 @@
         </v-container>
     </v-card>
 
-    <!-- approval dialog -->
-    <v-dialog v-model="approvalDialog" max-width="400" persistent>
-        <div class="border-white rounded-lg">
-            <v-card color="primary" class="rounded-lg">
-                <v-col align="center">
-                    <p class="text--disabled">
-                        <spinner :animation-duration="1200" :size="30" color="#fff" class="mx-auto" />Do not close this window
-                    </p>
-                    <p>You will be able to see items after payment approval</p>
-                    <p>{{ approvals }} Approvals Left</p>
-                </v-col>
-            </v-card>
-        </div>
-    </v-dialog>
-    <!-- end approval dialog -->
 </div>
 </template>
 
@@ -244,7 +230,6 @@ export default {
     mounted() {
         this.getNft()
         this.getComments()
-        console.log(this.$route.name)
     },
     methods: {
         getReplies(item, i) {
@@ -359,12 +344,6 @@ export default {
                     .goAway(3000);
             } else {
                 this.loading = true;
-
-                // const depositData = {
-                //     sender: this.walletAddress,
-                //     amount: Number(this.preview.price) + Number(0.02 * this.preview.price)
-                // };
-
                 var total_charge =
                     parseFloat(this.preview.price) +
                     0.02 * parseFloat(this.preview.price);
@@ -413,81 +392,6 @@ export default {
                                     id: this.gallery_id
                                 }
                             });
-                            // this.approvalDialog = true
-
-                            // let depositResponse = await zeb.deposit(depositData);
-
-                            // if (depositResponse.status == "success") {
-                            //     this.approvals -= 1
-                            //     let currentTime1 = Math.floor(Date.now() / 1000) + 120;
-                            //     let futureTime1 = currentTime1 + 1200;
-                            //     let creatorResponse = await zeb.init({
-                            //         sender: this.walletAddress,
-                            //         receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-                            //         amount: 0.02 * this.preview.price,
-                            //         start_time: currentTime1,
-                            //         end_time: futureTime1,
-                            //     });
-                            //     if (creatorResponse.status == "success") {
-                            //         this.approvals -= 1
-                            //         let currentTime2 = Math.floor(Date.now() / 1000) + 120
-                            //         let futureTime2 = currentTime2 + 1200
-                            //         let platformResponse = await zeb.init({
-                            //             sender: this.walletAddress,
-                            //             receiver: this.preview.user_id,
-                            //             amount: parseFloat(this.preview.price),
-                            //             start_time: currentTime2,
-                            //             end_time: futureTime2,
-                            //         });
-                            //         if (platformResponse.status == "success") {
-                            //             this.$store.commit('nft/setStream', true)
-                            //             this.streampda = platformResponse.data.pda
-                            //             this.saveEarning();
-                            //             this.loading = false;
-                            //             this.approvalDialog = false
-
-                            //             this.$router.push({
-                            //                 name: "stream-id",
-                            //                 params: {
-                            //                     id: this.gallery_id
-                            //                 }
-                            //             });
-                            //         } else {
-                            //             this.loading = false;
-                            //             this.approvalDialog = false
-                            //             this.approvals = 3
-                            //             this.$toast
-                            //                 .error("User rejected the request", {
-                            //                     iconPack: "mdi",
-                            //                     icon: "mdi-cancel",
-                            //                     theme: "outline",
-                            //                 })
-                            //                 .goAway(3000);
-                            //         }
-                            //     } else {
-                            //         this.approvalDialog = false
-                            //         this.loading = false;
-                            //         this.approvals = 3
-                            //         this.$toast
-                            //             .error("User rejected the request", {
-                            //                 iconPack: "mdi",
-                            //                 icon: "mdi-cancel",
-                            //                 theme: "outline",
-                            //             })
-                            //             .goAway(3000);
-                            //     }
-                            // } else {
-                            //     this.loading = false;
-                            //     this.approvalDialog = false
-                            //     this.approvals = 3
-                            //     this.$toast
-                            //         .error("User rejected the request", {
-                            //             iconPack: "mdi",
-                            //             icon: "mdi-cancel",
-                            //             theme: "outline",
-                            //         })
-                            //         .goAway(3000);
-                            // }
                         } else {
                             this.loading = false;
                             this.$toast
