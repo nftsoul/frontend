@@ -13,6 +13,8 @@
                                 <p class="ml-3 mt-n1" style="font-size:14px">Explore</p>
                             </div>
                         </div>
+                        <v-btn @click="send()">send</v-btn>
+
                     </v-row>
                 </v-col>
             </v-row>
@@ -24,6 +26,7 @@
 
 <script>
 import Appbar from '../layout/appbar';
+
 export default {
     components: {
         Appbar
@@ -38,7 +41,7 @@ export default {
             return this.$store.state.wallet.walletAddress
         }
     },
-    mounted() {
+    async mounted() {
         this.windowHeight = window.innerHeight
     },
     methods: {
@@ -97,7 +100,7 @@ export default {
                     address: this.walletAddress
                 }
             })
-        },
+        }
     }
 }
 </script>
