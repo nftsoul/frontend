@@ -1,4 +1,5 @@
-import util from "tweetnacl-util";
+import nacl from "tweetnacl";
+
 export const state = () => ({
   walletAddress: null,
   provider: null,
@@ -19,9 +20,9 @@ export const mutations = {
   setProfile(state, payload) {
     state.profile = payload;
   },
-  setNoficationCount(state,payload){
-    state.notificationCount=payload
-  }
+  setNoficationCount(state, payload) {
+    state.notificationCount = payload;
+  },
 };
 
 export const actions = {
@@ -33,29 +34,43 @@ export const actions = {
         context.commit("setWalletAddress", res.publicKey.toString());
         context.dispatch("getProfile", res.publicKey.toString());
         //signing hash
-        // const message = `Let me sign in !!!`
-        //     const encodedMessage = new TextEncoder().encode(message);
-        //     const signedMessage = await window.solana.signMessage(
-        //       encodedMessage,
-        //       "utf8"
-        //     );
-        //     var enc=new TextEncoder("utf-8")
-        //     let encMesaage=enc.encode(this.message)
-        //     let encPublicKey=signedMessage.publicKey
-        //     let encSignature=signedMessage.signature
+        // const message = `NFTsoul Authorization`;
+        // const encodedMessage = new TextEncoder().encode(message);
+        // const signedMessage = await window.solana.signMessage(
+        //   encodedMessage,
+        //   "utf8"
+        // );
+        // const messageBytes = new TextEncoder().encode(message);
 
-        //     console.log('encoded signature:',signedMessage.signature)
-        //     console.log('encoded message:',encMesaage)
-        //     console.log('encoded public key:',encPublicKey)
+        // const publicKeyBytes = signedMessage.publicKey.toBuffer();
 
-        //     this.$axios.post('https://staging-api.nftsoul.io/auth/login',{
-        //       message:encMesaage,
-        //       signature:encSignature,
-        //       publicKey:encPublicKey,
-        //       wallet_address:signedMessage.publicKey.toString()
-        //     }).then(res=>{
-        //       console.log('token',res.data)
-        //     }).catch(err=>console.log(err.response))
+        // const signatureBytes = signedMessage.signature;
+
+        // console.log("encoded signature:", signatureBytes);
+        // console.log("encoded message:", messageBytes);
+        // console.log("encoded public key:", publicKeyBytes);
+
+        // const result =  nacl.sign.detached.verify(
+        //   messageBytes,
+        //   signatureBytes,
+        //   publicKeyBytes
+        // );
+
+        // if (!result) {
+        //   console.log(`authentication failed`);
+        //   throw new Error("user can not be authenticated");
+        // }
+        // else{
+        //    console.log('result:',result)
+        // }
+        // let data=[messageBytes,signatureBytes,publicKeyBytes]
+        // let json=JSON.stringify(data)
+        // let post_data={json_data:json}
+        // console.log('r:',post_data)
+
+        // this.$axios.post('/auth/login',post_data).then(res=>{
+        //   console.log('token',res.data)
+        // }).catch(err=>console.log(err.response))
 
         this.$toast
           .success("Phantom wallet successfully connected.", {
@@ -95,24 +110,21 @@ export const actions = {
             .post(process.env.API_URL + "/profile?wallet_address=" + address)
             .then((res) => {
               context.commit("setProfile", res.data.data);
-              context.dispatch("getNotificationCount",res.data.data)
+              context.dispatch("getNotificationCount", res.data.data);
             })
             .catch((err) => {
               console.log(err.response);
             });
         } else {
           context.commit("setProfile", res.data[0]);
-          context.dispatch("getNotificationCount",res.data[0])
-
+          context.dispatch("getNotificationCount", res.data[0]);
         }
       })
       .catch((err) => console.log(err.response));
   },
-  getNotificationCount(context,payload) {
-    this.$axios
-      .get("/notification/new/" + payload._id)
-      .then(res =>{
-        context.commit('setNoficationCount',res.data.newNotifications)
-      } );
+  getNotificationCount(context, payload) {
+    this.$axios.get("/notification/new/" + payload._id).then((res) => {
+      context.commit("setNoficationCount", res.data.newNotifications);
+    });
   },
 };

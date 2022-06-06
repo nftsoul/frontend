@@ -107,7 +107,7 @@ export default {
                     } else {
                         this.pages = Math.floor(this.total / 20)+1
                     }
-                    this.nfts = res.data.trending
+                    this.nfts = res.data.trending_galleries
                 })
                 .catch((err) => console.log(err.response));
         },
