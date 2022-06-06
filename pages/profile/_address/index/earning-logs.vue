@@ -15,7 +15,6 @@
                                             <th class="text-left">Price</th>
                                             <th class="text-left">Date & Time</th>
                                             <th class="text-left">User</th>
-                                            <th class="text-left">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -31,15 +30,7 @@
                           }}
                                             </td>
                                             <td>{{ item.user_id }}</td>
-                                            <td>
-                                                <v-tooltip top v-if="item.withdrawn">
-                                                    <template v-slot:activator="{ on, attrs }">
-                                                        <v-icon dark v-bind="attrs" v-on="on">mdi-check</v-icon>
-                                                    </template>
-                                                    <span>Already withdrawn</span>
-                                                </v-tooltip>
-                                                <v-btn v-else small class="btn-exhibit" @click="withdraw(item)">Withdraw</v-btn>
-                                            </td>
+
                                         </tr>
                                     </tbody>
                                 </template>
@@ -74,10 +65,6 @@ let OrbitSpinner = null;
 if (process.client) {
     OrbitSpinner = require("epic-spinners").OrbitSpinner;
 }
-let zebec = null;
-if (process.client) {
-    zebec = require("@zebec-protocol/stream");
-}
 export default {
     components: {
         OrbitSpinner
@@ -103,40 +90,13 @@ export default {
             return window.innerHeight - 350;
         },
         getEarnings() {
-            axios
-                .get(process.env.baseUrl + "/get-earnings/" + this.walletAddress)
+            this.$axios
+                .get( "/get-earnings/" + this.walletAddress)
                 .then((res) => {
                     this.earning = res.data;
                     this.loading = false;
                 })
                 .catch((err) => console.log(err.response));
-        },
-        async withdraw(item) {
-            const zeb=new zebec.NativeStream(window.solana,process.env.CLUSTER_URL)
-            this.withdrawing = true
-            const data = {
-                sender: item.user_id,
-                receiver: this.walletAddress,
-                pda: item.pda,
-                amount: item.price,
-            };
-            const withdrawResponse = await zeb.withdraw(data)
-            if (withdrawResponse.status == "success") {
-                axios
-                    .get(process.env.baseUrl + "/withdraw/" + item._id)
-                    .then((res) => {
-                        this.withdrawing = true
-                        this.$toast
-                            .success("You have successfully withdrawn your SOL earned.", {
-                                iconPack: "mdi",
-                                icon: "mdi-check",
-                                theme: "outline",
-                            })
-                            .goAway(3000);
-                        this.earning[this.earning.indexOf(item)].withdrawn = true;
-                    })
-                    .catch((err) => console.log(err.response));
-            }
         },
     },
 };

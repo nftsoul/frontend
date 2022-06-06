@@ -139,22 +139,6 @@
     </v-dialog>
     <!-- end submit confirm -->
 
-    <!-- approval dialog -->
-    <v-dialog v-model="approvalDialog" max-width="400" persistent>
-        <div class="border-white rounded-lg">
-            <v-card color="primary" class="rounded-lg" style="border:2px solid white">
-                <v-col align="center">
-                    <p class="text--disabled">
-                        <spinner :animation-duration="1200" :size="30" color="#fff" class="mx-auto" />Do not close this window
-                    </p>
-                    <p>Your gallery will be created after payment approval</p>
-                    <p>{{ approvals }} Approvals Left</p>
-                </v-col>
-            </v-card>
-        </div>
-    </v-dialog>
-    <!-- end approval dialog -->
-
     <!-- delete nft -->
     <v-dialog v-model="deleteDialog" max-width="600" persistent>
         <v-card color="background">
@@ -229,10 +213,6 @@
 
 <script>
 import Exhibit from '../../../components/profile/exhibit.vue'
-let zebec = null;
-if (process.client) {
-    zebec = require("@zebec-protocol/stream");
-}
 const web3 = require("@solana/web3.js");
 const getProvider = async () => {
     if ("solana" in window) {
@@ -295,7 +275,6 @@ export default {
             },
             rankedNfts: [],
             approvalDialog: false,
-            approvals: 2,
             priceDisabled: false,
             premium: true,
             selectedIndex: 0,
@@ -461,7 +440,6 @@ export default {
         async createGallery() {
             this.confirmDialog = false
             if (this.$refs.form.validate()) {
-                const zeb = new zebec.NativeStream(window.solana, process.env.CLUSTER_URL)
                 if (this.src != null) {
                     this.creating = true;
                     const depositData = {

@@ -32,7 +32,7 @@ export const actions = {
         var res = await window.solana.connect();
         context.commit("setWalletAddress", res.publicKey.toString());
         context.dispatch("getProfile", res.publicKey.toString());
-        // //signing hash
+        //signing hash
         // const message = `Let me sign in !!!`
         //     const encodedMessage = new TextEncoder().encode(message);
         //     const signedMessage = await window.solana.signMessage(
@@ -41,8 +41,8 @@ export const actions = {
         //     );
         //     var enc=new TextEncoder("utf-8")
         //     let encMesaage=enc.encode(this.message)
-        //     let encPublicKey=util.encodeBase64(signedMessage.publicKey.toBuffer())
-        //     let encSignature=util.encodeBase64(signedMessage.signature)
+        //     let encPublicKey=signedMessage.publicKey
+        //     let encSignature=signedMessage.signature
 
         //     console.log('encoded signature:',signedMessage.signature)
         //     console.log('encoded message:',encMesaage)

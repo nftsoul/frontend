@@ -194,12 +194,17 @@
 </template>
 
 <script>
-let zebec = null;
-if (process.client) {
-    zebec = require("@zebec-protocol/stream");
-}
-
 const web3 = require("@solana/web3.js");
+const getProvider = async () => {
+    if ("solana" in window) {
+        const provider = window.solana;
+        if (provider.isPhantom) {
+            return provider;
+        }
+    } else {
+        window.open("https://www.phantom.app/", "_blank");
+    }
+};
 export default {
     data() {
         return {
@@ -344,7 +349,6 @@ export default {
             }
         },
         async stream() {
-            const zeb = new zebec.NativeStream(window.solana, process.env.CLUSTER_URL)
             if (this.walletAddress == null) {
                 this.$toast
                     .error("Connect your phantom wallet first.", {
@@ -356,10 +360,10 @@ export default {
             } else {
                 this.loading = true;
 
-                const depositData = {
-                    sender: this.walletAddress,
-                    amount: Number(this.preview.price) + Number(0.02 * this.preview.price)
-                };
+                // const depositData = {
+                //     sender: this.walletAddress,
+                //     amount: Number(this.preview.price) + Number(0.02 * this.preview.price)
+                // };
 
                 var total_charge =
                     parseFloat(this.preview.price) +
@@ -375,82 +379,115 @@ export default {
                     if (this.preview.premium) {
 
                         if (total_charge < available) {
-                            // depositing sol
-                            this.approvalDialog = true
+                            var provider = await getProvider();
 
-                            let depositResponse = await zeb.deposit(depositData);
+                            var platformWallet = new web3.PublicKey("9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv");
+                            var creatorWallet = new web3.PublicKey(this.preview.user_id);
 
-                            if (depositResponse.status == "success") {
-                                this.approvals -= 1
-                                let currentTime1 = Math.floor(Date.now() / 1000) + 120;
-                                let futureTime1 = currentTime1 + 1200;
-                                let creatorResponse = await zeb.init({
-                                    sender: this.walletAddress,
-                                    receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-                                    amount: 0.02 * this.preview.price,
-                                    start_time: currentTime1,
-                                    end_time: futureTime1,
-                                });
-                                if (creatorResponse.status == "success") {
-                                    this.approvals -= 1
-                                    let currentTime2 = Math.floor(Date.now() / 1000) + 120
-                                    let futureTime2 = currentTime2 + 1200
-                                    let platformResponse = await zeb.init({
-                                        sender: this.walletAddress,
-                                        receiver: this.preview.user_id,
-                                        amount: parseFloat(this.preview.price),
-                                        start_time: currentTime2,
-                                        end_time: futureTime2,
-                                    });
-                                    if (platformResponse.status == "success") {
-                                        this.$store.commit('nft/setStream', true)
-                                        this.streampda = platformResponse.data.pda
-                                        this.saveEarning();
-                                        this.loading = false;
-                                        this.approvalDialog = false
+                            var transaction = new web3.Transaction().add(
+                                web3.SystemProgram.transfer({
+                                    fromPubkey: provider.publicKey,
+                                    toPubkey: platformWallet,
+                                    lamports: 0.02 * this.preview.price
+                                }),
+                                web3.SystemProgram.transfer({
+                                    fromPubkey: provider.publicKey,
+                                    toPubkey: creatorWallet,
+                                    lamports: this.preview.price
+                                }),
+                            );
 
-                                        this.$router.push({
-                                            name: "stream-id",
-                                            params: {
-                                                id: this.gallery_id
-                                            }
-                                        });
-                                    } else {
-                                        this.loading = false;
-                                        this.approvalDialog = false
-                                        this.approvals = 3
-                                        this.$toast
-                                            .error("User rejected the request", {
-                                                iconPack: "mdi",
-                                                icon: "mdi-cancel",
-                                                theme: "outline",
-                                            })
-                                            .goAway(3000);
-                                    }
-                                } else {
-                                    this.approvalDialog = false
-                                    this.loading = false;
-                                    this.approvals = 3
-                                    this.$toast
-                                        .error("User rejected the request", {
-                                            iconPack: "mdi",
-                                            icon: "mdi-cancel",
-                                            theme: "outline",
-                                        })
-                                        .goAway(3000);
+                            transaction.feePayer = await provider.publicKey;
+                            let blockhashObj = await this.connection.getRecentBlockhash();
+                            transaction.recentBlockhash = await blockhashObj.blockhash;
+                            let signed = await provider.signTransaction(transaction);
+                            let signature = await this.connection.sendRawTransaction(signed.serialize());
+                            this.$store.commit('nft/setStream', true)
+                            this.saveEarning();
+                            this.loading = false;
+                            this.approvalDialog = false
+
+                            this.$router.push({
+                                name: "stream-id",
+                                params: {
+                                    id: this.gallery_id
                                 }
-                            } else {
-                                this.loading = false;
-                                this.approvalDialog = false
-                                this.approvals = 3
-                                this.$toast
-                                    .error("User rejected the request", {
-                                        iconPack: "mdi",
-                                        icon: "mdi-cancel",
-                                        theme: "outline",
-                                    })
-                                    .goAway(3000);
-                            }
+                            });
+                            // this.approvalDialog = true
+
+                            // let depositResponse = await zeb.deposit(depositData);
+
+                            // if (depositResponse.status == "success") {
+                            //     this.approvals -= 1
+                            //     let currentTime1 = Math.floor(Date.now() / 1000) + 120;
+                            //     let futureTime1 = currentTime1 + 1200;
+                            //     let creatorResponse = await zeb.init({
+                            //         sender: this.walletAddress,
+                            //         receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
+                            //         amount: 0.02 * this.preview.price,
+                            //         start_time: currentTime1,
+                            //         end_time: futureTime1,
+                            //     });
+                            //     if (creatorResponse.status == "success") {
+                            //         this.approvals -= 1
+                            //         let currentTime2 = Math.floor(Date.now() / 1000) + 120
+                            //         let futureTime2 = currentTime2 + 1200
+                            //         let platformResponse = await zeb.init({
+                            //             sender: this.walletAddress,
+                            //             receiver: this.preview.user_id,
+                            //             amount: parseFloat(this.preview.price),
+                            //             start_time: currentTime2,
+                            //             end_time: futureTime2,
+                            //         });
+                            //         if (platformResponse.status == "success") {
+                            //             this.$store.commit('nft/setStream', true)
+                            //             this.streampda = platformResponse.data.pda
+                            //             this.saveEarning();
+                            //             this.loading = false;
+                            //             this.approvalDialog = false
+
+                            //             this.$router.push({
+                            //                 name: "stream-id",
+                            //                 params: {
+                            //                     id: this.gallery_id
+                            //                 }
+                            //             });
+                            //         } else {
+                            //             this.loading = false;
+                            //             this.approvalDialog = false
+                            //             this.approvals = 3
+                            //             this.$toast
+                            //                 .error("User rejected the request", {
+                            //                     iconPack: "mdi",
+                            //                     icon: "mdi-cancel",
+                            //                     theme: "outline",
+                            //                 })
+                            //                 .goAway(3000);
+                            //         }
+                            //     } else {
+                            //         this.approvalDialog = false
+                            //         this.loading = false;
+                            //         this.approvals = 3
+                            //         this.$toast
+                            //             .error("User rejected the request", {
+                            //                 iconPack: "mdi",
+                            //                 icon: "mdi-cancel",
+                            //                 theme: "outline",
+                            //             })
+                            //             .goAway(3000);
+                            //     }
+                            // } else {
+                            //     this.loading = false;
+                            //     this.approvalDialog = false
+                            //     this.approvals = 3
+                            //     this.$toast
+                            //         .error("User rejected the request", {
+                            //             iconPack: "mdi",
+                            //             icon: "mdi-cancel",
+                            //             theme: "outline",
+                            //         })
+                            //         .goAway(3000);
+                            // }
                         } else {
                             this.loading = false;
                             this.$toast
