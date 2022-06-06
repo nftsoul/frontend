@@ -15,7 +15,7 @@
                                         <v-container>
                                             <v-row>
                                                 <v-col cols="4">
-                                                    <p class="text-h6 mb-0">
+                                                    <p class="mb-0">
                                                         {{ stream.gallery_name }}
                                                     </p>
                                                     <p class="mb-0">
