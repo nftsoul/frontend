@@ -215,10 +215,10 @@ export default {
         const mutation = app.head.meta.map(i => {
             if(i && i.hid){
                 if(i.hid === 'title'){
-                    i.content = pre.gallery[0].title
+                    i.content = pre.gallery[0].gallery_name
                 }
                 if(i.hid === 'description'){
-                    i.content = pre.gallery[0].body;
+                    i.content = pre.gallery[0].description;
                 }
                 if(i.hid === 'twitter:image'){
                     i.content = pre.gallery[0].image
@@ -230,16 +230,16 @@ export default {
                     i.content = pre.gallery[0].image
                 }
                 if(i.hid === 'og:image:secure_url'){
-                    i.content = pre.gallery[0].title;
+                    i.content = pre.gallery[0].image;
                 }
                 if(i.hid === 'og:title'){
-                    i.content = pre.gallery[0].title
+                    i.content = pre.gallery[0].gallery_name
                 }
                 if(i.hid === 'og:description'){
-                    i.content = pre.gallery[0].body
+                    i.content = pre.gallery[0].description
                 }
                 if(i.hid === 'description'){
-                    i.content = pre.gallery[0].body
+                    i.content = pre.gallery[0].description
                 }
                 // if(i.hid === 'og:url'){
                 //     i.content = this.$route.path
