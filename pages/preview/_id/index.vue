@@ -209,9 +209,45 @@ const getProvider = async () => {
 };
 export default {
     async asyncData({
-        params
+        app,params
     }) {
         const pre = await fetch(process.env.API_URL + `/single-gallery/${params.id}`).then((res) => res.json());
+        const mutation = app.head.meta.map(i => {
+            if(i && i.hid){
+                if(i.hid === 'title'){
+                    i.content = pre.gallery[0].title
+                }
+                if(i.hid === 'description'){
+                    i.content = pre.gallery[0].body;
+                }
+                if(i.hid === 'twitter:image'){
+                    i.content = pre.gallery[0].image
+                }
+                if(i.hid === 'twitter:card'){
+                    i.content = 'summary_large_image'
+                }
+                if(i.hid === 'og:image'){
+                    i.content = pre.gallery[0].image
+                }
+                if(i.hid === 'og:image:secure_url'){
+                    i.content = pre.gallery[0].title;
+                }
+                if(i.hid === 'og:title'){
+                    i.content = pre.gallery[0].title
+                }
+                if(i.hid === 'og:description'){
+                    i.content = pre.gallery[0].body
+                }
+                if(i.hid === 'description'){
+                    i.content = pre.gallery[0].body
+                }
+                // if(i.hid === 'og:url'){
+                //     i.content = this.$route.path
+                // }
+            }
+            return i;
+        });
+      app.head.meta = mutation;
         return {
             pre
         };
