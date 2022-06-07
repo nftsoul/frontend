@@ -1,5 +1,5 @@
 import nacl from "tweetnacl";
-
+// nacl.util = require('tweetnacl-util');
 export const state = () => ({
   walletAddress: null,
   provider: null,

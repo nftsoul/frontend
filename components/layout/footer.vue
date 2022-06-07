@@ -19,7 +19,7 @@
                 <v-col cols="12" lg="3" md="6" sm="4" class="footer">
                     <h5 class="mb-5">Join Our Discord</h5>
                     <small>Become a part of our community</small><br>
-                    <v-icon>mdi-discord</v-icon>
+                    <v-icon class="mx-auto" large @click="goTo({link:'https://discord.com/invite/xcTuWYc8rj'})">mdi-discord</v-icon>
                 </v-col>
             </v-row>
 
