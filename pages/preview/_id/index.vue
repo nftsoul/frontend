@@ -1,5 +1,6 @@
 <template>
 <div class="dark-bg">
+    <SocialHead :title="pre.gallery[0].gallery_name" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
     <v-card :min-height="screenHeight()" flat color="transparent" class="pt-16">
         <v-container class="pt-16">
             <v-row justify="center">
@@ -11,19 +12,24 @@
                                     <v-img :src="preview.image" class="rounded-lg">
                                         <template v-slot:placeholder>
                                             <v-row class="fill-height ma-0" align="center" justify="center">
-                                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                                <v-progress-circular indeterminate color="grey lighten-5">
+                                                </v-progress-circular>
                                             </v-row>
                                         </template>
                                     </v-img>
                                 </v-col>
                                 <v-col cols="12" lg="5" md="6" class="pr-0">
                                     <v-row class="pb-2 mb-2">
-                                        <p v-if="preview.gallery_name.length > 34">{{ preview.gallery_name.slice(0,35) }}<br>{{ preview.gallery_name.slice(35,-1) }}</p>
-                                        <p v-else>{{preview.gallery_name}}</p>
+                                        <p v-if="preview.gallery_name.length > 34">{{
+                                                    preview.gallery_name.slice(0, 35)
+                                            }}<br>{{
+        preview.gallery_name.slice(35, -1)
+}}</p>
+                                        <p v-else>{{ preview.gallery_name }}</p>
                                         <v-spacer></v-spacer>
                                         <ShareNetwork class="mx-3" style="text-decoration: none;" network="twitter" :url="getShareLink()" :title="preview.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
 
-                                            <div @mouseenter="expand=true" @mouseleave="expand=false">
+                                            <div @mouseenter="expand = true" @mouseleave="expand = false">
                                                 <v-row no-gutters>
                                                     <div class="twitter-share">
                                                         <v-icon color="white">mdi-twitter</v-icon>
@@ -45,20 +51,22 @@
                                                 <v-icon v-else>mdi-account-tie</v-icon>
                                             </v-list-item-avatar>
                                             <v-list-item-content>
-                                                <v-list-item-title v-if="preview.created_by.name">{{preview.created_by.name.slice(0,20)}}</v-list-item-title>
-                                                <v-list-item-title v-else>{{preview.user_id.slice(0, 5)}}</v-list-item-title>
+                                                <v-list-item-title v-if="preview.created_by.name">
+                                                    {{ preview.created_by.name.slice(0, 20) }}</v-list-item-title>
+                                                <v-list-item-title v-else>{{ preview.user_id.slice(0, 5) }}
+                                                </v-list-item-title>
                                             </v-list-item-content>
                                         </v-list-item>
                                     </v-list>
                                     <v-row class="mt-5">
                                         <v-col cols="5">
                                             <p class="mb-0 caption text--disabled">start with</p>
-                                            <p class="text-h5" v-if="preview.price>0">{{ preview.price }} SOL</p>
+                                            <p class="text-h5" v-if="preview.price > 0">{{ preview.price }} SOL</p>
                                             <p class="text-h5" v-else>{{ 0 }} SOL</p>
 
                                             <div>
                                                 <v-btn small color="green" class="mt-7" rounded x-small @click="stream" :loading="loading">
-                                                    <small>{{getBtnText()}}</small>
+                                                    <small>{{ getBtnText() }}</small>
                                                 </v-btn>
                                             </div>
                                             <p class="mt-2 body-2">
@@ -78,29 +86,30 @@
                                 <v-col cols="12" lg="4" md="6" class="px-3">
                                     <h5 class="mx-5">Comments</h5>
                                     <div style="border-left:1px solid #500083;height:300px;overflow:auto" class="px-3">
-                                        <div v-if="comments.length>0">
-                                            <v-list-item v-for="(item,i) in comments" :key="i" class="px-0">
+                                        <div v-if="comments.length > 0">
+                                            <v-list-item v-for="(item, i) in comments" :key="i" class="px-0">
                                                 <v-list-item-avatar size="50" class="mr-0">
                                                     <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="60" max-height="60"></v-img>
                                                     <v-icon v-else large>mdi-account</v-icon>
                                                 </v-list-item-avatar>
-                                                <v-list-item-content @mouseenter="selectedIndex=i" @mouseleave="selectedIndex=null,replying=false">
+                                                <v-list-item-content @mouseenter="selectedIndex = i" @mouseleave="selectedIndex = null, replying = false">
                                                     <v-list-item-title>
-                                                        <span v-if="item.user_id.name">{{item.user_id.name}}</span>
-                                                        <span v-else>{{ item.user_id.wallet_address.slice(0, 5) }}</span>
-                                                        <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
-                                                        <small class="reply-btn position-abs text--disabled mb-0 mt-n6" v-if="selectedIndex==i" @click="replying=true">
+                                                        <span v-if="item.user_id.name">{{ item.user_id.name }}</span>
+                                                        <span v-else>{{ item.user_id.wallet_address.slice(0, 5)
+                                                            }}</span>
+                                                        <small class="caption text--disabled">{{ $moment(item.time).fromNow() }}</small>
+                                                        <small class="reply-btn position-abs text--disabled mb-0 mt-n6" v-if="selectedIndex == i" @click="replying = true">
                                                             <v-icon small>mdi-reply</v-icon>Reply
                                                         </small>
                                                     </v-list-item-title>
                                                     <v-card-text class="text--disabled pa-0"><small v-html="item.body"></small></v-card-text><br>
                                                     <v-row no-gutters>
-                                                        <small v-if="item.reply_count>0" @click="getReplies(item,i)" class="reply-btn">{{item.reply_count}} Replied</small>
-                                                        <v-btn x-small text v-if="replyPage==1 && selectedIndex==i" :loading="more"></v-btn>
+                                                        <small v-if="item.reply_count > 0" @click="getReplies(item, i)" class="reply-btn">{{ item.reply_count }} Replied</small>
+                                                        <v-btn x-small text v-if="replyPage == 1 && selectedIndex == i" :loading="more"></v-btn>
                                                     </v-row>
 
                                                     <!-- make reply -->
-                                                    <div v-if="replying==true && selectedIndex==i">
+                                                    <div v-if="replying == true && selectedIndex == i">
                                                         <v-list-item dense class="px-0" v-if="profile">
                                                             <v-row no-gutters>
                                                                 <v-col cols="2" class="pa-0">
@@ -121,26 +130,30 @@
 
                                                     <!-- replies -->
                                                     <div v-if="item.replies">
-                                                        <v-list-item dense v-for="(reply,j) in item.replies" :key="j">
+                                                        <v-list-item dense v-for="(reply, j) in item.replies" :key="j">
                                                             <v-list-item-avatar size="30" class="mr-0">
                                                                 <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link" max-width="60" max-height="60"></v-img>
                                                                 <v-icon v-else>mdi-account</v-icon>
                                                             </v-list-item-avatar>
                                                             <v-list-item-content>
                                                                 <v-list-item-title>
-                                                                    <span v-if="reply.user_id.name">{{reply.user_id.name}}</span>
-                                                                    <span v-else>{{ reply.user_id.wallet_address.slice(0, 5) }}</span>
-                                                                    <small class="caption text--disabled">{{$moment(reply.time).fromNow()}}</small>
+                                                                    <span v-if="reply.user_id.name">{{ reply.user_id.name }}</span>
+                                                                    <span v-else>{{
+                                                                                reply.user_id.wallet_address.slice(0, 5)
+                                                                        }}</span>
+                                                                    <small class="caption text--disabled">{{ $moment(reply.time).fromNow() }}</small>
                                                                 </v-list-item-title>
-                                                                <v-card-text class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text><br>
+                                                                <v-card-text class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text>
+                                                                <br>
                                                             </v-list-item-content>
                                                         </v-list-item>
                                                         <v-row no-gutters>
-                                                            <v-btn v-if="item.reply_count>5 && item.replies.length < item.reply_count" @click="getReplies(item,i)" x-small text>
+                                                            <v-btn v-if="item.reply_count > 5 && item.replies.length < item.reply_count" @click="getReplies(item, i)" x-small text>
                                                                 <v-icon small>mdi-arrow-down</v-icon>
                                                                 <small>See More</small>
                                                             </v-btn>
-                                                            <v-btn v-if="replyPage>1" x-small text :loading="more"></v-btn>
+                                                            <v-btn v-if="replyPage > 1" x-small text :loading="more">
+                                                            </v-btn>
                                                         </v-row>
 
                                                     </div>
@@ -162,10 +175,12 @@
                                     <v-skeleton-loader type="image"></v-skeleton-loader>
                                 </v-col>
                                 <v-col cols="12" lg="4" md="6">
-                                    <v-skeleton-loader type="list-item-avatar, list-item-three-line, card-heading, actions\"></v-skeleton-loader>
+                                    <v-skeleton-loader type="list-item-avatar, list-item-three-line, card-heading, actions\">
+                                    </v-skeleton-loader>
                                 </v-col>
                                 <v-col cols="12" lg="4" md="6">
-                                    <v-skeleton-loader v-for="(item,i) in 5" :key="i" dark type="list-item-avatar"></v-skeleton-loader>
+                                    <v-skeleton-loader v-for="(item, i) in 5" :key="i" dark type="list-item-avatar">
+                                    </v-skeleton-loader>
 
                                 </v-col>
                             </v-row>
@@ -192,6 +207,14 @@ const getProvider = async () => {
     }
 };
 export default {
+    async asyncData({params}) {
+        const pre = await fetch(
+            process.env.API_URL+`/single-gallery/${params.id}`
+        ).then((res) =>res.json())
+        return {
+            pre
+        }
+    },
     data() {
         return {
             loading: false,
