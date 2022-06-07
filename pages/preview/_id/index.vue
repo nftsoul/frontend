@@ -21,7 +21,7 @@
                                         <p v-if="preview.gallery_name.length > 34">{{ preview.gallery_name.slice(0,35) }}<br>{{ preview.gallery_name.slice(35,-1) }}</p>
                                         <p v-else>{{preview.gallery_name}}</p>
                                         <v-spacer></v-spacer>
-                                        <ShareNetwork class="mx-3" network="twitter" :url="getShareLink()" :title="preview.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
+                                        <ShareNetwork class="mx-3" style="text-decoration: none;" network="twitter" :url="getShareLink()" :title="preview.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
 
                                             <div @mouseenter="expand=true" @mouseleave="expand=false">
                                                 <v-row no-gutters>
@@ -192,25 +192,6 @@ const getProvider = async () => {
     }
 };
 export default {
-    head: {
-        meta: [{
-                name: "twitter:card",
-                content: "summary_large_image"
-            },
-            {
-                name: "twitter:title",
-                content: 'preview page'
-            },
-            {
-                name: "twitter:description",
-                content: "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
-            },
-            {
-                name: "twitter:image",
-                content: "/mini-log.png"
-            },
-        ]
-    },
     data() {
         return {
             loading: false,
