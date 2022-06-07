@@ -71,7 +71,7 @@
                                                         </v-img>
                                                     </div>
                                                 </v-col>
-                                                <v-col cols="12" lg="7" md="6" class="mt-n12">
+                                                <v-col cols="12" lg="7" md="6" class="mt-n6">
                                                     <v-card outlined class="rounded-lg pa-2">
                                                         <v-row no-gutters>
                                                             <v-chip dark small :color="getColor('story')" @click="active = 'story'">Nft Story</v-chip>
@@ -105,7 +105,7 @@
 
                                                     <v-divider class="mt-n3"></v-divider>
 
-                                                    <v-list-item dense class="px-0">
+                                                    <v-list-item dense class="px-0 mt-2">
                                                         <v-list-item-avatar size="30">
                                                             <v-icon>mdi-account-tie</v-icon>
                                                         </v-list-item-avatar>
@@ -143,72 +143,74 @@
                 <v-card dark outlined class="max-width:800">
                     <div v-if="comments.length > 0">
                         <v-list-item v-for="(item, i) in comments" :key="i">
-                            <v-row no-gutters>
-                                <v-col cols="1" class="pa-0" align="right">
-                                    <v-list-item-avatar>
-                                        <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="40" max-height="40"></v-img>
-                                        <v-icon v-else large>mdi-account</v-icon>
-                                    </v-list-item-avatar>
-                                </v-col>
-                                <v-col>
-                                    <v-list-item-content @mouseenter="selectedIndex=i" @mouseleave="selectedIndex=null,replying=false">
-                                        <v-list-item-title>
-                                            <span v-if="item.user_id.name">{{item.user_id.name}}</span>
-                                            <span v-else>{{item.user_id.wallet_address.slice(0, 5)}}</span>
-                                            <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
-                                        </v-list-item-title>
-                                        <small class="text--disabled" v-html="item.body"></small>
+
+                            <v-list-item-avatar class="mr-0">
+                                <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="40" max-height="40"></v-img>
+                                <v-icon v-else large>mdi-account</v-icon>
+                            </v-list-item-avatar>
+
+                            <v-list-item-content @mouseenter="selectedIndex=i" @mouseleave="selectedIndex=null,replying=false">
+                                <v-list-item-title>
+                                    <span v-if="item.user_id.name">{{item.user_id.name}}</span>
+                                    <span v-else>{{item.user_id.wallet_address.slice(0, 5)}}</span>
+                                    <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
+                                    <small class="reply-btn position-abs text--disabled mb-0 ml-2 mt-n1" v-if="selectedIndex==i" @click="replying=true">
+                                        <v-icon small>mdi-reply</v-icon>Reply
+                                    </small>
+                                </v-list-item-title>
+                                <v-card-text class="text--disabled pa-0"><small v-html="item.body"></small></v-card-text><br>
+                                <v-row no-gutters class="mt-1">
+                                    <small v-if="item.reply_count>0" @click="getReplies(item,i)" class="reply-btn">{{item.reply_count}} Replied</small>
+                                    <v-btn x-small text v-if="replyPage==1 && selectedIndex==i" :loading="moreReply"></v-btn>
+
+                                </v-row>
+
+                                <div v-if="replying==true && selectedIndex==i" class="mt-3">
+                                    <v-list-item dense class="px-0" v-if="profile">
                                         <v-row no-gutters>
-                                            <small v-if="item.reply_count>0" @click="getReplies(item,i)" class="reply-btn">{{item.reply_count}} Replied</small>
-                                            <v-btn x-small text v-if="replyPage==1 && selectedIndex==i" :loading="more"></v-btn>
-                                            <!-- make reply -->
-                                            <small class="reply-btn position-abs text--disabled mb-0 ml-2" v-if="selectedIndex==i" @click="replying=true">
-                                                <v-icon small>mdi-reply</v-icon>Reply
-                                            </small>
-                                        </v-row>
-
-                                        <div v-if="replying==true && selectedIndex==i" class="mt-3">
-                                            <v-list-item dense class="px-0" v-if="profile">
-                                                <v-row no-gutters>
-                                                    <v-col cols="1" class="pa-0">
-                                                        <v-list-item-avatar size="30" class="mb-0 mt-2 mr-1">
-                                                            <v-img v-if="profile.image_link" :src="profile.image_link" :lazy-src="profile.image_link"></v-img>
-                                                            <v-icon v-else large>mdi-account</v-icon>
-                                                        </v-list-item-avatar>
-                                                    </v-col>
-                                                    <v-col>
-                                                        <v-list-item-content class="py-1 ml-n5">
-                                                            <v-text-field dark color="white" append-icon="mdi-check" :loading="makingReply" @click:append="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply"></v-text-field>
-                                                        </v-list-item-content>
-                                                    </v-col>
-                                                </v-row>
-                                            </v-list-item>
-                                        </div>
-                                        <!-- end make reply -->
-
-                                        <!-- replies -->
-                                        <div v-if="item.replies">
-                                            <v-list-item dense v-for="(reply,j) in item.replies" :key="j">
-                                                <v-list-item-avatar size="30">
-                                                    <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link" max-width="60" max-height="60"></v-img>
-                                                    <v-icon v-else>mdi-account</v-icon>
+                                            <v-col cols="1" class="pa-0">
+                                                <v-list-item-avatar size="30" class="mb-0 mt-2 mr-1">
+                                                    <v-img v-if="profile.image_link" :src="profile.image_link" :lazy-src="profile.image_link"></v-img>
+                                                    <v-icon v-else large>mdi-account</v-icon>
                                                 </v-list-item-avatar>
-                                                <v-list-item-content>
-                                                    <v-list-item-subtitle v-html="reply.body"></v-list-item-subtitle>
+                                            </v-col>
+                                            <v-col>
+                                                <v-list-item-content class="py-1 ml-n5">
+                                                    <v-textarea rows="1" id="txtArea" @keypress.enter="onEnterPress(item)" auto-grow dark color="white" append-icon="mdi-check" :loading="makingReply" @click:append="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply"></v-textarea>
                                                 </v-list-item-content>
-                                            </v-list-item>
-                                            <v-row no-gutters>
-                                                <v-btn v-if="item.reply_count>5 && item.replies.length < item.reply_count" @click="getReplies(item,i)" x-small text>
-                                                    <v-icon small>mdi-arrow-down</v-icon>
-                                                    <small>See More</small>
-                                                </v-btn>
-                                                <v-btn v-if="replyPage>1" x-small text :loading="more"></v-btn>
-                                            </v-row>
-                                        </div>
-                                        <!-- end replies -->
-                                    </v-list-item-content>
-                                </v-col>
-                            </v-row>
+                                            </v-col>
+                                        </v-row>
+                                    </v-list-item>
+                                </div>
+                                <!-- end make reply -->
+
+                                <!-- replies -->
+                                <div v-if="item.replies">
+                                    <v-list-item dense v-for="(reply,j) in item.replies" :key="j">
+                                        <v-list-item-avatar size="30" class="mr-0">
+                                            <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link" max-width="60" max-height="60"></v-img>
+                                            <v-icon v-else>mdi-account</v-icon>
+                                        </v-list-item-avatar>
+                                        <v-list-item-content>
+                                            <v-list-item-title>
+                                                <span v-if="reply.user_id.name">{{reply.user_id.name}}</span>
+                                                <span v-else>{{ reply.user_id.wallet_address.slice(0, 5) }}</span>
+                                                <small class="caption text--disabled">{{$moment(reply.time).fromNow()}}</small>
+                                            </v-list-item-title>
+                                            <v-card-text class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text><br>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                    <v-row no-gutters>
+                                        <v-btn v-if="item.reply_count>5 && item.replies.length < item.reply_count" @click="getReplies(item,i)" x-small text>
+                                            <v-icon small>mdi-arrow-down</v-icon>
+                                            <small>See More</small>
+                                        </v-btn>
+                                        <v-btn v-if="replyPage>1" x-small text :loading="moreReply"></v-btn>
+                                    </v-row>
+                                </div>
+                                <!-- end replies -->
+                            </v-list-item-content>
+
                         </v-list-item>
                     </div>
                     <div v-else class="ma-5">
@@ -230,7 +232,7 @@
                             <v-img v-if="profile.image_link" :src="profile.image_link"></v-img>
                             <v-icon v-else large>mdi-account</v-icon>
                         </v-avatar>
-                        <v-textarea dark rows="2" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?"></v-textarea>
+                        <v-textarea dark rows="1" auto-grow id="txtArea2" @keypress.enter="preventComment()" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?"></v-textarea>
                     </v-row>
                     <v-row no-gutters class="px-5 pb-5">
                         <v-spacer></v-spacer>
@@ -287,8 +289,16 @@ export default {
             selectedComment: '',
             replyPage: 0,
             more: false,
-            makingReply: false
+            makingReply: false,
+            moreReply:false
         };
+    },
+    watch: {
+        comment() {
+            if (this.comment != "") {
+                this.error = ''
+            }
+        }
     },
     computed: {
         walletAddress() {
@@ -322,8 +332,26 @@ export default {
         }
     },
     methods: {
+        preventComment() {
+            this.makeComment()
+            var el = document.getElementById("txtArea2");
+            el.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                }
+            });
+        },
+        onEnterPress(item) {
+            this.makeReply(item)
+            var el = document.getElementById("txtArea");
+            el.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                }
+            });
+        },
         getReplies(item, i) {
-            this.more=true
+            this.moreReply = true
             if (this.selectedComment != item._id) {
                 this.replyPage = 1
                 this.selectedComment = item._id
@@ -337,14 +365,21 @@ export default {
                     },
                 }
             ).then(res => {
-                this.more=false
+                this.moreReply = false
                 const index = this.comments.indexOf(item)
                 let rep = res.data.replies.replies
                 if (!this.comments[index].replies) {
                     this.comments[index]['replies'] = []
                 }
+                let reply_ids = []
+                for (var y = 0; y < this.comments[index].replies.length; y++) {
+                    reply_ids.push(this.comments[index].replies[y]._id)
+                }
                 for (var x = 0; x < rep.length; x++) {
-                    this.comments[index].replies.push(rep[x])
+                    if (!reply_ids.includes(rep[x]._id)) {
+                        this.comments[index].replies.push(rep[x])
+
+                    }
                 }
             })
         },
@@ -364,7 +399,7 @@ export default {
                 });
         },
         makeReply(item) {
-            this.makingReply=true
+            this.makingReply = true
             this.selectedComment = item
             if (this.reply != '') {
                 this.$axios
@@ -373,7 +408,7 @@ export default {
                         user_id: this.profile._id,
                     })
                     .then((res) => {
-                        this.makingReply=false
+                        this.makingReply = false
                         let rep = res.data.reply
                         this.reply = ''
                         rep['user_id'] = this.profile
@@ -554,5 +589,8 @@ a.prev span {
             #1905da 96.24%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+.v-list-item__avatar{
+    align-self: flex-start;
 }
 </style>
