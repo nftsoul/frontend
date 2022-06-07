@@ -19,36 +19,36 @@ export default {
         content:
           "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
       },
-      { property: "og:locale", content: "en_US" },
-      { property: "og:type", content: "website" },
-      { property: "og:title", content: "NFTsoul | Exhibit your NFT" },
-      {
-        property: "og:description",
-        content:
-          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
-      },
-      { property: "og:url", content: process.env.SITE_URL },
-      {
-        property: "og:site_name",
-        content:
-          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
-      },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "NFTsoul | Exhibit your NFT" },
-      {
-        name: "twitter:description",
-        content:
-          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
-      },
-      {
-        name: "twitter:image",
-        content: "/mini-log.png"
-      },
-      { name: "theme-color", content: "#000229" },
-      {
-        property: "og:image:url",
-        content: "/mini-log.png",
-      },
+      // { property: "og:locale", content: "en_US" },
+      // { property: "og:type", content: "website" },
+      // { property: "og:title", content: "NFTsoul | Exhibit your NFT" },
+      // {
+      //   property: "og:description",
+      //   content:
+      //     "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+      // },
+      // { property: "og:url", content: process.env.SITE_URL },
+      // {
+      //   property: "og:site_name",
+      //   content:
+      //     "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+      // },
+      // { name: "twitter:card", content: "summary_large_image" },
+      // { name: "twitter:title", content: "NFTsoul | Exhibit your NFT" },
+      // {
+      //   name: "twitter:description",
+      //   content:
+      //     "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+      // },
+      // {
+      //   name: "twitter:image",
+      //   content: "/mini-log.png"
+      // },
+      // { name: "theme-color", content: "#000229" },
+      // {
+      //   property: "og:image:url",
+      //   content: "/mini-log.png",
+      // },
       {
         name: "keywords",
         content:
