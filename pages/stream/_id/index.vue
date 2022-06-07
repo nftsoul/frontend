@@ -42,7 +42,7 @@
                                                     </p>
                                                 </v-col>
                                                 <v-col cols="3">
-                                                    <ShareNetwork class="mb-2" network="twitter" :url="getShareLink()" :title="stream.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
+                                                    <ShareNetwork style="text-decoration: none;" class="mb-2" network="twitter" :url="getShareLink()" :title="stream.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
 
                                                         <div @mouseenter="expand=true" @mouseleave="expand=false">
                                                             <v-row no-gutters>
