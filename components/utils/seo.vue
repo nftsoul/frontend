@@ -1,13 +1,10 @@
 <template>
 <div>
     <span v-if="false"></span>
-
 </div>
 </template>
 
 <script>
-// Test on: https://cards-dev.twitter.com/validator
-// Test on: https://developers.facebook.com/tools/debug/
 export default {
     props: {
         title: {

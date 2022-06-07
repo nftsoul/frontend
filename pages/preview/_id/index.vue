@@ -1,6 +1,7 @@
 <template>
 <div class="dark-bg">
-    <SocialHead :title="pre.gallery[0].gallery_name" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
+    <UtilsSeo :title="pre.gallery[0].gallery_name" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
+    
     <v-card :min-height="screenHeight()" flat color="transparent" class="pt-16">
         <v-container class="pt-16">
             <v-row justify="center">
@@ -207,32 +208,38 @@ const getProvider = async () => {
     }
 };
 export default {
-    async asyncData({params}) {
-        const pre = await fetch(
-            process.env.API_URL+`/single-gallery/${params.id}`
-        ).then((res) =>res.json())
+    async asyncData({
+        params
+    }) {
+        const pre = await fetch(process.env.API_URL + `/single-gallery/${params.id}`).then((res) => res.json());
         return {
             pre
-        }
+        };
+    },
+    head() {
+        return {
+            link: [{
+                hid: "canonical",
+                rel: "canonical",
+                href: process.env.API_URL + `/single-gallery/${this.$route.params.id}`
+            }]
+        };
     },
     data() {
         return {
             loading: false,
-            connection: new web3.Connection(
-                web3.clusterApiUrl(process.env.CLUSTER),
-                "confirmed"
-            ),
+            connection: new web3.Connection(web3.clusterApiUrl(process.env.CLUSTER), "confirmed"),
             approvalDialog: false,
             approvals: 3,
             streampda: null,
             comments: [],
             loaded: false,
-            preview: '',
+            preview: "",
             expand: false,
             selectedIndex: null,
             replying: false,
-            reply: '',
-            selectedComment: '',
+            reply: "",
+            selectedComment: "",
             replyPage: 0,
             more: false,
             makingReply: false
@@ -243,20 +250,19 @@ export default {
             return this.$store.state.wallet.walletAddress;
         },
         gallery_id() {
-            return this.$route.params.id
+            return this.$route.params.id;
         },
         profile() {
-            return this.$store.state.wallet.profile
+            return this.$store.state.wallet.profile;
         }
     },
-
     mounted() {
-        this.getNft()
-        this.getComments()
+        this.getNft();
+        this.getComments();
     },
     methods: {
         onEnterPress(item) {
-            this.makeReply(item)
+            this.makeReply(item);
             var el = document.getElementById("txtArea");
             el.addEventListener("keypress", function (event) {
                 if (event.key === "Enter") {
@@ -265,111 +271,106 @@ export default {
             });
         },
         getReplies(item, i) {
-            this.more = true
+            this.more = true;
             if (this.selectedComment != item._id) {
-                this.replyPage = 1
-                this.selectedComment = item._id
+                this.replyPage = 1;
+                this.selectedComment = item._id;
             } else {
-                this.replyPage += 1
+                this.replyPage += 1;
             }
-            this.$axios.get(
-                "/comment/reply/" + item._id, {
-                    params: {
-                        page: this.replyPage,
-                    },
-                }
-            ).then(res => {
-                this.more = false
-                const index = this.comments.indexOf(item)
-                let rep = res.data.replies.replies
+            this.$axios.get("/comment/reply/" + item._id, {
+                params: {
+                    page: this.replyPage,
+                },
+            }).then(res => {
+                this.more = false;
+                const index = this.comments.indexOf(item);
+                let rep = res.data.replies.replies;
                 if (!this.comments[index].replies) {
-                    this.comments[index]['replies'] = []
+                    this.comments[index]["replies"] = [];
                 }
-                let reply_ids = []
+                let reply_ids = [];
                 for (var y = 0; y < this.comments[index].replies.length; y++) {
-                    reply_ids.push(this.comments[index].replies[y]._id)
+                    reply_ids.push(this.comments[index].replies[y]._id);
                 }
                 for (var x = 0; x < rep.length; x++) {
                     if (!reply_ids.includes(rep[x]._id)) {
-                        this.comments[index].replies.push(rep[x])
-
+                        this.comments[index].replies.push(rep[x]);
                     }
                 }
-            })
+            });
         },
         getNft() {
-            this.$axios.get(
-                "/single-gallery/" + this.gallery_id
-            ).then(res => {
-                this.preview = res.data.gallery[0]
-            })
+            this.$axios.get("/single-gallery/" + this.gallery_id).then(res => {
+                this.preview = res.data.gallery[0];
+            });
         },
         getShareLink() {
-            return process.env.SITE_URL + '/preview/' + this.gallery_id
+            return process.env.SITE_URL + "/preview/" + this.gallery_id;
         },
         getLink(item) {
             if (item.image_link) {
-                return item.image_link
+                return item.image_link;
             } else {
-                return require('~/assets/images/profile.svg')
+                return require("~/assets/images/profile.svg");
             }
         },
         makeReply(item) {
-            this.makingReply = true
-            this.selectedComment = item
-            if (this.reply != '') {
+            this.makingReply = true;
+            this.selectedComment = item;
+            if (this.reply != "") {
                 this.$axios
                     .post("/comments/reply/" + item._id, {
                         body: this.reply,
                         user_id: this.profile._id,
                     })
                     .then((res) => {
-                        this.makingReply = false
-                        let rep = res.data.reply
-                        this.reply = ''
-                        rep['user_id'] = this.profile
-                        const index = this.comments.indexOf(item)
+                        this.makingReply = false;
+                        let rep = res.data.reply;
+                        this.reply = "";
+                        rep["user_id"] = this.profile;
+                        const index = this.comments.indexOf(item);
                         if (this.comments[index].replies) {
-                            this.comments[index].replies.push(rep)
+                            this.comments[index].replies.push(rep);
                         } else {
-                            this.comments[index]['replies'] = []
-                            this.comments[index].replies.push(rep)
+                            this.comments[index]["replies"] = [];
+                            this.comments[index].replies.push(rep);
                         }
-                        this.comments[index].reply_count += 1
+                        this.comments[index].reply_count += 1;
                     })
-                    .catch((err) => err.response)
+                    .catch((err) => err.response);
             }
         },
         getComments() {
-            this.$axios.get('/comments/' + this.gallery_id, {
+            this.$axios.get("/comments/" + this.gallery_id, {
                     params: {
                         page: 1,
                         limit: 5
                     }
                 })
                 .then(res => {
-                    this.comments = res.data.result
-                    this.loaded = true
-                    console.log('comments:', res.data.result)
+                    this.comments = res.data.result;
+                    this.loaded = true;
+                    console.log("comments:", res.data.result);
                 })
-                .catch(err => err.response)
+                .catch(err => err.response);
         },
         seeProfile() {
             this.$router.push({
-                name: 'profile-address-index-gallery',
+                name: "profile-address-index-gallery",
                 params: {
                     address: this.preview.user_id
                 }
-            })
+            });
         },
         getBtnText() {
             if (this.preview.user_id == this.walletAddress) {
-                return 'View'
+                return "View";
             } else {
                 if (this.preview.premium == true) {
-                    return 'Pay and View'
+                    return "Pay and View";
                 } else {
-                    return 'Free View'
+                    return "Free View";
                 }
             }
         },
@@ -384,48 +385,35 @@ export default {
                     .goAway(3000);
             } else {
                 this.loading = true;
-                var total_charge =
-                    parseFloat(this.preview.price) +
+                var total_charge = parseFloat(this.preview.price) +
                     0.02 * parseFloat(this.preview.price);
                 // console.log('charge:',total_charge)
-                var lamports = await this.connection.getBalance(
-                    new web3.PublicKey(this.walletAddress)
-                );
-
-                var available = parseFloat(lamports * 0.000000001).toFixed(5);
-
+                var lamports = await this.connection.getBalance(new web3.PublicKey(this.walletAddress));
+                var available = parseFloat(lamports * 1e-9).toFixed(5);
                 if (this.preview.user_id != this.walletAddress) {
                     if (this.preview.premium) {
-
                         if (total_charge < available) {
                             var provider = await getProvider();
-
                             var platformWallet = new web3.PublicKey("9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv");
                             var creatorWallet = new web3.PublicKey(this.preview.user_id);
-
-                            var transaction = new web3.Transaction().add(
-                                web3.SystemProgram.transfer({
-                                    fromPubkey: provider.publicKey,
-                                    toPubkey: platformWallet,
-                                    lamports: 0.02 * this.preview.price
-                                }),
-                                web3.SystemProgram.transfer({
-                                    fromPubkey: provider.publicKey,
-                                    toPubkey: creatorWallet,
-                                    lamports: this.preview.price
-                                }),
-                            );
-
+                            var transaction = new web3.Transaction().add(web3.SystemProgram.transfer({
+                                fromPubkey: provider.publicKey,
+                                toPubkey: platformWallet,
+                                lamports: 0.02 * this.preview.price
+                            }), web3.SystemProgram.transfer({
+                                fromPubkey: provider.publicKey,
+                                toPubkey: creatorWallet,
+                                lamports: this.preview.price
+                            }));
                             transaction.feePayer = await provider.publicKey;
                             let blockhashObj = await this.connection.getRecentBlockhash();
                             transaction.recentBlockhash = await blockhashObj.blockhash;
                             let signed = await provider.signTransaction(transaction);
                             let signature = await this.connection.sendRawTransaction(signed.serialize());
-                            this.$store.commit('nft/setStream', true)
+                            this.$store.commit("nft/setStream", true);
                             this.saveEarning();
                             this.loading = false;
-                            this.approvalDialog = false
-
+                            this.approvalDialog = false;
                             this.$router.push({
                                 name: "stream-id",
                                 params: {
@@ -443,7 +431,7 @@ export default {
                                 .goAway(3000);
                         }
                     } else {
-                        this.$store.commit('nft/setStream', true)
+                        this.$store.commit("nft/setStream", true);
                         this.$router.push({
                             name: "stream-id",
                             params: {
@@ -452,8 +440,7 @@ export default {
                         });
                     }
                 } else {
-                    this.$store.commit('nft/setStream', true)
-
+                    this.$store.commit("nft/setStream", true);
                     this.$router.push({
                         name: "stream-id",
                         params: {
@@ -461,13 +448,11 @@ export default {
                         }
                     });
                 }
-
             }
         },
         screenHeight() {
             return window.innerHeight;
         },
-
         saveEarning() {
             this.$axios
                 .post("/post-earnings", {
