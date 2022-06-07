@@ -351,7 +351,6 @@ export default {
                 .then(res => {
                     this.comments = res.data.result;
                     this.loaded = true;
-                    console.log("comments:", res.data.result);
                 })
                 .catch(err => err.response);
         },
