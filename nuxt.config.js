@@ -20,69 +20,68 @@ export default {
           "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
       },
       {
-        hid: 'twitter:card',
-        name: 'twitter:card',
-        content: 'summary_large_image'
+        hid: "twitter:card",
+        name: "twitter:card",
+        content: "summary_large_image",
       },
-      { hid: 'twitter:site', name: 'twitter:site', content: '@nftsoul_io' },
+      { hid: "twitter:site", name: "twitter:site", content: "@nftsoul_io" },
       {
-        hid: 'twitter:url',
-        name: 'twitter:url',
-        content: 'https://twitter.com/nftsoul_io'
-      },
-      {
-        hid: 'twitter:title',
-        name: 'twitter:title',
-        content: 'My amazing Nuxt application'
+        hid: "twitter:url",
+        name: "twitter:url",
+        content: "https://twitter.com/nftsoul_io",
       },
       {
-        hid: 'twitter:description',
-        name: 'twitter:description',
+        hid: "twitter:title",
+        name: "twitter:title",
+        content: "My amazing Nuxt application",
+      },
+      {
+        hid: "twitter:description",
+        name: "twitter:description",
         content:
-          'The amazing Nuxt application that teaches me all the cool features of Nuxt'
+          "The amazing Nuxt application that teaches me all the cool features of Nuxt",
       },
       {
-        hid: 'twitter:image',
-        name: 'twitter:image',
-        content: 'https://nuxtjs.org/nuxt-card.png'
+        hid: "twitter:image",
+        name: "twitter:image",
+        content: "https://nuxtjs.org/nuxt-card.png",
       },
 
       // Open Graph
       // Test on: https://developers.facebook.com/tools/debug/
-      { hid: 'og:site_name', property: 'og:site_name', content: 'Nuxt' },
-      { hid: 'og:type', property: 'og:type', content: 'website' },
+      { hid: "og:site_name", property: "og:site_name", content: "Nuxt" },
+      { hid: "og:type", property: "og:type", content: "website" },
       {
-        hid: 'og:url',
-        property: 'og:url',
-        content: 'https://nuxtjs.org'
+        hid: "og:url",
+        property: "og:url",
+        content: "https://nuxtjs.org",
       },
       {
-        hid: 'og:title',
-        property: 'og:title',
-        content: 'My amazing Nuxt application'
+        hid: "og:title",
+        property: "og:title",
+        content: "My amazing Nuxt application",
       },
       {
-        hid: 'og:description',
-        property: 'og:description',
+        hid: "og:description",
+        property: "og:description",
         content:
-          'The amazing Nuxt application that teaches me all the cool features of Nuxt'
+          "The amazing Nuxt application that teaches me all the cool features of Nuxt",
       },
       {
-        hid: 'og:image',
-        property: 'og:image',
-        content: 'https://nuxtjs.org/nuxt-card.png'
+        hid: "og:image",
+        property: "og:image",
+        content: "https://nuxtjs.org/nuxt-card.png",
       },
       {
-        hid: 'og:image:secure_url',
-        property: 'og:image:secure_url',
-        content: 'https://nuxtjs.org/nuxt-card.png'
+        hid: "og:image:secure_url",
+        property: "og:image:secure_url",
+        content: "https://nuxtjs.org/nuxt-card.png",
       },
       {
-        hid: 'og:image:alt',
-        property: 'og:image:alt',
-        content: 'NuxtJS'
+        hid: "og:image:alt",
+        property: "og:image:alt",
+        content: "NuxtJS",
       },
-
 
       // { property: "og:locale", content: "en_US" },
       // { property: "og:type", content: "website" },
@@ -122,33 +121,13 @@ export default {
       // {name:'robots',content:"index,follow"}
     ],
     link: [
+      { rel: "icon", type: "image/x-icon", href: "/mini-log.png" },
       {
-        hid: 'canonical',
-        rel: 'canonical',
-        href: `https://nuxtjs.org/examples`
-      }
-    ],
-    script: [
-      {
-        "@context": process.env.SITE_URL,
-        "@type": "WebSite",
-        url: process.env.SITE_URL,
-        name: "NFTsoul | Exhibit your NFT",
-        // potentialAction: {
-        //   "@type": "SearchAction",
-        //   target: "http://localhost/search/{search_term_string}/",
-        //   "query-input": "required name=search_term_string",
-        // },
-      },
-      {
-        "@context": process.env.SITE_URL,
-        "@type": "Organization",
-        url: process.env.SITE_URL,
-        name: "NFTsoul | Exhibit your NFT",
-        logo: '/mini-log.png',
+        hid: "canonical",
+        rel: "canonical",
+        href: `https://nuxtjs.org/examples`,
       },
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/mini-log.png" }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -188,7 +167,7 @@ export default {
         dark: {
           primary: "#030537",
           background: "#000229",
-          notification:"#1b024d",
+          notification: "#1b024d",
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
