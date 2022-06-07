@@ -19,76 +19,76 @@ export default {
         content:
           "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
       },
-      // {
-      //   hid: "twitter:card",
-      //   name: "twitter:card",
-      //   content: "summary_large_image",
-      // },
-      // { hid: "twitter:site", name: "twitter:site", content: "@nftsoul_io" },
-      // {
-      //   hid: "twitter:url",
-      //   name: "twitter:url",
-      //   content: "https://twitter.com/nftsoul_io",
-      // },
-      // {
-      //   hid: "twitter:title",
-      //   name: "twitter:title",
-      //   content: "My amazing Nuxt application",
-      // },
-      // {
-      //   hid: "twitter:description",
-      //   name: "twitter:description",
-      //   content:
-      //     "The amazing Nuxt application that teaches me all the cool features of Nuxt",
-      // },
-      // {
-      //   hid: "twitter:image",
-      //   name: "twitter:image",
-      //   content: "https://nuxtjs.org/nuxt-card.png",
-      // },
+      {
+        hid: "twitter:card",
+        name: "twitter:card",
+        content: "summary_large_image",
+      },
+      { hid: "twitter:site", name: "twitter:site", content: "@nftsoul_io" },
+      {
+        hid: "twitter:url",
+        name: "twitter:url",
+        content: "https://twitter.com/nftsoul_io",
+      },
+      {
+        hid: "twitter:title",
+        name: "twitter:title",
+        content: "Nftsoul | Exhibit your NFT",
+      },
+      {
+        hid: "twitter:description",
+        name: "twitter:description",
+        content:
+        "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+      },
+      {
+        hid: "twitter:image",
+        name: "twitter:image",
+        content: "https://nuxtjs.org/nuxt-card.png",
+      },
 
       // Open Graph
       // Test on: https://developers.facebook.com/tools/debug/
-      // { hid: "og:site_name", property: "og:site_name", content: "Nuxt" },
-      // { hid: "og:type", property: "og:type", content: "website" },
-      // {
-      //   hid: "og:url",
-      //   property: "og:url",
-      //   content: "https://nuxtjs.org",
-      // },
-      // {
-      //   hid: "og:title",
-      //   property: "og:title",
-      //   content: "My amazing Nuxt application",
-      // },
-      // {
-      //   hid: "og:description",
-      //   property: "og:description",
-      //   content:
-      //     "The amazing Nuxt application that teaches me all the cool features of Nuxt",
-      // },
-      // {
-      //   hid: "og:image",
-      //   property: "og:image",
-      //   content: "https://nuxtjs.org/nuxt-card.png",
-      // },
-      // {
-      //   hid: "og:image:secure_url",
-      //   property: "og:image:secure_url",
-      //   content: "https://nuxtjs.org/nuxt-card.png",
-      // },
-      // {
-      //   hid: "og:image:alt",
-      //   property: "og:image:alt",
-      //   content: "NuxtJS",
-      // },
+      { hid: "og:site_name", property: "og:site_name", content: "Nuxt" },
+      { hid: "og:type", property: "og:type", content: "website" },
+      {
+        hid: "og:url",
+        property: "og:url",
+        content: "https://nuxtjs.org",
+      },
+      {
+        hid: "og:title",
+        property: "og:title",
+        content: "Nftsoul | Exhibit your NFT",
+      },
+      {
+        hid: "og:description",
+        property: "og:description",
+        content:
+        "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+      },
+      {
+        hid: "og:image",
+        property: "og:image",
+        content: "https://nuxtjs.org/nuxt-card.png",
+      },
+      {
+        hid: "og:image:secure_url",
+        property: "og:image:secure_url",
+        content: "https://nuxtjs.org/nuxt-card.png",
+      },
+      {
+        hid: "og:image:alt",
+        property: "og:image:alt",
+        content: "NuxtJS",
+      },
     ],
     link: [
       { rel: "icon", type: "image/x-icon", href: "/mini-log.png" },
       {
         hid: "canonical",
         rel: "canonical",
-        href: `https://nuxtjs.org/examples`,
+        href: process.env.SITE_URL,
       },
     ],
   },
