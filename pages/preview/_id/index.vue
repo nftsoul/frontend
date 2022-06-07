@@ -80,7 +80,7 @@
                                     <div style="border-left:1px solid #500083;height:300px;overflow:auto" class="px-3">
                                         <div v-if="comments.length>0">
                                             <v-list-item v-for="(item,i) in comments" :key="i" class="px-0">
-                                                <v-list-item-avatar size="50" class="mr-0" >
+                                                <v-list-item-avatar size="50" class="mr-0">
                                                     <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="60" max-height="60"></v-img>
                                                     <v-icon v-else large>mdi-account</v-icon>
                                                 </v-list-item-avatar>
@@ -192,6 +192,25 @@ const getProvider = async () => {
     }
 };
 export default {
+    // head: {
+    //     meta: [{
+    //             name: "twitter:card",
+    //             content: "summary_large_image"
+    //         },
+    //         {
+    //             name: "twitter:title",
+    //             content: 'preview page'
+    //         },
+    //         {
+    //             name: "twitter:description",
+    //             content: "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+    //         },
+    //         {
+    //             name: "twitter:image",
+    //             content: "/mini-log.png"
+    //         },
+    //     ]
+    // },
     data() {
         return {
             loading: false,
@@ -327,7 +346,7 @@ export default {
                 .then(res => {
                     this.comments = res.data.result
                     this.loaded = true
-                    console.log('comments:',res.data.result)
+                    console.log('comments:', res.data.result)
                 })
                 .catch(err => err.response)
         },
@@ -471,7 +490,8 @@ export default {
     right: 0;
     top: 40px;
 }
-.v-list-item__avatar{
+
+.v-list-item__avatar {
     align-self: flex-start;
 }
 </style>

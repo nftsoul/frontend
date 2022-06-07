@@ -1,6 +1,6 @@
 <template>
 <div>
-    <v-card width="400" class="mx-auto pt-2" dark color="primary" min-height="400">
+    <v-card width="400" class="mx-auto pt-2" dark color="primary">
         <v-row justify="space-between" no-gutters class="px-2">
             <span>Your Notifications</span>
             <v-btn v-if="$route.name !='all-notifications'" @click="$router.push('/all-notifications')" text small class="text-capitalize">See All Activity</v-btn>
@@ -20,25 +20,23 @@
             <v-btn text small class="text-capitalize" @click="markAllAsRead()">Mark all as read</v-btn>
         </v-row>
         <v-divider class="mt-2"></v-divider>
-        <v-virtual-scroll v-if="notifications.length>0" :items="notifications" :item-height="58" height="400" style="overflow:auto">
-            <template v-slot="{item}">
-                <v-list dense class="py-0">
-                    <v-hover v-slot="{ hover }">
-                        <div>
-                            <v-card :color="getColor(item)" flat tile>
-                                <v-list-item :key="item.id" color="background" style="box-shadow:none" dense link @click="goToLink(item)">
-                                    <v-list-item-avatar>
-                                        <v-divider></v-divider>
-                                        <v-img v-if="item.from.image_link" :src="item.from.image_link" :lazy-src="item.from.image_link"></v-img>
-                                        <v-icon v-else large>mdi-account</v-icon>
-                                    </v-list-item-avatar>
+        <v-card-text style="max-height:400px;overflow:auto" class="pa-0">
 
-                                    <v-list-item-content>
-                                        <div class="comment-box">
-                                            <p class="mb-0 mt-2" style="font-size:12px" v-html="getDescription(item)"></p>
-                                        </div>
-                                    </v-list-item-content>
-                                    <!-- <v-list-item-action>
+                <div v-for="(item,i) in notifications" :key="i">
+                    <v-card :color="getColor(item)" flat tile>
+                        <v-list-item :key="item.id" color="background" style="box-shadow:none" dense link @click="goToLink(item)">
+                            <v-list-item-avatar>
+                                <v-divider></v-divider>
+                                <v-img v-if="item.from.image_link" :src="item.from.image_link" :lazy-src="item.from.image_link"></v-img>
+                                <v-icon v-else large>mdi-account</v-icon>
+                            </v-list-item-avatar>
+
+                            <v-list-item-content>
+                                <div class="comment-box">
+                                    <p class="mb-0 mt-2" style="font-size:12px" v-html="getDescription(item)"></p>
+                                </div>
+                            </v-list-item-content>
+                            <!-- <v-list-item-action>
                                         <v-list-item-action-text>
                                             <span v-if="!hover">{{ moment.utc(item.created_at).fromNow() }}</span>
                                             <v-tooltip top v-if="hover">
@@ -51,26 +49,18 @@
                                             </v-tooltip>
                                         </v-list-item-action-text>
                                     </v-list-item-action> -->
-                                </v-list-item>
-                                <v-row no-gutters justify="center" v-if="notifications.length>7 && notifications.length<total">
+                        </v-list-item>
+                        <!-- <v-row no-gutters justify="center" v-if="notifications.length>7 && notifications.length<total">
                                     <v-btn text @click="getNotifications()" :loading="more">Load More</v-btn>
-                                </v-row>
-                            </v-card>
-                        </div>
-                    </v-hover>
-                </v-list>
-            </template>
-        </v-virtual-scroll>
-        <v-container fluid v-else>
-            <v-row>
-                <v-col cols="12" align="center" v-intersect.quiet="{handler: onIntersect,options: {threshold: [0, 0.5, 1.0]}}">
-                    <div v-if="dataEnd ==false" class="mb-2">
-                        <v-skeleton-loader v-for="i in 8" :key="i" class="mt-2" dark type="list-item-avatar"></v-skeleton-loader>
-                    </div>
-                    <p v-if="dataEnd==true" class="text--disabled">No Notifications</p>
-                </v-col>
+                                </v-row> -->
+                    </v-card>
+                </div>
+            <v-row no-gutters justify="center" v-if="finish==false">
+                <v-progress-circular v-intersect.quiet="{handler: onIntersect,options: {threshold: [0, 0.5, 1.0]}}" indeterminate color="grey lighten-5"></v-progress-circular>
             </v-row>
-        </v-container>
+            <p v-if="dataEnd==true && notifications.length==0" class="text--disabled">No Notifications</p>
+        </v-card-text>
+
     </v-card>
 </div>
 </template>
@@ -89,7 +79,8 @@ export default {
             mates: [],
             more: false,
             tab: 0,
-            limit: 8
+            limit: 10,
+            finish: false
         }
     },
     watch: {
@@ -130,8 +121,10 @@ export default {
                 })
                 .then(res => {
                     this.more = false
-                    this.dataEnd = true
                     this.total = res.data.total_notifications
+                    if (res.data.notifications.length == 0) {
+                        this.finish = true
+                    }
                     for (var x = 0; x < res.data.notifications.length; x++) {
                         if (this.tab == 0) {
                             this.notifications.push(res.data.notifications[x])
@@ -141,6 +134,7 @@ export default {
                             }
                         }
                     }
+                    this.dataEnd = true
 
                 })
                 .catch(err => console.log(err.response))
