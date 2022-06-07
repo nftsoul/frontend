@@ -192,25 +192,25 @@ const getProvider = async () => {
     }
 };
 export default {
-    // head: {
-    //     meta: [{
-    //             name: "twitter:card",
-    //             content: "summary_large_image"
-    //         },
-    //         {
-    //             name: "twitter:title",
-    //             content: 'preview page'
-    //         },
-    //         {
-    //             name: "twitter:description",
-    //             content: "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
-    //         },
-    //         {
-    //             name: "twitter:image",
-    //             content: "/mini-log.png"
-    //         },
-    //     ]
-    // },
+    head: {
+        meta: [{
+                name: "twitter:card",
+                content: "summary_large_image"
+            },
+            {
+                name: "twitter:title",
+                content: 'preview page'
+            },
+            {
+                name: "twitter:description",
+                content: "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+            },
+            {
+                name: "twitter:image",
+                content: "/mini-log.png"
+            },
+        ]
+    },
     data() {
         return {
             loading: false,
