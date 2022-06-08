@@ -458,58 +458,71 @@ export default {
                             if (this.premium == false) {
                                 this.price = 0
                             }
-                            // Getting wallet address
-                            var provider = await getProvider();
+                            try {
+                                // Getting wallet address
+                                var provider = await getProvider();
 
-                            var recieverWallet = new web3.PublicKey("9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv");
+                                var recieverWallet = new web3.PublicKey("9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv");
 
-                            var transaction = new web3.Transaction().add(
-                                web3.SystemProgram.transfer({
-                                    fromPubkey: provider.publicKey,
-                                    toPubkey: recieverWallet,
-                                    lamports: web3.LAMPORTS_PER_SOL / 100
-                                }),
-                            );
+                                var transaction = new web3.Transaction().add(
+                                    web3.SystemProgram.transfer({
+                                        fromPubkey: provider.publicKey,
+                                        toPubkey: recieverWallet,
+                                        lamports: web3.LAMPORTS_PER_SOL / 100
+                                    }),
+                                );
 
-                            // Setting the variables for the transaction
-                            transaction.feePayer = await provider.publicKey;
-                            let blockhashObj = await this.connection.getRecentBlockhash();
-                            transaction.recentBlockhash = await blockhashObj.blockhash;
+                                // Setting the variables for the transaction
+                                transaction.feePayer = await provider.publicKey;
+                                let blockhashObj = await this.connection.getRecentBlockhash();
+                                transaction.recentBlockhash = await blockhashObj.blockhash;
 
-                            // Request creator to sign the transaction (allow the transaction)
-                            let signed = await provider.signTransaction(transaction);
-                            // The signature is generated
-                            let signature = await this.connection.sendRawTransaction(signed.serialize());
-                            // // Confirm whether the transaction went through or not
-                            // await connection.confirmTransaction(signature);
-                            // console.log("Signature: ", signature);
+                                // Request creator to sign the transaction (allow the transaction)
+                                let signed = await provider.signTransaction(transaction);
+                                // The signature is generated
+                                let signature = await this.connection.sendRawTransaction(signed.serialize());
+                                // // Confirm whether the transaction went through or not
+                                // await connection.confirmTransaction(signature);
+                                // console.log("Signature: ", signature);
 
-                            this.$axios
-                                .post("/create-gallery", {
-                                    'user_id': this.walletAddress,
-                                    'gallery_name': this.name,
-                                    'nfts': this.collection,
-                                    'image': this.src,
-                                    'description': this.about,
-                                    'price': this.price,
-                                    'premium': this.premium
-                                })
-                                .then((res) => {
-                                    this.creating = false;
-                                    this.approvalDialog = false
+                                this.$axios
+                                    .post("/create-gallery", {
+                                        'user_id': this.walletAddress,
+                                        'gallery_name': this.name,
+                                        'nfts': this.collection,
+                                        'image': this.src,
+                                        'description': this.about,
+                                        'price': this.price,
+                                        'premium': this.premium
+                                    })
+                                    .then((res) => {
+                                        this.creating = false;
+                                        this.approvalDialog = false
+                                        this.$toast
+                                            .success("Your gallery has been created successfully.", {
+                                                iconPack: "mdi",
+                                                icon: "mdi-image",
+                                                theme: "outline",
+                                            })
+                                            .goAway(3000);
+                                        this.$store.commit("content/setSelected", res.data.gallery);
+                                        this.$router.push({
+                                            name: "profile-preview",
+                                        });
+                                    })
+                                    .catch((err) => console.log(err.response));
+                            } catch (e) {
+                                if (e.code == 4001) {
                                     this.$toast
-                                        .success("Your gallery has been created successfully.", {
+                                        .error(e.message, {
                                             iconPack: "mdi",
-                                            icon: "mdi-image",
+                                            icon: "mdi-account",
                                             theme: "outline",
                                         })
                                         .goAway(3000);
-                                    this.$store.commit("content/setSelected", res.data.gallery);
-                                    this.$router.push({
-                                        name: "profile-preview",
-                                    });
-                                })
-                                .catch((err) => console.log(err.response));
+                                    this.creating = false
+                                }
+                            }
 
                         } else {
                             this.creating = false;
