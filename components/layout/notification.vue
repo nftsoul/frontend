@@ -1,6 +1,6 @@
 <template>
 <div>
-    <v-card width="400" class="mx-auto pt-2" dark color="primary">
+    <v-card width="400" class="mx-auto pt-2" dark color="primary" min-height="400">
         <v-row justify="space-between" no-gutters class="px-2">
             <span>Your Notifications</span>
             <v-btn v-if="$route.name !='all-notifications'" @click="$router.push('/all-notifications')" text small class="text-capitalize">See All Activity</v-btn>
@@ -21,10 +21,10 @@
         </v-row>
         <v-divider class="mt-2"></v-divider>
         <v-card-text style="max-height:400px;overflow:auto" class="pa-0">
-
+            <div v-if="notifications.length>0">
                 <div v-for="(item,i) in notifications" :key="i">
                     <v-card :color="getColor(item)" flat tile>
-                        <v-list-item :key="item.id" color="background" style="box-shadow:none" dense link @click="goToLink(item)">
+                        <v-list-item color="background" style="box-shadow:none" dense link @click="goToLink(item)">
                             <v-list-item-avatar>
                                 <v-divider></v-divider>
                                 <v-img v-if="item.from.image_link" :src="item.from.image_link" :lazy-src="item.from.image_link"></v-img>
@@ -55,10 +55,20 @@
                                 </v-row> -->
                     </v-card>
                 </div>
-            <v-row no-gutters justify="center" v-if="finish==false">
+            </div>
+            <div v-else>
+                <div v-if="dataEnd==false">
+                    <v-skeleton-loader class="my-1" v-for="(item,i) in 8" :key="i" type="list-item-avatar"></v-skeleton-loader>
+
+                </div>
+            </div>
+            <v-row no-gutters justify="center" v-if="finish==false && notifications.length>7" class="my-2">
                 <v-progress-circular v-intersect.quiet="{handler: onIntersect,options: {threshold: [0, 0.5, 1.0]}}" indeterminate color="grey lighten-5"></v-progress-circular>
             </v-row>
-            <p v-if="dataEnd==true && notifications.length==0" class="text--disabled">No Notifications</p>
+            <v-row no-gutters justify="center">
+                <p v-if="dataEnd==true && notifications.length==0" class="text--disabled my-3">No Notifications</p>
+
+            </v-row>
         </v-card-text>
 
     </v-card>
@@ -120,6 +130,7 @@ export default {
                     },
                 })
                 .then(res => {
+                    console.log('noti:', res.data)
                     this.more = false
                     this.total = res.data.total_notifications
                     if (res.data.notifications.length == 0) {
