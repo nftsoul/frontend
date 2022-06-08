@@ -151,12 +151,12 @@
                                 <v-icon v-else large>mdi-account</v-icon>
                             </v-list-item-avatar>
 
-                            <v-list-item-content @mouseenter="selectedIndex=i" @mouseleave="selectedIndex=null,replying=false">
+                            <v-list-item-content @mouseenter="hoverIndex=i">
                                 <v-list-item-title>
                                     <span v-if="item.user_id.name">{{item.user_id.name}}</span>
                                     <span v-else>{{item.user_id.wallet_address.slice(0, 5)}}</span>
                                     <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
-                                    <small class="reply-btn position-abs text--disabled mb-0 ml-2 mt-n1" v-if="selectedIndex==i" @click="replying=true">
+                                    <small class="reply-btn position-abs text--disabled mb-0 ml-2 mt-n1" v-if="hoverIndex==i" @click="selectedIndex = i,replying = true"">
                                         <v-icon small>mdi-reply</v-icon>Reply
                                     </small>
                                 </v-list-item-title>
@@ -266,7 +266,7 @@ export default {
     async asyncData({
         app,params
     }) {
-        const pre = await fetch(process.env.API_URL + `/gallery-stream/${params.id}`).then((res) => res.json());
+        const pre = await fetch(process.env.API_URL + `/single-gallery/${params.id}`).then((res) => res.json());
         const mutation = app.head.meta.map(i => {
             if(i && i.hid){
                 if(i.hid === 'title'){
@@ -312,7 +312,7 @@ export default {
             link: [{
                 hid: "canonical",
                 rel: "canonical",
-                href: process.env.API_URL + `/gallery-stream/${this.$route.params.id}`
+                href: process.env.API_URL + `/single-gallery/${this.$route.params.id}`
             }]
         };
     },
@@ -339,6 +339,7 @@ export default {
             leave: false,
             expand: false,
             selectedIndex: null,
+            hoverIndex:null,
             replying: false,
             reply: '',
             selectedComment: '',
