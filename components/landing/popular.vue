@@ -62,7 +62,7 @@
                                                     </v-list-item>
                                                 </v-list>
                                             </v-card>
-                                            <v-card-subtitle class="text-left mx-n3">{{item.gallery_name.slice(0,28)}}<span v-if="item.gallery_name.length>27">..</span></v-card-subtitle>
+                                            <v-card-subtitle class="text-left mx-n3">{{item.gallery_name.slice(0,20)}}<span v-if="item.gallery_name.length>20">..</span></v-card-subtitle>
 
                                             <v-row>
                                                 <div class="prem-sup-card rounded-lg px-2" v-for="(nft, i) in item.nfts.slice(0,4)" :key="i">
@@ -151,6 +151,7 @@ export default {
                 })
                 .then((res) => {
                     this.popular = res.data.trending_galleries
+                    console.log('pop:',this.popular)
                 })
                 .catch((err) => console.log(err.response));
         },
