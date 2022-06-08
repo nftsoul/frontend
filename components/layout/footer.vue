@@ -28,7 +28,7 @@
         <v-container>
             <v-row justify="center" class="py-2">
                 <small>
-                    <v-icon>mdi-copyright</v-icon>Copyright 2021 - NFT Soul
+                    <v-icon>mdi-copyright</v-icon>Copyright <span> {{ new Date().getFullYear() }}</span> - NFT Soul
                 </small>
             </v-row>
         </v-container>

@@ -89,7 +89,7 @@
                                     <div style="border-left:1px solid #500083;height:300px;overflow:auto" class="px-3">
                                         <div v-if="comments.length > 0">
                                             <v-list-item v-for="(item, i) in comments" :key="i" class="px-0">
-                                                <v-list-item-avatar size="50" class="mr-0">
+                                                <v-list-item-avatar size="50" class="mr-2">
                                                     <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="60" max-height="60"></v-img>
                                                     <v-icon v-else large>mdi-account</v-icon>
                                                 </v-list-item-avatar>
@@ -130,13 +130,13 @@
                                                     <!-- end make reply -->
 
                                                     <!-- replies -->
-                                                    <div v-if="item.replies">
+                                                    <div v-if="item.replies" style="width:100%">
                                                         <v-list-item dense v-for="(reply, j) in item.replies" :key="j">
-                                                            <v-list-item-avatar size="30" class="mr-0">
+                                                            <v-list-item-avatar size="30" class="mr-2">
                                                                 <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link" max-width="60" max-height="60"></v-img>
                                                                 <v-icon v-else>mdi-account</v-icon>
                                                             </v-list-item-avatar>
-                                                            <v-list-item-content>
+                                                            <v-list-item-content >
                                                                 <v-list-item-title>
                                                                     <span v-if="reply.user_id.name">{{ reply.user_id.name }}</span>
                                                                     <span v-else>{{
@@ -144,10 +144,11 @@
                                                                         }}</span>
                                                                     <small class="caption text--disabled">{{ $moment(reply.time).fromNow() }}</small>
                                                                 </v-list-item-title>
-                                                                <v-card-text class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text>
+                                                                <v-card-text style="width:100%" class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text>
                                                                 <br>
                                                             </v-list-item-content>
                                                         </v-list-item>
+
                                                         <v-row no-gutters>
                                                             <v-btn v-if="item.reply_count > 5 && item.replies.length < item.reply_count" @click="getReplies(item, i)" x-small text>
                                                                 <v-icon small>mdi-arrow-down</v-icon>
@@ -435,11 +436,11 @@ export default {
                             var transaction = new web3.Transaction().add(web3.SystemProgram.transfer({
                                 fromPubkey: provider.publicKey,
                                 toPubkey: platformWallet,
-                                lamports: 0.02 * this.preview.price
+                                lamports: web3.LAMPORTS_PER_SOL *0.02 * this.preview.price
                             }), web3.SystemProgram.transfer({
                                 fromPubkey: provider.publicKey,
                                 toPubkey: creatorWallet,
-                                lamports: this.preview.price
+                                lamports: web3.LAMPORTS_PER_SOL*this.preview.price
                             }));
                             transaction.feePayer = await provider.publicKey;
                             let blockhashObj = await this.connection.getRecentBlockhash();
