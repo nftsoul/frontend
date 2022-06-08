@@ -128,7 +128,9 @@ export default {
                 let promises = [];
                 for (var x = 0; x < mints.length; x++) {
                     let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
-                    this.nfts.push(myNFT)
+                    if (myNFT.owner == this.walletAddress) {
+                        this.nfts.push(myNFT)
+                    }
                 }
             } else {
 

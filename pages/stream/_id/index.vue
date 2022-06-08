@@ -1,5 +1,7 @@
 <template>
 <div class="dark-bg pt-16">
+        <UtilsSeo :title="pre.gallery[0].gallery_name" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
+
     <v-container class="pt-16">
         <v-row justify="center">
             <h3>Item Preview</h3>
@@ -15,7 +17,7 @@
                                         <v-container>
                                             <v-row>
                                                 <v-col cols="4">
-                                                    <p class="text-h6 mb-0">
+                                                    <p class="mb-0">
                                                         {{ stream.gallery_name }}
                                                     </p>
                                                     <p class="mb-0">
@@ -42,7 +44,7 @@
                                                     </p>
                                                 </v-col>
                                                 <v-col cols="3">
-                                                    <ShareNetwork class="mb-2" network="twitter" :url="getShareLink()" :title="stream.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
+                                                    <ShareNetwork style="text-decoration: none;" class="mb-2" network="twitter" :url="getShareLink()" :title="stream.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
 
                                                         <div @mouseenter="expand=true" @mouseleave="expand=false">
                                                             <v-row no-gutters>
@@ -71,22 +73,20 @@
                                                         </v-img>
                                                     </div>
                                                 </v-col>
-                                                <v-col cols="12" lg="7" md="6" class="mt-n12">
+                                                <v-col cols="12" lg="7" md="6" class="mt-n6">
                                                     <v-card outlined class="rounded-lg pa-2">
                                                         <v-row no-gutters>
                                                             <v-chip dark small :color="getColor('story')" @click="active = 'story'">Nft Story</v-chip>
                                                             <v-chip small dark class="mx-2" :color="getColor('attributes')" @click="active = 'attributes'">Attributes</v-chip>
 
-                                                            <v-chip dark small  :color="getColor('details')" @click="active = 'details'">Details</v-chip>
+                                                            <v-chip dark small :color="getColor('details')" @click="active = 'details'">Details</v-chip>
 
                                                             <v-spacer></v-spacer>
                                                         </v-row>
                                                         <v-divider class="mt-3"></v-divider>
                                                         <v-card-text class="caption px-0">
                                                             <div class="attr-desc-box">
-                                                                <span v-if="active == 'details'">{{
-                                    item.description
-                                  }}</span>
+                                                                <span v-if="active == 'details'">{{item.description}}</span>
 
                                                                 <span v-if="active == 'attributes'">
                                                                     <v-row>
@@ -100,16 +100,14 @@
                                                                         </v-col>
                                                                     </v-row>
                                                                 </span>
-                                                                <span v-if="active == 'story'">{{
-                                    item.story
-                                  }}</span>
+                                                                <span v-if="active == 'story'">{{item.story}}</span>
                                                             </div>
                                                         </v-card-text>
                                                     </v-card>
 
                                                     <v-divider class="mt-n3"></v-divider>
 
-                                                    <v-list-item dense class="px-0">
+                                                    <v-list-item dense class="px-0 mt-2">
                                                         <v-list-item-avatar size="30">
                                                             <v-icon>mdi-account-tie</v-icon>
                                                         </v-list-item-avatar>
@@ -147,21 +145,74 @@
                 <v-card dark outlined class="max-width:800">
                     <div v-if="comments.length > 0">
                         <v-list-item v-for="(item, i) in comments" :key="i">
-                            <v-list-item-avatar>
+
+                            <v-list-item-avatar class="mr-0">
                                 <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="40" max-height="40"></v-img>
                                 <v-icon v-else large>mdi-account</v-icon>
                             </v-list-item-avatar>
-                            <v-list-item-content>
+
+                            <v-list-item-content @mouseenter="hoverIndex=i">
                                 <v-list-item-title>
-                                    <span v-if="item.user_id.name">{{
-                      item.user_id.name
-                    }}</span>
-                                    <span v-else>{{
-                      item.user_id.wallet_address.slice(0, 5)
-                    }}</span>
+                                    <span v-if="item.user_id.name">{{item.user_id.name}}</span>
+                                    <span v-else>{{item.user_id.wallet_address.slice(0, 5)}}</span>
+                                    <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
+                                    <small class="reply-btn position-abs text--disabled mb-0 ml-2 mt-n1" v-if="hoverIndex==i" @click="selectedIndex = i,replying = true"">
+                                        <v-icon small>mdi-reply</v-icon>Reply
+                                    </small>
                                 </v-list-item-title>
-                                <small class="text--disabled" v-html="item.body"></small>
+                                <v-card-text class="text--disabled pa-0"><small v-html="item.body"></small></v-card-text><br>
+                                <v-row no-gutters class="mt-1">
+                                    <small v-if="item.reply_count>0" @click="getReplies(item,i)" class="reply-btn">{{item.reply_count}} Replied</small>
+                                    <v-btn x-small text v-if="replyPage==1 && selectedIndex==i" :loading="moreReply"></v-btn>
+
+                                </v-row>
+
+                                <div v-if="replying==true && selectedIndex==i" class="mt-3">
+                                    <v-list-item dense class="px-0" v-if="profile">
+                                        <v-row no-gutters>
+                                            <v-col cols="1" class="pa-0">
+                                                <v-list-item-avatar size="30" class="mb-0 mt-2 mr-1">
+                                                    <v-img v-if="profile.image_link" :src="profile.image_link" :lazy-src="profile.image_link"></v-img>
+                                                    <v-icon v-else large>mdi-account</v-icon>
+                                                </v-list-item-avatar>
+                                            </v-col>
+                                            <v-col>
+                                                <v-list-item-content class="py-1 ml-n5">
+                                                    <v-textarea rows="1" id="txtArea" @keypress.enter="onEnterPress(item)" auto-grow dark color="white" append-icon="mdi-check" :loading="makingReply" @click:append="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply"></v-textarea>
+                                                </v-list-item-content>
+                                            </v-col>
+                                        </v-row>
+                                    </v-list-item>
+                                </div>
+                                <!-- end make reply -->
+
+                                <!-- replies -->
+                                <div v-if="item.replies">
+                                    <v-list-item dense v-for="(reply,j) in item.replies" :key="j">
+                                        <v-list-item-avatar size="30" class="mr-0">
+                                            <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link" max-width="60" max-height="60"></v-img>
+                                            <v-icon v-else>mdi-account</v-icon>
+                                        </v-list-item-avatar>
+                                        <v-list-item-content>
+                                            <v-list-item-title>
+                                                <span v-if="reply.user_id.name">{{reply.user_id.name}}</span>
+                                                <span v-else>{{ reply.user_id.wallet_address.slice(0, 5) }}</span>
+                                                <small class="caption text--disabled">{{$moment(reply.time).fromNow()}}</small>
+                                            </v-list-item-title>
+                                            <v-card-text class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text><br>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                    <v-row no-gutters>
+                                        <v-btn v-if="item.reply_count>5 && item.replies.length < item.reply_count" @click="getReplies(item,i)" x-small text>
+                                            <v-icon small>mdi-arrow-down</v-icon>
+                                            <small>See More</small>
+                                        </v-btn>
+                                        <v-btn v-if="replyPage>1" x-small text :loading="moreReply"></v-btn>
+                                    </v-row>
+                                </div>
+                                <!-- end replies -->
                             </v-list-item-content>
+
                         </v-list-item>
                     </div>
                     <div v-else class="ma-5">
@@ -183,7 +234,7 @@
                             <v-img v-if="profile.image_link" :src="profile.image_link"></v-img>
                             <v-icon v-else large>mdi-account</v-icon>
                         </v-avatar>
-                        <v-textarea dark rows="2" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?"></v-textarea>
+                        <v-textarea dark rows="1" auto-grow id="txtArea2" @keypress.enter="preventComment()" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?"></v-textarea>
                     </v-row>
                     <v-row no-gutters class="px-5 pb-5">
                         <v-spacer></v-spacer>
@@ -212,6 +263,59 @@
 
 <script>
 export default {
+    async asyncData({
+        app,params
+    }) {
+        const pre = await fetch(process.env.API_URL + `/single-gallery/${params.id}`).then((res) => res.json());
+        const mutation = app.head.meta.map(i => {
+            if(i && i.hid){
+                if(i.hid === 'title'){
+                    i.content = pre.gallery[0].gallery_name
+                }
+                if(i.hid === 'description'){
+                    i.content = pre.gallery[0].description;
+                }
+                if(i.hid === 'twitter:image'){
+                    i.content = pre.gallery[0].image
+                }
+                if(i.hid === 'twitter:card'){
+                    i.content = 'summary_large_image'
+                }
+                if(i.hid === 'og:image'){
+                    i.content = pre.gallery[0].image
+                }
+                if(i.hid === 'og:image:secure_url'){
+                    i.content = pre.gallery[0].image;
+                }
+                if(i.hid === 'og:title'){
+                    i.content = pre.gallery[0].gallery_name
+                }
+                if(i.hid === 'og:description'){
+                    i.content = pre.gallery[0].description
+                }
+                if(i.hid === 'description'){
+                    i.content = pre.gallery[0].description
+                }
+                // if(i.hid === 'og:url'){
+                //     i.content = this.$route.path
+                // }
+            }
+            return i;
+        });
+      app.head.meta = mutation;
+        return {
+            pre
+        };
+    },
+    head() {
+        return {
+            link: [{
+                hid: "canonical",
+                rel: "canonical",
+                href: process.env.API_URL + `/single-gallery/${this.$route.params.id}`
+            }]
+        };
+    },
     data() {
         return {
             totalTime: 300,
@@ -233,8 +337,24 @@ export default {
             more: false,
             stream: "",
             leave: false,
-            expand:false
+            expand: false,
+            selectedIndex: null,
+            hoverIndex:null,
+            replying: false,
+            reply: '',
+            selectedComment: '',
+            replyPage: 0,
+            more: false,
+            makingReply: false,
+            moreReply:false
         };
+    },
+    watch: {
+        comment() {
+            if (this.comment != "") {
+                this.error = ''
+            }
+        }
     },
     computed: {
         walletAddress() {
@@ -268,8 +388,59 @@ export default {
         }
     },
     methods: {
-      getShareLink(){
-            return process.env.SITE_URL+'/preview/' + this.gallery_id
+        preventComment() {
+            this.makeComment()
+            var el = document.getElementById("txtArea2");
+            el.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                }
+            });
+        },
+        onEnterPress(item) {
+            this.makeReply(item)
+            var el = document.getElementById("txtArea");
+            el.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                }
+            });
+        },
+        getReplies(item, i) {
+            this.moreReply = true
+            if (this.selectedComment != item._id) {
+                this.replyPage = 1
+                this.selectedComment = item._id
+            } else {
+                this.replyPage += 1
+            }
+            this.$axios.get(
+                "/comment/reply/" + item._id, {
+                    params: {
+                        page: this.replyPage,
+                    },
+                }
+            ).then(res => {
+                this.moreReply = false
+                const index = this.comments.indexOf(item)
+                let rep = res.data.replies.replies
+                if (!this.comments[index].replies) {
+                    this.comments[index]['replies'] = []
+                }
+                let reply_ids = []
+                for (var y = 0; y < this.comments[index].replies.length; y++) {
+                    reply_ids.push(this.comments[index].replies[y]._id)
+                }
+                for (var x = 0; x < rep.length; x++) {
+                    if (!reply_ids.includes(rep[x]._id)) {
+                        this.comments[index].replies.push(rep[x])
+
+                    }
+                }
+            })
+        },
+        getShareLink() {
+            return process.env.SITE_URL + '/preview/' + this.gallery_id
         },
         getStream() {
             this.$axios
@@ -282,6 +453,32 @@ export default {
                     this.stream = res.data[0];
                     this.current = this.stream.nfts[this.index];
                 });
+        },
+        makeReply(item) {
+            this.makingReply = true
+            this.selectedComment = item
+            if (this.reply != '') {
+                this.$axios
+                    .post("/comments/reply/" + item._id, {
+                        body: this.reply,
+                        user_id: this.profile._id,
+                    })
+                    .then((res) => {
+                        this.makingReply = false
+                        let rep = res.data.reply
+                        this.reply = ''
+                        rep['user_id'] = this.profile
+                        const index = this.comments.indexOf(item)
+                        if (this.comments[index].replies) {
+                            this.comments[index].replies.push(rep)
+                        } else {
+                            this.comments[index]['replies'] = []
+                            this.comments[index].replies.push(rep)
+                        }
+                        this.comments[index].reply_count += 1
+                    })
+                    .catch((err) => err.response);
+            }
         },
         getComments() {
             this.page++;
@@ -315,7 +512,7 @@ export default {
                         gallery_id: this.gallery_id,
                     })
                     .then((res) => {
-                        let resp = res.data.result;
+                        let resp = res.data.comment;
                         resp.user_id = this.profile;
                         this.comments.push(resp);
                         this.commenting = false;
@@ -356,7 +553,7 @@ export default {
             this.favourite.push(this.stream._id);
             this.$axios
                 .post("/save-favourite", {
-                    user_id: this.walletAddress,
+                    user_id: this.profile._id,
                     gallery_id: this.stream._id,
                 })
                 .then((res) => {
@@ -448,5 +645,8 @@ a.prev span {
             #1905da 96.24%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+.v-list-item__avatar{
+    align-self: flex-start;
 }
 </style>

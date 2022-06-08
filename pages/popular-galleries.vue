@@ -8,13 +8,8 @@
                         <p class="title">Popular Galleries</p>
                     </v-row>
                     <v-row v-if="nfts.length == 0" justify="center">
-                        <v-col align="center">
-                            <div class="spinner-box my-16">
-                                <client-only>
-                                    <spinner :animation-duration="1200" :size="55" color="#fff" />
-                                </client-only>
-                            </div>
-                            <p>Loading Galleries...</p>
+                        <v-col align="center" v-for="(item,i) in 8" :key="i">
+                                <v-skeleton-loader  class="mx-5" width="220" dark type="card, article"></v-skeleton-loader>
                         </v-col>
                     </v-row>
                     <v-row v-else>
@@ -38,9 +33,8 @@
                                                 </v-list-item>
                                             </v-list>
                                         </v-card>
-                                        <v-card-subtitle class="text-left">{{
-                        item.gallery_name
-                      }}</v-card-subtitle>
+                                            <v-card-subtitle class="text-left mx-n3">{{item.gallery_name.slice(0,28)}}<span v-if="item.gallery_name.length>27">..</span></v-card-subtitle>
+
                                        <v-row>
                                             <div class="prem-sup-card rounded-lg px-2" v-for="(nft, i) in item.nfts.slice(0,4)" :key="i">
                                                 <small v-if="nft.name.length>10">{{ nft.name.slice(0,10) }}..</small>
@@ -105,7 +99,7 @@ export default {
         getPopularNfts() {
             this.$axios
                 .get(
-                    "/all-trending?page="+this.page+"&limit=2")
+                    "/trending?page="+this.page+"&limit=2")
                 .then((res) => {
                     this.total = res.data.galleryCount
                     if (this.total % 20 == 0) {
@@ -113,7 +107,7 @@ export default {
                     } else {
                         this.pages = Math.floor(this.total / 20)+1
                     }
-                    this.nfts = res.data.trending
+                    this.nfts = res.data.trending_galleries
                 })
                 .catch((err) => console.log(err.response));
         },

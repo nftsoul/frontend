@@ -163,8 +163,8 @@ export default {
 
     mounted() {
         if (this.$route.name == 'profile-address-index-exhibit') {
-            this.$store.commit('nft/setCollection',[])
-            this.$store.commit('nft/setCollectionIds',[])
+            this.$store.commit('nft/setCollection', [])
+            this.$store.commit('nft/setCollectionIds', [])
         }
         this.cluster = process.env.CLUSTER
         this.getAllNftData();
@@ -190,7 +190,11 @@ export default {
                 let promises = [];
                 for (var x = 0; x < mints.length; x++) {
                     let myNFT = await NFTs.getNFTByMintAddress(conn, mints[x]);
-                    this.originalList.push(myNFT)
+                    if (myNFT.owner == this.walletAddress) {
+                        this.originalList.push(myNFT)
+
+                    }
+
                 }
             } else {
                 const publicAddress = await solrayz.resolveToWalletAddress({

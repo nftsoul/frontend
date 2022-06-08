@@ -12,78 +12,94 @@
             </v-btn>
 
             <div v-else>
-                <v-menu transition="slide-y-transition" bottom offset-y>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-icon large dark v-bind="attrs" v-on="on" class="mx-2">mdi-account</v-icon>
-                    </template>
-                    <v-card width="200" color="#636262">
-                        <v-list style="background-color: #636262" dense>
-                            <v-list-item @click="
+                <v-row no-gutters>
+
+                    <v-menu transition="slide-y-transition" bottom offset-y :close-on-click="false" :close-on-content-click="false">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-icon large dark v-bind="attrs" class="mr-n3" v-on="on">mdi-account</v-icon>
+                        </template>
+                        <v-card width="200" color="#636262">
+                            <v-list style="background-color: #636262" dense>
+                                <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-nfts',
                       params: { address: walletAddress },
                     })
                   ">
-                                <v-list-item-title>My Items</v-list-item-title><br /><br />
-                            </v-list-item>
-                            <v-divider></v-divider>
-                            <v-list-item @click="
+                                    <v-list-item-title>My Items</v-list-item-title><br /><br />
+                                </v-list-item>
+                                <v-divider></v-divider>
+                                <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-gallery',
                       params: { address: walletAddress },
                     })
                   ">
-                                <v-list-item-title>Listed Items</v-list-item-title><br /><br />
-                            </v-list-item>
-                            <v-list-item @click="
+                                    <v-list-item-title>Listed Items</v-list-item-title><br /><br />
+                                </v-list-item>
+                                <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-exhibit',
                       params: { address: walletAddress },
                     })
                   ">
-                                <v-list-item-title>Create Gallery</v-list-item-title><br /><br />
-                            </v-list-item>
-                            <v-list-item @click="
+                                    <v-list-item-title>Create Gallery</v-list-item-title><br /><br />
+                                </v-list-item>
+                                <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-earning-logs',
                       params: { address: walletAddress },
                     })
                   ">
-                                <v-list-item-title>Earning Logs</v-list-item-title><br /><br />
-                            </v-list-item>
-                        </v-list>
-                    </v-card>
-                </v-menu>
-                <div class="auth-box mt-n2">
-                    <div class="auth-inside">
-                        <div class="auth-inside-1" @click="
+                                    <v-list-item-title>Earning Logs</v-list-item-title><br /><br />
+                                </v-list-item>
+                            </v-list>
+                        </v-card>
+                    </v-menu>
+
+                    <v-menu transition="slide-y-transition" bottom offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                            <div class="mx-4">
+                                <v-badge v-if="notificationCount>1" color="green" :content="notificationCount" overlap>
+                                    <v-icon @click="$store.commit('wallet/setNoficationCount',0)" dark v-bind="attrs" v-on="on" size="28" class="mx-2 mt-1">mdi-bell</v-icon>
+                                </v-badge>
+                                <v-icon v-else size="28" v-bind="attrs" v-on="on" class="mx-2 mt-1">mdi-bell</v-icon>
+                            </div>
+                        </template>
+                        <LayoutNotification />
+                    </v-menu>
+
+                    <div class="auth-box mt-n2 ml-1">
+                        <div class="auth-inside">
+                            <div class="auth-inside-1" @click="
                   $router.push({
                     name: 'profile-address-index-nfts',
                     params: { address: walletAddress },
                   })
                 ">
-                            <v-avatar size="20" class="mx-2 mt-3">
-                                <v-img :src="require('~/assets/images/phantom.png')"></v-img>
-                            </v-avatar>
-                        </div>
-                        <div class="auth-inside-2">
-                            <v-menu transition="slide-y-transition" bottom offset-y>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <p class="wallet-text mt-3" v-bind="attrs" v-on="on">
-                                        {{ walletAddress.slice(0, 8) + "..." }}
-                                    </p>
-                                </template>
-                                <v-card width="200" color="#636262" class="mt-3">
-                                    <v-list style="background-color: #636262" dense>
-                                        <v-list-item @click="disconnect">
-                                            <v-list-item-title>Disconnect</v-list-item-title><br /><br />
-                                        </v-list-item>
-                                    </v-list>
-                                </v-card>
-                            </v-menu>
+                                <v-avatar size="20" class="mx-2 mt-3">
+                                    <v-img :src="require('~/assets/images/phantom.png')"></v-img>
+                                </v-avatar>
+                            </div>
+                            <div class="auth-inside-2">
+                                <v-menu transition="slide-y-transition" bottom offset-y>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <p class="wallet-text mt-3" v-bind="attrs" v-on="on">
+                                            {{ walletAddress.slice(0, 8) + "..." }}
+                                        </p>
+                                    </template>
+                                    <v-card width="200" color="#636262" class="mt-3">
+                                        <v-list style="background-color: #636262" dense>
+                                            <v-list-item @click="disconnect">
+                                                <v-list-item-title>Disconnect</v-list-item-title><br /><br />
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-card>
+                                </v-menu>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </v-row>
             </div>
         </div>
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-app-bar-nav-icon>
@@ -148,7 +164,15 @@
           ">
                 <v-list-item-title>Earning Logs</v-list-item-title><br /><br />
             </v-list-item>
+
             <v-divider></v-divider>
+
+            <v-list-item @click="$router.push('/all-notifications')">
+                <v-list-item-title>Notifications</v-list-item-title>
+            </v-list-item>
+
+            <v-divider></v-divider>
+
             <v-list-item @click="disconnect">
                 <v-list-item-title>Disconnect</v-list-item-title><br /><br />
             </v-list-item>
@@ -166,7 +190,7 @@ export default {
             resp: "",
             drawer: false,
             authBtn: null,
-            loaded: false
+            loaded: false,
         };
     },
     computed: {
@@ -178,9 +202,12 @@ export default {
         },
         currentRoute() {
             return this.$store.state.nft.currentRoute
+        },
+        notificationCount(){
+            return this.$store.state.wallet.notificationCount
         }
     },
-    created() {
+     created() {
         this.$store.dispatch('wallet/connectWallet')
     },
     watch: {

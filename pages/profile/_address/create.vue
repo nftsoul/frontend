@@ -10,13 +10,13 @@
 
                         <label for="about" class="text--disabled">Short story about your Gallery</label>
                         <v-textarea v-model="about" :rules="[validRules.required,validRules.lengthMax100]" id="about" rows="3" auto-grow background-color="#030537" dense outlined placeholder="e.g.'The fact that makes this gallery worth watch...'"></v-textarea>
-                        
+
                         <div v-if="!editing">
-                        <label for="type" class="text--disabled">Select</label>
-                        <v-radio-group class="py-0" v-model="premium" row dense id="type">
-                            <v-radio label="Premium Gallery" color="#c202d3" :value="true"></v-radio>
-                            <v-radio label="Free Gallery" color="#c202d3" :value="false"></v-radio>
-                        </v-radio-group>
+                            <label for="type" class="text--disabled">Select</label>
+                            <v-radio-group class="py-0" v-model="premium" row dense id="type">
+                                <v-radio label="Premium Gallery" color="#c202d3" :value="true"></v-radio>
+                                <v-radio label="Free Gallery" color="#c202d3" :value="false"></v-radio>
+                            </v-radio-group>
                         </div>
 
                         <label for="price" v-if="premium" class="text--disabled">Price</label>
@@ -139,22 +139,6 @@
     </v-dialog>
     <!-- end submit confirm -->
 
-    <!-- approval dialog -->
-    <v-dialog v-model="approvalDialog" max-width="400" persistent>
-        <div class="border-white rounded-lg">
-            <v-card color="primary" class="rounded-lg" style="border:2px solid white">
-                <v-col align="center">
-                    <p class="text--disabled">
-                        <spinner :animation-duration="1200" :size="30" color="#fff" class="mx-auto" />Do not close this window
-                    </p>
-                    <p>Your gallery will be created after payment approval</p>
-                    <p>{{ approvals }} Approvals Left</p>
-                </v-col>
-            </v-card>
-        </div>
-    </v-dialog>
-    <!-- end approval dialog -->
-
     <!-- delete nft -->
     <v-dialog v-model="deleteDialog" max-width="600" persistent>
         <v-card color="background">
@@ -229,12 +213,17 @@
 
 <script>
 import Exhibit from '../../../components/profile/exhibit.vue'
-let zebec = null;
-if (process.client) {
-    zebec = require("@zebec-protocol/stream");
-}
 const web3 = require("@solana/web3.js");
-
+const getProvider = async () => {
+    if ("solana" in window) {
+        const provider = window.solana;
+        if (provider.isPhantom) {
+            return provider;
+        }
+    } else {
+        window.open("https://www.phantom.app/", "_blank");
+    }
+};
 export default {
     components: {
         Exhibit
@@ -286,7 +275,6 @@ export default {
             },
             rankedNfts: [],
             approvalDialog: false,
-            approvals: 2,
             priceDisabled: false,
             premium: true,
             selectedIndex: 0,
@@ -296,7 +284,7 @@ export default {
             yes: true,
             no: true,
             addDialog: false,
-            btnText:'Create Gallery'
+            btnText: 'Create Gallery'
         };
     },
     computed: {
@@ -338,8 +326,8 @@ export default {
         next();
     },
     mounted() {
-        if(this.editing){
-            this.btnText='Update'
+        if (this.editing) {
+            this.btnText = 'Update'
         }
         if (this.collection.length > 0) {
             this.src = this.collection[0].image;
@@ -452,7 +440,6 @@ export default {
         async createGallery() {
             this.confirmDialog = false
             if (this.$refs.form.validate()) {
-                const zeb = new zebec.NativeStream(window.solana, process.env.CLUSTER_URL)
                 if (this.src != null) {
                     this.creating = true;
                     const depositData = {
@@ -470,71 +457,59 @@ export default {
                             if (this.premium == false) {
                                 this.price = 0
                             }
-                            this.approvalDialog = true
-                            let depositResponse = await zeb.deposit(depositData);
-                            if (depositResponse.status == "success") {
-                                this.approvals -= 1
-                                let currentTime = Math.floor(Date.now() / 1000) + 120
-                                let futureTime = currentTime + 1200;
-                                let platformResponse = await zeb.init({
-                                    sender: this.walletAddress,
-                                    receiver: "9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv",
-                                    amount: 0.01,
-                                    start_time: currentTime,
-                                    end_time: futureTime,
-                                });
-                                if (platformResponse.status == "success") {
+                            // Getting wallet address
+                            var provider = await getProvider();
 
-                                    this.$axios
-                                        .post("/create-gallery", {
-                                            'user_id': this.walletAddress,
-                                            'gallery_name': this.name,
-                                            'nfts': this.collection,
-                                            'image': this.src,
-                                            'description': this.about,
-                                            'price': this.price,
-                                            'premium': this.premium
-                                        })
-                                        .then((res) => {
-                                            this.creating = false;
-                                            this.approvalDialog = false
-                                            this.$toast
-                                                .success("Your gallery has been created successfully.", {
-                                                    iconPack: "mdi",
-                                                    icon: "mdi-image",
-                                                    theme: "outline",
-                                                })
-                                                .goAway(3000);
-                                            this.$store.commit("content/setSelected", res.data.gallery);
-                                            this.$router.push({
-                                                name: "profile-preview",
-                                            });
-                                        })
-                                        .catch((err) => console.log(err.response));
-                                } else {
+                            var recieverWallet = new web3.PublicKey("9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv");
+
+                            var transaction = new web3.Transaction().add(
+                                web3.SystemProgram.transfer({
+                                    fromPubkey: provider.publicKey,
+                                    toPubkey: recieverWallet,
+                                    lamports: web3.LAMPORTS_PER_SOL / 100
+                                }),
+                            );
+
+                            // Setting the variables for the transaction
+                            transaction.feePayer = await provider.publicKey;
+                            let blockhashObj = await this.connection.getRecentBlockhash();
+                            transaction.recentBlockhash = await blockhashObj.blockhash;
+
+                            // Request creator to sign the transaction (allow the transaction)
+                            let signed = await provider.signTransaction(transaction);
+                            // The signature is generated
+                            let signature = await this.connection.sendRawTransaction(signed.serialize());
+                            // // Confirm whether the transaction went through or not
+                            // await connection.confirmTransaction(signature);
+                            // console.log("Signature: ", signature);
+
+                            this.$axios
+                                .post("/create-gallery", {
+                                    'user_id': this.walletAddress,
+                                    'gallery_name': this.name,
+                                    'nfts': this.collection,
+                                    'image': this.src,
+                                    'description': this.about,
+                                    'price': this.price,
+                                    'premium': this.premium
+                                })
+                                .then((res) => {
                                     this.creating = false;
                                     this.approvalDialog = false
-                                    this.approvals = 2
                                     this.$toast
-                                        .error("User rejected the request", {
+                                        .success("Your gallery has been created successfully.", {
                                             iconPack: "mdi",
-                                            icon: "mdi-cancel",
+                                            icon: "mdi-image",
                                             theme: "outline",
                                         })
                                         .goAway(3000);
-                                }
-                            } else {
-                                this.creating = false;
-                                this.approvalDialog = false
-                                this.approvals = 2
-                                this.$toast
-                                    .error("User rejected the request", {
-                                        iconPack: "mdi",
-                                        icon: "mdi-cancel",
-                                        theme: "outline",
-                                    })
-                                    .goAway(3000);
-                            }
+                                    this.$store.commit("content/setSelected", res.data.gallery);
+                                    this.$router.push({
+                                        name: "profile-preview",
+                                    });
+                                })
+                                .catch((err) => console.log(err.response));
+
                         } else {
                             this.creating = false;
                             this.$toast
@@ -547,7 +522,7 @@ export default {
                         }
                     } else {
                         this.$axios
-                            .patch("/gallery/"+this.selected._id, {
+                            .patch("/gallery/" + this.selected._id, {
                                 'user_id': this.walletAddress,
                                 'gallery_name': this.name,
                                 'nfts': this.collection,

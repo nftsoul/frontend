@@ -1,5 +1,5 @@
 <template>
-<v-card  :src="require('~/assets/images/abstract-flowing.jpg')" flat>
+<v-card :src="require('~/assets/images/abstract-flowing.jpg')" flat>
     <v-img :height="screenHeight()" :lazy-src="require('~/assets/images/dark-banner.png')" :src="require('~/assets/images/dark-banner.png')">
         <v-container fluid class="py-16">
             <v-row class="py-16">
@@ -8,18 +8,14 @@
                     <p class="">Create galleries, showcase your best NFTs and earn from them.</p>
                     <v-row class="mt-10">
                         <v-btn class="btn-exhibit ma-3" width="100" @click="$router.push({name:'profile-address-index-exhibit',params:{'address':walletAddress}})">Exhibit</v-btn>
-                        <!-- <div class="outer-btn ma-3" @click="$router.push({path:'/featured'})">
+                        <div class="outer-btn ma-3" @click="$router.push({path:'/featured'})">
                             <div class="inner-btn">
                                 <p class="ml-3 mt-n1" style="font-size:14px">Explore</p>
                             </div>
-                        </div> -->
-
-                        <div class="btn-gradient mt-3 mr-n3" style="height:38px" @click="$router.push({path:'/featured'})">
                         </div>
-                        <p class="body-1 ml-n16 mt-4">Explore</p>
                     </v-row>
                 </v-col>
-            </v-row> 
+            </v-row>
         </v-container>
     </v-img>
 
@@ -37,32 +33,33 @@ export default {
             windowHeight: 0,
         }
     },
-    computed:{
-        walletAddress(){
+    computed: {
+        walletAddress() {
             return this.$store.state.wallet.walletAddress
         }
     },
-    mounted() {
+    async mounted() {
         this.windowHeight = window.innerHeight
     },
     methods: {
         screenHeight() {
             return this.windowHeight;
         },
-        exhibit(){
-            if(this.walletAddress==null){
+        exhibit() {
+            if (this.walletAddress == null) {
                 this.$toast
-                .error("Please connect your phantom wallet first and then try again.", {
-                    iconPack: "mdi",
-                    icon: "mdi-wallet",
-                    theme: "outline"
-                })
-                .goAway(3000);
-            }
-            else{
+                    .error("Please connect your phantom wallet first and then try again.", {
+                        iconPack: "mdi",
+                        icon: "mdi-wallet",
+                        theme: "outline"
+                    })
+                    .goAway(3000);
+            } else {
                 this.$router.push({
-                    name:'profile-address-exhibit',
-                    params:{address:this.walletAddress}
+                    name: 'profile-address-exhibit',
+                    params: {
+                        address: this.walletAddress
+                    }
                 })
             }
         },
@@ -95,10 +92,12 @@ export default {
             var resp = await window.solana.connect();
             this.$store.commit('wallet/setWalletAddress', resp.publicKey.toString())
             this.$router.push({
-                name:'profile-address-exhibit',
-                params:{address:this.walletAddress}
+                name: 'profile-address-exhibit',
+                params: {
+                    address: this.walletAddress
+                }
             })
-        },
+        }
     }
 }
 </script>

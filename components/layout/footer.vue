@@ -2,47 +2,28 @@
 <div class="dark-bg pt-10">
     <div class="f-shadow">
 
-        <!-- <v-container class="py-10">
+        <v-container class="py-10">
             <v-row class="py-10">
                 <v-col cols="12" lg="3" md="6" sm="4" class="footer">
-                    <h5 class="mb-5">Marketplace</h5>
-                    <p>All NFTs</p>
-                    <p>Art</p>
-                    <p>Music</p>
-                    <p>Domain Names</p>
-                    <p>Virtual World</p>
-                    <p>Collectibles</p>
+                    <h5 class="mb-5">Nft Soul</h5>
+                    <small>Introducing a new utility for NFTs. Exhibit, Interact and Earn via NFTs. </small>
                 </v-col>
                 <v-col cols="12" lg="3" md="6" sm="4" class="footer">
-                    <h5 class="mb-5">Resources</h5>
-                    <p>Help Center</p>
-                    <p>Partners</p>
-                    <p>Suggestions</p>
-                    <p>Discord</p>
-                    <p>Docs</p>
-                    <p>Newsletter</p>
+                    <h5 class="mb-5">Nft Soul DAO</h5>
+                    <p v-for="(item,i) in dao" :key="i" @click="goTo(item)">{{item.title}}</p>
                 </v-col>
                 <v-col cols="12" lg="3" md="6" sm="4" class="footer">
                     <h5 class="mb-5">Community</h5>
-                    <p>Community</p>
-                    <p>Documentation</p>
-                    <p>BraND Access</p>
-                    <p>Blog</p>
-                    <p>Forum</p>
-                    <p>Mailing List</p>
+                    <p v-for="(item,i) in community" :key="i" @click="goTo(item)">{{item.title}}</p>
                 </v-col>
                 <v-col cols="12" lg="3" md="6" sm="4" class="footer">
-                    <h5 class="mb-5">Newsletter</h5>
-                    <p>Signup for our newsletter to get the latest news in your inbox.</p>
-                    <v-form v-model="valid" ref="form">
-                        <v-text-field prepend-inner-icon="mdi-mail" append-icon="mdi-arrow-right" placeholder="Enter your email"></v-text-field>
-
-                    </v-form>
-                    <p>Your email is safe with us. We don't spam.</p>
+                    <h5 class="mb-5">Join Our Discord</h5>
+                    <small>Become a part of our community</small><br>
+                    <v-icon class="mx-auto" large @click="goTo({link:'https://discord.com/invite/xcTuWYc8rj'})">mdi-discord</v-icon>
                 </v-col>
             </v-row>
 
-        </v-container> -->
+        </v-container>
         <v-divider></v-divider>
         <v-container>
             <v-row justify="center" class="py-2">
@@ -57,7 +38,7 @@
 
 <script>
 export default {
-    datae() {
+    data() {
         return {
             valid: true,
             email: '',
@@ -66,6 +47,28 @@ export default {
                 required: value => !!value || "Required.",
                 length10: v => v && v.length == 10 || "Should be 10 characters",
             },
+            dao: [
+                // {
+                //     title: 'About Us',
+                //     link: ''
+                // },
+                {
+                    title: 'Docs',
+                    link: 'https://docs.nftsoul.io'
+                },
+                {
+                    title: 'White Paper',
+                    link: 'https://bit.ly/3lZbJiQ'
+                },
+                {
+                    title: 'Medium',
+                    link: 'https://medium.com/@nftsoul'
+                }
+            ],
+            community:[
+                {title:'Discord',link:'https://discord.com/invite/xcTuWYc8rj'},
+                {title:'Twitter',link:'https://twitter.com/nftsoul_io'}
+            ]
         }
     },
     methods: {
@@ -84,6 +87,9 @@ export default {
                         .goAway(3000);
                 }).catch(err => console.log(err.response))
             }
+        },
+        goTo(item) {
+            window.open(item.link, "_blank");
         }
     }
 }
@@ -107,5 +113,6 @@ export default {
 .footer p {
     font-weight: normal;
     font-size: 14px;
+    cursor: pointer;
 }
 </style>
