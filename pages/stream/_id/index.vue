@@ -1,5 +1,7 @@
 <template>
 <div class="dark-bg pt-16">
+        <UtilsSeo :title="pre.gallery[0].gallery_name" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
+
     <v-container class="pt-16">
         <v-row justify="center">
             <h3>Item Preview</h3>
@@ -261,6 +263,59 @@
 
 <script>
 export default {
+    async asyncData({
+        app,params
+    }) {
+        const pre = await fetch(process.env.API_URL + `/gallery-stream/${params.id}`).then((res) => res.json());
+        const mutation = app.head.meta.map(i => {
+            if(i && i.hid){
+                if(i.hid === 'title'){
+                    i.content = pre.gallery[0].gallery_name
+                }
+                if(i.hid === 'description'){
+                    i.content = pre.gallery[0].description;
+                }
+                if(i.hid === 'twitter:image'){
+                    i.content = pre.gallery[0].image
+                }
+                if(i.hid === 'twitter:card'){
+                    i.content = 'summary_large_image'
+                }
+                if(i.hid === 'og:image'){
+                    i.content = pre.gallery[0].image
+                }
+                if(i.hid === 'og:image:secure_url'){
+                    i.content = pre.gallery[0].image;
+                }
+                if(i.hid === 'og:title'){
+                    i.content = pre.gallery[0].gallery_name
+                }
+                if(i.hid === 'og:description'){
+                    i.content = pre.gallery[0].description
+                }
+                if(i.hid === 'description'){
+                    i.content = pre.gallery[0].description
+                }
+                // if(i.hid === 'og:url'){
+                //     i.content = this.$route.path
+                // }
+            }
+            return i;
+        });
+      app.head.meta = mutation;
+        return {
+            pre
+        };
+    },
+    head() {
+        return {
+            link: [{
+                hid: "canonical",
+                rel: "canonical",
+                href: process.env.API_URL + `/gallery-stream/${this.$route.params.id}`
+            }]
+        };
+    },
     data() {
         return {
             totalTime: 300,
