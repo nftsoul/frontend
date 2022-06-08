@@ -6,7 +6,7 @@
                 <div class="enclose-border">
                     <v-form v-model="valid" ref="form">
                         <label for="name" class="text--disabled">Gallery Name</label>
-                        <v-textarea v-model="name" :rules="[validRules.required,validRules.lengthMin3]" id="name" rows="1" dense outlined placeholder="e.g. 'My Best NFT'"></v-textarea>
+                        <v-textarea v-model="name" :rules="[validRules.required,validRules.lengthMin3,validRules.lengthMax50]" id="name" rows="1" dense outlined placeholder="e.g. 'My Best NFT'"></v-textarea>
 
                         <label for="about" class="text--disabled">Short story about your Gallery</label>
                         <v-textarea v-model="about" :rules="[validRules.required,validRules.lengthMax100]" id="about" rows="3" auto-grow background-color="#030537" dense outlined placeholder="e.g.'The fact that makes this gallery worth watch...'"></v-textarea>
@@ -254,6 +254,7 @@ export default {
                 positive: (v) => (v && v > -1) || "Price cannot be negative.",
                 lengthMax100: (v) => (v && v.length < 200) || "Should not be more than 200 characters.",
                 lengthMin3: (v) => (v && v.length > 2) || "At least 3 characters.",
+                lengthMax50: (v) => (v && v.length < 50) || "Should be less than 50 characters.",
                 sollimit: (v) => (v && v <= 20 / this.sol) || "SOL should not worth more than 20$. Current price: 20$=" + (20 / this.sol).toFixed(4) + " SOL"
             },
             slickSetting: {

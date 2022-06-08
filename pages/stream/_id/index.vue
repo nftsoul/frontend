@@ -156,7 +156,7 @@
                                     <span v-if="item.user_id.name">{{item.user_id.name}}</span>
                                     <span v-else>{{item.user_id.wallet_address.slice(0, 5)}}</span>
                                     <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
-                                    <small class="reply-btn position-abs text--disabled mb-0 ml-2 mt-n1" v-if="hoverIndex==i" @click="selectedIndex = i,replying = true"">
+                                    <small class="reply-btn position-abs text--disabled mb-0 ml-2 mt-n1" v-if="hoverIndex==i" @click="selectedIndex = i,replying = true,reply=''">
                                         <v-icon small>mdi-reply</v-icon>Reply
                                     </small>
                                 </v-list-item-title>
