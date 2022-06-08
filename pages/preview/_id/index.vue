@@ -1,7 +1,7 @@
 <template>
 <div class="dark-bg">
     <UtilsSeo :title="pre.gallery[0].gallery_name" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
-    
+
     <v-card :min-height="screenHeight()" flat color="transparent" class="pt-16">
         <v-container class="pt-16">
             <v-row justify="center">
@@ -136,7 +136,7 @@
                                                                 <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link" max-width="60" max-height="60"></v-img>
                                                                 <v-icon v-else>mdi-account</v-icon>
                                                             </v-list-item-avatar>
-                                                            <v-list-item-content >
+                                                            <v-list-item-content>
                                                                 <v-list-item-title>
                                                                     <span v-if="reply.user_id.name">{{ reply.user_id.name }}</span>
                                                                     <span v-else>{{
@@ -210,36 +210,37 @@ const getProvider = async () => {
 };
 export default {
     async asyncData({
-        app,params
+        app,
+        params
     }) {
         const pre = await fetch(process.env.API_URL + `/single-gallery/${params.id}`).then((res) => res.json());
         const mutation = app.head.meta.map(i => {
-            if(i && i.hid){
-                if(i.hid === 'title'){
+            if (i && i.hid) {
+                if (i.hid === 'title') {
                     i.content = pre.gallery[0].gallery_name
                 }
-                if(i.hid === 'description'){
+                if (i.hid === 'description') {
                     i.content = pre.gallery[0].description;
                 }
-                if(i.hid === 'twitter:image'){
+                if (i.hid === 'twitter:image') {
                     i.content = pre.gallery[0].image
                 }
-                if(i.hid === 'twitter:card'){
+                if (i.hid === 'twitter:card') {
                     i.content = 'summary_large_image'
                 }
-                if(i.hid === 'og:image'){
+                if (i.hid === 'og:image') {
                     i.content = pre.gallery[0].image
                 }
-                if(i.hid === 'og:image:secure_url'){
+                if (i.hid === 'og:image:secure_url') {
                     i.content = pre.gallery[0].image;
                 }
-                if(i.hid === 'og:title'){
+                if (i.hid === 'og:title') {
                     i.content = pre.gallery[0].gallery_name
                 }
-                if(i.hid === 'og:description'){
+                if (i.hid === 'og:description') {
                     i.content = pre.gallery[0].description
                 }
-                if(i.hid === 'description'){
+                if (i.hid === 'description') {
                     i.content = pre.gallery[0].description
                 }
                 // if(i.hid === 'og:url'){
@@ -248,7 +249,7 @@ export default {
             }
             return i;
         });
-      app.head.meta = mutation;
+        app.head.meta = mutation;
         return {
             pre
         };
@@ -274,7 +275,7 @@ export default {
             preview: "",
             expand: false,
             selectedIndex: null,
-            hoverIndex:null,
+            hoverIndex: null,
             replying: false,
             reply: "",
             selectedComment: "",
@@ -430,33 +431,47 @@ export default {
                 if (this.preview.user_id != this.walletAddress) {
                     if (this.preview.premium) {
                         if (total_charge < available) {
-                            var provider = await getProvider();
-                            var platformWallet = new web3.PublicKey("9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv");
-                            var creatorWallet = new web3.PublicKey(this.preview.user_id);
-                            var transaction = new web3.Transaction().add(web3.SystemProgram.transfer({
-                                fromPubkey: provider.publicKey,
-                                toPubkey: platformWallet,
-                                lamports: web3.LAMPORTS_PER_SOL *0.02 * this.preview.price
-                            }), web3.SystemProgram.transfer({
-                                fromPubkey: provider.publicKey,
-                                toPubkey: creatorWallet,
-                                lamports: web3.LAMPORTS_PER_SOL*this.preview.price
-                            }));
-                            transaction.feePayer = await provider.publicKey;
-                            let blockhashObj = await this.connection.getRecentBlockhash();
-                            transaction.recentBlockhash = await blockhashObj.blockhash;
-                            let signed = await provider.signTransaction(transaction);
-                            let signature = await this.connection.sendRawTransaction(signed.serialize());
-                            this.$store.commit("nft/setStream", true);
-                            this.saveEarning();
-                            this.loading = false;
-                            this.approvalDialog = false;
-                            this.$router.push({
-                                name: "stream-id",
-                                params: {
-                                    id: this.gallery_id
+                            try {
+
+                                var provider = await getProvider();
+                                var platformWallet = new web3.PublicKey("9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv");
+                                var creatorWallet = new web3.PublicKey(this.preview.user_id);
+                                var transaction = new web3.Transaction().add(web3.SystemProgram.transfer({
+                                    fromPubkey: provider.publicKey,
+                                    toPubkey: platformWallet,
+                                    lamports: web3.LAMPORTS_PER_SOL * 0.02 * this.preview.price
+                                }), web3.SystemProgram.transfer({
+                                    fromPubkey: provider.publicKey,
+                                    toPubkey: creatorWallet,
+                                    lamports: web3.LAMPORTS_PER_SOL * (this.preview.price - 0.02 * this.preview.price)
+                                }));
+                                transaction.feePayer = await provider.publicKey;
+                                let blockhashObj = await this.connection.getRecentBlockhash();
+                                transaction.recentBlockhash = await blockhashObj.blockhash;
+                                let signed = await provider.signTransaction(transaction);
+                                let signature = await this.connection.sendRawTransaction(signed.serialize());
+                                this.$store.commit("nft/setStream", true);
+                                this.saveEarning();
+                                this.loading = false;
+                                this.approvalDialog = false;
+                                this.$router.push({
+                                    name: "stream-id",
+                                    params: {
+                                        id: this.gallery_id
+                                    }
+                                });
+                            } catch (e) {
+                                if (e.code == 4001) {
+                                    this.$toast
+                                        .error(e.message, {
+                                            iconPack: "mdi",
+                                            icon: "mdi-account",
+                                            theme: "outline",
+                                        })
+                                        .goAway(3000);
+                                        this.loading=false
                                 }
-                            });
+                            }
                         } else {
                             this.loading = false;
                             this.$toast
