@@ -1,8 +1,10 @@
 <template>
   <v-app>
+    <div v-if="loaded">
       <LayoutAppbar />
       <Nuxt />
       <LayoutFooter />
+    </div>
   </v-app>
 </template>
 
