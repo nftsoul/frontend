@@ -107,7 +107,11 @@ export default {
                     } else {
                         this.pages = Math.floor(this.total / 20)+1
                     }
-                    this.nfts = res.data.trending_galleries
+                    for(var x=0;x<res.data.trending_galleries.length;x++){
+                        if(res.data.trending_galleries[x] != null){
+                            this.nfts.push(res.data.trending_galleries[x])
+                        }
+                    }
                 })
                 .catch((err) => console.log(err.response));
         },

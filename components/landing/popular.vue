@@ -150,8 +150,11 @@ export default {
                     query: item
                 })
                 .then((res) => {
-                    this.popular = res.data.trending_galleries
-                    console.log('pop:',this.popular)
+                    for(var x=0;x<res.data.trending_galleries.length;x++){
+                        if(res.data.trending_galleries[x] != null){
+                            this.popular.push(res.data.trending_galleries[x])
+                        }
+                    }
                 })
                 .catch((err) => console.log(err.response));
         },
