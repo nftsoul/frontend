@@ -46,7 +46,7 @@
                                                 </v-list-item>
                                             </v-list>
                                         </v-card>
-                                        <v-card-subtitle class="text-left">{{item.gallery_id.gallery_name}}</v-card-subtitle>
+                                            <v-card-subtitle class="text-left mx-n3">{{item.gallery_name.slice(0,20)}}<span v-if="item.gallery_name.length>20">..</span></v-card-subtitle>
                                         <v-row>
                                             <div class="prem-sup-card rounded-lg px-2" v-for="(nft, i) in item.gallery_id.nfts.slice(0,4)" :key="i">
                                                 <small v-if="nft.name.length>10">{{ nft.name.slice(0,10) }}..</small>

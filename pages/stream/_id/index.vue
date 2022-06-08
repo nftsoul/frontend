@@ -146,7 +146,7 @@
                     <div v-if="comments.length > 0">
                         <v-list-item v-for="(item, i) in comments" :key="i">
 
-                            <v-list-item-avatar class="mr-0">
+                            <v-list-item-avatar class="mr-2">
                                 <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="40" max-height="40"></v-img>
                                 <v-icon v-else large>mdi-account</v-icon>
                             </v-list-item-avatar>
@@ -156,7 +156,7 @@
                                     <span v-if="item.user_id.name">{{item.user_id.name}}</span>
                                     <span v-else>{{item.user_id.wallet_address.slice(0, 5)}}</span>
                                     <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
-                                    <small class="reply-btn position-abs text--disabled mb-0 ml-2 mt-n1" v-if="hoverIndex==i" @click="selectedIndex = i,replying = true"">
+                                    <small class="reply-btn position-abs text--disabled mb-0 ml-2 mt-n1" v-if="hoverIndex==i" @click="selectedIndex = i,replying = true,reply=''">
                                         <v-icon small>mdi-reply</v-icon>Reply
                                     </small>
                                 </v-list-item-title>
@@ -187,9 +187,9 @@
                                 <!-- end make reply -->
 
                                 <!-- replies -->
-                                <div v-if="item.replies">
+                                <div v-if="item.replies" style="width:100%">
                                     <v-list-item dense v-for="(reply,j) in item.replies" :key="j">
-                                        <v-list-item-avatar size="30" class="mr-0">
+                                        <v-list-item-avatar size="30" class="mr-2">
                                             <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link" max-width="60" max-height="60"></v-img>
                                             <v-icon v-else>mdi-account</v-icon>
                                         </v-list-item-avatar>
@@ -199,7 +199,7 @@
                                                 <span v-else>{{ reply.user_id.wallet_address.slice(0, 5) }}</span>
                                                 <small class="caption text--disabled">{{$moment(reply.time).fromNow()}}</small>
                                             </v-list-item-title>
-                                            <v-card-text class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text><br>
+                                            <v-card-text style="width:100%" class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text><br>
                                         </v-list-item-content>
                                     </v-list-item>
                                     <v-row no-gutters>
