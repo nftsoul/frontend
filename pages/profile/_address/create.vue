@@ -481,6 +481,7 @@ export default {
                                 let signed = await provider.signTransaction(transaction);
                                 // The signature is generated
                                 let signature = await this.connection.sendRawTransaction(signed.serialize());
+                                this.$store.commit('wallet/setSnackbar',signature)
                                 // // Confirm whether the transaction went through or not
                                 // await connection.confirmTransaction(signature);
                                 // console.log("Signature: ", signature);

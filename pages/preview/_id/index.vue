@@ -281,7 +281,7 @@ export default {
             selectedComment: "",
             replyPage: 0,
             more: false,
-            makingReply: false
+            makingReply: false,
         };
     },
     computed: {
@@ -298,6 +298,7 @@ export default {
     mounted() {
         this.getNft();
         this.getComments();
+        
     },
     methods: {
         onEnterPress(item) {
@@ -450,10 +451,10 @@ export default {
                                 transaction.recentBlockhash = await blockhashObj.blockhash;
                                 let signed = await provider.signTransaction(transaction);
                                 let signature = await this.connection.sendRawTransaction(signed.serialize());
+                                this.$store.commit('wallet/setSnackbar',signature)
                                 this.$store.commit("nft/setStream", true);
                                 this.saveEarning();
                                 this.loading = false;
-                                this.approvalDialog = false;
                                 this.$router.push({
                                     name: "stream-id",
                                     params: {
