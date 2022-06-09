@@ -31,14 +31,7 @@
 </template>
 
 <script>
-let OrbitSpinner = null;
-if (process.client) {
-    OrbitSpinner = require("epic-spinners").OrbitSpinner;
-}
 export default {
-    components: {
-        OrbitSpinner
-    },
     data() {
         return {
             nfts: [],
