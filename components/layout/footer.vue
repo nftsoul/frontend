@@ -115,4 +115,7 @@ export default {
     font-size: 14px;
     cursor: pointer;
 }
+.footer p:hover{
+    color: #C202D3;
+}
 </style>
