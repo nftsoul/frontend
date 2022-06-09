@@ -60,28 +60,28 @@
                                                         </v-list-item>
                                                     </v-list>
                                                 </v-card>
-                                                                                            <v-card-subtitle class="text-left mx-n3">{{item.gallery_name.slice(0,20)}}<span v-if="item.gallery_name.length>20">..</span></v-card-subtitle>
+                                                <v-card-subtitle class="text-left mx-n3">{{item.gallery_name.slice(0,20)}}<span v-if="item.gallery_name.length>20">..</span></v-card-subtitle>
 
                                                 <v-row>
-                                            <div class="prem-sup-card rounded-lg px-2" v-for="(nft, i) in item.nfts.slice(0,4)" :key="i">
-                                                <small v-if="nft.name.length>10">{{ nft.name.slice(0,10) }}..</small>
-                                                <small v-else>{{ nft.name }}</small>
-                                            </div>
-                                        </v-row>
+                                                    <div class="prem-sup-card rounded-lg px-2" v-for="(nft, i) in item.nfts.slice(0,4)" :key="i">
+                                                        <small v-if="nft.name.length>8">{{ nft.name.slice(0,8) }}..</small>
+                                                        <small v-else>{{ nft.name }}</small>
+                                                    </div>
+                                                </v-row>
 
-                                        <br>
+                                                <br>
 
-                                        <v-col class="pa-0">
-                                            <v-divider class="mb-1"></v-divider>
-                                            <v-row no-gutters>
-                                                <small class="mr-1">{{item.views}}</small>
-                                                <v-icon small>mdi-eye</v-icon>
-                                                <v-spacer></v-spacer>
-                                                <small class="mr-1">{{item.favourites}}</small>
-                                                <v-icon small>mdi-heart-outline</v-icon>
-                                            </v-row>
+                                                <v-col class="pa-0">
+                                                    <v-divider class="mb-1"></v-divider>
+                                                    <v-row no-gutters>
+                                                        <small class="mr-1">{{item.views}}</small>
+                                                        <v-icon small>mdi-eye</v-icon>
+                                                        <v-spacer></v-spacer>
+                                                        <small class="mr-1">{{item.favourites}}</small>
+                                                        <v-icon small>mdi-heart-outline</v-icon>
+                                                    </v-row>
 
-                                        </v-col>
+                                                </v-col>
                                             </div>
                                         </div>
                                     </div>
@@ -159,12 +159,12 @@ export default {
             this.deleteDialog = true
         },
         deleteConfirm() {
-            this.deleting=true
+            this.deleting = true
             this.$axios.delete('/gallery/' + this.selected._id)
                 .then(res => {
                     this.collections.splice(this.collections.indexOf(this.selected), 1)
-                    this.deleteDialog=false
-                    this.deleting=false
+                    this.deleteDialog = false
+                    this.deleting = false
                     this.$toast
                         .success("Gallery has been deleted successfully.", {
                             iconPack: "mdi",
