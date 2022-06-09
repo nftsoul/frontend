@@ -84,8 +84,5 @@ export default {
             default: 0
         }
     },
-    mounted() {
-        console.log('creator:', this.creator)
-    }
 }
 </script>

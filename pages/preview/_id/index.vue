@@ -454,13 +454,13 @@ export default {
                                 this.$store.commit('wallet/setSnackbar',signature)
                                 this.$store.commit("nft/setStream", true);
                                 this.saveEarning();
-                                this.loading = false;
                                 this.$router.push({
                                     name: "stream-id",
                                     params: {
                                         id: this.gallery_id
                                     }
                                 });
+                                this.loading = false;
                             } catch (e) {
                                 if (e.code == 4001) {
                                     this.$toast
