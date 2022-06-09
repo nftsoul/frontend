@@ -7,9 +7,15 @@ export const state = () => ({
   accountDetail: "",
   profile: null,
   notificationCount: 0,
+  snackbar:false,
+  signature:''
 });
 
 export const mutations = {
+  setSnackbar(state,payload){
+    state.snackbar=true
+    state.signature=payload
+  },
   setWalletAddress(state, payload) {
     state.walletAddress = payload;
   },
