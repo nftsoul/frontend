@@ -21,7 +21,7 @@
                     </v-row>
                     <v-row v-else>
                         <v-col cols="12" lg="4" md="6" v-for="(item, i) in collections" :key="i" align="center">
-                            <GalleryCard :galleryId="item._id" :title="item.gallery_name" :image="item.image" :nfts="item.nfts" :creator="item.created_by" :views="item.views" :favourites="item.favourites" />
+                            <GalleryCard :galleryId="item.gallery_id._id" :title="item.gallery_id.gallery_name" :image="item.gallery_id.image" :nfts="item.gallery_id.nfts" :creator="item.gallery_id.created_by" :views="item.gallery_id.views" :favourites="item.gallery_id.favourites" />
                         </v-col>
                     </v-row>
                 </v-col>
@@ -43,6 +43,9 @@ export default {
         walletAddress() {
             return this.$route.params.address
         },
+        profile(){
+            return this.$store.state.wallet.profile
+        }
     },
     mounted() {
         this.getCollections();
@@ -55,11 +58,10 @@ export default {
             this.$axios
                 .get(
                     "/get-favourite/" +
-                    this.walletAddress
+                    this.profile._id
                 )
                 .then((res) => {
                     this.collections = res.data
-
                     if (res.data.length == 0) {
                         this.noData = true;
                     }
