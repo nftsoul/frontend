@@ -39,7 +39,7 @@ export default {
         hid: "twitter:description",
         name: "twitter:description",
         content:
-        "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
       },
       {
         hid: "twitter:image",
@@ -65,7 +65,7 @@ export default {
         hid: "og:description",
         property: "og:description",
         content:
-        "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
+          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
       },
       {
         hid: "og:image",

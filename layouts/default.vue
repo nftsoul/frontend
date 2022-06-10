@@ -2,6 +2,7 @@
   <v-app>
     <div v-if="loaded">
       <LayoutAppbar />
+      <CommonSolscan />
       <Nuxt />
       <LayoutFooter />
     </div>

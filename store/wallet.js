@@ -1,4 +1,6 @@
-import nacl from "tweetnacl";
+var nacl = require("tweetnacl");
+nacl.util = require("tweetnacl-util");
+import axios from 'axios'
 // nacl.util = require('tweetnacl-util');
 export const state = () => ({
   walletAddress: null,
@@ -7,9 +9,15 @@ export const state = () => ({
   accountDetail: "",
   profile: null,
   notificationCount: 0,
+  snackbar: false,
+  signature: "",
 });
 
 export const mutations = {
+  setSnackbar(state, payload) {
+    state.snackbar = true;
+    state.signature = payload;
+  },
   setWalletAddress(state, payload) {
     state.walletAddress = payload;
   },
@@ -23,6 +31,9 @@ export const mutations = {
   setNoficationCount(state, payload) {
     state.notificationCount = payload;
   },
+  setToken(state,payload){
+    state.profile['token']=payload
+  }
 };
 
 export const actions = {
@@ -34,44 +45,38 @@ export const actions = {
         context.commit("setWalletAddress", res.publicKey.toString());
         context.dispatch("getProfile", res.publicKey.toString());
         //signing hash
-        // const message = `NFTsoul Authorization`;
-        // const encodedMessage = new TextEncoder().encode(message);
-        // const signedMessage = await window.solana.signMessage(
-        //   encodedMessage,
-        //   "utf8"
-        // );
-        // const messageBytes = new TextEncoder().encode(message);
+        const message = `NFTsoul Authorization`;
+        const encodedMessage = new TextEncoder().encode(message);
+        const signedMessage = await window.solana.signMessage(
+          encodedMessage,
+          "utf8"
+        );
+        const messageBytes = new TextEncoder().encode(message);
 
-        // const publicKeyBytes = signedMessage.publicKey.toBuffer();
+        const publicKeyBytes = signedMessage.publicKey.toBuffer();
 
-        // const signatureBytes = signedMessage.signature;
+        const signatureBytes = signedMessage.signature;
 
-        // console.log("encoded signature:", signatureBytes);
-        // console.log("encoded message:", messageBytes);
-        // console.log("encoded public key:", publicKeyBytes);
-
-        // const result =  nacl.sign.detached.verify(
-        //   messageBytes,
-        //   signatureBytes,
-        //   publicKeyBytes
-        // );
-
-        // if (!result) {
-        //   console.log(`authentication failed`);
-        //   throw new Error("user can not be authenticated");
-        // }
-        // else{
-        //    console.log('result:',result)
-        // }
-        // let data=[messageBytes,signatureBytes,publicKeyBytes]
-        // let json=JSON.stringify(data)
-        // let post_data={json_data:json}
-        // console.log('r:',post_data)
-
-        // this.$axios.post('/auth/login',post_data).then(res=>{
-        //   console.log('token',res.data)
-        // }).catch(err=>console.log(err.response))
-
+        var qs = require("qs");
+        var data = qs.stringify({
+          message: nacl.util.encodeBase64(messageBytes),
+          wallet_address: res.publicKey.toString(),
+          publicKey: nacl.util.encodeBase64(publicKeyBytes),
+          signature:nacl.util.encodeBase64(signatureBytes)
+        });
+        var config = {
+          method: "post",
+          url: process.env.API_URL+"/auth/login",
+          headers: {},
+          data: data,
+        };
+        axios(config)
+          .then(function (response) {
+            context.commit('setToken',response.data.token)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
         this.$toast
           .success("Phantom wallet successfully connected.", {
             iconPack: "mdi",
