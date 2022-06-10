@@ -138,7 +138,7 @@ export default {
         getCollections() {
             this.$axios
                 .get(
-                    "/all-gallery/" + this.$route.params.address
+                    "/gallery/all" + this.$route.params.address
                 )
                 .then((res) => {
                     this.collections = res.data.galleries

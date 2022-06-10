@@ -54,7 +54,7 @@ export default {
 
         getCollections() {
             this.$axios
-                .get("/free-collection?page=1&limit=4")
+                .get("/gallery/free?page=1&limit=4")
                 .then((res) => {
                     this.free = res.data.free
                 })

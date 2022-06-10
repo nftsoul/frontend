@@ -102,7 +102,7 @@ export default {
     methods: {
         getCollections(item) {
             this.$axios
-                .get('/trending?page=1&limit=4', {
+                .get('/gallery/trending?page=1&limit=4', {
                     query: item
                 })
                 .then((res) => {

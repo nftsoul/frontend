@@ -52,7 +52,7 @@ export default {
         getFreeNfts() {
             this.$axios
                 .get(
-                    "/free-collection?page=" +
+                    "/gallery/free?page=" +
                     this.page +
                     "&limit=" +
                     this.limit
