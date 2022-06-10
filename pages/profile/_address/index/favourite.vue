@@ -57,7 +57,7 @@ export default {
         getCollections() {
             this.$axios
                 .get(
-                    "/get-favourite/" +
+                    "/favourite/" +
                     this.profile._id
                 )
                 .then((res) => {

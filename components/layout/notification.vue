@@ -122,7 +122,7 @@ export default {
         getNotifications() {
             this.page += 1
             this.more = true
-            this.$axios.get('/nofitications', {
+            this.$axios.get('/nofitication', {
                     params: {
                         page: this.page,
                         limit: this.limit,
@@ -130,7 +130,6 @@ export default {
                     },
                 })
                 .then(res => {
-                    console.log('noti:', res.data)
                     this.more = false
                     this.total = res.data.total_notifications
                     if (res.data.notifications.length == 0) {
@@ -218,7 +217,7 @@ export default {
         readNotification(item) {
             const index = this.notifications.indexOf(item)
             this.notifications[index].seen = true
-            this.$axios.get('/notification/' + item._id)
+            this.$axios.get('/notification/read' + item._id)
                 .catch(err => console.log(err.response))
         },
         markAllAsRead() {

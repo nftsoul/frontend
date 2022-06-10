@@ -213,7 +213,7 @@ export default {
         app,
         params
     }) {
-        const pre = await fetch(process.env.API_URL + `/single-gallery/${params.id}`).then((res) => res.json());
+        const pre = await fetch(process.env.API_URL + `/gallery/${params.id}`).then((res) => res.json());
         const mutation = app.head.meta.map(i => {
             if (i && i.hid) {
                 if (i.hid === 'title') {
@@ -259,7 +259,7 @@ export default {
             link: [{
                 hid: "canonical",
                 rel: "canonical",
-                href: process.env.API_URL + `/single-gallery/${this.$route.params.id}`
+                href: process.env.API_URL + `/gallery/${this.$route.params.id}`
             }]
         };
     },
@@ -341,7 +341,7 @@ export default {
             });
         },
         getNft() {
-            this.$axios.get("/single-gallery/" + this.gallery_id).then(res => {
+            this.$axios.get("/gallery/" + this.gallery_id).then(res => {
                 this.preview = res.data.gallery[0];
             });
         },
@@ -360,7 +360,7 @@ export default {
             this.selectedComment = item;
             if (this.reply != "") {
                 this.$axios
-                    .post("/comments/reply/" + item._id, {
+                    .post("/comment/reply/" + item._id, {
                         body: this.reply,
                         user_id: this.profile._id,
                     })
@@ -382,7 +382,7 @@ export default {
             }
         },
         getComments() {
-            this.$axios.get("/comments/" + this.gallery_id, {
+            this.$axios.get("/comment/" + this.gallery_id, {
                     params: {
                         page: 1,
                         limit: 5

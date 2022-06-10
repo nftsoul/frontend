@@ -112,7 +112,7 @@ export const actions = {
       .then((res) => {
         if (res.data.length == 0) {
           this.$axios
-            .post(process.env.API_URL + "/profile?wallet_address=" + address)
+            .post("/profile/create?wallet_address=" + address)
             .then((res) => {
               context.commit("setProfile", res.data.data);
               context.dispatch("getNotificationCount", res.data.data);

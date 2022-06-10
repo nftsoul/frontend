@@ -487,7 +487,7 @@ export default {
                                 // console.log("Signature: ", signature);
 
                                 this.$axios
-                                    .post("/create-gallery", {
+                                    .post("/gallery/create", {
                                         'user_id': this.walletAddress,
                                         'gallery_name': this.name,
                                         'nfts': this.collection,

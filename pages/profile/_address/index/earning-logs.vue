@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import moment from "moment";
 let OrbitSpinner = null;
 if (process.client) {
@@ -91,7 +90,7 @@ export default {
         },
         getEarnings() {
             this.$axios
-                .get( "/get-earnings/" + this.walletAddress)
+                .get( "/profile/earnings/" + this.walletAddress)
                 .then((res) => {
                     this.earning = res.data;
                     this.loading = false;
