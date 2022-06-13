@@ -53,7 +53,7 @@ export default {
     methods: {
         getPremium() {
             this.$axios
-                .get("/all-premium?page=1&limit=4")
+                .get("/gallery/premium?page=1&limit=4")
                 .then((res) => {
                     this.premium = res.data.premium
                 })

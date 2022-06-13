@@ -53,7 +53,7 @@ export default {
     methods: {
         getCollections() {
             this.$axios
-                .get('/new-galleries?page=1&limit=4')
+                .get('/gallery/new?page=1&limit=4')
                 .then((res) => {
                     this.recent = res.data.galleries
                 })

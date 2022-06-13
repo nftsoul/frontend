@@ -266,7 +266,7 @@ export default {
     async asyncData({
         app,params
     }) {
-        const pre = await fetch(process.env.API_URL + `/single-gallery/${params.id}`).then((res) => res.json());
+        const pre = await fetch(process.env.API_URL + `/gallery/${params.id}`).then((res) => res.json());
         const mutation = app.head.meta.map(i => {
             if(i && i.hid){
                 if(i.hid === 'title'){
@@ -312,7 +312,7 @@ export default {
             link: [{
                 hid: "canonical",
                 rel: "canonical",
-                href: process.env.API_URL + `/single-gallery/${this.$route.params.id}`
+                href: process.env.API_URL + `/gallery/${this.$route.params.id}`
             }]
         };
     },
@@ -444,11 +444,7 @@ export default {
         },
         getStream() {
             this.$axios
-                .get("/gallery-stream", {
-                    params: {
-                        id: this.gallery_id,
-                    },
-                })
+                .get("/gallery/stream/"+this.gallery_id)
                 .then((res) => {
                     this.stream = res.data[0];
                     this.current = this.stream.nfts[this.index];
@@ -459,7 +455,7 @@ export default {
             this.selectedComment = item
             if (this.reply != '') {
                 this.$axios
-                    .post("/comments/reply/" + item._id, {
+                    .post("/comment/reply/" + item._id, {
                         body: this.reply,
                         user_id: this.profile._id,
                     })
@@ -484,7 +480,7 @@ export default {
             this.page++;
             this.more = true;
             this.$axios
-                .get("/comments/" + this.gallery_id, {
+                .get("/comment/" + this.gallery_id, {
                     params: {
                         page: this.page,
                         limit: 5,
@@ -506,7 +502,7 @@ export default {
             } else {
                 this.commenting = true;
                 this.$axios
-                    .post("/comments", {
+                    .post("/comment", {
                         body: this.comment.replace(/\n/g, "<br>\n"),
                         user_id: this.profile._id,
                         gallery_id: this.gallery_id,
@@ -540,7 +536,7 @@ export default {
         },
         getFavourite() {
             this.$axios
-                .get("/get-favourite-gallery/" + this.walletAddress)
+                .get("/favourite/list/" + this.profile._id)
                 .then((res) => {
                     for (var x = 0; x < res.data.length; x++) {
                         this.favourite.push(res.data[x].gallery_id);
@@ -552,7 +548,7 @@ export default {
         addToFavourite() {
             this.favourite.push(this.stream._id);
             this.$axios
-                .post("/save-favourite", {
+                .post("/favourite/save", {
                     user_id: this.profile._id,
                     gallery_id: this.stream._id,
                 })

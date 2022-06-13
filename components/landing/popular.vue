@@ -102,10 +102,11 @@ export default {
     methods: {
         getCollections(item) {
             this.$axios
-                .get('/trending?page=1&limit=4', {
+                .get('/gallery/trending?page=1&limit=4', {
                     query: item
                 })
                 .then((res) => {
+                    console.log('col:',res.data)
                     for(var x=0;x<res.data.trending_galleries.length;x++){
                         if(res.data.trending_galleries[x] != null){
                             this.popular.push(res.data.trending_galleries[x])
