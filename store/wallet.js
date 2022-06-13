@@ -11,6 +11,7 @@ export const state = () => ({
   notificationCount: 0,
   snackbar: false,
   signature: "",
+  token:null
 });
 
 export const mutations = {
@@ -32,7 +33,7 @@ export const mutations = {
     state.notificationCount = payload;
   },
   setToken(state,payload){
-    state.profile['token']=payload
+    state.token=payload
   }
 };
 
@@ -43,7 +44,6 @@ export const actions = {
       try {
         var res = await window.solana.connect();
         context.commit("setWalletAddress", res.publicKey.toString());
-        context.dispatch("getProfile", res.publicKey.toString());
         //signing hash
         const message = `NFTsoul Authorization`;
         const encodedMessage = new TextEncoder().encode(message);
@@ -72,7 +72,10 @@ export const actions = {
         };
         axios(config)
           .then(function (response) {
-            context.commit('setToken',response.data.token)
+
+            console.log('token:',response.data)
+            context.dispatch("getProfile", res.publicKey.toString());
+            // context.commit('setToken',response.data.token)
           })
           .catch(function (error) {
             console.log(error);
@@ -107,6 +110,7 @@ export const actions = {
   },
   getProfile(context, address) {
     // fetch profile if not available create new and then fetch
+    console.log('profile')
     this.$axios
       .get("/profile/" + address)
       .then((res) => {

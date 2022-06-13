@@ -444,11 +444,7 @@ export default {
         },
         getStream() {
             this.$axios
-                .get("/gallery/stream", {
-                    params: {
-                        id: this.gallery_id,
-                    },
-                })
+                .get("/gallery/stream/"+this.gallery_id)
                 .then((res) => {
                     this.stream = res.data[0];
                     this.current = this.stream.nfts[this.index];
