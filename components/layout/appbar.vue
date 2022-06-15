@@ -14,7 +14,7 @@
             <div v-else>
                 <v-row no-gutters>
 
-                    <v-menu transition="slide-y-transition" bottom offset-y :close-on-click="false" :close-on-content-click="false">
+                    <v-menu transition="slide-y-transition" bottom offset-y open-on-hover>
                         <template v-slot:activator="{ on, attrs }">
                             <v-icon large dark v-bind="attrs" class="mr-n3" v-on="on">mdi-account</v-icon>
                         </template>
@@ -57,7 +57,7 @@
                         </v-card>
                     </v-menu>
 
-                    <v-menu transition="slide-y-transition" bottom offset-y>
+                    <v-menu transition="slide-y-transition" bottom offset-y :close-on-click="false" :close-on-content-click="true">
                         <template v-slot:activator="{ on, attrs }">
                             <div class="mx-4">
                                 <v-badge v-if="notificationCount>1" color="green" :content="notificationCount" overlap>
