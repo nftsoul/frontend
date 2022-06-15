@@ -227,6 +227,7 @@ export default {
                 method: "disconnect",
             });
             this.$store.commit("wallet/setWalletAddress", null);
+            this.$auth.logout()
             this.$router.push('/')
         },
     },

@@ -282,6 +282,7 @@ export default {
             replyPage: 0,
             more: false,
             makingReply: false,
+            profile:this.$auth.user.user
         };
     },
     computed: {
@@ -291,9 +292,6 @@ export default {
         gallery_id() {
             return this.$route.params.id;
         },
-        profile() {
-            return this.$store.state.wallet.profile;
-        }
     },
     mounted() {
         this.getNft();
@@ -508,7 +506,7 @@ export default {
         },
         saveEarning() {
             this.$axios
-                .post("/post-earnings", {
+                .post("/profile/earnings", {
                     user_id: this.walletAddress,
                     gallery_id: this.preview._id,
                     price: this.preview.price,

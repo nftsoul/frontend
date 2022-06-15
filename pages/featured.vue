@@ -28,19 +28,12 @@
 </template>
 
 <script>
-let OrbitSpinner = null;
-if (process.client) {
-    OrbitSpinner = require("epic-spinners").OrbitSpinner;
-}
 export default {
-    components: {
-        OrbitSpinner
-    },
     data() {
         return {
             nfts: [],
             page: 1,
-            limit: 15,
+            limit: 20,
             total: 0,
             pages: 1,
             page: 1
@@ -56,17 +49,17 @@ export default {
         getPopularNfts() {
             this.$axios
                 .get(
-                    "/all-trending?page=" + this.page + "&limit="+this.limit, {
+                    "/gallery/trending?page=" + this.page + "&limit="+this.limit, {
                         query: '7days'
                     })
                 .then((res) => {
-                    this.total = res.data.galleryCount
+                    this.total = res.data.total
                     if (this.total % 20 == 0) {
                         this.page = this.total / 20
                     } else {
                         this.pages = Math.floor(this.total / 20) + 1
                     }
-                    this.nfts = res.data.trending
+                    this.nfts = res.data.trending_galleries
                 })
                 .catch((err) => console.log(err.response));
         },
