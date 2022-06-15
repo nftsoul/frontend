@@ -104,23 +104,21 @@
 
 <script>
 const web3 = require("@solana/web3.js");
-import {
-    initializeApp
-} from 'firebase/app';
-import firebaseConfig from './firebaseConfig';
-import {
-    TwitterAuthProvider,
-    getAuth,
-    signInWithPopup
-} from "firebase/auth";
+// import {
+//     initializeApp
+// } from 'firebase/app';
+// import firebaseConfig from './firebaseConfig';
+// import {
+//     TwitterAuthProvider,
+//     getAuth,
+//     signInWithPopup
+// } from "firebase/auth";
 
-const app = initializeApp(firebaseConfig);
+// const app = initializeApp(firebaseConfig);
 
 export default {
     layout: 'user',
-    middleware() {
-        this.$store.commit("setProfile", null);
-    },
+    middleware:'auth',
     data() {
         return {
             chipColor: 'rgba(160, 160, 160, 0.3)',
@@ -137,15 +135,13 @@ export default {
             },
             updating: false,
             image_link: '',
+            profile:this.$auth.user.user
         }
     },
     computed: {
         walletAddress() {
             return this.$store.state.wallet.walletAddress
         },
-        profile() {
-            return this.$store.state.wallet.profile
-        }
     },
     watch: {
         walletAddress(newValue, oldValue) {
@@ -163,6 +159,9 @@ export default {
         this.connect = new web3.Connection(web3.clusterApiUrl(process.env.CLUSTER), 'confirmed');
         this.getAccountInfo()
         // this.auth()
+        if(!this.$auth.user){
+            this.$router.push('/')
+        }
     },
     methods: {
         tutorProfile() {

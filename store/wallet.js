@@ -1,6 +1,5 @@
 var nacl = require("tweetnacl");
 nacl.util = require("tweetnacl-util");
-import axios from 'axios'
 // nacl.util = require('tweetnacl-util');
 export const state = () => ({
   walletAddress: null,
@@ -11,7 +10,7 @@ export const state = () => ({
   notificationCount: 0,
   snackbar: false,
   signature: "",
-  token:null
+  token: null,
 });
 
 export const mutations = {
@@ -32,9 +31,9 @@ export const mutations = {
   setNoficationCount(state, payload) {
     state.notificationCount = payload;
   },
-  setToken(state,payload){
-    state.token=payload
-  }
+  setToken(state, payload) {
+    state.token = payload;
+  },
 };
 
 export const actions = {
@@ -45,41 +44,38 @@ export const actions = {
         var res = await window.solana.connect();
         context.commit("setWalletAddress", res.publicKey.toString());
         //signing hash
-        const message = `NFTsoul Authorization`;
-        const encodedMessage = new TextEncoder().encode(message);
-        const signedMessage = await window.solana.signMessage(
-          encodedMessage,
-          "utf8"
-        );
-        const messageBytes = new TextEncoder().encode(message);
+        if (this.$auth.loggedIn == false) {
+          const message = `NFTsoul Authorization`;
+          const encodedMessage = new TextEncoder().encode(message);
+          const signedMessage = await window.solana.signMessage(
+            encodedMessage,
+            "utf8"
+          );
+          const messageBytes = new TextEncoder().encode(message);
 
-        const publicKeyBytes = signedMessage.publicKey.toBuffer();
+          const publicKeyBytes = signedMessage.publicKey.toBuffer();
 
-        const signatureBytes = signedMessage.signature;
+          const signatureBytes = signedMessage.signature;
 
-        var qs = require("qs");
-        var data = qs.stringify({
-          message: nacl.util.encodeBase64(messageBytes),
-          wallet_address: res.publicKey.toString(),
-          publicKey: nacl.util.encodeBase64(publicKeyBytes),
-          signature:nacl.util.encodeBase64(signatureBytes)
-        });
-        var config = {
-          method: "post",
-          url: process.env.API_URL+"/auth/login",
-          headers: {},
-          data: data,
-        };
-        axios(config)
-          .then(function (response) {
-
-            console.log('token:',response.data)
-            context.dispatch("getProfile", res.publicKey.toString());
-            // context.commit('setToken',response.data.token)
-          })
-          .catch(function (error) {
-            console.log(error);
+          var qs = require("qs");
+          var data = qs.stringify({
+            message: nacl.util.encodeBase64(messageBytes),
+            wallet_address: res.publicKey.toString(),
+            publicKey: nacl.util.encodeBase64(publicKeyBytes),
+            signature: nacl.util.encodeBase64(signatureBytes),
           });
+
+          try {
+            let response = await this.$auth.loginWith("local", {
+              data: data,
+            });
+            this.$auth.setUser(response.data);
+            this.$axios.setToken(response.data.token, "X-XSRF-TOKEN");
+          } catch (e) {
+            console.log(e);
+          }
+        }
+
         this.$toast
           .success("Phantom wallet successfully connected.", {
             iconPack: "mdi",
@@ -110,7 +106,7 @@ export const actions = {
   },
   getProfile(context, address) {
     // fetch profile if not available create new and then fetch
-    console.log('profile')
+    console.log("profile");
     this.$axios
       .get("/profile/" + address)
       .then((res) => {
