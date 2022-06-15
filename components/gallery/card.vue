@@ -28,8 +28,8 @@
                 <v-card-subtitle class="text-left mx-n3">{{title.slice(0,20)}}<span v-if="title.length>20">..</span></v-card-subtitle>
                 <v-row>
                     <div class="prem-sup-card rounded-lg px-2" v-for="(nft, i) in nfts.slice(0,6)" :key="i">
-                        <!-- <small v-if="nft.name.length>8">{{ nft.name.slice(0,8) }}..</small> -->
-                        <small>{{ nft.name }}</small>
+                        <small v-if="nft.name.length>8">{{ nft.name.slice(0,6) }}..</small>
+                        <small v-else>{{ nft.name }}</small>
                     </div>
                 </v-row>
 

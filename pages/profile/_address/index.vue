@@ -53,9 +53,6 @@ export default {
             return this.$store.state.nft.creating
         }
     },
-    mounted() {
-        this.$store.dispatch('wallet/getProfile', this.$route.params.address)
-    }
 
 }
 </script>

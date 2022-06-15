@@ -122,11 +122,11 @@ export default {
         getNotifications() {
             this.page += 1
             this.more = true
-            this.$axios.get('/nofitication', {
+            this.$axios.get('/notification/user', {
                     params: {
                         page: this.page,
                         limit: this.limit,
-                        id: this.profile._id
+                        id: this.$auth.user.user._id
                     },
                 })
                 .then(res => {
@@ -184,8 +184,9 @@ export default {
             switch (item.type) {
                 case 'commented':
                 case 'replied':
+                    this.$store.commit("nft/setStream", true);
                     this.$router.push({
-                        name: 'preview-id',
+                        name: 'stream-id',
                         params: {
                             id: item.data.gallery_id
                         }
@@ -217,7 +218,7 @@ export default {
         readNotification(item) {
             const index = this.notifications.indexOf(item)
             this.notifications[index].seen = true
-            this.$axios.get('/notification/read' + item._id)
+            this.$axios.get('/notification/read/' + item._id)
                 .catch(err => console.log(err.response))
         },
         markAllAsRead() {
@@ -228,7 +229,7 @@ export default {
 
             }
             this.$axios.patch('notification/mark-all-read', {
-                    id: this.profile._id
+                    id: this.$auth.user.user._id
                 })
                 .catch(err => console.log(err.response))
         }

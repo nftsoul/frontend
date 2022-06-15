@@ -346,7 +346,8 @@ export default {
             replyPage: 0,
             more: false,
             makingReply: false,
-            moreReply:false
+            moreReply:false,
+            profile:this.$auth.user.user
         };
     },
     watch: {
@@ -359,9 +360,6 @@ export default {
     computed: {
         walletAddress() {
             return this.$store.state.wallet.walletAddress;
-        },
-        profile() {
-            return this.$store.state.wallet.profile;
         },
         gallery_id() {
             return this.$route.params.id;
