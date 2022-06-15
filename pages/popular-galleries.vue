@@ -4,8 +4,13 @@
         <v-container class="py-16">
             <v-row class="py-16" justify="center">
                 <v-col cols="12" lg="12" md="8" align="center">
-                    <v-row justify="center">
-                        <p class="title">Popular Galleries</p>
+                    <v-row justify="end">
+                        <v-col cols="12" lg="6" md="8" align="center">
+                            <p class="title">Popular Galleries</p>
+                        </v-col>
+                        <v-col cols="12" lg="3" md="4">
+                            <v-text-field placeholder="Search collection" class="mx-3" dense solo dark background-color="primary" color="white" append-icon="mdi-cloud-search"></v-text-field>
+                        </v-col>
                     </v-row>
                     <v-row v-if="nfts.length == 0" justify="center">
                         <v-col align="center" v-for="(item,i) in 8" :key="i">
