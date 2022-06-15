@@ -228,6 +228,8 @@ export default {
             });
             this.$store.commit("wallet/setWalletAddress", null);
             this.$auth.logout()
+            this.$auth.$storage.removeUniversal('uni-nftsoul-user')
+
             this.$router.push('/')
         },
     },
