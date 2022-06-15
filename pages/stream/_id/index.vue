@@ -419,9 +419,10 @@ export default {
                     },
                 }
             ).then(res => {
+                console.log('reply:',res.data)
                 this.moreReply = false
                 const index = this.comments.indexOf(item)
-                let rep = res.data.replies.replies
+                let rep = res.data.replies
                 if (!this.comments[index].replies) {
                     this.comments[index]['replies'] = []
                 }
