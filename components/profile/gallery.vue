@@ -177,11 +177,7 @@ export default {
         editItem(item) {
             this.editing = true
             this.$axios
-                .get("/gallery/stream", {
-                    params: {
-                        id: item._id,
-                    },
-                })
+                .get("/gallery/stream/"+item._id)
                 .then((res) => {
                     this.$store.commit('content/setSelected', res.data[0])
                     this.$store.commit('content/setEditing', true)
