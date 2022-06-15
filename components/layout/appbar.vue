@@ -57,7 +57,7 @@
                         </v-card>
                     </v-menu>
 
-                    <v-menu transition="slide-y-transition" bottom offset-y :close-on-click="false" :close-on-content-click="true">
+                    <v-menu transition="slide-y-transition" bottom offset-y :close-on-click="true" :close-on-content-click="true">
                         <template v-slot:activator="{ on, attrs }">
                             <div class="mx-4">
                                 <v-badge v-if="notificationCount>1" color="green" :content="notificationCount" overlap>

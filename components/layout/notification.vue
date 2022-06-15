@@ -126,7 +126,7 @@ export default {
                     params: {
                         page: this.page,
                         limit: this.limit,
-                        id: this.$auth.user.user._id
+                        id: this.$auth.user._id
                     },
                 })
                 .then(res => {
