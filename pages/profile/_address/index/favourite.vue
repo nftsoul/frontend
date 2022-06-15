@@ -37,15 +37,13 @@ export default {
         return {
             collections: [],
             noData: false,
+            profile:this.$auth.user
         };
     },
     computed: {
         walletAddress() {
             return this.$route.params.address
         },
-        profile(){
-            return this.$store.state.wallet.profile
-        }
     },
     mounted() {
         this.getCollections();

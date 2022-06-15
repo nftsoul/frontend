@@ -347,7 +347,7 @@ export default {
             more: false,
             makingReply: false,
             moreReply:false,
-            profile:this.$auth.user.user
+            profile:this.$auth.user
         };
     },
     watch: {

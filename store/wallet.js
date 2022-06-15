@@ -69,7 +69,8 @@ export const actions = {
             let response = await this.$auth.loginWith("local", {
               data: data,
             });
-            this.$auth.setUser(response.data);
+            this.$auth.setUser(response.data.user);
+            this.$store.commit('wallet/setProfile', res.data.result)
             this.$axios.setToken(response.data.token, "X-XSRF-TOKEN");
           } catch (e) {
             console.log(e);
@@ -106,7 +107,6 @@ export const actions = {
   },
   getProfile(context, address) {
     // fetch profile if not available create new and then fetch
-    console.log("profile");
     this.$axios
       .get("/profile/" + address)
       .then((res) => {
