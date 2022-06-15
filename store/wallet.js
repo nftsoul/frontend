@@ -38,14 +38,16 @@ export const mutations = {
 
 export const actions = {
   async connectWallet(context) {
-    const isPhantomInstalled = (await window.solana) && window.solana.isPhantom;
-    if (isPhantomInstalled) {
-      try {
-        var res = await window.solana.connect();
-        context.commit("setWalletAddress", res.publicKey.toString());
-        //signing hash
-        if (this.$auth.loggedIn == false) {
-          const message = `NFTsoul Authorization`;
+    if (!this.$auth.$storage.getUniversal("uni-nftsoul-user")) {
+      const isPhantomInstalled =
+        (await window.solana) && window.solana.isPhantom;
+      if (isPhantomInstalled) {
+        try {
+          var res = await window.solana.connect();
+          context.commit("setWalletAddress", res.publicKey.toString());
+          //signing hash
+          let nonce=await context.dispatch('createNonce')
+          const message = `NFTsoul Authorization Sign In Request   Nonce:`+nonce;
           const encodedMessage = new TextEncoder().encode(message);
           const signedMessage = await window.solana.signMessage(
             encodedMessage,
@@ -70,40 +72,51 @@ export const actions = {
               data: data,
             });
             this.$auth.setUser(response.data.user);
-            context.commit('setProfile', response.data.user)
+            this.$auth.$storage.setUniversal(
+              "uni-nftsoul-user",
+              response.data
+            );
+            context.commit("setProfile", response.data.user);
             this.$axios.setToken(response.data.token, "X-XSRF-TOKEN");
             context.dispatch("getNotificationCount", response.data.user);
           } catch (e) {
             console.log(e);
           }
-        }
 
+          this.$toast
+            .success("Phantom wallet successfully connected.", {
+              iconPack: "mdi",
+              icon: "mdi-wallet",
+              theme: "outline",
+            })
+            .goAway(3000);
+        } catch (err) {
+          if ((err.code = 4001)) {
+            this.$toast
+              .error(err.message, {
+                iconPack: "mdi",
+                icon: "mdi-cancel",
+                theme: "outline",
+              })
+              .goAway(3000);
+          }
+        }
+      } else {
         this.$toast
-          .success("Phantom wallet successfully connected.", {
+          .error("Please install phantom wallet", {
             iconPack: "mdi",
             icon: "mdi-wallet",
             theme: "outline",
           })
           .goAway(3000);
-      } catch (err) {
-        if ((err.code = 4001)) {
-          this.$toast
-            .error(err.message, {
-              iconPack: "mdi",
-              icon: "mdi-cancel",
-              theme: "outline",
-            })
-            .goAway(3000);
-        }
       }
     } else {
-      this.$toast
-        .error("Please install phantom wallet", {
-          iconPack: "mdi",
-          icon: "mdi-wallet",
-          theme: "outline",
-        })
-        .goAway(3000);
+      let profile = this.$auth.$storage.getUniversal("uni-nftsoul-user");
+      context.commit("setWalletAddress", profile.user.wallet_address);
+      this.$auth.setUser(profile.user);
+      context.commit("setProfile", profile.user);
+      this.$axios.setToken(profile.token, "X-XSRF-TOKEN");
+      context.dispatch("getNotificationCount", profile.user);
     }
   },
   getProfile(context, address) {
@@ -133,4 +146,17 @@ export const actions = {
       context.commit("setNoficationCount", res.data.newNotifications);
     });
   },
+  createNonce(){
+    var characters ="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let nonce='';
+    for(var i=0;i<4;i++){
+      for(var j=0;j<4;j++){
+        nonce +=characters.charAt(Math.floor(Math.random() * characters.length)) 
+      }
+      if(i<3){
+        nonce +='-'
+      }
+    }
+    return nonce
+  }
 };
