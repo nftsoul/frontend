@@ -72,6 +72,7 @@ export const actions = {
             this.$auth.setUser(response.data.user);
             context.commit('setProfile', response.data.user)
             this.$axios.setToken(response.data.token, "X-XSRF-TOKEN");
+            context.dispatch("getNotificationCount", response.data.user);
           } catch (e) {
             console.log(e);
           }
