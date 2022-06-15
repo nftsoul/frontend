@@ -90,7 +90,7 @@ export default {
         },
         getEarnings() {
             this.$axios
-                .get( "/profile/earnings/"+this.$auth.user.user._id)
+                .get( "/profile/earnings/"+this.$auth.user._id)
                 .then((res) => {
                     this.earning = res.data;
                     this.loading = false;

@@ -226,7 +226,7 @@ export default {
         getCollected() {
             this.$axios
                 .get(
-                    "/all-gallery/" + this.walletAddress
+                    "/gallery/all/" + this.walletAddress
                 )
                 .then((res) => {
                     for (var x = 0; x < res.data.galleries.length; x++) {
