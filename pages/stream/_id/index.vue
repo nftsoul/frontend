@@ -1,6 +1,6 @@
 <template>
 <div class="dark-bg pt-16">
-        <UtilsSeo :title="pre.gallery[0].gallery_name" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
+    <UtilsSeo :title="pre.gallery[0].gallery_name" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
 
     <v-container class="pt-16">
         <v-row justify="center">
@@ -178,7 +178,11 @@
                                             </v-col>
                                             <v-col>
                                                 <v-list-item-content class="py-1 ml-n5">
-                                                    <v-textarea rows="1" id="txtArea" @keypress.enter="onEnterPress(item)" auto-grow dark color="white" append-icon="mdi-check" :loading="makingReply" @click:append="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply"></v-textarea>
+                                                    <v-row no-gutters>
+                                                        <v-textarea rows="1" id="txtArea" @keypress.enter="onEnterPress(item)" auto-grow dark color="white" class="mb-n5 mr-2" v-model="reply" outlined dense placeholder="Reply"></v-textarea>
+                                                        <v-btn small class="connect-wallet mt-1" @click="makeReply(item)" :loading="makingReply"><small>Reply</small></v-btn>
+                                                    </v-row>
+
                                                 </v-list-item-content>
                                             </v-col>
                                         </v-row>
@@ -264,36 +268,37 @@
 <script>
 export default {
     async asyncData({
-        app,params
+        app,
+        params
     }) {
         const pre = await fetch(process.env.API_URL + `/gallery/${params.id}`).then((res) => res.json());
         const mutation = app.head.meta.map(i => {
-            if(i && i.hid){
-                if(i.hid === 'title'){
+            if (i && i.hid) {
+                if (i.hid === 'title') {
                     i.content = pre.gallery[0].gallery_name
                 }
-                if(i.hid === 'description'){
+                if (i.hid === 'description') {
                     i.content = pre.gallery[0].description;
                 }
-                if(i.hid === 'twitter:image'){
+                if (i.hid === 'twitter:image') {
                     i.content = pre.gallery[0].image
                 }
-                if(i.hid === 'twitter:card'){
+                if (i.hid === 'twitter:card') {
                     i.content = 'summary_large_image'
                 }
-                if(i.hid === 'og:image'){
+                if (i.hid === 'og:image') {
                     i.content = pre.gallery[0].image
                 }
-                if(i.hid === 'og:image:secure_url'){
+                if (i.hid === 'og:image:secure_url') {
                     i.content = pre.gallery[0].image;
                 }
-                if(i.hid === 'og:title'){
+                if (i.hid === 'og:title') {
                     i.content = pre.gallery[0].gallery_name
                 }
-                if(i.hid === 'og:description'){
+                if (i.hid === 'og:description') {
                     i.content = pre.gallery[0].description
                 }
-                if(i.hid === 'description'){
+                if (i.hid === 'description') {
                     i.content = pre.gallery[0].description
                 }
                 // if(i.hid === 'og:url'){
@@ -302,7 +307,7 @@ export default {
             }
             return i;
         });
-      app.head.meta = mutation;
+        app.head.meta = mutation;
         return {
             pre
         };
@@ -339,15 +344,15 @@ export default {
             leave: false,
             expand: false,
             selectedIndex: null,
-            hoverIndex:null,
+            hoverIndex: null,
             replying: false,
             reply: '',
             selectedComment: '',
             replyPage: 0,
             more: false,
             makingReply: false,
-            moreReply:false,
-            profile:this.$auth.user
+            moreReply: false,
+            profile: this.$auth.user
         };
     },
     watch: {
@@ -419,7 +424,6 @@ export default {
                     },
                 }
             ).then(res => {
-                console.log('reply:',res.data)
                 this.moreReply = false
                 const index = this.comments.indexOf(item)
                 let rep = res.data.replies
@@ -443,7 +447,7 @@ export default {
         },
         getStream() {
             this.$axios
-                .get("/gallery/stream/"+this.gallery_id)
+                .get("/gallery/stream/" + this.gallery_id)
                 .then((res) => {
                     this.stream = res.data[0];
                     this.current = this.stream.nfts[this.index];
@@ -641,7 +645,8 @@ a.prev span {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-.v-list-item__avatar{
+
+.v-list-item__avatar {
     align-self: flex-start;
 }
 </style>
