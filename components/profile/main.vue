@@ -135,13 +135,15 @@ export default {
             },
             updating: false,
             image_link: '',
-            profile:this.$auth.user.user
         }
     },
     computed: {
         walletAddress() {
             return this.$store.state.wallet.walletAddress
         },
+        profile(){
+            return this.$store.state.wallet.profile
+        }
     },
     watch: {
         walletAddress(newValue, oldValue) {
@@ -198,7 +200,6 @@ export default {
                 this.updating = true
                 this.$axios.patch('/profile/info/' + this.$route.params.address + '?name=' + this.name + '&username=' + this.username)
                     .then(res => {
-                        // this.profile = res.data.result
                         this.$store.commit('wallet/setProfile', res.data.result)
                         this.updating = false
                         this.profileDialog = false
