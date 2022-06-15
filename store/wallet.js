@@ -70,7 +70,7 @@ export const actions = {
               data: data,
             });
             this.$auth.setUser(response.data.user);
-            this.$store.commit('wallet/setProfile', res.data.result)
+            context.commit('setProfile', response.data.user)
             this.$axios.setToken(response.data.token, "X-XSRF-TOKEN");
           } catch (e) {
             console.log(e);
