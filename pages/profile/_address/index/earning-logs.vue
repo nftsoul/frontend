@@ -111,10 +111,4 @@ export default {
             #fd2bff 70.6%,
             #c202d3 97.81%);
 }
-
-tbody {
-    tr:hover {
-        background-color: transparent !important;
-    }
-}
 </style>
