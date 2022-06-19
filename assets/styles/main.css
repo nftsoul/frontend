@@ -50,6 +50,9 @@ div::-webkit-scrollbar-thumb {
 .border{
   border: 1px solid red;
 }
+.theme-color{
+  color: #C202D3;
+}
 .outer-btn{
   background: linear-gradient(264.44deg, #FE87FF 2.87%, #C202D3 34.05%, #5E0FFF 67.82%, #1905DA 99.15%);
   padding:1px;
