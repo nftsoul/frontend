@@ -6,7 +6,7 @@
                 <p class="title2">Top Recent Comments</p>
 
                 <v-row v-if="comments.length>0">
-                    <v-list-item dense v-for="(item,i) in comments" :key="i">
+                    <v-list-item dense v-for="(item,i) in comments" :key="i" @click="$router.push({name:'preview-id',params:{id:item.gallery_id._id}})">
                         <v-list-item-avatar size="50" class="mr-2">
                             <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="60" max-height="60"></v-img>
                             <v-icon v-else large>mdi-account</v-icon>
