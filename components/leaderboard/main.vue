@@ -4,10 +4,10 @@
             <v-row justify="center">
                 <p class="title white--text">Leader Board</p>
             </v-row>
-            <v-row>
-                <v-col cols="12" lg="6" md="6">
+            <v-row justify="center">
+                <!-- <v-col cols="12" lg="6" md="6">
                     <gallery />
-                </v-col>
+                </v-col> -->
                 <v-col cols="12" lg="6" md="6" class="custom-back my-3">
                     <collection />
                     <comment />
