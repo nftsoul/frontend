@@ -58,10 +58,8 @@ export default {
             this.$axios.get('/collection/top-three')
                 .then(res => {
                     let responses = res.data.topThreeCollections
-                    let top = responses[0]
-                    responses.splice(0, 1)
-                    responses[1] = top
-                    this.collections = responses
+                    let top=[responses[1],responses[0],responses[2]]
+                    this.collections = top
                 })
                 .catch(err => console.log(err.response))
         },
