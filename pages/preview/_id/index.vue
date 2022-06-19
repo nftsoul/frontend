@@ -282,7 +282,7 @@ export default {
             replyPage: 0,
             more: false,
             makingReply: false,
-            profile:this.$auth.user.user
+            profile:this.$auth.user
         };
     },
     computed: {
