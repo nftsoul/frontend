@@ -63,8 +63,8 @@
                                                 <v-card-subtitle class="text-left mx-n3">{{item.gallery_name.slice(0,20)}}<span v-if="item.gallery_name.length>20">..</span></v-card-subtitle>
 
                                                 <v-row>
-                                                    <div class="prem-sup-card rounded-lg px-2" v-for="(nft, i) in item.nfts.slice(0,4)" :key="i">
-                                                        <small v-if="nft.name.length>8">{{ nft.name.slice(0,8) }}..</small>
+                                                    <div class="prem-sup-card rounded-lg px-2" v-for="(nft, i) in item.nfts.slice(0,6)" :key="i">
+                                                        <small v-if="nft.name.length>8">{{ nft.name.slice(0,6) }}..</small>
                                                         <small v-else>{{ nft.name }}</small>
                                                     </div>
                                                 </v-row>
@@ -138,7 +138,7 @@ export default {
         getCollections() {
             this.$axios
                 .get(
-                    "/all-gallery/" + this.$route.params.address
+                    "/gallery/all/" + this.$route.params.address
                 )
                 .then((res) => {
                     this.collections = res.data.galleries
@@ -177,11 +177,7 @@ export default {
         editItem(item) {
             this.editing = true
             this.$axios
-                .get("/gallery-stream", {
-                    params: {
-                        id: item._id,
-                    },
-                })
+                .get("/gallery/stream/"+item._id)
                 .then((res) => {
                     this.$store.commit('content/setSelected', res.data[0])
                     this.$store.commit('content/setEditing', true)

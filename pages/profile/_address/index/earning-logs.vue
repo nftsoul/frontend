@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import moment from "moment";
 let OrbitSpinner = null;
 if (process.client) {
@@ -91,7 +90,7 @@ export default {
         },
         getEarnings() {
             this.$axios
-                .get( "/get-earnings/" + this.walletAddress)
+                .get( "/profile/earnings/"+this.$auth.user._id)
                 .then((res) => {
                     this.earning = res.data;
                     this.loading = false;
@@ -111,11 +110,5 @@ export default {
             #5e0fff 31.76%,
             #fd2bff 70.6%,
             #c202d3 97.81%);
-}
-
-tbody {
-    tr:hover {
-        background-color: transparent !important;
-    }
 }
 </style>

@@ -37,15 +37,13 @@ export default {
         return {
             collections: [],
             noData: false,
+            profile:this.$auth.user
         };
     },
     computed: {
         walletAddress() {
             return this.$route.params.address
         },
-        profile(){
-            return this.$store.state.wallet.profile
-        }
     },
     mounted() {
         this.getCollections();
@@ -57,7 +55,7 @@ export default {
         getCollections() {
             this.$axios
                 .get(
-                    "/get-favourite/" +
+                    "/favourite/" +
                     this.profile._id
                 )
                 .then((res) => {

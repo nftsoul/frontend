@@ -14,7 +14,7 @@
             <div v-else>
                 <v-row no-gutters>
 
-                    <v-menu transition="slide-y-transition" bottom offset-y :close-on-click="false" :close-on-content-click="false">
+                    <v-menu transition="slide-y-transition" bottom offset-y open-on-hover>
                         <template v-slot:activator="{ on, attrs }">
                             <v-icon large dark v-bind="attrs" class="mr-n3" v-on="on">mdi-account</v-icon>
                         </template>
@@ -57,10 +57,10 @@
                         </v-card>
                     </v-menu>
 
-                    <v-menu transition="slide-y-transition" bottom offset-y>
+                    <v-menu transition="slide-y-transition" bottom offset-y :close-on-click="true" :close-on-content-click="true">
                         <template v-slot:activator="{ on, attrs }">
                             <div class="mx-4">
-                                <v-badge v-if="notificationCount>1" color="green" :content="notificationCount" overlap>
+                                <v-badge v-if="notificationCount>0" color="green" :content="notificationCount" overlap>
                                     <v-icon @click="$store.commit('wallet/setNoficationCount',0)" dark v-bind="attrs" v-on="on" size="28" class="mx-2 mt-1">mdi-bell</v-icon>
                                 </v-badge>
                                 <v-icon v-else size="28" v-bind="attrs" v-on="on" class="mx-2 mt-1">mdi-bell</v-icon>
@@ -227,6 +227,9 @@ export default {
                 method: "disconnect",
             });
             this.$store.commit("wallet/setWalletAddress", null);
+            this.$auth.logout()
+            this.$auth.$storage.removeUniversal('uni-nftsoul-user')
+
             this.$router.push('/')
         },
     },

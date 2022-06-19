@@ -50,7 +50,7 @@ export default {
         getPremiumNfts() {
             this.$axios
                 .get(
-                    "/all-premium?page=" +
+                    "/gallery/premium?page=" +
                     this.page +
                     "&limit=" +
                     this.limit

@@ -115,10 +115,31 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios", "@nuxtjs/toast", "@nuxtjs/dotenv"],
+  modules: ["@nuxtjs/axios", "@nuxtjs/toast", "@nuxtjs/dotenv",'@nuxtjs/auth-next'],
   axios: {
     baseURL: process.env.API_URL,
     // credentials: true,
+  },
+  auth: {
+    strategies: {
+      'local': {
+        token: {
+          property: "token",
+          required: true,
+          maxAge: 60 * 60 * 24
+        },
+        user: {
+          property: false,
+          autoFetch: false
+        },
+        endpoints: {
+          login: { url: "/auth/login", method: "post" },
+          logout: { url: "/logout", method: "get" },
+          user: { url: "/profile", method: "get" }
+        }
+      },
+    },
+    redirect:false
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

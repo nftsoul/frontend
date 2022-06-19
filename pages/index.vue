@@ -5,6 +5,7 @@
     <LandingRecent />
     <LandingFree />
     <LandingPremium />
+    <LeaderboardMain />
     <LandingWorking />
     <LandingPartner />
     <CommonProfile />
