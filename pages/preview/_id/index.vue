@@ -459,9 +459,11 @@ export default {
 
                                 let signed = await provider.signTransaction(transaction);
                                                 console.log('112')
+                                                console.log('signed:',signed)
 
                                 let signature = await this.connection.sendRawTransaction(signed.serialize());
                                                 console.log('113')
+                                                console.log('signature:',signature)
 
                                 this.$store.commit('wallet/setSnackbar', signature)
                                                 console.log('114')
