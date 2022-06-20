@@ -282,7 +282,7 @@ export default {
             replyPage: 0,
             more: false,
             makingReply: false,
-            profile:this.$auth.user
+            profile: this.$auth.user
         };
     },
     computed: {
@@ -296,7 +296,7 @@ export default {
     mounted() {
         this.getNft();
         this.getComments();
-        
+
     },
     methods: {
         onEnterPress(item) {
@@ -431,8 +431,10 @@ export default {
                     if (this.preview.premium) {
                         if (total_charge < available) {
                             try {
-
+                                console.log('106')
                                 var provider = await getProvider();
+                                                console.log('107')
+
                                 var platformWallet = new web3.PublicKey("9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv");
                                 var creatorWallet = new web3.PublicKey(this.preview.user_id);
                                 var transaction = new web3.Transaction().add(web3.SystemProgram.transfer({
@@ -444,22 +446,43 @@ export default {
                                     toPubkey: creatorWallet,
                                     lamports: web3.LAMPORTS_PER_SOL * (this.preview.price - 0.02 * this.preview.price)
                                 }));
+                                                console.log('108')
+
                                 transaction.feePayer = await provider.publicKey;
+                                                console.log('109')
+
                                 let blockhashObj = await this.connection.getRecentBlockhash();
+                                                console.log('110')
+
                                 transaction.recentBlockhash = await blockhashObj.blockhash;
+                                                console.log('111')
+
                                 let signed = await provider.signTransaction(transaction);
+                                                console.log('112')
+
                                 let signature = await this.connection.sendRawTransaction(signed.serialize());
-                                this.$store.commit('wallet/setSnackbar',signature)
+                                                console.log('113')
+
+                                this.$store.commit('wallet/setSnackbar', signature)
+                                                console.log('114')
+
                                 this.$store.commit("nft/setStream", true);
+                                                console.log('115')
+
                                 this.saveEarning();
+                                                console.log('116')
+
                                 this.$router.push({
                                     name: "stream-id",
                                     params: {
                                         id: this.gallery_id
                                     }
                                 });
+                                                console.log('117')
+
                                 this.loading = false;
                             } catch (e) {
+                                console.log('105')
                                 if (e.code == 4001) {
                                     this.$toast
                                         .error(e.message, {
@@ -468,10 +491,11 @@ export default {
                                             theme: "outline",
                                         })
                                         .goAway(3000);
-                                        this.loading=false
+                                    this.loading = false
                                 }
                             }
                         } else {
+                            console.log('104')
                             this.loading = false;
                             this.$toast
                                 .error("Insufficient fund.", {
@@ -482,6 +506,7 @@ export default {
                                 .goAway(3000);
                         }
                     } else {
+                        console.log('103')
                         this.$store.commit("nft/setStream", true);
                         this.$router.push({
                             name: "stream-id",
@@ -491,6 +516,7 @@ export default {
                         });
                     }
                 } else {
+                    console.log('102')
                     this.$store.commit("nft/setStream", true);
                     this.$router.push({
                         name: "stream-id",
@@ -499,6 +525,7 @@ export default {
                         }
                     });
                 }
+                console.log('101')
             }
         },
         screenHeight() {
