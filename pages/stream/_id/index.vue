@@ -238,8 +238,18 @@
                             <v-img v-if="profile.image_link" :src="profile.image_link"></v-img>
                             <v-icon v-else large>mdi-account</v-icon>
                         </v-avatar>
-                        <v-textarea dark rows="1" auto-grow id="txtArea2" @keypress.enter="preventComment()" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?"></v-textarea>
-                        <Picker :data="emojiIndex" set="twitter" @select="showEmoji" />
+                        <v-textarea dark rows="1" auto-grow id="txtArea2" @keypress.enter="preventComment()" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?">
+                            <!-- <template v-slot:append>
+                                <v-fade-transition leave-absolute>
+                                    <v-menu offset-y top>
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-img :src="require('~/assets/icons/emoji-icon.png')" max-width="30" class="mt-n2 link" v-bind="attrs" v-on="on"></v-img>
+                                        </template>
+                                        <Picker :data="emojiIndex" set="twitter" @select="showEmoji" />
+                                    </v-menu>
+                                </v-fade-transition>
+                            </template> -->
+                        </v-textarea>
 
                     </v-row>
                     <v-row no-gutters class="px-5 pb-5">
@@ -275,7 +285,10 @@ import data from "emoji-mart-vue-fast/data/all.json";
 import "emoji-mart-vue-fast/css/emoji-mart.css";
 
 // Vue 2:
-import { Picker, EmojiIndex } from "emoji-mart-vue-fast";
+import {
+    Picker,
+    EmojiIndex
+} from "emoji-mart-vue-fast";
 
 // Create emoji data index.
 // We can change it (for example, filter by category) before passing to the component.
@@ -336,12 +349,12 @@ export default {
         };
     },
     components: {
-    Picker
-  },
+        Picker
+    },
     data() {
         return {
-            emojiIndex:emojiIndex,
-            emojiOutput:"",
+            emojiIndex: emojiIndex,
+            emojiOutput: "",
             totalTime: 300,
             minuteLeft: 0,
             secondLeft: 0,
@@ -411,8 +424,8 @@ export default {
     },
     methods: {
         showEmoji(emoji) {
-      this.emojisOutput = this.emojisOutput + emoji.native;
-    },
+            // this.comment=emoji.native
+        },
         preventComment() {
             this.makeComment()
             var el = document.getElementById("txtArea2");
