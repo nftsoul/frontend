@@ -1,7 +1,7 @@
 <template>
 <div>
     <v-container fluid class="custom-back">
-        <v-row>
+        <v-row justify="center">
             <v-col cols="12" lg="6" md="12">
                 <p class="title2 text-center">Top Viewed Gallery</p>
                 <v-list-item dense class="px-0">
@@ -31,7 +31,7 @@
                     </v-list-item-content>
                 </v-list-item>
             </v-col>
-            <v-col cols="12" lg="6" md="12">
+            <!-- <v-col cols="12" lg="6" md="12">
                 <p class="title2">Top Earned Gallery</p>
                 <v-list-item dense class="px-0">
                     <v-list-item-avatar tile size="140">
@@ -59,7 +59,7 @@
                         <small class="caption">Total Items: 45</small>
                     </v-list-item-content>
                 </v-list-item>
-            </v-col>
+            </v-col> -->
         </v-row>
         <v-row class="py-3">
             <v-col align="center">
@@ -111,10 +111,18 @@
 export default {
     data() {
         return {
-            // gallaries:[
-            //     {user:{}}
-            // ]
+            galleries:[]
         }
+    },
+    mounted(){
+        this.getGalleries()
+    },
+    methods:{
+       getGalleries(){
+        this.$axios.get('/gallery/top-viewed/showcase?limit=1&page=1')
+        .then(res=>console.log('top:',res.data))
+        .catch(err=>console.log(err.response))
+       }
     }
 }
 </script>
