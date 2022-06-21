@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@audius/fetch-nft": "^0.1.6",
+    "@joeattardi/emoji-button": "^4.6.4",
     "@kevinfaguiar/vue-twemoji-picker": "^5.7.4",
     "@nfteyez/sol-rayz": "^0.9.1",
     "@nuxtjs/auth-next": "^5.0.0-1648802546.c9880dc",

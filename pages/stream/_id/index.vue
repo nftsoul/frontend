@@ -238,7 +238,7 @@
                             <v-img v-if="profile.image_link" :src="profile.image_link"></v-img>
                             <v-icon v-else large>mdi-account</v-icon>
                         </v-avatar>
-                        <v-textarea dark rows="1" auto-grow id="txtArea2" @keypress.enter="preventComment()" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?">
+                        <v-textarea dark rows="1" auto-grow ref="textArea" id="txtArea2" @keypress.enter="preventComment()" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?">
                             <!-- <template v-slot:append>
                                 <v-fade-transition leave-absolute>
                                     <v-menu offset-y top>
@@ -424,7 +424,8 @@ export default {
     },
     methods: {
         showEmoji(emoji) {
-            // this.comment=emoji.native
+            // this.comment+emoji.native
+            console.log(emoji)
         },
         preventComment() {
             this.makeComment()
