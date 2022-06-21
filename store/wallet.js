@@ -111,6 +111,8 @@ export const actions = {
           .goAway(3000);
       }
     } else {
+      var res = await window.solana.connect();
+      context.commit("setWalletAddress", res.publicKey.toString());
       let profile = this.$auth.$storage.getUniversal("uni-nftsoul-user");
       context.commit("setWalletAddress", profile.user.wallet_address);
       this.$auth.setUser(profile.user);
