@@ -278,21 +278,6 @@
 </template>
 
 <script>
-// Import data/twitter.json to reduce size, all.json contains data for
-// all emoji sets.
-import data from "emoji-mart-vue-fast/data/all.json";
-// Import default CSS
-import "emoji-mart-vue-fast/css/emoji-mart.css";
-
-// Vue 2:
-import {
-    Picker,
-    EmojiIndex
-} from "emoji-mart-vue-fast";
-
-// Create emoji data index.
-// We can change it (for example, filter by category) before passing to the component.
-let emojiIndex = new EmojiIndex(data);
 export default {
     async asyncData({
         app,
@@ -348,13 +333,8 @@ export default {
             }]
         };
     },
-    components: {
-        Picker
-    },
     data() {
         return {
-            emojiIndex: emojiIndex,
-            emojiOutput: "",
             totalTime: 300,
             minuteLeft: 0,
             secondLeft: 0,
@@ -423,10 +403,6 @@ export default {
         }
     },
     methods: {
-        showEmoji(emoji) {
-            // this.comment+emoji.native
-            console.log(emoji)
-        },
         preventComment() {
             this.makeComment()
             var el = document.getElementById("txtArea2");
