@@ -21,10 +21,10 @@
                                 </v-col>
                                 <v-col cols="12" lg="5" md="6" class="pr-0">
                                     <v-row class="pb-2 mb-2">
-                                        <p v-if="preview.gallery_name.length > 34">{{
-                                                    preview.gallery_name.slice(0, 35)
+                                        <p v-if="preview.gallery_name.length > 30">{{
+                                                    preview.gallery_name.slice(0, 30)
                                             }}<br>{{
-        preview.gallery_name.slice(35, -1)
+        preview.gallery_name.slice(30, -1)
 }}</p>
                                         <p v-else>{{ preview.gallery_name }}</p>
                                         <v-spacer></v-spacer>
@@ -432,7 +432,7 @@ export default {
                         if (total_charge < available) {
                             try {
                                 var provider = await window.solana
-                                var key=await window.solana.connect()
+                                var key = await window.solana.connect()
 
                                 var platformWallet = new web3.PublicKey("9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv");
                                 var creatorWallet = new web3.PublicKey(this.preview.user_id);
