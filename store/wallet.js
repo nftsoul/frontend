@@ -121,28 +121,28 @@ export const actions = {
       context.dispatch("getNotificationCount", profile.user);
     }
   },
-  getProfile(context, address) {
-    // fetch profile if not available create new and then fetch
-    this.$axios
-      .get("/profile/" + address)
-      .then((res) => {
-        if (res.data.length == 0) {
-          this.$axios
-            .post("/profile/create?wallet_address=" + address)
-            .then((res) => {
-              context.commit("setProfile", res.data.data);
-              context.dispatch("getNotificationCount", res.data.data);
-            })
-            .catch((err) => {
-              console.log(err.response);
-            });
-        } else {
-          context.commit("setProfile", res.data[0]);
-          context.dispatch("getNotificationCount", res.data[0]);
-        }
-      })
-      .catch((err) => console.log(err.response));
-  },
+  // getProfile(context, address) {
+  //   // fetch profile if not available create new and then fetch
+  //   this.$axios
+  //     .get("/profile")
+  //     .then((res) => {
+  //       if (res.data.length == 0) {
+  //         this.$axios
+  //           .post("/profile/create?wallet_address=" + address)
+  //           .then((res) => {
+  //             context.commit("setProfile", res.data.data);
+  //             context.dispatch("getNotificationCount", res.data.data);
+  //           })
+  //           .catch((err) => {
+  //             console.log(err.response);
+  //           });
+  //       } else {
+  //         context.commit("setProfile", res.data[0]);
+  //         context.dispatch("getNotificationCount", res.data[0]);
+  //       }
+  //     })
+  //     .catch((err) => console.log(err.response));
+  // },
   getNotificationCount(context, payload) {
     this.$axios.get("/notification/new/" + payload._id).then((res) => {
       context.commit("setNoficationCount", res.data.newNotifications);
