@@ -20,7 +20,7 @@
                         </v-col>
                     </v-row>
                     <v-row v-else>
-                        <v-col cols="12" lg="4" md="6" v-for="(item, i) in collections" :key="i" align="center">
+                        <v-col cols="12" lg="4" md="6" v-for="(item, i) in collections" :key="i" align="center" class="pa-0">
                             <GalleryCard :galleryId="item.gallery_id._id" :title="item.gallery_id.gallery_name" :image="item.gallery_id.image" :nfts="item.gallery_id.nfts" :creator="item.gallery_id.created_by" :views="item.gallery_id.views" :favourites="item.gallery_id.favourites" />
                         </v-col>
                     </v-row>
