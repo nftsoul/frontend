@@ -44,17 +44,17 @@ export default {
       {
         hid: "twitter:image",
         name: "twitter:image",
-        content: "https://nuxtjs.org/nuxt-card.png",
+        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
       },
 
       // Open Graph
       // Test on: https://developers.facebook.com/tools/debug/
-      { hid: "og:site_name", property: "og:site_name", content: "Nuxt" },
+      { hid: "og:site_name", property: "og:site_name", content: "Nftsoul" },
       { hid: "og:type", property: "og:type", content: "website" },
       {
         hid: "og:url",
         property: "og:url",
-        content: "https://nuxtjs.org",
+        content: "https://nftsoul.io",
       },
       {
         hid: "og:title",
@@ -70,21 +70,21 @@ export default {
       {
         hid: "og:image",
         property: "og:image",
-        content: "https://nuxtjs.org/nuxt-card.png",
+        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
       },
       {
         hid: "og:image:secure_url",
         property: "og:image:secure_url",
-        content: "https://nuxtjs.org/nuxt-card.png",
+        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
       },
       {
         hid: "og:image:alt",
         property: "og:image:alt",
-        content: "NuxtJS",
+        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
       },
     ],
     link: [
-      { rel: "icon", type: "image/x-icon", href: "/mini-log.png" },
+      { rel: "icon", type: "image/x-icon", href: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg" },
       {
         hid: "canonical",
         rel: "canonical",
