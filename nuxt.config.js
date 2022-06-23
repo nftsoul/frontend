@@ -48,7 +48,6 @@ export default {
       },
 
       // Open Graph
-      // Test on: https://developers.facebook.com/tools/debug/
       { hid: "og:site_name", property: "og:site_name", content: "Nftsoul" },
       { hid: "og:type", property: "og:type", content: "website" },
       {
@@ -80,16 +79,16 @@ export default {
       {
         hid: "og:image:alt",
         property: "og:image:alt",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
+        content: "Nftsoul",
       },
     ],
     link: [
-      { rel: "icon", type: "image/x-icon", href: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg" },
       {
-        hid: "canonical",
-        rel: "canonical",
-        href: process.env.SITE_URL,
+        hid: 'canonical',
+        rel: 'canonical',
+        href: `https://nftsoul.io`
       },
+      { rel: "icon", type: "image/x-icon", href: "/mini-log.png" }
     ],
   },
 
