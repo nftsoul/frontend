@@ -48,6 +48,11 @@ export default {
                     content: this.image
                 },
                 {
+                    hid: 'twitter:image:src',
+                    name: 'twitter:image:src',
+                    content: this.image
+                },
+                {
                     hid: 'twitter:image:alt',
                     name: 'twitter:image:alt',
                     content: this.title
