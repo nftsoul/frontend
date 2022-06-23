@@ -7,7 +7,7 @@
         </div>
         <v-spacer></v-spacer>
         <div class="hidden-md-and-down mt-5">
-            <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.dispatch('wallet/connectWallet')">
+            <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.commit('wallet/setWalletDialog',true)">
                 Connect Wallet
             </v-btn>
 
@@ -105,7 +105,7 @@
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-app-bar-nav-icon>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" app absolute temporary right dark color="primary">
-        <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.dispatch('wallet/connectWallet')">
+        <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.commit('wallet/setWalletDialog',true)">
             Connect Wallet
         </v-btn>
         <v-list v-else nav dense>

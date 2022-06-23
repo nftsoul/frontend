@@ -3,6 +3,7 @@
     <div v-if="loaded">
       <LayoutAppbar />
       <CommonSolscan />
+      <DialogWallet />
       <Nuxt />
       <LayoutFooter />
     </div>

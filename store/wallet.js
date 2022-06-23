@@ -11,9 +11,13 @@ export const state = () => ({
   snackbar: false,
   signature: "",
   token: null,
+  walletDialog:false
 });
 
 export const mutations = {
+  setWalletDialog(state,payload){
+    state.walletDialog=payload
+  },
   setSnackbar(state, payload) {
     state.snackbar = true;
     state.signature = payload;
