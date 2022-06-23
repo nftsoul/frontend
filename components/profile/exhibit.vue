@@ -107,6 +107,7 @@ let solrayz = null;
 if (process.client) {
     solrayz = require("@nfteyez/sol-rayz");
 }
+import axios from 'axios';
 export default {
     data() {
         return {
@@ -208,7 +209,7 @@ export default {
                 for (var x = 0; x < this.meta.length; x++) {
                     try {
                         promises.push(
-                            await this.$axios.get(this.meta[x].data.uri).then((response) => {
+                            await axios.get(this.meta[x].data.uri).then((response) => {
                                 if (response.data) {
                                     this.originalList.push(response.data);
                                 }
