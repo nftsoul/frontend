@@ -7,6 +7,10 @@
 <script>
 export default {
     props: {
+        gallery_id: {
+            type: String,
+            required: true
+        },
         title: {
             type: String,
             required: true
@@ -24,6 +28,11 @@ export default {
     head() {
         return {
             meta: [{
+                    hid: 'og:url',
+                    name: 'og:url',
+                    content: process.env.SITE_URL + '/preview/' + this.gallery_id
+                },
+                {
                     hid: 'twitter:title',
                     name: 'twitter:title',
                     content: this.title
@@ -71,10 +80,5 @@ export default {
             ]
         }
     },
-    mounted(){
-        console.log(this.title)
-        console.log(this.description)
-        console.log(this.image)
-    }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
 <div class="dark-bg">
-    <UtilsSeo :title="pre.gallery[0].gallery_name" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
+    <UtilsSeo :title="pre.gallery[0].gallery_name" :gallery_id="pre.gallery[0]._id" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
 
     <v-card :min-height="screenHeight()" flat color="transparent" class="pt-16">
         <v-container class="pt-16">
