@@ -1,9 +1,8 @@
 <template>
 <div>
     <v-container>
-
         <v-row justify="center">
-            <p class="title2 text-center">Top 3 Collection</p>
+            <p class="title2 text-center mt-3">Top 3 Collection</p>
         </v-row>
         <v-row v-if="collections.length>0">
             <v-col cols="12" lg="4" md="6" v-for="(item,i) in collections" :key="i" align="center">
