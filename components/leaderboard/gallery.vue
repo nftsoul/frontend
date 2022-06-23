@@ -1,57 +1,27 @@
 <template>
 <div>
     <v-container fluid class="custom-back">
-        <v-row>
-            <v-col cols="12" lg="6" md="12">
-                <p class="title2 text-center">Top Viewed Gallery</p>
-                <v-list-item dense class="px-0">
-                    <v-list-item-avatar tile size="140">
+        <v-row justify="center">
+            <v-col cols="12" lg="8" md="12">
+                <p class="title2 text-center">Top Earned Gallery</p>
+                <v-list-item class="px-0">
+                    <v-list-item-avatar tile size="160">
                         <v-img :src="require('~/assets/images/featured/f1.png')"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
                         <v-list-item-title>
                             Rear 101
                         </v-list-item-title>
-                        <v-list-item dense class="px-0">
-                            <v-list-item-avatar class="mr-1">
+                        <v-list-item class="px-0">
+                            <v-list-item-avatar>
                                 <v-img :src="require('~/assets/images/featured/fa3.png')"></v-img>
                             </v-list-item-avatar>
                             <v-list-item-content>
                                 <v-list-item-title>
-                                    <small>Roy Reyna</small>
+                                    Roy Reyna
                                 </v-list-item-title>
                                 <v-list-item-subtitle>
-                                    <small>6gk7Ygtv45</small>
-
-                                </v-list-item-subtitle>
-                            </v-list-item-content>
-                        </v-list-item>
-                        <small class="caption">Views: 1.2k</small>
-                        <small class="caption">Total Items: 45</small>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-col>
-            <v-col cols="12" lg="6" md="12">
-                <p class="title2">Top Earned Gallery</p>
-                <v-list-item dense class="px-0">
-                    <v-list-item-avatar tile size="140">
-                        <v-img :src="require('~/assets/images/featured/f1.png')"></v-img>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                        <v-list-item-title>
-                            Rear 101
-                        </v-list-item-title>
-                        <v-list-item dense class="px-0">
-                            <v-list-item-avatar class="mr-1">
-                                <v-img :src="require('~/assets/images/featured/fa3.png')"></v-img>
-                            </v-list-item-avatar>
-                            <v-list-item-content>
-                                <v-list-item-title>
-                                    <small>Roy Reyna</small>
-                                </v-list-item-title>
-                                <v-list-item-subtitle>
-                                    <small>6gk7Ygtv45</small>
-
+                                    6gk7Ygtv45
                                 </v-list-item-subtitle>
                             </v-list-item-content>
                         </v-list-item>
@@ -74,13 +44,13 @@
                                 <th class="text-left">Total Sol Earned</th>
                             </tr>
                         </thead>
-                        
+
                         <tbody>
                             <tr v-for="(item, i) in 3" :key="i">
                                 <td>{{ i + 1 }}</td>
                                 <td>
-                                    <v-list-item dense class="px-0">
-                                        <v-list-item-avatar class="mr-1">
+                                    <v-list-item class="px-0">
+                                        <v-list-item-avatar class="mr-2">
                                             <v-img :src="require('~/assets/images/featured/fa3.png')"></v-img>
                                         </v-list-item-avatar>
                                         <v-list-item-content>
@@ -111,24 +81,34 @@
 export default {
     data() {
         return {
-            // gallaries:[
-            //     {user:{}}
-            // ]
+            showcase:[]
+        }
+    },
+    mounted(){
+        // this.getShowcase()
+    },
+    methods:{
+        getShowcase(){
+            this.$axios.get('/gallery/top-earned/list?limit=3&page=1')
+            .then(res=>console.log('earned:',res.data))
+            .catch(err=>console.log(err.response))
         }
     }
 }
 </script>
+
 <style lang="scss">
 tbody {
     tr:hover {
         background-color: transparent !important;
     }
 }
-table{
-    border:none
-}
-tr{
-    border:none
+
+table {
+    border: none
 }
 
+tr {
+    border: none
+}
 </style>
