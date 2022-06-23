@@ -17,7 +17,7 @@ export default {
         },
         image: {
             type: String,
-            default: 'https://nuxtjs.org/nuxt-card.png'
+            default: 'https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg'
         }
     },
 
@@ -70,6 +70,11 @@ export default {
                 }
             ]
         }
+    },
+    mounted(){
+        console.log(this.title)
+        console.log(this.description)
+        console.log(this.image)
     }
 }
 </script>
