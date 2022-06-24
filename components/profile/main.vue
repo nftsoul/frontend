@@ -198,7 +198,7 @@ export default {
         updateProfileDetail() {
             if (this.$refs.form.validate()) {
                 this.updating = true
-                this.$axios.patch('/profile/info/' + this.$route.params.address + '?name=' + this.name + '&username=' + this.username)
+                this.$axios.patch('/profile/info?name=' + this.name + '&username=' + this.username)
                     .then(res => {
                         this.$store.commit('wallet/setProfile', res.data.result)
                         this.updating = false
