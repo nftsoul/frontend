@@ -99,7 +99,7 @@ export default {
     methods: {
         setProfilePic(item) {
             this.profiling = true
-            this.$axios.patch('/profile/' + this.$route.params.address + '?image_link=' + item.image)
+            this.$axios.patch('/profile?image_link=' + item.image)
                 .then(res => {
                     this.profiling = false
                     this.$store.commit('wallet/setProfile', res.data.result)

@@ -7,6 +7,10 @@
 <script>
 export default {
     props: {
+        gallery_id: {
+            type: String,
+            required: true
+        },
         title: {
             type: String,
             required: true
@@ -17,13 +21,18 @@ export default {
         },
         image: {
             type: String,
-            default: 'https://nuxtjs.org/nuxt-card.png'
+            default: 'https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg'
         }
     },
 
     head() {
         return {
             meta: [{
+                    hid: 'og:url',
+                    name: 'og:url',
+                    content: process.env.SITE_URL + '/preview/' + this.gallery_id
+                },
+                {
                     hid: 'twitter:title',
                     name: 'twitter:title',
                     content: this.title
@@ -36,6 +45,11 @@ export default {
                 {
                     hid: 'twitter:image',
                     name: 'twitter:image',
+                    content: this.image
+                },
+                {
+                    hid: 'twitter:image:src',
+                    name: 'twitter:image:src',
                     content: this.image
                 },
                 {
@@ -70,6 +84,6 @@ export default {
                 }
             ]
         }
-    }
+    },
 }
 </script>
