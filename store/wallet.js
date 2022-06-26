@@ -38,16 +38,16 @@ export const mutations = {
 
 export const actions = {
   async connectWallet(context) {
+    const isPhantomInstalled = (await window.solana) && window.solana.isPhantom;
     if (!this.$auth.$storage.getUniversal("uni-nftsoul-user")) {
-      const isPhantomInstalled =
-        (await window.solana) && window.solana.isPhantom;
       if (isPhantomInstalled) {
         try {
           var res = await window.solana.connect();
           context.commit("setWalletAddress", res.publicKey.toString());
           //signing hash
-          let nonce=await context.dispatch('createNonce')
-          const message = `NFTsoul Authorization Sign In Request   Nonce:`+nonce;
+          let nonce = await context.dispatch("createNonce");
+          const message =
+            `NFTsoul Authorization Sign In Request   Nonce:` + nonce;
           const encodedMessage = new TextEncoder().encode(message);
           const signedMessage = await window.solana.signMessage(
             encodedMessage,
@@ -72,10 +72,7 @@ export const actions = {
               data: data,
             });
             this.$auth.setUser(response.data.user);
-            this.$auth.$storage.setUniversal(
-              "uni-nftsoul-user",
-              response.data
-            );
+            this.$auth.$storage.setUniversal("uni-nftsoul-user", response.data);
             context.commit("setProfile", response.data.user);
             this.$axios.setToken(response.data.token, "X-XSRF-TOKEN");
             context.dispatch("getNotificationCount", response.data.user);
@@ -148,17 +145,20 @@ export const actions = {
       context.commit("setNoficationCount", res.data.newNotifications);
     });
   },
-  createNonce(){
-    var characters ="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let nonce='';
-    for(var i=0;i<4;i++){
-      for(var j=0;j<4;j++){
-        nonce +=characters.charAt(Math.floor(Math.random() * characters.length)) 
+  createNonce() {
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let nonce = "";
+    for (var i = 0; i < 4; i++) {
+      for (var j = 0; j < 4; j++) {
+        nonce += characters.charAt(
+          Math.floor(Math.random() * characters.length)
+        );
       }
-      if(i<3){
-        nonce +='-'
+      if (i < 3) {
+        nonce += "-";
       }
     }
-    return nonce
-  }
+    return nonce;
+  },
 };
