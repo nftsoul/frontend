@@ -2,64 +2,37 @@
 <div>
     <v-container fluid class="custom-back">
         <v-row justify="center">
-            <v-col cols="12" lg="6" md="12">
-                <p class="title2 text-center">Top Viewed Gallery</p>
-                <v-list-item dense class="px-0">
-                    <v-list-item-avatar tile size="140">
-                        <v-img :src="require('~/assets/images/featured/f1.png')"></v-img>
+            <v-col cols="12" lg="8" md="12">
+                <p class="title2 text-center">Top Earned Gallery</p>
+                <v-list-item class="px-0" v-if="showcase != null">
+                    <v-list-item-avatar tile size="160">
+                        <v-img :src="showcase._id.image"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
                         <v-list-item-title>
-                            Rear 101
+                            {{showcase._id.gallery_name}}
                         </v-list-item-title>
-                        <v-list-item dense class="px-0">
-                            <v-list-item-avatar class="mr-1">
-                                <v-img :src="require('~/assets/images/featured/fa3.png')"></v-img>
+                        <v-list-item class="px-0">
+                            <v-list-item-avatar>
+                                <v-img v-if="showcase._id.created_by.image_link" :src="showcase._id.created_by.image_link"></v-img>
+                                <v-icon v-else>mdi-account</v-icon>
                             </v-list-item-avatar>
                             <v-list-item-content>
                                 <v-list-item-title>
-                                    <small>Roy Reyna</small>
-                                </v-list-item-title>
-                                <v-list-item-subtitle>
-                                    <small>6gk7Ygtv45</small>
+                                    <span v-if="showcase._id.created_by.name">{{showcase._id.created_by.name}}</span>
+                                    <span v-else>{{showcase._id.created_by.wallet_address.slice(0,8)}}</span>
 
+                                </v-list-item-title>
+                                <v-list-item-subtitle v-if="showcase._id.created_by.username">
+                                    {{showcase._id.created_by.username}}
                                 </v-list-item-subtitle>
                             </v-list-item-content>
                         </v-list-item>
-                        <small class="caption">Views: 1.2k</small>
-                        <small class="caption">Total Items: 45</small>
+                        <small class="caption">Views: {{showcase._id.views}}</small>
+                        <small class="caption">Total Items: {{showcase.nfts[0]}}</small>
                     </v-list-item-content>
                 </v-list-item>
             </v-col>
-            <!-- <v-col cols="12" lg="6" md="12">
-                <p class="title2">Top Earned Gallery</p>
-                <v-list-item dense class="px-0">
-                    <v-list-item-avatar tile size="140">
-                        <v-img :src="require('~/assets/images/featured/f1.png')"></v-img>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                        <v-list-item-title>
-                            Rear 101
-                        </v-list-item-title>
-                        <v-list-item dense class="px-0">
-                            <v-list-item-avatar class="mr-1">
-                                <v-img :src="require('~/assets/images/featured/fa3.png')"></v-img>
-                            </v-list-item-avatar>
-                            <v-list-item-content>
-                                <v-list-item-title>
-                                    <small>Roy Reyna</small>
-                                </v-list-item-title>
-                                <v-list-item-subtitle>
-                                    <small>6gk7Ygtv45</small>
-
-                                </v-list-item-subtitle>
-                            </v-list-item-content>
-                        </v-list-item>
-                        <small class="caption">Views: 1.2k</small>
-                        <small class="caption">Total Items: 45</small>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-col> -->
         </v-row>
         <v-row class="py-3">
             <v-col align="center">
@@ -74,29 +47,31 @@
                                 <th class="text-left">Total Sol Earned</th>
                             </tr>
                         </thead>
-                        
+
                         <tbody>
-                            <tr v-for="(item, i) in 3" :key="i">
+                            <tr v-for="(item, i) in list" :key="i">
                                 <td>{{ i + 1 }}</td>
                                 <td>
-                                    <v-list-item dense class="px-0">
-                                        <v-list-item-avatar class="mr-1">
-                                            <v-img :src="require('~/assets/images/featured/fa3.png')"></v-img>
+                                    <v-list-item class="px-0" dense>
+                                        <v-list-item-avatar class="mr-2">
+                                            <v-img v-if="item._id.created_by.image_link" :src="item._id.created_by.image_link"></v-img>
+                                            <v-icon v-else>mdi-account</v-icon>
                                         </v-list-item-avatar>
                                         <v-list-item-content>
                                             <v-list-item-title>
-                                                <small>Roy Reyna</small>
-                                            </v-list-item-title>
-                                            <v-list-item-subtitle>
-                                                <small>6gk7Ygtv45</small>
+                                                <span v-if="item._id.created_by.name">{{item._id.created_by.name}}</span>
+                                                <span v-else>{{item._id.created_by.wallet_address.slice(0,8)}}</span>
 
+                                            </v-list-item-title>
+                                            <v-list-item-subtitle v-if="item._id.created_by.username">
+                                                {{item._id.created_by.username}}
                                             </v-list-item-subtitle>
                                         </v-list-item-content>
                                     </v-list-item>
                                 </td>
-                                <td><small>Monkey Kingdom</small></td>
-                                <td><small>2.50 Sol</small>
-                                </td>
+                                <td>{{item._id.gallery_name}}</td>
+                                <td>{{item.earned}} Sol</td>
+                            
                             </tr>
                         </tbody>
                     </template>
@@ -111,32 +86,45 @@
 export default {
     data() {
         return {
-            galleries:[]
+            showcase: null,
+            list: []
         }
     },
-    mounted(){
-        this.getGalleries()
+    mounted() {
+        this.getShowcase()
+        this.getEarnedList()
     },
-    methods:{
-       getGalleries(){
-        this.$axios.get('/gallery/top-viewed/showcase?limit=1&page=1')
-        .then(res=>console.log('top:',res.data))
-        .catch(err=>console.log(err.response))
-       }
-    }
+    methods: {
+        getShowcase() {
+            this.$axios.get('/gallery/top-earned/showcase?limit=1&page=1')
+                .then(res => {
+                    this.showcase = res.data.galleries[0]
+                })
+                .catch(err => console.log(err.response))
+        },
+        getEarnedList() {
+            this.$axios.get('/gallery/top-earned/list?limit=3&page=1')
+                .then(res => {
+                    this.list = res.data.galleries
+                })
+                .catch(err => console.log(err.response))
+        }
+    },
 }
 </script>
+
 <style lang="scss">
 tbody {
     tr:hover {
         background-color: transparent !important;
     }
 }
-table{
-    border:none
-}
-tr{
-    border:none
+
+table {
+    border: none
 }
 
+tr {
+    border: none
+}
 </style>
