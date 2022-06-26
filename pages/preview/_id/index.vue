@@ -1,7 +1,6 @@
 <template>
 <div class="dark-bg">
     <UtilsSeo :title="pre.gallery[0].gallery_name" :gallery_id="pre.gallery[0]._id" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
-
     <v-card :min-height="screenHeight()" flat color="transparent" class="pt-16">
         <v-container class="pt-16">
             <v-row justify="center">
@@ -192,7 +191,6 @@
             </v-row>
         </v-container>
     </v-card>
-
 </div>
 </template>
 
@@ -203,6 +201,7 @@ export default {
         params
     }) {
         const pre = await fetch(process.env.API_URL + `/gallery/${params.id}`).then((res) => res.json());
+        console.log(pre)
         return {
             pre
         };
@@ -476,7 +475,12 @@ export default {
             }
         },
         screenHeight() {
-            return window.innerHeight;
+            if (process.client) {
+                return window.innerHeight;
+            }
+            else{
+                return 900;
+            }
         },
         saveEarning() {
             this.$axios
