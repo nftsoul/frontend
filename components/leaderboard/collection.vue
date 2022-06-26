@@ -50,7 +50,7 @@ export default {
         }
     },
     mounted() {
-        this.getCollections()
+        // this.getCollections()
     },
     methods: {
         getCollections() {
