@@ -37,6 +37,7 @@
 <script>
 export default {
     layout: 'user',
+    middleware:'auth',
     data() {
         return {
             tab: 1

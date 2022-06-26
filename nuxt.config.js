@@ -125,7 +125,7 @@ export default {
         token: {
           property: "token",
           required: true,
-          maxAge: 60 * 60 * 24
+          maxAge: 60 * 60 * 23
         },
         user: {
           property: false,
