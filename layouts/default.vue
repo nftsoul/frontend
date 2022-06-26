@@ -1,24 +1,22 @@
 <template>
-  <v-app>
-    <div v-if="loaded">
-      <LayoutAppbar />
-      <CommonSolscan />
-      <Nuxt />
-      <LayoutFooter />
-    </div>
-  </v-app>
+<v-app>
+    <LayoutAppbar />
+    <CommonSolscan />
+    <Nuxt />
+    <LayoutFooter />
+</v-app>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      loaded: false,
-    };
-  },
-  mounted(){
-    this.loaded=true
-  }
+    data() {
+        return {
+            loaded: false,
+        };
+    },
+    mounted() {
+        this.loaded = true
+    }
 };
 </script>
 
