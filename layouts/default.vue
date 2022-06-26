@@ -1,9 +1,13 @@
 <template>
 <v-app>
-    <LayoutAppbar />
-    <CommonSolscan />
+    <client-only>
+        <LayoutAppbar />
+        <CommonSolscan />
+    </client-only>
     <Nuxt />
-    <LayoutFooter />
+    <client-only>
+        <LayoutFooter />
+    </client-only>
 </v-app>
 </template>
 
