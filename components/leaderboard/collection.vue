@@ -5,7 +5,7 @@
         <v-row justify="center">
             <p class="title2 text-center">Top 3 Collection</p>
         </v-row>
-        <v-row v-if="collections.length>0">
+        <v-row justify="center" v-if="collections.length>0">
             <v-col cols="12" lg="4" md="6" v-for="(item,i) in collections" :key="i" align="center">
                 <div class="outer-btn div1" :class="setMargin(i)">
                     <div class="inner-btn div2">
@@ -58,9 +58,16 @@ export default {
             this.$axios.get('/collection/top-three')
                 .then(res => {
                     let responses = res.data.topThreeCollections
-                    let top=[responses[1],responses[0]]
-                    if(responses[2]){
-                        top[2]=responses[2]
+                    let top = []
+                    if (responses.length == 3) {
+                        top[0] = responses[1]
+                        top[1] = responses[0]
+                        top[2] = responses[2]
+                    } else if (responses.length == 2) {
+                        top[0] = responses[1]
+                        top[1] = responses[0]
+                    } else {
+                        top = responses
                     }
                     this.collections = top
 
@@ -73,12 +80,16 @@ export default {
             }
         },
         getRank(i) {
-            if (i == 0) {
-                return '2'
-            } else if (i == 1) {
+            if (this.collections.length == 1) {
                 return '1'
-            } else if (i == 2) {
-                return '3'
+            } else {
+                if (i == 0) {
+                    return '2'
+                } else if (i == 1) {
+                    return '1'
+                } else if (i == 2) {
+                    return '3'
+                }
             }
         }
     }
