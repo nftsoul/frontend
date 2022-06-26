@@ -44,7 +44,7 @@ export default {
       {
         hid: "twitter:image",
         name: "twitter:image",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
+        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
       },
 
       // Open Graph
@@ -69,12 +69,12 @@ export default {
       {
         hid: "og:image",
         property: "og:image",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
+        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
       },
       {
         hid: "og:image:secure_url",
         property: "og:image:secure_url",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
+        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
       },
       {
         hid: "og:image:alt",
@@ -133,7 +133,7 @@ export default {
         },
         endpoints: {
           login: { url: "/auth/login", method: "post" },
-          logout: { url: "/logout", method: "get" },
+          logout: { url: "/auth/logout", method: "get" },
           user: { url: "/profile", method: "get" }
         }
       },
