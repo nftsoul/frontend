@@ -477,7 +477,9 @@ export default {
         screenHeight() {
             if (process.client) {
                 return window.innerHeight;
-
+            }
+            else{
+                return 900;
             }
         },
         saveEarning() {
