@@ -1,5 +1,6 @@
 <template>
 <div class="dark-bg">
+    <client-only>
     <v-card :min-height="screenHeight()" flat color="transparent">
         <v-container class="py-16">
             <v-row class="py-16" justify="center">
@@ -40,6 +41,7 @@
             </v-row>
         </v-container>
     </v-card>
+    </client-only>
 </div>
 </template>
 
