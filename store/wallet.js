@@ -39,7 +39,16 @@ export const mutations = {
 export const actions = {
   async connectWallet(context) {
     const isPhantomInstalled = (await window.solana) && window.solana.isPhantom;
-    if (!this.$auth.$storage.getUniversal("uni-nftsoul-user")) {
+    if (this.$auth.strategy.token.get()) {
+      var res = await window.solana.connect();
+      context.commit("setWalletAddress", res.publicKey.toString());
+      let profile = this.$auth.$storage.getUniversal("uni-nftsoul-user");
+      context.commit("setWalletAddress", profile.user.wallet_address);
+      this.$auth.setUser(profile.user);
+      context.commit("setProfile", profile.user);
+      this.$axios.setToken(profile.token, "X-XSRF-TOKEN");
+      context.dispatch("getNotificationCount", profile.user);
+    } else {
       if (isPhantomInstalled) {
         try {
           var res = await window.solana.connect();
@@ -107,39 +116,19 @@ export const actions = {
           })
           .goAway(3000);
       }
-    } else {
-      var res = await window.solana.connect();
-      context.commit("setWalletAddress", res.publicKey.toString());
-      let profile = this.$auth.$storage.getUniversal("uni-nftsoul-user");
-      context.commit("setWalletAddress", profile.user.wallet_address);
-      this.$auth.setUser(profile.user);
-      context.commit("setProfile", profile.user);
-      this.$axios.setToken(profile.token, "X-XSRF-TOKEN");
-      context.dispatch("getNotificationCount", profile.user);
     }
   },
-  // getProfile(context, address) {
-  //   // fetch profile if not available create new and then fetch
-  //   this.$axios
-  //     .get("/profile")
-  //     .then((res) => {
-  //       if (res.data.length == 0) {
-  //         this.$axios
-  //           .post("/profile/create?wallet_address=" + address)
-  //           .then((res) => {
-  //             context.commit("setProfile", res.data.data);
-  //             context.dispatch("getNotificationCount", res.data.data);
-  //           })
-  //           .catch((err) => {
-  //             console.log(err.response);
-  //           });
-  //       } else {
-  //         context.commit("setProfile", res.data[0]);
-  //         context.dispatch("getNotificationCount", res.data[0]);
-  //       }
-  //     })
-  //     .catch((err) => console.log(err.response));
-  // },
+  disconnect() {
+    window.solana.request({
+        method: "disconnect",
+    });
+    context.commit("setWalletAddress", null);
+    this.$auth.logout()
+    this.$auth.$storage.removeUniversal('uni-nftsoul-user')
+
+    this.$router.push('/')
+},
+ 
   getNotificationCount(context, payload) {
     this.$axios.get("/notification/new/" + payload._id).then((res) => {
       context.commit("setNoficationCount", res.data.newNotifications);
