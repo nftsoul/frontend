@@ -94,10 +94,19 @@ export default {
     },
     mounted() {
         this.getPopularNfts();
+        this.getTopCollections()
     },
     methods: {
         screenHeight() {
-            return window.innerHeight;
+            if (process.client) {
+                return window.innerHeight;
+
+            } else {
+                return 900;
+            }
+        },
+        getTopCollections(){
+            this.$axios.get('/top/collections/')
         },
         getPopularNfts() {
             this.$axios
