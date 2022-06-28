@@ -90,7 +90,7 @@
                                     </template>
                                     <v-card width="200" color="#636262" class="mt-3">
                                         <v-list style="background-color: #636262" dense>
-                                            <v-list-item @click="disconnect">
+                                            <v-list-item @click="$store.dispatch('wallet/disconnect')">
                                                 <v-list-item-title>Disconnect</v-list-item-title><br /><br />
                                             </v-list-item>
                                         </v-list>
@@ -173,7 +173,7 @@
 
             <v-divider></v-divider>
 
-            <v-list-item @click="disconnect">
+            <v-list-item @click="$store.dispatch('wallet/disconnect')">
                 <v-list-item-title>Disconnect</v-list-item-title><br /><br />
             </v-list-item>
         </v-list>
@@ -219,19 +219,6 @@ export default {
                 this.$store.commit('nft/setCreating', false)
             }
         }
-    },
-
-    methods: {
-        disconnect() {
-            window.solana.request({
-                method: "disconnect",
-            });
-            this.$store.commit("wallet/setWalletAddress", null);
-            this.$auth.logout()
-            this.$auth.$storage.removeUniversal('uni-nftsoul-user')
-
-            this.$router.push('/')
-        },
     },
 };
 </script>

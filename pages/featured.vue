@@ -8,8 +8,8 @@
                 <div class="line-box mt-4"></div>
             </v-row>
             <v-row no-gutters>
-                <v-btn-toggle v-model="text" group>
-                    <v-btn value="all" dark @click="getPopularNfts()">
+                <v-btn-toggle v-model="text" group color="theme">
+                    <v-btn value="all" dark @click="getPopularNfts()" elevation="10">
                         All
                     </v-btn>
 
@@ -19,10 +19,10 @@
 
                 </v-btn-toggle>
                 <v-spacer></v-spacer>
-                <!-- <v-btn dark color="primary mx-2" large>
+                <v-btn dark color="primary mx-2" large>
                     All
                 </v-btn>
-                <v-btn dark color="primary mx-2" large>
+                <!-- <v-btn dark color="primary mx-2" large>
                     Art
                 </v-btn>
                 <v-btn dark color="primary mx-2" large>

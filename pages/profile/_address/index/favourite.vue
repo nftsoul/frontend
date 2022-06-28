@@ -50,7 +50,13 @@ export default {
     },
     methods: {
         screenHeight() {
+            if(process.client){
             return window.innerHeight - 350;
+
+            }
+            else{
+                return 600
+            }
         },
         getCollections() {
             this.$axios

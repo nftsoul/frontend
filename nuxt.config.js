@@ -125,7 +125,7 @@ export default {
         token: {
           property: "token",
           required: true,
-          maxAge: 60 * 60 * 23
+          maxAge: 23*60*60
         },
         user: {
           property: false,
@@ -148,6 +148,7 @@ export default {
       dark: true,
       themes: {
         dark: {
+          theme:'#C202D3',
           primary: "#030537",
           background: "#000229",
           notification: "#1b024d",
