@@ -125,7 +125,6 @@ export default {
         .get("/gallery/top-earned/list?limit=3&page=1")
         .then((res) => {
           this.list = res.data.galleries;
-          console.log('res:',res.data)
         })
         .catch((err) => console.log(err.response));
     },
