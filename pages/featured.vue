@@ -8,7 +8,18 @@
                 <div class="line-box mt-4"></div>
             </v-row>
             <v-row no-gutters>
-                <v-btn dark color="primary mx-2" large>
+                <v-btn-toggle v-model="text" group>
+                    <v-btn value="all" dark @click="getPopularNfts()">
+                        All
+                    </v-btn>
+
+                    <v-btn v-for="(item,i) in collections" :key="i" :value="item._id" @click="searchSortGallery({'q':item._id,sort:'popular'})">
+                        {{item._id}}
+                    </v-btn>
+
+                </v-btn-toggle>
+                <v-spacer></v-spacer>
+                <!-- <v-btn dark color="primary mx-2" large>
                     All
                 </v-btn>
                 <v-btn dark color="primary mx-2" large>
@@ -19,11 +30,8 @@
                 </v-btn>
                 <v-btn dark color="primary mx-2" large>
                     Sports
-                </v-btn>
-                <v-btn dark color="primary mx-2" large>
-                    Collectibles
-                </v-btn>
-                <v-text-field placeholder="Search" class="mx-2" height="30" solo dark background-color="primary" color="white" append-icon="mdi-cloud-search"></v-text-field>
+                </v-btn> -->
+               <FormSearchField v-model="search" />
 
                 <v-menu transition="slide-y-transition" bottom offset-y>
                     <template v-slot:activator="{ on, attrs }">
@@ -34,7 +42,7 @@
                     </template>
                     <v-list width="200" style="background-color:#636262">
                         <div v-for="(item, i) in items" :key="i">
-                            <v-list-item>
+                            <v-list-item @click="searchSortGallery({'q':search,sort:item.sort})">
                                 <v-list-item-title>{{ item.title }}</v-list-item-title><br><br>
                             </v-list-item>
                             <v-divider v-if="items.length-items.indexOf(item)>1"></v-divider>
@@ -71,23 +79,29 @@ export default {
             total: 0,
             pages: 1,
             page: 1,
-            items: [{
-                    title: 'Latest'
+            collections: [],
+            text: 'all',
+            search:'',
+            items: [
+                {
+                    title: 'Newest',
+                    sort:'newest'
                 },
                 {
-                    title: 'Newest'
+                    title: 'Popular',
+                    sort:'popular'
                 },
                 {
-                    title: 'Popular'
+                    title: 'High to Low',
+                    sort:'pricehl'
                 },
                 {
-                    title: 'High to Low'
+                    title: 'Low to High',
+                    sort:'pricelh'
                 },
                 {
-                    title: 'Low to High'
-                },
-                {
-                    title: 'Oldest'
+                    title: 'Oldest',
+                    sort:'oldest'
                 },
             ],
         };
@@ -95,6 +109,11 @@ export default {
     mounted() {
         this.getPopularNfts();
         this.getTopCollections()
+    },
+    watch: {
+        search() {
+            this.searchSortGallery({'q':this.search,sort:'popular'})
+        }
     },
     methods: {
         screenHeight() {
@@ -105,8 +124,17 @@ export default {
                 return 900;
             }
         },
-        getTopCollections(){
-            this.$axios.get('/top/collections/')
+        async searchSortGallery(sort){
+            this.nfts=[]
+             let searched = await this.$store.dispatch('utility/searchGallery', {
+                'q': this.search,
+                sort: sort
+            })
+            this.nfts = searched
+        },
+        getTopCollections() {
+            this.$axios.get('/collection/top-three')
+                .then(res => this.collections = res.data.topThreeCollections)
         },
         getPopularNfts() {
             this.$axios
