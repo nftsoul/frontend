@@ -168,7 +168,6 @@ export default {
     methods: {
         getProfileInfo() {
             this.$axios.get('/profile/'+this.$route.params.address).then(res => {
-                console.log('pro:',res.data)
                 this.profile=res.data[0]
             })
         },
