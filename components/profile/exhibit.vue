@@ -191,7 +191,7 @@ export default {
   },
   computed: {
     walletAddress() {
-      return this.$route.params.address;
+      return this.$store.state.wallet.walletAddress
     },
     editing() {
       return this.$store.state.content.editing;
@@ -289,7 +289,7 @@ export default {
     },
     getCollected() {
       this.$axios
-        .get("/gallery/all/" + this.walletAddress)
+        .get("/gallery/all/" + this.$route.params.address)
         .then((res) => {
           for (var x = 0; x < res.data.galleries.length; x++) {
             for (var y = 0; y < res.data.galleries[x].nfts.length; y++) {

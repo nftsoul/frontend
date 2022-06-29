@@ -23,7 +23,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-nfts',
-                      params: { address: walletAddress },
+                      params: { address: profile._id },
                     })
                   ">
                                     <v-list-item-title>My Items</v-list-item-title><br /><br />
@@ -32,7 +32,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-gallery',
-                      params: { address: walletAddress },
+                      params: { address: profile._id },
                     })
                   ">
                                     <v-list-item-title>Listed Items</v-list-item-title><br /><br />
@@ -40,7 +40,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-exhibit',
-                      params: { address: walletAddress },
+                      params: { address: profile._id },
                     })
                   ">
                                     <v-list-item-title>Create Gallery</v-list-item-title><br /><br />
@@ -48,7 +48,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-earning-logs',
-                      params: { address: walletAddress },
+                      params: { address: profile._id },
                     })
                   ">
                                     <v-list-item-title>Earning Logs</v-list-item-title><br /><br />
@@ -74,7 +74,7 @@
                             <div class="auth-inside-1" @click="
                   $router.push({
                     name: 'profile-address-index-nfts',
-                    params: { address: walletAddress },
+                    params: { address: profile._id },
                   })
                 ">
                                 <v-avatar size="20" class="mx-2 mt-3">
@@ -115,7 +115,7 @@
                         <div class="auth-inside-1" @click="
                   $router.push({
                     name: 'profile-address',
-                    params: { address: walletAddress },
+                    params: { address: profile._id },
                   })
                 ">
                             <v-avatar size="20" class="mx-2 mt-3">
@@ -134,7 +134,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-nfts',
-              params: { address: walletAddress },
+              params: { address: profile._id },
             })
           ">
                 <v-list-item-title>My Items</v-list-item-title><br /><br />
@@ -143,7 +143,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-gallery',
-              params: { address: walletAddress },
+              params: { address: profile._id },
             })
           ">
                 <v-list-item-title>Listed Items</v-list-item-title><br /><br />
@@ -151,7 +151,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-exhibit',
-              params: { address: walletAddress },
+              params: { address: profile._id },
             })
           ">
                 <v-list-item-title>Create Gallery</v-list-item-title><br /><br />
@@ -159,7 +159,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-earning-logs',
-              params: { address: walletAddress },
+              params: { address: profile._id },
             })
           ">
                 <v-list-item-title>Earning Logs</v-list-item-title><br /><br />
@@ -196,6 +196,9 @@ export default {
     computed: {
         walletAddress() {
             return this.$store.state.wallet.walletAddress;
+        },
+        profile(){
+            return this.$store.state.wallet.profile
         },
         creating() {
             return this.$store.state.nft.creating
