@@ -8,29 +8,16 @@
                 <div class="line-box mt-4"></div>
             </v-row>
             <v-row no-gutters>
-                <v-btn-toggle v-model="text" group color="theme">
-                    <v-btn value="all" dark @click="getPopularNfts()" elevation="10">
+                    <v-btn value="all" class="mx-2" dark color="primary" @click="getPopularNfts()" elevation="10">
                         All
                     </v-btn>
 
-                    <v-btn v-for="(item,i) in collections" :key="i" :value="item._id" @click="searchSortGallery({'q':item._id,sort:'popular'})">
+                    <v-btn v-for="(item,i) in collections" :key="i" class="mx-2" color="primary" :value="item._id" @click="searchSortGallery({'q':item._id,sort:'popular'})">
                         {{item._id}}
                     </v-btn>
 
-                </v-btn-toggle>
                 <v-spacer></v-spacer>
-                <v-btn dark color="primary mx-2" large>
-                    All
-                </v-btn>
-                <!-- <v-btn dark color="primary mx-2" large>
-                    Art
-                </v-btn>
-                <v-btn dark color="primary mx-2" large>
-                    Music
-                </v-btn>
-                <v-btn dark color="primary mx-2" large>
-                    Sports
-                </v-btn> -->
+            
                <FormSearchField v-model="search" />
 
                 <v-menu transition="slide-y-transition" bottom offset-y>
