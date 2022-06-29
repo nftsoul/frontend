@@ -118,7 +118,7 @@ export const actions = {
       }
     }
   },
-  disconnect() {
+  disconnect(context) {
     window.solana.request({
         method: "disconnect",
     });

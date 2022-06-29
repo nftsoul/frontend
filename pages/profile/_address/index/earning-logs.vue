@@ -83,7 +83,7 @@ export default {
     };
   },
   computed: {
-    walletAddress() {
+    userAddress() {
       return this.$route.params.address;
     },
   },
@@ -100,9 +100,9 @@ export default {
     },
     getEarnings() {
       this.$axios
-        .get("/profile/earnings")
+        .get("/profile/earnings/"+this.userAddress)
         .then((res) => {
-          this.earning = res.data;
+          this.earning = res.data.allEarnings;
           this.loading = false;
         })
         .catch((err) => console.log(err.response));

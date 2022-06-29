@@ -201,7 +201,6 @@ export default {
         params
     }) {
         const pre = await fetch(process.env.API_URL + `/gallery/${params.id}`).then((res) => res.json());
-        console.log(pre)
         return {
             pre
         };
@@ -358,7 +357,7 @@ export default {
             this.$router.push({
                 name: "profile-address-index-gallery",
                 params: {
-                    address: this.preview.user_id
+                    address: this.preview.created_by._id
                 }
             });
         },
@@ -417,7 +416,7 @@ export default {
                                 let signed = await provider.signTransaction(transaction);
 
                                 let signature = await this.connection.sendRawTransaction(signed.serialize());
-
+                                
                                 this.$store.commit('wallet/setSnackbar', signature)
 
                                 this.$store.commit("nft/setStream", true);

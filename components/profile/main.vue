@@ -34,7 +34,7 @@
                     <v-row justify="center py-3">
                         <p class="mr-5 mt-1 text-gradient link" @click="tutorProfile()" v-if="profile.username">@{{profile.username}}</p>
                         <v-card max-width="200" dark color="black" class="pa-2" height="40" @click="copy()">
-                            <p v-if="walletAddress" class="mb-n7">{{this.$route.params.address.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
+                            <p v-if="walletAddress" class="mb-n7">{{walletAddress.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
                             <client-only v-else>
                                 <spinner :animation-duration="1200" :size="20" color="#fff" />
                             </client-only>
@@ -118,7 +118,7 @@ const web3 = require("@solana/web3.js");
 
 export default {
     layout: 'user',
-    middleware:'auth',
+    middleware: 'auth',
     data() {
         return {
             chipColor: 'rgba(160, 160, 160, 0.3)',
@@ -135,15 +135,14 @@ export default {
             },
             updating: false,
             image_link: '',
+            profile: ''
         }
     },
     computed: {
         walletAddress() {
             return this.$store.state.wallet.walletAddress
         },
-        profile(){
-            return this.$store.state.wallet.profile
-        }
+
     },
     watch: {
         walletAddress(newValue, oldValue) {
@@ -161,11 +160,18 @@ export default {
         this.connect = new web3.Connection(web3.clusterApiUrl(process.env.CLUSTER), 'confirmed');
         this.getAccountInfo()
         // this.auth()
-        if(!this.$auth.user){
+        if (!this.$auth.user) {
             this.$router.push('/')
         }
+        this.getProfileInfo()
     },
     methods: {
+        getProfileInfo() {
+            this.$axios.get('/profile/'+this.$route.params.address).then(res => {
+                console.log('pro:',res.data)
+                this.profile=res.data[0]
+            })
+        },
         tutorProfile() {
             // window.open('https://twitter.com/'+this.profile.username)
         },

@@ -115,7 +115,7 @@ export default {
   },
   computed: {
     walletAddress() {
-      return this.$route.params.address;
+      return this.$store.state.wallet.walletAddress
     },
   },
   watch: {
