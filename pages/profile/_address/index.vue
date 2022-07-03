@@ -8,23 +8,23 @@
                 <v-tabs v-model="tab" background-color="#000229" tile color="purple" group>
                     <v-tabs-slider color="#000229"></v-tabs-slider>
 
-                    <v-tab href="#tab-1" v-if="userAddress==walletAddress" class="text-capitalize" :to="'/profile/'+walletAddress+'/nfts'">
+                    <v-tab href="#tab-1" v-if="profile._id==userAddress" class="text-capitalize" :to="'/profile/'+userAddress+'/nfts'">
                         NFTs
                     </v-tab>
 
-                    <v-tab href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/gallery'">
+                    <v-tab href="#tab-2" class="text-capitalize" :to="'/profile/'+userAddress+'/gallery'">
                         Galleries
                     </v-tab>
 
-                    <v-tab v-if="userAddress==walletAddress" href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/favourite'">
+                    <v-tab v-if="profile._id==userAddress" href="#tab-2" class="text-capitalize" :to="'/profile/'+userAddress+'/favourite'">
                         Favourites
                     </v-tab>
-                    <v-tab v-if="userAddress==walletAddress" href="#tab-2" class="text-capitalize" :to="'/profile/'+walletAddress+'/earning-logs'">
+                    <v-tab v-if="profile._id==userAddress" href="#tab-2" class="text-capitalize" :to="'/profile/'+userAddress+'/earning-logs'">
                         Earning Logs
                     </v-tab>
                 </v-tabs>
             </v-col>
-            <v-btn class="btn-exhibit px-5 mt-8" v-if="creating==false" @click="$router.push({name:'profile-address-index-exhibit',params:{'address':walletAddress}})">
+            <v-btn class="btn-exhibit px-5 mt-8" v-if="creating==false" @click="$router.push({name:'profile-address-index-exhibit',params:{'address':userAddress}})">
                 Create Gallery
             </v-btn>
         </v-row>
@@ -52,6 +52,9 @@ export default {
         },
         creating() {
             return this.$store.state.nft.creating
+        },
+        profile(){
+            return this.$store.state.wallet.profile
         }
     },
 

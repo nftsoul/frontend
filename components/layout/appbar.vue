@@ -23,7 +23,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-nfts',
-                      params: { address: walletAddress },
+                      params: { address: profile._id },
                     })
                   ">
                                     <v-list-item-title>My Items</v-list-item-title><br /><br />
@@ -32,7 +32,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-gallery',
-                      params: { address: walletAddress },
+                      params: { address: profile._id },
                     })
                   ">
                                     <v-list-item-title>Listed Items</v-list-item-title><br /><br />
@@ -40,7 +40,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-exhibit',
-                      params: { address: walletAddress },
+                      params: { address: profile._id },
                     })
                   ">
                                     <v-list-item-title>Create Gallery</v-list-item-title><br /><br />
@@ -48,7 +48,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-earning-logs',
-                      params: { address: walletAddress },
+                      params: { address: profile._id },
                     })
                   ">
                                     <v-list-item-title>Earning Logs</v-list-item-title><br /><br />
@@ -74,7 +74,7 @@
                             <div class="auth-inside-1" @click="
                   $router.push({
                     name: 'profile-address-index-nfts',
-                    params: { address: walletAddress },
+                    params: { address: profile._id },
                   })
                 ">
                                 <v-avatar size="20" class="mx-2 mt-3">
@@ -90,7 +90,7 @@
                                     </template>
                                     <v-card width="200" color="#636262" class="mt-3">
                                         <v-list style="background-color: #636262" dense>
-                                            <v-list-item @click="disconnect">
+                                            <v-list-item @click="$store.dispatch('wallet/disconnect')">
                                                 <v-list-item-title>Disconnect</v-list-item-title><br /><br />
                                             </v-list-item>
                                         </v-list>
@@ -115,7 +115,7 @@
                         <div class="auth-inside-1" @click="
                   $router.push({
                     name: 'profile-address',
-                    params: { address: walletAddress },
+                    params: { address: profile._id },
                   })
                 ">
                             <v-avatar size="20" class="mx-2 mt-3">
@@ -134,7 +134,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-nfts',
-              params: { address: walletAddress },
+              params: { address: profile._id },
             })
           ">
                 <v-list-item-title>My Items</v-list-item-title><br /><br />
@@ -143,7 +143,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-gallery',
-              params: { address: walletAddress },
+              params: { address: profile._id },
             })
           ">
                 <v-list-item-title>Listed Items</v-list-item-title><br /><br />
@@ -151,7 +151,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-exhibit',
-              params: { address: walletAddress },
+              params: { address: profile._id },
             })
           ">
                 <v-list-item-title>Create Gallery</v-list-item-title><br /><br />
@@ -159,7 +159,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-earning-logs',
-              params: { address: walletAddress },
+              params: { address: profile._id },
             })
           ">
                 <v-list-item-title>Earning Logs</v-list-item-title><br /><br />
@@ -173,7 +173,7 @@
 
             <v-divider></v-divider>
 
-            <v-list-item @click="disconnect">
+            <v-list-item @click="$store.dispatch('wallet/disconnect')">
                 <v-list-item-title>Disconnect</v-list-item-title><br /><br />
             </v-list-item>
         </v-list>
@@ -197,6 +197,9 @@ export default {
         walletAddress() {
             return this.$store.state.wallet.walletAddress;
         },
+        profile(){
+            return this.$store.state.wallet.profile
+        },
         creating() {
             return this.$store.state.nft.creating
         },
@@ -219,19 +222,6 @@ export default {
                 this.$store.commit('nft/setCreating', false)
             }
         }
-    },
-
-    methods: {
-        disconnect() {
-            window.solana.request({
-                method: "disconnect",
-            });
-            this.$store.commit("wallet/setWalletAddress", null);
-            this.$auth.logout()
-            this.$auth.$storage.removeUniversal('uni-nftsoul-user')
-
-            this.$router.push('/')
-        },
     },
 };
 </script>
