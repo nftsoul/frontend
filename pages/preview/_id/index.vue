@@ -120,7 +120,18 @@
                                                                 </v-col>
                                                                 <v-col>
                                                                     <v-list-item-content class="py-1">
-                                                                        <v-textarea rows="1" id="txtArea" auto-grow @keypress.enter="onEnterPress(item)" dark color="white" :loading="makingReply" append-icon="mdi-check" @click:append="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply"></v-textarea>
+                                                                        <v-textarea rows="1" id="txtArea" auto-grow @keypress.enter="onEnterPress(item)" dark color="white" :loading="makingReply" append-outer-icon="mdi-check" @click:append-outer="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply">
+                                                                            <template v-slot:append>
+                                                                                <v-fade-transition leave-absolute>
+                                                                                    <v-menu offset-y top>
+                                                                                        <template v-slot:activator="{ on, attrs }">
+                                                                                            <v-img :src="require('~/assets/icons/emoji-icon.png')" max-width="30" class="mt-n1 link" v-bind="attrs" v-on="on"></v-img>
+                                                                                        </template>
+                                                                                        <Picker set="emojione" @select="selectEmojiReply" />
+                                                                                    </v-menu>
+                                                                                </v-fade-transition>
+                                                                            </template>
+                                                                        </v-textarea>
                                                                     </v-list-item-content>
                                                                 </v-col>
                                                             </v-row>
@@ -196,7 +207,13 @@
 
 <script>
 const web3 = require("@solana/web3.js");
+import {
+    Picker
+} from 'emoji-mart-vue'
 export default {
+    components: {
+        Picker
+    },
     async asyncData({
         params
     }) {
@@ -250,6 +267,13 @@ export default {
 
     },
     methods: {
+        selectEmojiReply(e) {
+            if (!this.reply) {
+                this.reply = e.native
+            } else {
+                this.reply += e.native
+            }
+        },
         async getProvider() {
             if ("solana" in window) {
                 const provider = window.solana;
@@ -416,7 +440,7 @@ export default {
                                 let signed = await provider.signTransaction(transaction);
 
                                 let signature = await this.connection.sendRawTransaction(signed.serialize());
-                                
+
                                 this.$store.commit('wallet/setSnackbar', signature)
 
                                 this.$store.commit("nft/setStream", true);
@@ -476,8 +500,7 @@ export default {
         screenHeight() {
             if (process.client) {
                 return window.innerHeight;
-            }
-            else{
+            } else {
                 return 900;
             }
         },
