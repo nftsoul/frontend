@@ -34,25 +34,15 @@
                     <v-row justify="center py-3">
                         <p class="mr-5 mt-1 text-gradient link" @click="tutorProfile()" v-if="profile.username">@{{profile.username}}</p>
                         <v-card max-width="200" dark color="black" class="pa-2" height="40" @click="copy()">
-                            <p v-if="walletAddress" class="mb-n7">{{walletAddress.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
+                            <p v-if="profile" class="mb-n7">{{profile.wallet_address.slice(0,8)+'.............'+profile.wallet_address.slice(-3,-1)}}</p>
                             <client-only v-else>
                                 <spinner :animation-duration="1200" :size="20" color="#fff" />
                             </client-only>
                         </v-card>
                     </v-row>
                 </div>
-                <div v-else>
 
-                    <v-card dark max-width="200" color="black" class="pa-2" height="40" @click="copy()">
-                        <p v-if="walletAddress" class="mb-n7">{{this.$route.params.address.slice(0,8)+'.............'+walletAddress.slice(-3,-1)}}</p>
-                        <client-only v-else>
-                            <spinner :animation-duration="1200" :size="20" color="#fff" />
-                        </client-only>
-                    </v-card>
-
-                </div>
-
-                <v-row justify="center" v-if="walletAddress == $route.params.address" no-gutters class="mt-n5">
+                <v-row justify="center" v-if="walletAddress == profile.wallet_address" no-gutters class="mt-n5">
                     <v-col cols="3" align="center">
                         <div class="btn-gradient mt-5" @click="showProfileDialog">
 
@@ -169,6 +159,7 @@ export default {
         getProfileInfo() {
             this.$axios.get('/profile/'+this.$route.params.address).then(res => {
                 this.profile=res.data[0]
+                this.$store.commit('wallet/setProfile', this.profile)
             })
         },
         tutorProfile() {
@@ -205,6 +196,7 @@ export default {
                 this.updating = true
                 this.$axios.patch('/profile/info?name=' + this.name + '&username=' + this.username)
                     .then(res => {
+                        this.profile=res.data.result
                         this.$store.commit('wallet/setProfile', res.data.result)
                         this.updating = false
                         this.profileDialog = false
