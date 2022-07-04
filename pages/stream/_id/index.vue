@@ -1,6 +1,6 @@
 <template>
 <div class="dark-bg pt-16">
-    <UtilsSeo :title="pre.gallery[0].gallery_name" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
+    <UtilsSeo :title="pre.gallery[0].gallery_name" :gallery_id="pre.gallery[0]._id" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
 
     <v-container class="pt-16">
         <v-row justify="center">
@@ -179,7 +179,18 @@
                                             <v-col>
                                                 <v-list-item-content class="py-1 ml-n5">
                                                     <v-row no-gutters>
-                                                        <v-textarea rows="1" id="txtArea" @keypress.enter="onEnterPress(item)" auto-grow dark color="white" class="mb-n5 mr-2" v-model="reply" outlined dense placeholder="Reply"></v-textarea>
+                                                        <v-textarea rows="1" id="txtArea" @keypress.enter="onEnterPress(item)" auto-grow dark color="white" class="mb-n5 mr-2" v-model="reply" outlined dense placeholder="Reply">
+                                                            <template v-slot:append>
+                                                                <v-fade-transition leave-absolute>
+                                                                    <v-menu offset-y top>
+                                                                        <template v-slot:activator="{ on, attrs }">
+                                                                            <v-img :src="require('~/assets/icons/emoji-icon.png')" max-width="30" class="mt-n1 link" v-bind="attrs" v-on="on"></v-img>
+                                                                        </template>
+                                                                        <Picker set="emojione" @select="selectEmojiReply" />
+                                                                    </v-menu>
+                                                                </v-fade-transition>
+                                                            </template>
+                                                        </v-textarea>
                                                         <v-btn small class="connect-wallet mt-1" @click="makeReply(item)" :loading="makingReply"><small>Reply</small></v-btn>
                                                     </v-row>
 
@@ -239,16 +250,16 @@
                             <v-icon v-else large>mdi-account</v-icon>
                         </v-avatar>
                         <v-textarea dark rows="1" auto-grow ref="textArea" id="txtArea2" @keypress.enter="preventComment()" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?">
-                            <!-- <template v-slot:append>
+                            <template v-slot:append>
                                 <v-fade-transition leave-absolute>
                                     <v-menu offset-y top>
                                         <template v-slot:activator="{ on, attrs }">
                                             <v-img :src="require('~/assets/icons/emoji-icon.png')" max-width="30" class="mt-n2 link" v-bind="attrs" v-on="on"></v-img>
                                         </template>
-                                        <Picker :data="emojiIndex" set="twitter" @select="showEmoji" />
+                                        <Picker set="emojione" @select="showEmoji" />
                                     </v-menu>
                                 </v-fade-transition>
-                            </template> -->
+                            </template>
                         </v-textarea>
 
                     </v-row>
@@ -278,48 +289,17 @@
 </template>
 
 <script>
+import {
+    Picker
+} from 'emoji-mart-vue'
 export default {
+    components: {
+        Picker
+    },
     async asyncData({
-        app,
         params
     }) {
         const pre = await fetch(process.env.API_URL + `/gallery/${params.id}`).then((res) => res.json());
-        const mutation = app.head.meta.map(i => {
-            if (i && i.hid) {
-                if (i.hid === 'title') {
-                    i.content = pre.gallery[0].gallery_name
-                }
-                if (i.hid === 'description') {
-                    i.content = pre.gallery[0].description;
-                }
-                if (i.hid === 'twitter:image') {
-                    i.content = pre.gallery[0].image
-                }
-                if (i.hid === 'twitter:card') {
-                    i.content = 'summary_large_image'
-                }
-                if (i.hid === 'og:image') {
-                    i.content = pre.gallery[0].image
-                }
-                if (i.hid === 'og:image:secure_url') {
-                    i.content = pre.gallery[0].image;
-                }
-                if (i.hid === 'og:title') {
-                    i.content = pre.gallery[0].gallery_name
-                }
-                if (i.hid === 'og:description') {
-                    i.content = pre.gallery[0].description
-                }
-                if (i.hid === 'description') {
-                    i.content = pre.gallery[0].description
-                }
-                // if(i.hid === 'og:url'){
-                //     i.content = this.$route.path
-                // }
-            }
-            return i;
-        });
-        app.head.meta = mutation;
         return {
             pre
         };
@@ -403,6 +383,20 @@ export default {
         }
     },
     methods: {
+        selectEmojiReply(e) {
+            if (!this.reply) {
+                this.reply = e.native
+            } else {
+                this.reply += e.native
+            }
+        },
+        showEmoji(e) {
+            if (!this.comment) {
+                this.comment = e.native
+            } else {
+                this.comment += e.native
+            }
+        },
         preventComment() {
             this.makeComment()
             var el = document.getElementById("txtArea2");

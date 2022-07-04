@@ -44,11 +44,10 @@ export default {
       {
         hid: "twitter:image",
         name: "twitter:image",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
+        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
       },
 
       // Open Graph
-      // Test on: https://developers.facebook.com/tools/debug/
       { hid: "og:site_name", property: "og:site_name", content: "Nftsoul" },
       { hid: "og:type", property: "og:type", content: "website" },
       {
@@ -70,26 +69,26 @@ export default {
       {
         hid: "og:image",
         property: "og:image",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
+        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
       },
       {
         hid: "og:image:secure_url",
         property: "og:image:secure_url",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
+        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
       },
       {
         hid: "og:image:alt",
         property: "og:image:alt",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg",
+        content: "Nftsoul",
       },
     ],
     link: [
-      { rel: "icon", type: "image/x-icon", href: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1655883374/Nftsoul/logo_ljmkk8.svg" },
       {
-        hid: "canonical",
-        rel: "canonical",
-        href: process.env.SITE_URL,
+        hid: 'canonical',
+        rel: 'canonical',
+        href: `https://nftsoul.io`
       },
+      { rel: "icon", type: "image/x-icon", href: "/mini-log.png" }
     ],
   },
 
@@ -126,7 +125,7 @@ export default {
         token: {
           property: "token",
           required: true,
-          maxAge: 60 * 60 * 24
+          maxAge: 23*60*60
         },
         user: {
           property: false,
@@ -134,7 +133,7 @@ export default {
         },
         endpoints: {
           login: { url: "/auth/login", method: "post" },
-          logout: { url: "/logout", method: "get" },
+          logout: { url: "/auth/logout", method: "get" },
           user: { url: "/profile", method: "get" }
         }
       },
@@ -149,6 +148,7 @@ export default {
       dark: true,
       themes: {
         dark: {
+          theme:'#C202D3',
           primary: "#030537",
           background: "#000229",
           notification: "#1b024d",
