@@ -132,9 +132,9 @@
               </v-row>
               <!-- end nfts list -->
 
-              <v-row v-else>
-                <v-col v-if="loading == true" align="center">
-                  <div class="spinner-box my-16">
+              <v-row v-if="loading == true">
+                <v-col  align="center">
+                  <div class="spinner-box mt-10">
                     <client-only>
                       <spinner
                         :animation-duration="1200"
@@ -145,7 +145,9 @@
                   </div>
                   <p>Loading your NFTs...</p>
                 </v-col>
-                <v-col v-else align="center">
+                </v-row>
+                <v-row v-if="nfts.length == 0 && loading == false">
+                <v-col align="center">
                   <v-img
                     :src="require('~/assets/images/sad.svg')"
                     max-width="300"
@@ -261,6 +263,7 @@ export default {
             this.originalList.push(myNFT);
           }
         }
+
       } else {
         const publicAddress = await solrayz.resolveToWalletAddress({
           text: this.walletAddress,
@@ -285,7 +288,7 @@ export default {
           Promise.all(promises);
         }
       }
-      this.loading = false;
+       this.loading = false;
     },
     getCollected() {
       this.$axios
