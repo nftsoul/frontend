@@ -1,7 +1,6 @@
 <template>
 <div class="dark-bg">
-    <UtilsSeo :title="pre.gallery[0].gallery_name" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
-
+    <UtilsSeo :title="pre.gallery[0].gallery_name" :gallery_id="pre.gallery[0]._id" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
     <v-card :min-height="screenHeight()" flat color="transparent" class="pt-16">
         <v-container class="pt-16">
             <v-row justify="center">
@@ -121,7 +120,18 @@
                                                                 </v-col>
                                                                 <v-col>
                                                                     <v-list-item-content class="py-1">
-                                                                        <v-textarea rows="1" id="txtArea" auto-grow @keypress.enter="onEnterPress(item)" dark color="white" :loading="makingReply" append-icon="mdi-check" @click:append="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply"></v-textarea>
+                                                                        <v-textarea rows="1" id="txtArea" auto-grow @keypress.enter="onEnterPress(item)" dark color="white" :loading="makingReply" append-outer-icon="mdi-check" @click:append-outer="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply">
+                                                                            <template v-slot:append>
+                                                                                <v-fade-transition leave-absolute>
+                                                                                    <v-menu offset-y top>
+                                                                                        <template v-slot:activator="{ on, attrs }">
+                                                                                            <v-img :src="require('~/assets/icons/emoji-icon.png')" max-width="30" class="mt-n1 link" v-bind="attrs" v-on="on"></v-img>
+                                                                                        </template>
+                                                                                        <Picker set="emojione" @select="selectEmojiReply" />
+                                                                                    </v-menu>
+                                                                                </v-fade-transition>
+                                                                            </template>
+                                                                        </v-textarea>
                                                                     </v-list-item-content>
                                                                 </v-col>
                                                             </v-row>
@@ -192,54 +202,22 @@
             </v-row>
         </v-container>
     </v-card>
-
 </div>
 </template>
 
 <script>
 const web3 = require("@solana/web3.js");
+import {
+    Picker
+} from 'emoji-mart-vue'
 export default {
+    components: {
+        Picker
+    },
     async asyncData({
-        app,
         params
     }) {
         const pre = await fetch(process.env.API_URL + `/gallery/${params.id}`).then((res) => res.json());
-        const mutation = app.head.meta.map(i => {
-            if (i && i.hid) {
-                if (i.hid === 'title') {
-                    i.content = pre.gallery[0].gallery_name
-                }
-                if (i.hid === 'description') {
-                    i.content = pre.gallery[0].description;
-                }
-                if (i.hid === 'twitter:image') {
-                    i.content = pre.gallery[0].image
-                }
-                if (i.hid === 'twitter:card') {
-                    i.content = 'summary_large_image'
-                }
-                if (i.hid === 'og:image') {
-                    i.content = pre.gallery[0].image
-                }
-                if (i.hid === 'og:image:secure_url') {
-                    i.content = pre.gallery[0].image;
-                }
-                if (i.hid === 'og:title') {
-                    i.content = pre.gallery[0].gallery_name
-                }
-                if (i.hid === 'og:description') {
-                    i.content = pre.gallery[0].description
-                }
-                if (i.hid === 'description') {
-                    i.content = pre.gallery[0].description
-                }
-                // if(i.hid === 'og:url'){
-                //     i.content = this.$route.path
-                // }
-            }
-            return i;
-        });
-        app.head.meta = mutation;
         return {
             pre
         };
@@ -289,6 +267,13 @@ export default {
 
     },
     methods: {
+        selectEmojiReply(e) {
+            if (!this.reply) {
+                this.reply = e.native
+            } else {
+                this.reply += e.native
+            }
+        },
         async getProvider() {
             if ("solana" in window) {
                 const provider = window.solana;
@@ -396,7 +381,7 @@ export default {
             this.$router.push({
                 name: "profile-address-index-gallery",
                 params: {
-                    address: this.preview.user_id
+                    address: this.preview.created_by._id
                 }
             });
         },
@@ -513,7 +498,11 @@ export default {
             }
         },
         screenHeight() {
-            return window.innerHeight;
+            if (process.client) {
+                return window.innerHeight;
+            } else {
+                return 900;
+            }
         },
         saveEarning() {
             this.$axios
