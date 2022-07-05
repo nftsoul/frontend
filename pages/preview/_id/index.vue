@@ -250,7 +250,8 @@ export default {
             replyPage: 0,
             more: false,
             makingReply: false,
-            profile: this.$auth.user
+            profile: this.$auth.user,
+            viewed: false
         };
     },
     computed: {
@@ -260,13 +261,24 @@ export default {
         gallery_id() {
             return this.$route.params.id;
         },
+        wallet() {
+            return this.$store.state.wallet.wallet
+        }
     },
     mounted() {
         this.getNft();
         this.getComments();
+        this.checkView()
 
     },
     methods: {
+        checkView() {
+            this.$axios.get("/gallery/isviewed", {
+                gallery_id: this.gallery_id
+            }).then(res => {
+                this.viewed = res.data.isViewed
+            });
+        },
         selectEmojiReply(e) {
             if (!this.reply) {
                 this.reply = e.native
@@ -389,11 +401,16 @@ export default {
             if (this.preview.user_id == this.walletAddress) {
                 return "View";
             } else {
-                if (this.preview.premium == true) {
-                    return "Pay and View";
+                if (this.viewed) {
+                    return 'View'
                 } else {
-                    return "Free View";
+                    if (this.preview.premium == true) {
+                        return "Pay and View";
+                    } else {
+                        return "Free View";
+                    }
                 }
+
             }
         },
         async stream() {
@@ -406,94 +423,96 @@ export default {
                     })
                     .goAway(3000);
             } else {
-                this.loading = true;
-                var total_charge = parseFloat(this.preview.price) +
-                    0.02 * parseFloat(this.preview.price);
-                // console.log('charge:',total_charge)
-                var lamports = await this.connection.getBalance(new web3.PublicKey(this.walletAddress));
-                var available = parseFloat(lamports * 1e-9).toFixed(5);
-                if (this.preview.user_id != this.walletAddress) {
-                    if (this.preview.premium) {
-                        if (total_charge < available) {
-                            try {
-                                var provider = await window.solana
-                                var key = await window.solana.connect()
+                if (this.wallet == 'Phantom') {
+                    this.loading = true;
+                    var total_charge = parseFloat(this.preview.price) +
+                        0.02 * parseFloat(this.preview.price);
+                    // console.log('charge:',total_charge)
+                    var lamports = await this.connection.getBalance(new web3.PublicKey(this.walletAddress));
+                    var available = parseFloat(lamports * 1e-9).toFixed(5);
+                    if (this.preview.user_id != this.walletAddress) {
+                        if (this.viewed == false) {
+                            if (this.preview.premium) {
+                                if (total_charge < available) {
+                                    try {
+                                        var provider = await window.solana
+                                        var key = await window.solana.connect()
 
-                                var platformWallet = new web3.PublicKey("9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv");
-                                var creatorWallet = new web3.PublicKey(this.preview.user_id);
-                                var transaction = new web3.Transaction().add(web3.SystemProgram.transfer({
-                                    fromPubkey: provider.publicKey,
-                                    toPubkey: platformWallet,
-                                    lamports: web3.LAMPORTS_PER_SOL * 0.02 * this.preview.price
-                                }), web3.SystemProgram.transfer({
-                                    fromPubkey: provider.publicKey,
-                                    toPubkey: creatorWallet,
-                                    lamports: web3.LAMPORTS_PER_SOL * (this.preview.price - 0.02 * this.preview.price)
-                                }));
+                                        var platformWallet = new web3.PublicKey("9wGdQtcHGiV16cqGfm6wsN5z9hmUTiDqN25zsnPu1SDv");
+                                        var creatorWallet = new web3.PublicKey(this.preview.user_id);
+                                        var transaction = new web3.Transaction().add(web3.SystemProgram.transfer({
+                                            fromPubkey: provider.publicKey,
+                                            toPubkey: platformWallet,
+                                            lamports: web3.LAMPORTS_PER_SOL * 0.02 * this.preview.price
+                                        }), web3.SystemProgram.transfer({
+                                            fromPubkey: provider.publicKey,
+                                            toPubkey: creatorWallet,
+                                            lamports: web3.LAMPORTS_PER_SOL * (this.preview.price - 0.02 * this.preview.price)
+                                        }));
 
-                                transaction.feePayer = key.publicKey;
+                                        transaction.feePayer = key.publicKey;
 
-                                let blockhashObj = await this.connection.getRecentBlockhash();
+                                        let blockhashObj = await this.connection.getRecentBlockhash();
 
-                                transaction.recentBlockhash = await blockhashObj.blockhash;
+                                        transaction.recentBlockhash = await blockhashObj.blockhash;
 
-                                let signed = await provider.signTransaction(transaction);
+                                        let signed = await provider.signTransaction(transaction);
 
-                                let signature = await this.connection.sendRawTransaction(signed.serialize());
+                                        let signature = await this.connection.sendRawTransaction(signed.serialize());
 
-                                this.$store.commit('wallet/setSnackbar', signature)
+                                        this.$store.commit('wallet/setSnackbar', signature)
 
+                                        this.saveEarning();
+
+                                        this.streamNow()
+
+                                        this.loading = false;
+                                    } catch (e) {
+                                        if (e.code == 4001) {
+                                            this.$toast
+                                                .error(e.message, {
+                                                    iconPack: "mdi",
+                                                    icon: "mdi-account",
+                                                    theme: "outline",
+                                                })
+                                                .goAway(3000);
+                                            this.loading = false
+                                        }
+                                    }
+                                } else {
+                                    this.loading = false;
+                                    this.$toast
+                                        .error("Insufficient fund.", {
+                                            iconPack: "mdi",
+                                            icon: "mdi-wallet",
+                                            theme: "outline",
+                                        })
+                                        .goAway(3000);
+                                }
+                            } else {
                                 this.$store.commit("nft/setStream", true);
-
-                                this.saveEarning();
-
                                 this.$router.push({
                                     name: "stream-id",
                                     params: {
                                         id: this.gallery_id
                                     }
                                 });
-
-                                this.loading = false;
-                            } catch (e) {
-                                if (e.code == 4001) {
-                                    this.$toast
-                                        .error(e.message, {
-                                            iconPack: "mdi",
-                                            icon: "mdi-account",
-                                            theme: "outline",
-                                        })
-                                        .goAway(3000);
-                                    this.loading = false
-                                }
                             }
                         } else {
-                            this.loading = false;
-                            this.$toast
-                                .error("Insufficient fund.", {
-                                    iconPack: "mdi",
-                                    icon: "mdi-wallet",
-                                    theme: "outline",
-                                })
-                                .goAway(3000);
+                            this.streamNow()
                         }
+
                     } else {
-                        this.$store.commit("nft/setStream", true);
-                        this.$router.push({
-                            name: "stream-id",
-                            params: {
-                                id: this.gallery_id
-                            }
-                        });
+                        this.streamNow()
                     }
                 } else {
-                    this.$store.commit("nft/setStream", true);
-                    this.$router.push({
-                        name: "stream-id",
-                        params: {
-                            id: this.gallery_id
-                        }
-                    });
+                    this.$toast
+                        .error("Change your wallet to phantom.", {
+                            iconPack: "mdi",
+                            icon: "mdi-cancel",
+                            theme: "outline",
+                        })
+                        .goAway(3000);
                 }
             }
         },
@@ -503,6 +522,15 @@ export default {
             } else {
                 return 900;
             }
+        },
+        streamNow() {
+            this.$store.commit("nft/setStream", true);
+            this.$router.push({
+                name: "stream-id",
+                params: {
+                    id: this.gallery_id
+                }
+            });
         },
         saveEarning() {
             this.$axios
