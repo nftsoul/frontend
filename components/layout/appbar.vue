@@ -178,6 +178,7 @@
             </v-list-item>
         </v-list>
     </v-navigation-drawer>
+    <DialogWallet />
 </div>
 </template>
 
@@ -210,9 +211,8 @@ export default {
             return this.$store.state.wallet.notificationCount
         }
     },
-     created() {
-        console.log('user:',this.$auth.user)
-        this.$store.dispatch('wallet/connectWallet')
+    created(){
+        this.$store.dispatch("wallet/checkLogin")
     },
     watch: {
         $route() {

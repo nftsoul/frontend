@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@audius/fetch-nft": "^0.1.6",
+    "@metamask/detect-provider": "^1.2.0",
     "@nfteyez/sol-rayz": "^0.9.1",
     "@nuxtjs/auth-next": "^5.0.0-1648802546.c9880dc",
     "@nuxtjs/axios": "^5.13.6",
