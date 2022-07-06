@@ -274,7 +274,7 @@ export default {
     methods: {
         checkView() {
             this.$axios.get("/gallery/isviewed", {
-                gallery_id: this.gallery_id
+                params:{gallery_id: this.gallery_id}
             }).then(res => {
                 this.viewed = res.data.isViewed
             });
