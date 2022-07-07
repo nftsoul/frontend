@@ -6,42 +6,7 @@
                 <v-col cols="8">
                     <v-row v-if="nfts.length > 0">
                         <v-col cols="12" lg="4" md="6" v-for="(item, i) in nfts" :key="i" align="center">
-                            <v-card max-width="300" class="art-card" height="390">
-                                <v-hover v-slot="{ hover }">
-                                    <v-img :src="item.image" :lazy-src="item.image" width="270" height="240">
-                                        <template v-slot:placeholder>
-                                            <v-row class="fill-height ma-0" align="center" justify="center">
-                                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                                            </v-row>
-                                        </template>
-                                        <v-expand-transition>
-                                            <div v-if="hover" @click="setProfilePic(item)" class="
-                            d-flex
-                            transition-fast-in-fast-out
-                            v-card--reveal
-                            text-h6
-                            white--text
-                          ">
-                                                <v-icon v-if="profiling" class="mdi-spin">mdi-reload</v-icon>
-                                                <p v-else style="cursor: pointer">Set as avatar</p>
-                                            </div>
-                                        </v-expand-transition>
-                                    </v-img>
-                                </v-hover>
-                                <v-card-text class="ml-n2 white--text text-left">{{
-                    item.name
-                  }}</v-card-text>
-                                <p class="mx-2 mt-n2 desc-text text-left">
-                                    {{ item.description }}
-                                </p>
-                                <!-- <v-card-actions class="mt-n10">
-                    <v-spacer></v-spacer>
-                    <v-chip class="ma-2 mt-5" color="#030537">
-                      125
-                      <v-icon class="ml-3">mdi-eye</v-icon>
-                    </v-chip>
-                  </v-card-actions> -->
-                            </v-card>
+                            <GalleryNftCard :title="item.name" :image="item.image" :description="item.description" />
                         </v-col>
                     </v-row>
                     <v-row v-if="loading == true" justify="center">
@@ -58,7 +23,6 @@
                             <p>Yo do not have any NFTs. Get some and then come back.</p>
                         </v-col>
                     </v-row>
-                    <v-row> </v-row>
                 </v-col>
             </v-row>
         </v-container>
@@ -105,23 +69,7 @@ export default {
         this.getAllNftData();
     },
     methods: {
-        setProfilePic(item) {
-            this.profiling = true;
-            this.$axios
-                .patch("/profile?image_link=" + item.image)
-                .then((res) => {
-                    this.profiling = false;
-                    this.$store.commit("wallet/setProfile", res.data.result);
-                    this.$toast
-                        .success("Your avatar has been updated.", {
-                            iconPack: "mdi",
-                            icon: "mdi-image",
-                            theme: "outline",
-                        })
-                        .goAway(3000);
-                })
-                .catch((err) => console.log(err.response));
-        },
+
         screenHeight() {
             if (process.client) {
                 return window.innerHeight - 350;
@@ -148,6 +96,7 @@ export default {
                             this.nfts.push(myNFT);
                         }
                     }
+                    console.log('list:', this.nfts)
                 } else {
                     const publicAddress = await solrayz.resolveToWalletAddress({
                         text: this.walletAddress,
@@ -183,8 +132,8 @@ export default {
                 };
                 axios(config)
                     .then((response) => {
-                        this.nfts=response.data.ownedNfts
-                        this.loading=false
+                        this.nfts = response.data.ownedNfts
+                        this.loading = false
                     })
                     .catch((error) => console.log(error));
             }
@@ -192,24 +141,3 @@ export default {
     },
 };
 </script>
-
-<style lang="css">
-.v-card--reveal {
-    align-items: center;
-    bottom: 0;
-    justify-content: center;
-    opacity: 0.5;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, rgba(17, 24, 39, 0) 0%, #111827 100%);
-}
-
-.desc-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-}
-</style>
