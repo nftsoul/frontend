@@ -4,15 +4,8 @@
         <v-row class="pt-16" justify="center">
             <v-col cols="6" align="center" class="pb-8">
                 <client-only>
-                    <div v-if="profile" class="mb-3">
-                        <v-img v-if="profile.image_link" :lazy-src="profile.image_link" class="rounded-circle" :src="profile.image_link" alt="Avatar" max-width="160" max-height="160">
-                            <template v-slot:placeholder>
-                                <v-row class="fill-height ma-0" align="center" justify="center">
-                                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                                </v-row>
-                            </template>
-                        </v-img>
-                        <v-img v-else :lazy-src="require('~/assets/images/avatar.png')" class="rounded-circle" :src="require('~/assets/images/avatar.png')" alt="Avatar" max-width="160" max-height="160">
+                    <div v-if="profile.image_link" class="mb-3">
+                        <v-img :lazy-src="profile.image_link" class="rounded-circle" :src="profile.image_link" alt="Avatar" max-width="160" max-height="160">
                             <template v-slot:placeholder>
                                 <v-row class="fill-height ma-0" align="center" justify="center">
                                     <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -20,13 +13,9 @@
                             </template>
                         </v-img>
                     </div>
-                    <v-img v-else :lazy-src="require('~/assets/images/avatar.png')" class="rounded-circle" :src="require('~/assets/images/avatar.png')" alt="Avatar" max-width="160" max-height="160">
-                        <template v-slot:placeholder>
-                            <v-row class="fill-height ma-0" align="center" justify="center">
-                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                            </v-row>
-                        </template>
-                    </v-img>
+                    <v-avatar v-else size="175" color="white" class="rounded-circle">
+                        <v-icon size="205" color="#c202d3">mdi-account-circle</v-icon>
+                    </v-avatar>
                 </client-only>
                 <div v-if="profile != null" class="my-3">
                     <p class="text-h6" v-if="profile.name">{{profile.name}}</p>
@@ -49,12 +38,6 @@
                         </div>
                         <p class="mt-n6 body-2">Edit Profile</p>
                     </v-col>
-                    <!-- <v-col cols="3" align="center">
-                        <div class="btn-gradient mt-5" @click="auth()">
-
-                        </div>
-                        <p class="mt-n6 body-2">Link Twitter</p>
-                    </v-col> -->
 
                 </v-row>
 
@@ -94,17 +77,6 @@
 
 <script>
 const web3 = require("@solana/web3.js");
-// import {
-//     initializeApp
-// } from 'firebase/app';
-// import firebaseConfig from './firebaseConfig';
-// import {
-//     TwitterAuthProvider,
-//     getAuth,
-//     signInWithPopup
-// } from "firebase/auth";
-
-// const app = initializeApp(firebaseConfig);
 
 export default {
     layout: 'user',
@@ -204,34 +176,6 @@ export default {
             }
 
         },
-
-        async auth() {
-            const provider = new TwitterAuthProvider();
-            const auth = getAuth();
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    console.log('result:', result)
-                    // This gives you a the Twitter OAuth 1.0 Access Token and Secret.
-                    // You can use these server side with your app's credentials to access the Twitter API.
-                    const credential = TwitterAuthProvider.credentialFromResult(result);
-                    const token = credential.accessToken;
-                    const secret = credential.secret;
-
-                    // The signed-in user info.
-                    const user = result.user;
-                    // ...
-                }).catch((error) => {
-                    console.log('error:', error)
-                    // Handle Errors here.
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    // The email of the user's account used.
-                    const email = error.email;
-                    // The AuthCredential type that was used.
-                    const credential = TwitterAuthProvider.credentialFromError(error);
-                    // ...
-                });
-        }
     }
 }
 </script>
