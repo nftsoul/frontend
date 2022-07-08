@@ -54,91 +54,16 @@ export const actions = {
         "setWallet",
         this.$auth.$storage.getUniversal("uni-nftsoul-wallet")
       );
+      this.$auth.setUser(profile.user)
       context.commit("setWalletAddress", profile.user.wallet_address);
       context.commit("setProfile", profile.user);
       context.dispatch("getNotificationCount", profile.user);
     } else {
       context.commit("setWalletDialog", true);
+      context.commit("setWalletAddress", null);
     }
   },
-  // async connectWallet(context) {
-  //   const isPhantomInstalled = await context.dispatch("detectPhantom");
-  //   if (this.$auth.strategy.token.get()) {
-  //     let profile = this.$auth.$storage.getUniversal("uni-nftsoul-user");
-  //     context.commit("setWalletAddress", profile.user.wallet_address);
-  //     context.commit("setProfile", profile.user);
-  //     context.dispatch("getNotificationCount", profile.user);
-  //   } else {
-  //     if (isPhantomInstalled) {
-  //       try {
-  //         var res = await window.solana.connect();
-  //         context.commit("setWalletAddress", res.publicKey.toString());
-  //         //signing hash
-  //         let nonce = await context.dispatch("createNonce");
-  //         const message =
-  //           `NFTsoul Authorization Sign In Request   Nonce:` + nonce;
-  //         const encodedMessage = new TextEncoder().encode(message);
-  //         const signedMessage = await window.solana.signMessage(
-  //           encodedMessage,
-  //           "utf8"
-  //         );
-  //         const messageBytes = new TextEncoder().encode(message);
 
-  //         const publicKeyBytes = signedMessage.publicKey.toBuffer();
-
-  //         const signatureBytes = signedMessage.signature;
-
-  //         var qs = require("qs");
-  //         var data = qs.stringify({
-  //           message: nacl.util.encodeBase64(messageBytes),
-  //           wallet_address: res.publicKey.toString(),
-  //           publicKey: nacl.util.encodeBase64(publicKeyBytes),
-  //           signature: nacl.util.encodeBase64(signatureBytes),
-  //         });
-
-  //         try {
-  //           let response = await this.$auth.loginWith("local", {
-  //             data: data,
-  //           });
-  //           this.$auth.setUser(response.data.user);
-  //           this.$auth.$storage.setUniversal("uni-nftsoul-user", response.data);
-  //           context.commit("setProfile", response.data.user);
-  //           this.$axios.setToken(response.data.token, "X-XSRF-TOKEN");
-  //           context.dispatch("getNotificationCount", response.data.user);
-  //         } catch (e) {
-  //           console.log(e);
-  //         }
-
-  //         this.$toast
-  //           .success("Phantom wallet successfully connected.", {
-  //             iconPack: "mdi",
-  //             icon: "mdi-wallet",
-  //             theme: "outline",
-  //           })
-  //           .goAway(3000);
-  //       } catch (err) {
-  //         if ((err.code = 4001)) {
-  //           context.dispatch("disconnect");
-  //           this.$toast
-  //             .error(err.message, {
-  //               iconPack: "mdi",
-  //               icon: "mdi-cancel",
-  //               theme: "outline",
-  //             })
-  //             .goAway(3000);
-  //         }
-  //       }
-  //     } else {
-  //       this.$toast
-  //         .error("Please install phantom wallet", {
-  //           iconPack: "mdi",
-  //           icon: "mdi-wallet",
-  //           theme: "outline",
-  //         })
-  //         .goAway(3000);
-  //     }
-  //   }
-  // },
   detectPhantom() {
     const isPhantomInstalled = window.solana && window.solana.isPhantom;
     return isPhantomInstalled;

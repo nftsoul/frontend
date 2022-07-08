@@ -69,7 +69,6 @@ export default {
         this.getAllNftData();
     },
     methods: {
-
         screenHeight() {
             if (process.client) {
                 return window.innerHeight - 350;
@@ -96,7 +95,6 @@ export default {
                             this.nfts.push(myNFT);
                         }
                     }
-                    console.log('list:', this.nfts)
                 } else {
                     const publicAddress = await solrayz.resolveToWalletAddress({
                         text: this.walletAddress,
