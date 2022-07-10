@@ -27,7 +27,7 @@
                     <div v-else>
                         <v-row>
                             <v-col cols="12" lg="3" md="6" v-for="(item, i) in nfts" :key="i" align="center">
-                                <GalleryCard :galleryId="item._id" :title="item.gallery_name" :image="item.image" :nfts="item.nfts" :creator="item.created_by" :views="item.views" :favourites="item.favourites" />
+                            <GalleryCard :galleryId="item._id._id" :title="item._id.gallery_name" :image="item._id.image" :nfts="item._id.nfts" :creator="item._id.created_by" :views="item.views" :favourites="item._id.favourites" />
                             </v-col>
                         </v-row>
                         <v-row justify="center">
@@ -90,9 +90,9 @@ export default {
                     } else {
                         this.pages = Math.floor(this.total / 20) + 1
                     }
-                    for (var x = 0; x < res.data.trending_galleries.length; x++) {
-                        if (res.data.trending_galleries[x] != null) {
-                            this.nfts.push(res.data.trending_galleries[x])
+                    for (var x = 0; x < res.data.trending.length; x++) {
+                        if (res.data.trending[x] != null) {
+                            this.nfts.push(res.data.trending[x])
                         }
                     }
                     this.loading = false

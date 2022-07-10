@@ -73,7 +73,8 @@
                             </v-list-item-avatar>
                             <v-list-item-content>
                               <v-list-item-title>
-                                {{ selected.user_id.slice(0, 5) }}
+                                <span v-if="profile.name">{{profile.name }}</span>
+                                <span v-else>{{ profile.wallet_address.slice(0, 5) }}</span>
                                 <!-- Roy Reyna -->
                               </v-list-item-title>
                               <!-- <v-list-item-subtitle>
@@ -130,6 +131,9 @@ export default {
     selected() {
       return this.$store.state.content.selected;
     },
+    profile(){
+      return this.$store.state.wallet.profile
+    }
   },
   mounted() {
     if (this.selected == "") {

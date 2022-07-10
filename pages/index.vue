@@ -10,7 +10,11 @@
         <LandingWorking />
         <LandingPartner />
         <CommonProfile />
-    </client-only>
+        <DialogWallet />
 
+    </client-only>
+  
 </div>
 </template>
+
+

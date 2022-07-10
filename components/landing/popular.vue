@@ -43,7 +43,7 @@
                     <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
                             <div v-for="(item, i) in popular" :key="i">
-                            <GalleryCard :galleryId="item._id" :title="item.gallery_name" :image="item.image" :nfts="item.nfts" :creator="item.created_by" :views="item.views" :favourites="item.favourites" />
+                            <GalleryCard :galleryId="item._id._id" :title="item._id.gallery_name" :image="item._id.image" :nfts="item._id.nfts" :creator="item._id.created_by" :views="item.views" :favourites="item._id.favourites" />
                             </div>
                         </VueSlickCarousel>
                     </client-only>
@@ -106,9 +106,9 @@ export default {
                     query: item
                 })
                 .then((res) => {
-                    for(var x=0;x<res.data.trending_galleries.length;x++){
-                        if(res.data.trending_galleries[x] != null){
-                            this.popular.push(res.data.trending_galleries[x])
+                    for(var x=0;x<res.data.trending.length;x++){
+                        if(res.data.trending[x] != null){
+                            this.popular.push(res.data.trending[x])
                         }
                     }
                 })

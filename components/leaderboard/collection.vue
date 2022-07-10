@@ -8,11 +8,9 @@
             <v-col cols="12" lg="4" md="6" v-for="(item,i) in collections" :key="i" align="center">
                 <div class="outer-btn div1" :class="setMargin(i)">
                     <div class="inner-btn div2">
-                        <v-badge bordered color="primary" :content="getRank(i)"></v-badge>
-
-                        <!-- <v-avatar size="60" class="mt-n16">
-                            <v-img :src="require('~/assets/images/featured/fa3.png')"></v-img>
-                        </v-avatar> -->
+                        <v-avatar size="60" class="mt-n16">
+                            <v-img :src="item.image"></v-img>
+                        </v-avatar>
                         <p>{{item._id}}</p>
                         <div class="caption">
 
@@ -78,19 +76,6 @@ export default {
                 return 'mt-lg-8 mt-md-8'
             }
         },
-        getRank(i) {
-            if (this.collections.length == 1) {
-                return '1'
-            } else {
-                if (i == 0) {
-                    return '2'
-                } else if (i == 1) {
-                    return '1'
-                } else if (i == 2) {
-                    return '3'
-                }
-            }
-        }
     }
 }
 </script>

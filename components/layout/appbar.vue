@@ -7,7 +7,7 @@
         </div>
         <v-spacer></v-spacer>
         <div class="hidden-md-and-down mt-5">
-            <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.dispatch('wallet/connectWallet')">
+            <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.commit('wallet/setWalletDialog',true)">
                 Connect Wallet
             </v-btn>
 
@@ -23,7 +23,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-nfts',
-                      params: { address: profile._id },
+                      params: { address: $auth.user._id },
                     })
                   ">
                                     <v-list-item-title>My Items</v-list-item-title><br /><br />
@@ -32,7 +32,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-gallery',
-                      params: { address: profile._id },
+                      params: { address: $auth.user._id  },
                     })
                   ">
                                     <v-list-item-title>Listed Items</v-list-item-title><br /><br />
@@ -40,7 +40,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-exhibit',
-                      params: { address: profile._id },
+                      params: { address: $auth.user._id  },
                     })
                   ">
                                     <v-list-item-title>Create Gallery</v-list-item-title><br /><br />
@@ -48,7 +48,7 @@
                                 <v-list-item @click="
                     $router.push({
                       name: 'profile-address-index-earning-logs',
-                      params: { address: profile._id },
+                      params: { address: $auth.user._id  },
                     })
                   ">
                                     <v-list-item-title>Earning Logs</v-list-item-title><br /><br />
@@ -74,7 +74,7 @@
                             <div class="auth-inside-1" @click="
                   $router.push({
                     name: 'profile-address-index-nfts',
-                    params: { address: profile._id },
+                    params: { address: $auth.user._id  },
                   })
                 ">
                                 <v-avatar size="20" class="mx-2 mt-3">
@@ -105,7 +105,7 @@
         <v-app-bar-nav-icon @click.stop="drawer = !drawer" class="hidden-lg-and-up"></v-app-bar-nav-icon>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" app absolute temporary right dark color="primary">
-        <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.dispatch('wallet/connectWallet')">
+        <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.commit('wallet/setWalletDialog',true)">
             Connect Wallet
         </v-btn>
         <v-list v-else nav dense>
@@ -115,7 +115,7 @@
                         <div class="auth-inside-1" @click="
                   $router.push({
                     name: 'profile-address',
-                    params: { address: profile._id },
+                    params: { address: $auth.user._id  },
                   })
                 ">
                             <v-avatar size="20" class="mx-2 mt-3">
@@ -134,7 +134,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-nfts',
-              params: { address: profile._id },
+              params: { address: $auth.user._id  },
             })
           ">
                 <v-list-item-title>My Items</v-list-item-title><br /><br />
@@ -143,7 +143,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-gallery',
-              params: { address: profile._id },
+              params: { address: $auth.user._id  },
             })
           ">
                 <v-list-item-title>Listed Items</v-list-item-title><br /><br />
@@ -151,7 +151,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-exhibit',
-              params: { address: profile._id },
+              params: { address: $auth.user._id  },
             })
           ">
                 <v-list-item-title>Create Gallery</v-list-item-title><br /><br />
@@ -159,7 +159,7 @@
             <v-list-item @click="
             $router.push({
               name: 'profile-address-index-earning-logs',
-              params: { address: profile._id },
+              params: { address: $auth.user._id  },
             })
           ">
                 <v-list-item-title>Earning Logs</v-list-item-title><br /><br />
@@ -178,6 +178,7 @@
             </v-list-item>
         </v-list>
     </v-navigation-drawer>
+    <DialogWallet />
 </div>
 </template>
 
@@ -210,8 +211,8 @@ export default {
             return this.$store.state.wallet.notificationCount
         }
     },
-     created() {
-        this.$store.dispatch('wallet/connectWallet')
+    created(){
+        this.$store.dispatch("wallet/checkLogin")
     },
     watch: {
         $route() {

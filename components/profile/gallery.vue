@@ -49,7 +49,7 @@
                           height="220"
                         >
                           <v-expand-transition
-                            v-if="walletAddress == $route.params.address"
+                            v-if="walletAddress == profile.wallet_address"
                           >
                             <div
                               v-if="hover"
@@ -211,6 +211,9 @@ export default {
     walletAddress() {
       return this.$store.state.wallet.walletAddress;
     },
+    profile(){
+      return this.$store.state.wallet.profile
+    }
   },
   mounted() {
     this.getCollections();
