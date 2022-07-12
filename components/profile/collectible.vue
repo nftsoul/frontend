@@ -123,14 +123,17 @@ export default {
                 const apiKey = "LEmpWOyg99tT_8lqP_RY6yAU6NBR5VKA"
                 const baseURL = `https://eth-mainnet.alchemyapi.io/nft/v2/${apiKey}/getNFTs/`;
                 // replace with the wallet address you want to query for NFTs
-                let ownerAddr = "0x4eDC0a6B6f19C1Cfa4b810B29038048072045537"
+                let ownerAddr = this.walletAddress
                 var config = {
                     method: "get",
                     url: `${baseURL}?owner=${ownerAddr}`,
                 };
                 axios(config)
                     .then((response) => {
-                        this.nfts = response.data.ownedNfts
+                        let res = response.data.ownedNfts
+                        for (var x = 0; x < res.length; x++) {
+                            this.nfts.push( res[x].metadata)
+                        }
                         this.loading = false
                     })
                     .catch((error) => console.log(error));
