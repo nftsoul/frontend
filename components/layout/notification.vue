@@ -1,6 +1,6 @@
 <template>
 <div>
-    <v-card width="400" class="mx-auto pt-2" dark color="primary" min-height="400">
+    <v-card width="400" class="mx-auto pt-2" dark color="primary" min-height="500">
         <v-row justify="space-between" no-gutters class="px-2">
             <span>Your Notifications</span>
             <v-btn v-if="$route.name !='all-notifications'" @click="$router.push('/all-notifications')" text small class="text-capitalize">See All Activity</v-btn>
