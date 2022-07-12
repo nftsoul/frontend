@@ -2,7 +2,7 @@
 <div>
     <v-container>
         <v-row justify="center">
-            <p class="title2 text-center mt-3">Top 3 Collection</p>
+            <p class="title2 text-center my-3">Top 3 Collection</p>
         </v-row>
         <v-row justify="center" v-if="collections.length>0">
             <v-col cols="12" lg="4" md="6" v-for="(item,i) in collections" :key="i" align="center">
@@ -11,7 +11,7 @@
                         <v-avatar size="60" class="mt-n16">
                             <v-img :src="item.image"></v-img>
                         </v-avatar>
-                        <p>{{item._id}}</p>
+                        <p class="item-overlap">{{item._id}}</p>
                         <div class="caption">
 
                             <v-row justify="space-between" class="px-4">
@@ -89,5 +89,11 @@ export default {
 .div2 {
     width: 168px;
     height: 128px;
+}
+.item-overlap{
+     width: 150px;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
 }
 </style>
