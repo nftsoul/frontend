@@ -1,7 +1,7 @@
 <template>
 <div class="dark-bg">
     <client-only>
-    <v-card :min-height="screenHeight()" flat color="transparent">
+    <v-card :min-height="$store.dispatch('utility/screenHeight')" flat color="transparent">
         <v-container class="py-16">
             <v-row class="py-16" justify="center">
                 <v-col cols="12" lg="12" md="8" align="center">
@@ -76,9 +76,7 @@ export default {
             this.nfts = searched
             this.loading = false
         },
-        screenHeight() {
-            return window.innerHeight;
-        },
+
         getPremiumNfts() {
             this.$axios
                 .get(
