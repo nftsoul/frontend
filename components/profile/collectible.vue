@@ -120,25 +120,56 @@ export default {
                 }
                 this.loading = false;
             } else {
-                const apiKey = "LEmpWOyg99tT_8lqP_RY6yAU6NBR5VKA"
-                const baseURL = `https://eth-mainnet.alchemyapi.io/nft/v2/${apiKey}/getNFTs/`;
+                var baseURL = null
+                if (process.env.CLUSTER == 'devnet') {
+                    const testApiKey = "2daCevUAvh_JeAjR4JVKX6pcqABrRrh3"
+                    baseURL = `https://eth-ropsten.alchemyapi.io/nft/v2/${testApiKey}/getNFTs/`
+                } else {
+                    const apiKey = "LEmpWOyg99tT_8lqP_RY6yAU6NBR5VKA"
+                    baseURL = `https://eth-mainnet.alchemyapi.io/nft/v2/${apiKey}/getNFTs/`;
+                }
+
                 // replace with the wallet address you want to query for NFTs
+                // let ownerAddr = "0x2A5ecfde059e54606a885516f14635a6d25bb316"
                 let ownerAddr = this.walletAddress
                 var config = {
                     method: "get",
                     url: `${baseURL}?owner=${ownerAddr}`,
                 };
+
                 axios(config)
                     .then((response) => {
                         let res = response.data.ownedNfts
                         for (var x = 0; x < res.length; x++) {
-                            this.nfts.push( res[x].metadata)
+                            if (typeof(res[x].metadata.image) != 'undefined' && typeof(res[x].metadata.name) != 'undefined' && typeof(res[x].metadata.attributes) != 'undefined' && typeof(res[x].metadata.description) != 'undefined') {
+                                let name=res[x].metadata.name
+                                let attributes=res[x].metadata.attributes
+                                let image=this.fixURL(res[x].metadata.image)
+                                let description=res[x].metadata.description
+
+                                let info={'name':name,'attributes':attributes,'image':image,'description':description}
+                                this.nfts.push(info)
+                            }
+                    
                         }
                         this.loading = false
                     })
                     .catch((error) => console.log(error));
             }
         },
+        fixURL(url) {
+            if (typeof (url) != "undefined") {
+                if (url.startsWith("ipfs://ipfs/")) {
+                    return "https://ipfs.moralis.io:2053/ipfs/" + url.split("ipfs://ipfs/").slice(-1)[0];
+                } else if (url.startsWith("ipfs")) {
+                    return "https://ipfs.moralis.io:2053/ipfs/" + url.split("ipfs://").slice(-1)[0];
+                } else {
+                    return url;
+                }
+            } else {
+                return url;
+            }
+        }
     },
 };
 </script>
