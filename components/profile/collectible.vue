@@ -67,6 +67,7 @@ export default {
     mounted() {
         this.cluster = process.env.CLUSTER;
         this.getAllNftData();
+        console.log('ok')
     },
     methods: {
         screenHeight() {
