@@ -129,7 +129,6 @@ export default {
                     baseURL = `https://eth-mainnet.alchemyapi.io/nft/v2/${apiKey}/getNFTs/`;
                 }
 
-                // replace with the wallet address you want to query for NFTs
                 // let ownerAddr = "0x2A5ecfde059e54606a885516f14635a6d25bb316"
                 let ownerAddr = this.walletAddress
                 var config = {
