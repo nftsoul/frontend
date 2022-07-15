@@ -297,11 +297,13 @@ export default {
             }
         },
         onEnterPress(item) {
-            this.makeReply(item);
             var el = document.getElementById("txtArea");
-            el.addEventListener("keypress", function (event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
+            el.addEventListener("keypress", (event)=> {
+                if (event.key == "Enter") {
+                    if (event.shiftKey) {} else {
+                        this.makeReply(item)
+                        event.preventDefault();
+                    }
                 }
             });
         },
