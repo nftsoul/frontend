@@ -73,7 +73,10 @@ export default {
         },
         setMargin(i) {
             if (i != 1) {
-                return 'mt-lg-8 mt-md-8'
+                return 'mt-lg-12 mt-md-12 mt-12'
+            }
+            else{
+                return 'mt-lg-16 mt-md-16 mt-16'
             }
         },
     }
