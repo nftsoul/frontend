@@ -136,7 +136,14 @@ export default {
                     } else {
                         this.pages = Math.floor(this.total / 20) + 1
                     }
-                    this.nfts = res.data.trending_galleries
+
+                    for (var x = 0; x < res.data.trending.length; x++) {
+                        if (res.data.trending[x] != null) {
+                            let data=res.data.trending[x]._id
+                            data['views']=res.data.trending[x].views
+                            this.nfts.push(data)
+                        }
+                    }
                 })
                 .catch((err) => console.log(err.response));
         },
