@@ -179,7 +179,7 @@
                                             <v-col>
                                                 <v-list-item-content class="py-1 ml-n5">
                                                     <v-row no-gutters>
-                                                        <v-textarea rows="1" id="txtArea" @keypress.enter="onEnterPress(item)" auto-grow dark color="white" class="mb-n5 mr-2" v-model="reply" outlined dense placeholder="Reply">
+                                                        <v-textarea rows="1" id="txtArea" @keyup.enter="onEnterPress(item)" auto-grow dark color="white" class="mb-n5 mr-2" v-model="reply" outlined dense placeholder="Reply">
                                                             <template v-slot:append>
                                                                 <v-fade-transition leave-absolute>
                                                                     <v-menu offset-y top>
@@ -249,7 +249,7 @@
                             <v-img v-if="profile.image_link" :src="profile.image_link"></v-img>
                             <v-icon v-else large>mdi-account</v-icon>
                         </v-avatar>
-                        <v-textarea dark rows="1" auto-grow ref="textArea" id="txtArea2" @keypress.enter="preventComment()" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?">
+                        <v-textarea dark rows="1" auto-grow ref="textArea" id="txtArea2" @keyup.enter="preventComment()" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?">
                             <template v-slot:append>
                                 <v-fade-transition leave-absolute>
                                     <v-menu offset-y top>
@@ -398,20 +398,26 @@ export default {
             }
         },
         preventComment() {
-            this.makeComment()
             var el = document.getElementById("txtArea2");
-            el.addEventListener("keypress", function (event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
+            el.addEventListener("keypress", (event) => {
+                if (event.key == "Enter") {
+                    if (event.shiftKey) {} else {
+                        this.makeComment()
+                        event.preventDefault();
+                    }
                 }
+
             });
         },
+    
         onEnterPress(item) {
-            this.makeReply(item)
             var el = document.getElementById("txtArea");
-            el.addEventListener("keypress", function (event) {
-                if (event.key === "Enter") {
-                    event.preventDefault();
+            el.addEventListener("keypress", (event)=> {
+                if (event.key == "Enter") {
+                    if (event.shiftKey) {} else {
+                        this.makeReply(item)
+                        event.preventDefault();
+                    }
                 }
             });
         },
