@@ -120,7 +120,7 @@ export default {
     },
     mounted() {
         this.connect = new web3.Connection(web3.clusterApiUrl(process.env.CLUSTER), 'confirmed');
-        this.getAccountInfo()
+        // this.getAccountInfo()
         // this.auth()
         if (!this.$auth.user) {
             this.$router.push('/')
