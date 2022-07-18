@@ -2,6 +2,7 @@
 <div>
     <client-only>
         <SectionLandingIntro />
+        <three></three>
         <SectionLandingPopular />
         <SectionLandingRecent />
         <SectionLandingFree />
@@ -16,5 +17,12 @@
   
 </div>
 </template>
+<script>
+import Three from "../components/section/mintShowcase/3dshow.vue"
+export default {
+    components:{Three}
+    
+}
+</script>
 
 
