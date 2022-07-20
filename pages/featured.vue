@@ -23,13 +23,13 @@
                 <v-menu transition="slide-y-transition" bottom offset-y>
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn color="primary" dark v-bind="attrs" v-on="on" large class="mx-2">
-                            Sort by
+                            {{sortText}}
                             <v-icon>mdi-chevron-down</v-icon>
                         </v-btn>
                     </template>
                     <v-list width="200" style="background-color:#636262">
                         <div v-for="(item, i) in items" :key="i">
-                            <v-list-item @click="searchSortGallery({'q':search,sort:item.sort})">
+                            <v-list-item v-if="item.title != sortText" @click="searchSortGallery(item)">
                                 <v-list-item-title>{{ item.title }}</v-list-item-title><br><br>
                             </v-list-item>
                             <v-divider v-if="items.length-items.indexOf(item)>1"></v-divider>
@@ -69,6 +69,7 @@ export default {
             collections: [],
             text: 'all',
             search:'',
+            sortText:'Sort By',
             items: [
                 {
                     title: 'Newest',
@@ -111,11 +112,12 @@ export default {
                 return 900;
             }
         },
-        async searchSortGallery(sort){
+        async searchSortGallery(item){
+            this.sortText=item.title
             this.nfts=[]
              let searched = await this.$store.dispatch('utility/searchGallery', {
                 'q': this.search,
-                sort: sort
+                sort: item.sort
             })
             this.nfts = searched
         },
@@ -136,7 +138,14 @@ export default {
                     } else {
                         this.pages = Math.floor(this.total / 20) + 1
                     }
-                    this.nfts = res.data.trending_galleries
+
+                    for (var x = 0; x < res.data.trending.length; x++) {
+                        if (res.data.trending[x] != null) {
+                            let data=res.data.trending[x]._id
+                            data['views']=res.data.trending[x].views
+                            this.nfts.push(data)
+                        }
+                    }
                 })
                 .catch((err) => console.log(err.response));
         },

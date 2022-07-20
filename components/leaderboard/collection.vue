@@ -72,8 +72,11 @@ export default {
                 .catch(err => console.log(err.response))
         },
         setMargin(i) {
-            if (i != 1) {
-                return 'mt-lg-8 mt-md-8'
+            if (i == 1) {
+                return 'mt-lg-8 mt-md-8 mt-8'
+            }
+            else{
+                return 'mt-lg-16 mt-md-16 mt-16'
             }
         },
     }
