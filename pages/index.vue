@@ -6,6 +6,7 @@
         <LandingRecent />
         <LandingFree />
         <LandingPremium />
+        <LandingMintCase />
         <LeaderboardMain />
         <LandingWorking />
         <LandingPartner />

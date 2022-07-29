@@ -1,25 +1,22 @@
 <template>
   <div>
-    <v-text-field
+    <v-textarea
       @input="handleInput"
       :rules="rules"
+      :rows="rows"
       dense
       outlined
       background-color="#030537"
       :placeholder="placeholder"
+      :auto-grow="autoGrow"
       color="white"
-      :type="inputtype"
-    ></v-text-field>
+    ></v-textarea>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    inputtype:{
-       type:String,
-       default:null
-    },
     placeholder: {
       type: String,
       default: "",
@@ -31,7 +28,12 @@ export default {
       },
     },
   },
- 
+  data(){
+    return{
+      autoGrow:true,
+      rows:2
+    }
+  },
   methods: {
     handleInput(e) {
       this.$emit("input", e);

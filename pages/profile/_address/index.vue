@@ -19,8 +19,13 @@
                     <v-tab v-if="walletAddress == profile.wallet_address" href="#tab-2" class="text-capitalize" :to="'/profile/'+userAddress+'/favourite'">
                         Favourites
                     </v-tab>
+
                     <v-tab v-if="walletAddress == profile.wallet_address" href="#tab-2" class="text-capitalize" :to="'/profile/'+userAddress+'/earning-logs'">
                         Earning Logs
+                    </v-tab>
+
+                    <v-tab v-if="walletAddress == profile.wallet_address" href="#tab-2" class="text-capitalize" :to="'/profile/'+userAddress+'/mint-showcase'">
+                        Mint Showcase
                     </v-tab>
                 </v-tabs>
             </v-col>
