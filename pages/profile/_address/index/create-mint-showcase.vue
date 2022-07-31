@@ -27,18 +27,18 @@
                     <FormCustomTextArea v-model="about_team" :rules="[validRules.required,validRules.lengthMax200,validRules.lengthMin3]" />
 
                     <v-row>
-                        <v-col cols="6" v-for="(item,i) in member" :key="i">
-                            <p>Member {{i+1}}</p>
+                        <v-col cols="6" v-for="i in team" :key="i">
+                            <p>Member {{i}}</p>
                             <label>Name</label>
-                            <FormCustomTextField v-model="team.member.name[i]" :rules="[validRules.required,validRules.lengthMin3]" />
+                            <FormCustomTextField v-model="member.name[i]" :rules="[validRules.required,validRules.lengthMin3]" />
                             <label>Role</label>
-                            <FormCustomTextField v-model="team.member.role[i]" :rules="[validRules.required,validRules.lengthMin3]" />
+                            <FormCustomTextField v-model="member.role[i]" :rules="[validRules.required,validRules.lengthMin3]" />
                             <label>Social Link</label>
-                            <FormCustomTextField v-model="team.member.social_link[i]" :rules="[validRules.required,validRules.lengthMin3]" />
+                            <FormCustomTextField v-model="member.social_link[i]" :rules="[validRules.required,validRules.lengthMin3]" />
                         </v-col>
                     </v-row>
 
-                    <v-btn color="#A0A0A0" dark class="mb-8" @click="member +=1">
+                    <v-btn color="#A0A0A0" dark class="mb-8" @click="team +=1">
                         <v-icon>mdi-plus</v-icon>
                         Add Member
                     </v-btn>
@@ -105,7 +105,7 @@
                         </v-col>
                     </v-row>
                     <v-row justify="center">
-                        <v-btn class="btn-exhibit mt-5" @click="create()">Submit</v-btn>
+                        <v-btn class="btn-exhibit mt-5" @click="create()" :loading="saving">Submit</v-btn>
                     </v-row>
                 </v-form>
             </v-col>
@@ -120,19 +120,17 @@ export default {
         return {
             valid: true,
             roadmap: 3,
-            member: 4,
+            team: 4,
             name: '',
             description: '',
             road: {
                 phases: []
             },
             about_team: '',
-            team: {
-                member: {
-                    name: [],
-                    role: [],
-                    social_link: []
-                }
+            member: {
+                name: [],
+                role: [],
+                social_link: []
             },
             twitter: '',
             discord: '',
@@ -140,6 +138,7 @@ export default {
             email: '',
             mintPrice: '',
             files: [],
+            saving: false,
             validRules: {
                 required: (value) => !!value || "Required.",
                 length10: (v) => (v && v.length == 10) || "Should be 10 characters.",
@@ -152,23 +151,108 @@ export default {
             activePicker: null,
             date: null,
             menu: false,
+            slickSetting: {
+                dots: true,
+                infinite: true,
+                speed: 500,
+                slidesToShow: 4,
+                slidesToScroll: 1,
+                arrows: true,
+                rows: 3,
+                responsive: [{
+                        breakpoint: 1264,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 3,
+                            infinite: true,
+                            dots: false,
+                            arrows: true,
+                        },
+                    },
+                    {
+                        breakpoint: 960,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2,
+                            initialSlide: 2,
+                            arrows: true,
+                        },
+                    },
+                    {
+                        breakpoint: 600,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1,
+                            arrows: true,
+                        },
+                    },
+                ],
+            },
 
         }
-    },
-    computed: {
-        slickSetting() {
-            return this.$store.state.plugins.slickSetting;
-        },
     },
     watch: {
         menu(val) {
             val && setTimeout(() => (this.activePicker = 'YEAR'))
         },
     },
+    computed: {
+        userAddress() {
+            return this.$route.params.address
+        }
+    },
     methods: {
-        create() {
+        async create() {
             if (this.$refs.form.validate()) {
-                console.log(this.name, this.description, this.road, this.about_team, this.team, this.twitter, this.discord, this.linkedin, this.email, this.date, this.mintPrice, this.files)
+                if (this.files.length < 11) {
+                    this.$toast
+                        .error("You must select 11 nfts.", {
+                            iconPack: "mdi",
+                            icon: "mdi-image",
+                            theme: "outline",
+                        })
+                        .goAway(3000);
+                } else {
+
+                    //arranging team data
+                    this.saving = true
+                    let meminfo = []
+                    for (var x = 0; x < this.team; x++) {
+                        meminfo.push({
+                            'name': this.member.name[x],
+                            'role': this.member.role[x],
+                            'social_link': this.member.social_link[x]
+                        })
+                    }
+                    this.$axios.post('/mint/create', {
+                            collection_name: this.name,
+                            description: this.description,
+                            roadmap: this.road.phases,
+                            about_team: this.about_team,
+                            members: meminfo,
+                            social: {
+                                'twitter': this.twitter,
+                                'discord': this.discord,
+                                'linkedin': this.linkedin
+                            },
+                            email: this.email,
+                            price: this.mintPrice,
+                            image: this.files[0],
+                            images: this.files
+                        })
+                        .then(res => {
+                            this.$toast
+                                .success("Your mint showcase has been created successfully.", {
+                                    iconPack: "mdi",
+                                    icon: "mdi-image",
+                                    theme: "outline",
+                                })
+                                .goAway(3000);
+                            this.$router.push('/profile/' + this.userAddress + '/mint-showcase')
+                            this.saving = false
+                        })
+                        .catch(err => console.log(err.response))
+                }
             }
         },
         selectImage() {

@@ -5,11 +5,11 @@
       flat
       class="pa-5"
       max-width="300"
-      height="470"
-      @click="$router.push({ name: 'preview-id', params: { id: mintId } })"
+      height="400"
+      @click="$router.push({ name: 'mint-showcase-id', params: { id: mintId } })"
     >
-      <div class="outer-card">
-        <div class="inner-card">
+      <div class="outer-card outer-card-edited">
+        <div class="inner-card inner-card-edited">
           <v-img
             :src="image"
             :lazy-src="image"
@@ -48,15 +48,11 @@
               </v-list-item>
             </v-list>
           </v-card>
-          <v-card-subtitle class="text-left mx-n3"
-            >{{ title.slice(0, 20)
+          <v-card-subtitle class="text-center mx-n3 pb-2">{{ title.slice(0, 20)
             }}<span v-if="title.length > 20">..</span></v-card-subtitle
           >
-
-          <br />
-
           <v-col class="pa-0" align="center">
-            <small>2 hr 34 minutes 2 sec</small>
+            <small class="theme-color">{{$moment(date).format("LL")}}</small>
             <v-row no-gutters>
               <small class="mr-1">Items: 12</small>
               <v-spacer></v-spacer>
@@ -100,3 +96,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.outer-card-edited{
+  height:375px;
+}
+.inner-card-edited{
+  height:373px;
+}
+</style>

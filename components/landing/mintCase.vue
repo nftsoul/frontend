@@ -5,13 +5,13 @@
             <v-row justify="center">
                 <p class="title">Mint Showcase</p>
             </v-row>
-            <v-row justify="center" v-if="free.length > 0">
+            <v-row justify="center" v-if="cases.length > 0">
                 <v-col cols="12" align="center">
                     <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
-                            <div v-for="(item, i) in free" :key="i">
-                            <p>Gallery mint card</p>
-                               <GalleryMintCard :galleryId="item._id" :title="item.gallery_name" :image="item.image" :creator="item.created_by" date="2022-03-04" :mintPrice="8" />
+                            <div v-for="(item, i) in cases" :key="i">
+                            <p>Mint Showcase</p>
+                               <GalleryMintCard :mintId="item._id" :title="item.collection_name" image="https://res.cloudinary.com/doxa4k3b0/image/upload/v1659090899/Nftsoul/mint-showcase/pvgdlof3jzupary13je2.jpg" :creator="item.user_id" :date="item.date" :mintPrice="item.price" />
                             </div>
                         </VueSlickCarousel>
                     </client-only>
@@ -40,7 +40,7 @@
 export default {
     data() {
         return {
-            free: [],
+            cases: [],
         };
     },
     computed: {
@@ -49,16 +49,16 @@ export default {
         },
     },
     mounted() {
-        this.getCollections();
+        this.getMintCases();
     },
     methods: {
-
-        getCollections() {
+        getMintCases() {
             this.$axios
-                .get("/gallery/free?page=1&limit=4")
+                .get("/mint/list?page=1&limit=4")
                 .then((res) => {
                     console.log('mint:',res.data)
                     // this.free = res.data.free
+                    this.cases=res.data.result
                 })
                 .catch((err) => console.log(err.response));
         },

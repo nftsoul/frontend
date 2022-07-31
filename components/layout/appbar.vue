@@ -7,9 +7,6 @@
         </div>
         <v-spacer></v-spacer>
 
-        <v-btn text class="mt-5" @click="$router.push({path:'/mint-showcase'})">Mint showcase</v-btn>
-        <v-btn text class="mt-5" @click="$router.push({path:'/mint-showcase-form'})">Mint showcase form</v-btn>
-
         <div class="hidden-md-and-down mt-5">
             <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.commit('wallet/setWalletDialog',true)">
                 Connect Wallet
