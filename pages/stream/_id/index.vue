@@ -44,9 +44,8 @@
                                                     </p>
                                                 </v-col>
                                                 <v-col cols="3">
-                                                    <ShareNetwork style="text-decoration: none;" class="mb-2" network="twitter" :url="getShareLink()" :title="stream.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
-
-                                                        <div @mouseenter="expand=true" @mouseleave="expand=false">
+                                                    <ShareNetwork style="text-decoration: none" class="mb-2" network="twitter" :url="getShareLink()" :title="stream.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
+                                                        <div @mouseenter="expand = true" @mouseleave="expand = false">
                                                             <v-row no-gutters>
                                                                 <div class="twitter-share">
                                                                     <v-icon color="white">mdi-twitter</v-icon>
@@ -82,11 +81,15 @@
                                                             <v-chip dark small :color="getColor('details')" @click="active = 'details'">Details</v-chip>
 
                                                             <v-spacer></v-spacer>
+
+                                                            <span>Rank {{ getRank(item) }}</span>
                                                         </v-row>
                                                         <v-divider class="mt-3"></v-divider>
                                                         <v-card-text class="caption px-0">
                                                             <div class="attr-desc-box">
-                                                                <span v-if="active == 'details'">{{item.description}}</span>
+                                                                <span v-if="active == 'details'">{{
+                                    item.description
+                                  }}</span>
 
                                                                 <span v-if="active == 'attributes'">
                                                                     <v-row>
@@ -100,7 +103,9 @@
                                                                         </v-col>
                                                                     </v-row>
                                                                 </span>
-                                                                <span v-if="active == 'story'">{{item.story}}</span>
+                                                                <span v-if="active == 'story'">{{
+                                    item.story
+                                  }}</span>
                                                             </div>
                                                         </v-card-text>
                                                     </v-card>
@@ -145,29 +150,42 @@
                 <v-card dark outlined class="max-width:800">
                     <div v-if="comments.length > 0">
                         <v-list-item v-for="(item, i) in comments" :key="i">
-
                             <v-list-item-avatar class="mr-2">
                                 <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="40" max-height="40"></v-img>
                                 <v-icon v-else large>mdi-account</v-icon>
                             </v-list-item-avatar>
 
-                            <v-list-item-content @mouseenter="hoverIndex=i">
+                            <v-list-item-content @mouseenter="hoverIndex = i">
                                 <v-list-item-title>
-                                    <span v-if="item.user_id.name">{{item.user_id.name}}</span>
-                                    <span v-else>{{item.user_id.wallet_address.slice(0, 5)}}</span>
-                                    <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
-                                    <small class="reply-btn position-abs text--disabled mb-0 ml-2 mt-n1" v-if="hoverIndex==i" @click="selectedIndex = i,replying = true,reply=''">
+                                    <span v-if="item.user_id.name">{{
+                      item.user_id.name
+                    }}</span>
+                                    <span v-else>{{
+                      item.user_id.wallet_address.slice(0, 5)
+                    }}</span>
+                                    <small class="caption text--disabled">{{
+                      $moment(item.time).fromNow()
+                    }}</small>
+                                    <small class="
+                        reply-btn
+                        position-abs
+                        text--disabled
+                        mb-0
+                        ml-2
+                        mt-n1
+                      " v-if="hoverIndex == i" @click="
+                        (selectedIndex = i), (replying = true), (reply = '')
+                      ">
                                         <v-icon small>mdi-reply</v-icon>Reply
                                     </small>
                                 </v-list-item-title>
-                                <v-card-text class="text--disabled pa-0"><small v-html="item.body"></small></v-card-text><br>
+                                <v-card-text class="text--disabled pa-0"><small v-html="item.body"></small></v-card-text><br />
                                 <v-row no-gutters class="mt-1">
-                                    <small v-if="item.reply_count>0" @click="getReplies(item,i)" class="reply-btn">{{item.reply_count}} Replied</small>
-                                    <v-btn x-small text v-if="replyPage==1 && selectedIndex==i" :loading="moreReply"></v-btn>
-
+                                    <small v-if="item.reply_count > 0" @click="getReplies(item, i)" class="reply-btn">{{ item.reply_count }} Replied</small>
+                                    <v-btn x-small text v-if="replyPage == 1 && selectedIndex == i" :loading="moreReply"></v-btn>
                                 </v-row>
 
-                                <div v-if="replying==true && selectedIndex==i" class="mt-3">
+                                <div v-if="replying == true && selectedIndex == i" class="mt-3">
                                     <v-list-item dense class="px-0" v-if="profile">
                                         <v-row no-gutters>
                                             <v-col cols="1" class="pa-0">
@@ -184,7 +202,9 @@
                                                                 <v-fade-transition leave-absolute>
                                                                     <v-menu offset-y top>
                                                                         <template v-slot:activator="{ on, attrs }">
-                                                                            <v-img :src="require('~/assets/icons/emoji-icon.png')" max-width="30" class="mt-n1 link" v-bind="attrs" v-on="on"></v-img>
+                                                                            <v-img :src="
+                                            require('~/assets/icons/emoji-icon.png')
+                                          " max-width="30" class="mt-n1 link" v-bind="attrs" v-on="on"></v-img>
                                                                         </template>
                                                                         <Picker set="emojione" @select="selectEmojiReply" />
                                                                     </v-menu>
@@ -193,7 +213,6 @@
                                                         </v-textarea>
                                                         <v-btn small class="connect-wallet mt-1" @click="makeReply(item)" :loading="makingReply"><small>Reply</small></v-btn>
                                                     </v-row>
-
                                                 </v-list-item-content>
                                             </v-col>
                                         </v-row>
@@ -202,32 +221,40 @@
                                 <!-- end make reply -->
 
                                 <!-- replies -->
-                                <div v-if="item.replies" style="width:100%">
-                                    <v-list-item dense v-for="(reply,j) in item.replies" :key="j">
+                                <div v-if="item.replies" style="width: 100%">
+                                    <v-list-item dense v-for="(reply, j) in item.replies" :key="j">
                                         <v-list-item-avatar size="30" class="mr-2">
                                             <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link" max-width="60" max-height="60"></v-img>
                                             <v-icon v-else>mdi-account</v-icon>
                                         </v-list-item-avatar>
                                         <v-list-item-content>
                                             <v-list-item-title>
-                                                <span v-if="reply.user_id.name">{{reply.user_id.name}}</span>
-                                                <span v-else>{{ reply.user_id.wallet_address.slice(0, 5) }}</span>
-                                                <small class="caption text--disabled">{{$moment(reply.time).fromNow()}}</small>
+                                                <span v-if="reply.user_id.name">{{
+                            reply.user_id.name
+                          }}</span>
+                                                <span v-else>{{
+                            reply.user_id.wallet_address.slice(0, 5)
+                          }}</span>
+                                                <small class="caption text--disabled">{{
+                            $moment(reply.time).fromNow()
+                          }}</small>
                                             </v-list-item-title>
-                                            <v-card-text style="width:100%" class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text><br>
+                                            <v-card-text style="width: 100%" class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text><br />
                                         </v-list-item-content>
                                     </v-list-item>
                                     <v-row no-gutters>
-                                        <v-btn v-if="item.reply_count>5 && item.replies.length < item.reply_count" @click="getReplies(item,i)" x-small text>
+                                        <v-btn v-if="
+                          item.reply_count > 5 &&
+                          item.replies.length < item.reply_count
+                        " @click="getReplies(item, i)" x-small text>
                                             <v-icon small>mdi-arrow-down</v-icon>
                                             <small>See More</small>
                                         </v-btn>
-                                        <v-btn v-if="replyPage>1" x-small text :loading="moreReply"></v-btn>
+                                        <v-btn v-if="replyPage > 1" x-small text :loading="moreReply"></v-btn>
                                     </v-row>
                                 </div>
                                 <!-- end replies -->
                             </v-list-item-content>
-
                         </v-list-item>
                     </div>
                     <div v-else class="ma-5">
@@ -261,7 +288,6 @@
                                 </v-fade-transition>
                             </template>
                         </v-textarea>
-
                     </v-row>
                     <v-row no-gutters class="px-5 pb-5">
                         <v-spacer></v-spacer>
@@ -291,17 +317,19 @@
 <script>
 import {
     Picker
-} from 'emoji-mart-vue'
+} from "emoji-mart-vue";
 export default {
     components: {
-        Picker
+        Picker,
     },
     async asyncData({
         params
     }) {
-        const pre = await fetch(process.env.API_URL + `/gallery/${params.id}`).then((res) => res.json());
+        const pre = await fetch(process.env.API_URL + `/gallery/${params.id}`).then(
+            (res) => res.json()
+        );
         return {
-            pre
+            pre,
         };
     },
     head() {
@@ -309,8 +337,8 @@ export default {
             link: [{
                 hid: "canonical",
                 rel: "canonical",
-                href: process.env.API_URL + `/gallery/${this.$route.params.id}`
-            }]
+                href: process.env.API_URL + `/gallery/${this.$route.params.id}`,
+            }, ],
         };
     },
     data() {
@@ -338,21 +366,23 @@ export default {
             selectedIndex: null,
             hoverIndex: null,
             replying: false,
-            reply: '',
-            selectedComment: '',
+            reply: "",
+            selectedComment: "",
             replyPage: 0,
             more: false,
             makingReply: false,
             moreReply: false,
-            profile: this.$auth.user
+            profile: this.$auth.user,
+            raritylist: [],
+            rarityurl: []
         };
     },
     watch: {
         comment() {
             if (this.comment != "") {
-                this.error = ''
+                this.error = "";
             }
-        }
+        },
     },
     computed: {
         walletAddress() {
@@ -373,8 +403,9 @@ export default {
         this.$store.commit("nft/setStream", false);
         next();
     },
-    mounted() {
+    async mounted() {
         if (this.streaming == true) {
+            await this.getRarityCollection()
             this.getStream();
             this.getComments();
             this.getFavourite();
@@ -383,18 +414,49 @@ export default {
         }
     },
     methods: {
+        getRarityCollection() {
+            this.$axios
+                .get("https://api.howrare.is/v0.1/collections")
+                .then((res) => {
+                    this.reslist = res.data.result.data
+                    for (var x = 0; x < res.data.result.data; x++) {
+                        this.raritylist.push(res.data.result.data[x].name)
+                        this.rarityurl.push(res.data.result.data[x].url)
+                    }
+                }).catch(err => console.log(err.response))
+        },
+        getRank(item) {
+            console.log('stream:',this.stream)
+            console.log('item:',item)
+            const index = this.raritylist.indexOf(item.name)
+            if (index) {
+                this.$axios.get('https://api.howrare.is/v0.1/collections/' + this.rarityurl[index] + '/only_rarity')
+                    .then(res => {
+                        let resp2 = res.data.result.data.items
+                        for (var x = 0; x < resp2.length; x++) {
+                            if (resp2[x].mint == item.mint) {
+                                return resp2[x].rank
+                            }
+                        }
+                    })
+            }
+            else{
+               ''
+            }
+
+        },
         selectEmojiReply(e) {
             if (!this.reply) {
-                this.reply = e.native
+                this.reply = e.native;
             } else {
-                this.reply += e.native
+                this.reply += e.native;
             }
         },
         showEmoji(e) {
             if (!this.comment) {
-                this.comment = e.native
+                this.comment = e.native;
             } else {
-                this.comment += e.native
+                this.comment += e.native;
             }
         },
         preventComment() {
@@ -402,91 +464,87 @@ export default {
             el.addEventListener("keypress", (event) => {
                 if (event.key == "Enter") {
                     if (event.shiftKey) {} else {
-                        this.makeComment()
+                        this.makeComment();
                         event.preventDefault();
                     }
                 }
-
             });
         },
-    
+
         onEnterPress(item) {
             var el = document.getElementById("txtArea");
-            el.addEventListener("keypress", (event)=> {
+            el.addEventListener("keypress", (event) => {
                 if (event.key == "Enter") {
                     if (event.shiftKey) {} else {
-                        this.makeReply(item)
+                        this.makeReply(item);
                         event.preventDefault();
                     }
                 }
             });
         },
         getReplies(item, i) {
-            this.moreReply = true
+            this.moreReply = true;
             if (this.selectedComment != item._id) {
-                this.replyPage = 1
-                this.selectedComment = item._id
+                this.replyPage = 1;
+                this.selectedComment = item._id;
             } else {
-                this.replyPage += 1
+                this.replyPage += 1;
             }
-            this.$axios.get(
-                "/comment/reply/" + item._id, {
+            this.$axios
+                .get("/comment/reply/" + item._id, {
                     params: {
                         page: this.replyPage,
                     },
-                }
-            ).then(res => {
-                this.moreReply = false
-                const index = this.comments.indexOf(item)
-                let rep = res.data.replies
-                if (!this.comments[index].replies) {
-                    this.comments[index]['replies'] = []
-                }
-                let reply_ids = []
-                for (var y = 0; y < this.comments[index].replies.length; y++) {
-                    reply_ids.push(this.comments[index].replies[y]._id)
-                }
-                for (var x = 0; x < rep.length; x++) {
-                    if (!reply_ids.includes(rep[x]._id)) {
-                        this.comments[index].replies.push(rep[x])
-
-                    }
-                }
-            })
-        },
-        getShareLink() {
-            return process.env.SITE_URL + '/preview/' + this.gallery_id
-        },
-        getStream() {
-            this.$axios
-                .get("/gallery/stream/" + this.gallery_id)
+                })
                 .then((res) => {
-                    this.stream = res.data[0];
-                    this.current = this.stream.nfts[this.index];
+                    this.moreReply = false;
+                    const index = this.comments.indexOf(item);
+                    let rep = res.data.replies;
+                    if (!this.comments[index].replies) {
+                        this.comments[index]["replies"] = [];
+                    }
+                    let reply_ids = [];
+                    for (var y = 0; y < this.comments[index].replies.length; y++) {
+                        reply_ids.push(this.comments[index].replies[y]._id);
+                    }
+                    for (var x = 0; x < rep.length; x++) {
+                        if (!reply_ids.includes(rep[x]._id)) {
+                            this.comments[index].replies.push(rep[x]);
+                        }
+                    }
                 });
         },
+        getShareLink() {
+            return process.env.SITE_URL + "/preview/" + this.gallery_id;
+        },
+        getStream() {
+            this.$axios.get("/gallery/stream/" + this.gallery_id).then((res) => {
+                this.stream = res.data[0];
+                this.current = this.stream.nfts[this.index];
+            });
+        },
         makeReply(item) {
-            this.makingReply = true
-            this.selectedComment = item
-            if (this.reply != '') {
+            this.makingReply = true;
+            this.selectedComment = item;
+            if (this.reply != "") {
                 this.$axios
                     .post("/comment/reply/" + item._id, {
                         body: this.reply,
                         user_id: this.profile._id,
                     })
                     .then((res) => {
-                        this.makingReply = false
-                        let rep = res.data.reply
-                        this.reply = ''
-                        rep['user_id'] = this.profile
-                        const index = this.comments.indexOf(item)
+                        this.makingReply = false;
+                        let rep = res.data.reply;
+                        this.reply = "";
+                        rep["user_id"] = this.profile;
+                        const index = this.comments.indexOf(item);
                         if (this.comments[index].replies) {
-                            this.comments[index].replies.push(rep)
+                            this.comments[index].replies.push(rep);
                         } else {
-                            this.comments[index]['replies'] = []
-                            this.comments[index].replies.push(rep)
+                            this.comments[index]["replies"] = [];
+                            this.comments[index].replies.push(rep);
                         }
-                        this.comments[index].reply_count += 1
+                        this.comments[index].reply_count += 1;
                     })
                     .catch((err) => err.response);
             }
