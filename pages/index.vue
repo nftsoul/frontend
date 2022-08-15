@@ -1,20 +1,13 @@
 <template>
-<div>
-    <client-only>
-        <LandingIntro />
-        <LandingPopular />
-        <LandingRecent />
-        <LandingFree />
-        <LandingPremium />
-        <LeaderboardMain />
-        <LandingWorking />
-        <LandingPartner />
-        <CommonProfile />
-        <DialogWallet />
-
-    </client-only>
-  
-</div>
+  <LandingPage />
+  <!-- <SlickGroup /> -->
+  <!-- <v-rating></v-rating> -->
 </template>
 
-
+<script>
+import LandingPage from '../components/LandingPage.vue';
+export default {
+  name: "IndexPage",
+  components: { LandingPage }
+}
+</script>

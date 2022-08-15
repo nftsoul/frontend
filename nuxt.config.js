@@ -1,107 +1,27 @@
 import colors from "vuetify/es5/util/colors";
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
-  server: {
-    port: process.env.PORT,
-    host: "0.0.0.0",
-  },
   head: {
-    titleTemplate: "Nftsoul | %s",
-    title: "Exhibit your NFT",
+    titleTemplate: "%s - intern_task",
+    title: "intern_task",
     htmlAttrs: {
       lang: "en",
     },
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      {
-        name: "description",
-        content:
-          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
-      },
-      {
-        hid: "twitter:card",
-        name: "twitter:card",
-        content: "summary_large_image",
-      },
-      { hid: "twitter:site", name: "twitter:site", content: "@nftsoul_io" },
-      {
-        hid: "twitter:url",
-        name: "twitter:url",
-        content: "https://twitter.com/nftsoul_io",
-      },
-      {
-        hid: "twitter:title",
-        name: "twitter:title",
-        content: "Nftsoul | Exhibit your NFT",
-      },
-      {
-        hid: "twitter:description",
-        name: "twitter:description",
-        content:
-          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
-      },
-      {
-        hid: "twitter:image",
-        name: "twitter:image",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
-      },
-
-      // Open Graph
-      { hid: "og:site_name", property: "og:site_name", content: "Nftsoul" },
-      { hid: "og:type", property: "og:type", content: "website" },
-      {
-        hid: "og:url",
-        property: "og:url",
-        content: "https://nftsoul.io",
-      },
-      {
-        hid: "og:title",
-        property: "og:title",
-        content: "Nftsoul | Exhibit your NFT",
-      },
-      {
-        hid: "og:description",
-        property: "og:description",
-        content:
-          "Exhibit and Earn From Your NFT Collections. Create galleries, showcase your best NFTs and earn from them.",
-      },
-      {
-        hid: "og:image",
-        property: "og:image",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
-      },
-      {
-        hid: "og:image:secure_url",
-        property: "og:image:secure_url",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
-      },
-      {
-        hid: "og:image:alt",
-        property: "og:image:alt",
-        content: "Nftsoul",
-      },
+      { hid: "description", name: "description", content: "" },
+      { name: "format-detection", content: "telephone=no" },
     ],
-    link: [
-      {
-        hid: 'canonical',
-        rel: 'canonical',
-        href: `https://nftsoul.io`
-      },
-      { rel: "icon", type: "image/x-icon", href: "/mini-log.png" }
-    ],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-    { src: "~/plugins/vue-slick-carousel", mode: "client" },
-    { src: "~/plugins/vue-carousel-3d", mode: "client" },
-    { src: "~/plugins/spinner", mode: "client" },
-    { src: "~/plugins/social-share", mode: "client" },
-  ],
+  plugins: [],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -110,48 +30,20 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     "@nuxtjs/vuetify",
-    "@nuxtjs/moment",
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios", "@nuxtjs/toast", "@nuxtjs/dotenv",'@nuxtjs/auth-next'],
-  axios: {
-    baseURL: process.env.API_URL,
-    // credentials: true,
-  },
-  auth: {
-    strategies: {
-      'local': {
-        token: {
-          property: "token",
-          required: true,
-          maxAge: 23*60*60
-        },
-        user: {
-          property: false,
-          autoFetch: false
-        },
-        endpoints: {
-          login: { url: "/auth/login", method: "post" },
-          logout: { url: "/auth/logout", method: "get" },
-          user: { url: "/profile", method: "get" }
-        }
-      },
-    },
-    redirect:false
-  },
+  modules: [],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
+    // optionsPath: "@/plugins/vuetify.js",
     customVariables: ["~/assets/variables.scss"],
     theme: {
       dark: true,
       themes: {
         dark: {
-          theme:'#C202D3',
-          primary: "#030537",
-          background: "#000229",
-          notification: "#1b024d",
+          primary: colors.blue.darken2,
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
@@ -165,7 +57,4 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
-  env: {
-    baseUrl: process.env.API_URL,
-  },
 };

@@ -1,29 +1,34 @@
 <template>
-<v-app>
-    <client-only>
-        <LayoutAppbar />
-        <CommonSolscan />
-    </client-only>
+  <v-app dark>
     <Nuxt />
-    <client-only>
-        <LayoutFooter />
-    </client-only>
-</v-app>
+  </v-app>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            loaded: false,
-        };
-    },
-    mounted() {
-        this.loaded = true
+  name: 'DefaultLayout',
+  data() {
+    return {
+      clipped: false,
+      drawer: false,
+      fixed: false,
+      items: [
+        {
+          icon: 'mdi-apps',
+          title: 'Welcome',
+          to: '/'
+        },
+        {
+          icon: 'mdi-chart-bubble',
+          title: 'Inspire',
+          to: '/inspire'
+        }
+      ],
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: 'Vuetify.js'
     }
-};
+  }
+}
 </script>
-
-<style lang="css">
-@import "~/assets/styles/main.css";
-</style>
