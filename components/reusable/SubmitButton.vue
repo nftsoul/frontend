@@ -1,6 +1,6 @@
 <template>
     <v-btn class="submit-btn">
-        <button @click="DetailPage" class="btn" type="button">submit Button</button>
+        <button @click="ShowAlert('submitted')" class="btn" type="button">submit Button</button>
     </v-btn>
 </template>
 
@@ -18,6 +18,9 @@ export default {
         },
         DetailPage() {
             this.$router.push('Details');
+        },
+        ShowAlert(msg) {
+            alert(msg);
         }
     },
 }
