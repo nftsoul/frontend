@@ -1,25 +1,26 @@
 <template>
     <div class="action-btn">
-        <button class="btn" type=button @click="GoHome">Go Home</button>
-        <!-- <ActionButton @click="GoHome" ActionButtonText="Return Home" /> -->
+        <button @click="DetailPage" class="btn" type="button">{{ ActionButtonText }}</button>
     </div>
 </template>
 
 <script>
-import ActionButton from '../components/basics/ActionButton.vue';
 export default {
-    name: "Details",
-    components: { ActionButton },
-
-    methods: {
-        GoHome() {
-            this.$router.push('/')
+    props: {
+        ActionButtonText: {
+            type: String,
+            required: true
         }
     },
+    methods: {
+        DetailPage() {
+            this.$router.push('/Details');
+        }
+    }
 }
 </script>
 
-<style scoped>
+<style>
 .action-btn {
     /* background-image: linear-gradient(to right, #2E11DE, #FE87FF); */
     border-radius: 6px;

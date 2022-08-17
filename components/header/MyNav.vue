@@ -1,13 +1,12 @@
 <template>
     <div>
-        <v-toolbar flat app>
-            <v-app-bar>
-                <v-toolbar-side-icon class="grey--text" @click="drawer = !drawer"></v-toolbar-side-icon>
-                <v-img src="@/assets/images/logo.svg" max-height="150" max-width="250">
-                    NFT Soul
+        <v-app-bar app>
+            <!-- <v-toolbar-side-icon class="grey--text" @click="drawer = !drawer"></v-toolbar-side-icon> -->
+            <NuxtLink to="/">
+                <v-img :src='require(`@/assets/images/logo.svg`)' max-height="150" max-width="250">
                 </v-img>
-            </v-app-bar>
-        </v-toolbar>
+            </NuxtLink>
+        </v-app-bar>
     </div>
 </template>
 

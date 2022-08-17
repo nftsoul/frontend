@@ -1,24 +1,17 @@
 <template>
     <v-btn class="submit-btn">
-        <button @click="ShowAlert('submitted')" class="btn" type="button">submit Button</button>
+        <button class="btn" type="button">{{ SubmitButtonText }}</button>
     </v-btn>
 </template>
 
 <script>
 export default {
     props: {
-        type: String,
+        SubmitButtonText: {
+            type: String,
+        }
     },
     methods: {
-        handleClick() {
-            console.log("hello");
-        },
-        handleInfo() {
-            alert("work it damnit");
-        },
-        DetailPage() {
-            this.$router.push('Details');
-        },
         ShowAlert(msg) {
             alert(msg);
         }

@@ -1,12 +1,15 @@
 <template>
-  <LandingPage />
+  <div>
+    <Buttons />
+    <Cards />
+  </div>
 </template>
 
 <script>
-import LandingPage from '../components/LandingPage.vue';
-import MyNav from '../components/header/MyNav.vue';
+import Buttons from '../components/sections/Buttons.vue';
+import Cards from '../components/sections/Cards.vue';
 export default {
   name: "IndexPage",
-  components: { LandingPage, MyNav }
+  components: { Buttons, Cards }
 }
 </script>
