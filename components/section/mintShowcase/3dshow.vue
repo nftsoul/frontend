@@ -20,103 +20,142 @@ export default {
                 1000
             ),
             renderer: new THREE.WebGLRenderer(),
+            nfts1: [{
+                    img: '',
+                    position: {
+                        x: -0.5,
+                        y: 0.95,
+                        z: 2.85
+                    }
+                },
+                {
+                    img: '',
+                    position: {
+                        x: 0.88,
+                        y: 0.95,
+                        z: 2.85
+                    }
+                },
+                {
+                    img: '',
+                    position: {
+                        x: -1.92,
+                        y: 0.95,
+                        z: 2.85
+                    }
+                }
+            ],
+            nfts2: [{
+                    img: '',
+                    position: {
+                        x: -2.88,
+                        y: 1.12,
+                        z: -1.74
+                    }
+                },
+                {
+                    img: '',
+                    position: {
+                        x: -2.88,
+                        y: 1.12,
+                        z: -0.25
+                    }
+                },
+                {
+                    img: '',
+                    position: {
+                       x: -2.88,
+                        y: 1.12,
+                        z: 1.25
+                    }
+                }
+            ],
+            nfts3: [{
+                    img: '',
+                    position: {
+                        x: 2.9,
+                        y: 1.18,
+                        z: -1.99
+                    }
+                },
+                {
+                    img: '',
+                    position: {
+                         x: 2.9,
+                        y: 0.92,
+                        z: -0.73
+                    }
+                }
+            ],
+            nfts4: [{
+                    img: '',
+                    position: {
+                        x: 2,
+                        y: 1.31,
+                        z: 1.85
+                    }
+                },
+                {
+                    img: '',
+                    position: {
+                        x: 2,
+                        y: 1.31,
+                        z: 0.85
+                    }
+                },
+
+            ]
         };
     },
     async mounted() {
+        const axesHelper = new THREE.AxesHelper(50);
+        axesHelper.setColors('#ff0000', '#00ff00', '#0000ff')
+        this.scene.add(axesHelper);
+
         //rendering the view section
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.$refs.canvas.appendChild(this.renderer.domElement);
-        // displaying axis and camera position
+        this.camera.position.set(0, 2, -3);
+        this.camera.lookAt(this.scene.position)
 
-        this.camera.position.set(0, 13, -25);
-
-        //to move object freely using mouse and to zoom in and zoom out
+        // to move object freely using mouse and to zoom in and zoom out
         let OC = require("three/examples/jsm/controls/OrbitControls.js");
         const orbit = new OC.OrbitControls(this.camera, this.renderer.domElement);
         orbit.update();
 
         // 3d models
         const modelLoader = require("three/examples/jsm/loaders/GLTFLoader.js");
-        const loader = require('three/examples/jsm/loaders/FBXLoader')
+        const homeloader = await new modelLoader.GLTFLoader();
+        homeloader.load(
+            "models/new.glb",
+            (gltf) => {
+                const model = gltf.scene;
+                model.position.set(0, 0, 0)
+                this.scene.add(model);
+            },
+            undefined,
+            (error) => {
+                console.error(error);
+            }
+        );
+        //adding wall image
+        var texture = new THREE.TextureLoader().load('images/wall-banner.png');
+        var geometry = new THREE.BoxBufferGeometry(6, 2, 0);
+        var material = new THREE.MeshBasicMaterial({
+            map: texture
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(0.05, 1, -3.05)
+        this.scene.add(mesh);
 
-        const fbxLoader = new loader.FBXLoader()
-        fbxLoader.load(
-                'models/mint.fbx',
-                (object) => {
-                    // object.traverse(function (child) {
-                    //     if ((child as THREE.Mesh).isMesh) {
-                    //         // (child as THREE.Mesh).material = material
-                    //         if ((child as THREE.Mesh).material) {
-                    //             ((child as THREE.Mesh).material as THREE.MeshBasicMaterial).transparent = false
-                    //         }
-                    //     }
-                    // })
-                    // object.scale.set(.01, .01, .01)
-                    this.scene.add(object)
-                },
-                (xhr) => {
-                    console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-                },
-                (error) => {
-                    console.log(error)
-                })
-        // console.log(toy)
-        // const homeloader = await new modelLoader.GLTFLoader();
-        // homeloader.load(
-        //     "models/nftsoul.glb",
-        //     (gltf) => {
-        //         const model = gltf.scene;
-        //         this.scene.add(model);
-        //     },
-        //     undefined,
-        //     (error) => {
-        //         console.error(error);
-        //     }
-        // );
-        // const floorloader = await new modelLoader.GLTFLoader();
-        // floorloader.load(
-        //     "models/ground.glb",
-        //     (gltf) => {
-        //         const model = gltf.scene;
-        //         model.position.set(10,-0.3,20)
-        //         this.scene.add(model);
-        //     },
-        //     undefined,
-        //     (error) => {
-        //         console.error(error);
-        //     }
-        // );
-        //adding image
-        //background
-        // var texture = new THREE.TextureLoader().load('images/background.jpg');
-        // var geometry = new THREE.BoxBufferGeometry(400, 200, 5);
-        // var material = new THREE.MeshBasicMaterial({
-        //     map: texture
-        // });
-        // const mesh = new THREE.Mesh(geometry, material);
-        // mesh.position.set(0, 65, 100)
-        // this.scene.add(mesh);
-        // // ground
-        // var grassTexture = new THREE.TextureLoader().load('images/grass.jpg');
-        // var grassgeometry = new THREE.BoxBufferGeometry(100, 100, 10);
-        // var grassmaterial = new THREE.MeshBasicMaterial({
-        //     map: grassTexture
-        // });
-        // const grass = new THREE.Mesh(grassgeometry, grassmaterial);
-        // // grass.rotation.x = -0.5 * Math.PI
-
-        // grass.position.set(20,65,200)
-        // this.scene.add(grass);
+        this.addFirstNftGroup()
+        this.addSecondNftGroup()
+        this.addThirdNftGroup()
+        this.addForthNftGroup()
 
         // lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1.5);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 2);
         this.scene.add(ambientLight);
-
-        // const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 3)
-        // this.scene.add(directionalLight)
-        // directionalLight.position.set(0, 100, 0)
-        // const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5) //5 is size of light
-        // this.scene.add(dLightHelper)
 
         //setting animation loop
         this.renderer.setAnimationLoop(this.animate);
@@ -125,6 +164,59 @@ export default {
         animate() {
             this.renderer.render(this.scene, this.camera);
         },
+        addFirstNftGroup() {
+            for (var l = 0; l < this.nfts1.length; l++) {
+                var nft = new THREE.TextureLoader().load('images/nft.jpg')
+                var nftgeometry = new THREE.BoxBufferGeometry(1, 1, 0);
+                var nftmaterial = new THREE.MeshBasicMaterial({
+                    map: nft
+                });
+                const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
+                nftmesh.position.set(this.nfts1[l].position.x, this.nfts1[l].position.y, this.nfts1[l].position.z)
+                this.scene.add(nftmesh);
+            }
+        },
+        addSecondNftGroup() {
+            for (var l = 0; l < this.nfts2.length; l++) {
+                let nft = new THREE.TextureLoader().load('images/nft.jpg')
+                let nftgeometry = new THREE.BoxBufferGeometry(1, 1, 0);
+                 let nftmaterial = new THREE.MeshBasicMaterial({
+                    map: nft
+                });
+                const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
+                nftmesh.position.set(this.nfts2[l].position.x, this.nfts2[l].position.y, this.nfts2[l].position.z)
+                nftmesh.rotation.y=-1.56
+                this.scene.add(nftmesh);
+            }
+        },
+
+        addThirdNftGroup() {
+            for (var l = 0; l < this.nfts3.length; l++) {
+                let nft = new THREE.TextureLoader().load('images/nft.jpg')
+                let nftgeometry = new THREE.BoxBufferGeometry(1,0.8, 0);
+                 let nftmaterial = new THREE.MeshBasicMaterial({
+                    map: nft
+                });
+                const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
+                nftmesh.position.set(this.nfts3[l].position.x, this.nfts3[l].position.y, this.nfts3[l].position.z)
+                nftmesh.rotation.y=-1.56
+                this.scene.add(nftmesh);
+            }
+        },
+        addForthNftGroup() {
+            for (var l = 0; l < this.nfts4.length; l++) {
+                let nft = new THREE.TextureLoader().load('images/nft.jpg')
+                let nftgeometry = new THREE.BoxBufferGeometry(0.5,0.7, 0);
+                 let nftmaterial = new THREE.MeshBasicMaterial({
+                    map: nft
+                });
+                const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
+                nftmesh.position.set(this.nfts4[l].position.x, this.nfts4[l].position.y, this.nfts4[l].position.z)
+                nftmesh.rotation.y=-1.56
+                this.scene.add(nftmesh);
+            }
+        }
+
     },
 };
 </script>

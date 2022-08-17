@@ -164,6 +164,7 @@ export const actions = {
       let response = await this.$auth.loginWith("local", {
         data: data,
       });
+      console.log('logged:',response.data)
       context.commit("setWalletAddress", walletAddress);
       this.$auth.setUser(response.data.user);
       this.$auth.$storage.setUniversal("uni-nftsoul-user", response.data);
