@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@audius/fetch-nft": "^0.1.6",
+    "@cognite/three-combo-controls": "^1.4.3",
     "@metamask/detect-provider": "^1.2.0",
     "@metamask/eth-sig-util": "^4.0.1",
     "@nfteyez/sol-rayz": "^0.9.1",

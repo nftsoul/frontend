@@ -6,7 +6,9 @@
 
 <script>
 let THREE = null;
+let ComboControls=null
 if (process.client) {
+    ComboControls=require("@cognite/three-combo-controls")
     THREE = require("three");
 }
 export default {
@@ -19,7 +21,9 @@ export default {
                 0.1,
                 1000
             ),
-            renderer: new THREE.WebGLRenderer(),
+            renderer: new THREE.WebGLRenderer({
+                antialias: true
+            }),
             nfts1: [{
                     img: '',
                     position: {
@@ -64,7 +68,7 @@ export default {
                 {
                     img: '',
                     position: {
-                       x: -2.88,
+                        x: -2.88,
                         y: 1.12,
                         z: 1.25
                     }
@@ -81,7 +85,7 @@ export default {
                 {
                     img: '',
                     position: {
-                         x: 2.9,
+                        x: 2.9,
                         y: 0.92,
                         z: -0.73
                     }
@@ -115,13 +119,42 @@ export default {
         //rendering the view section
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.$refs.canvas.appendChild(this.renderer.domElement);
-        this.camera.position.set(0, 2, -3);
-        this.camera.lookAt(this.scene.position)
+        this.camera.position.set(0, 1, -1);
+        this.camera.lookAt(0, 0.5, 3)
+
+        // let OC=require("three/examples/jsm/controls/OrbitControls")
+        // let orbit=new OC.OrbitControls(this.camera,this.renderer.domElement)
+        // orbit.update()
 
         // to move object freely using mouse and to zoom in and zoom out
-        let OC = require("three/examples/jsm/controls/OrbitControls.js");
-        const orbit = new OC.OrbitControls(this.camera, this.renderer.domElement);
-        orbit.update();
+        let fpcntrl = require("three/examples/jsm/controls/FirstPersonControls");
+        var fpc = new fpcntrl.FirstPersonControls(this.camera, this.renderer.domElement);
+        console.log('ok:', fpc)
+        fpc.enabled = true;
+        fpc.activeLook = true
+        fpc.lookVertical = false
+        fpc.constrainVertical = false
+        fpc.verticalMin = Math.PI / 1.7
+        fpc.verticalMax = Math.PI / 2.3
+        fpc.movementSpeed = 0.1
+        fpc.lookSpeed = 0.005
+
+        console.log('control:', fpc)
+
+        function animate() {
+            requestAnimationFrame(animate)
+            fpc.update(0.1)
+        }
+        animate()
+        // const controls = ComboControls(this.camera, this.renderer.domElement);
+        // const clock = new THREE.Clock();
+
+        // function animate() {
+        //     controls.update(clock.getDelta());
+        //     // ...
+        // }
+        // animate()
+        // console.log('ctrl:',ComboControls)
 
         // 3d models
         const modelLoader = require("three/examples/jsm/loaders/GLTFLoader.js");
@@ -159,6 +192,7 @@ export default {
 
         //setting animation loop
         this.renderer.setAnimationLoop(this.animate);
+
     },
     methods: {
         animate() {
@@ -180,12 +214,12 @@ export default {
             for (var l = 0; l < this.nfts2.length; l++) {
                 let nft = new THREE.TextureLoader().load('images/nft.jpg')
                 let nftgeometry = new THREE.BoxBufferGeometry(1, 1, 0);
-                 let nftmaterial = new THREE.MeshBasicMaterial({
+                let nftmaterial = new THREE.MeshBasicMaterial({
                     map: nft
                 });
                 const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
                 nftmesh.position.set(this.nfts2[l].position.x, this.nfts2[l].position.y, this.nfts2[l].position.z)
-                nftmesh.rotation.y=-1.56
+                nftmesh.rotation.y = -1.56
                 this.scene.add(nftmesh);
             }
         },
@@ -193,26 +227,26 @@ export default {
         addThirdNftGroup() {
             for (var l = 0; l < this.nfts3.length; l++) {
                 let nft = new THREE.TextureLoader().load('images/nft.jpg')
-                let nftgeometry = new THREE.BoxBufferGeometry(1,0.8, 0);
-                 let nftmaterial = new THREE.MeshBasicMaterial({
+                let nftgeometry = new THREE.BoxBufferGeometry(1, 0.8, 0);
+                let nftmaterial = new THREE.MeshBasicMaterial({
                     map: nft
                 });
                 const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
                 nftmesh.position.set(this.nfts3[l].position.x, this.nfts3[l].position.y, this.nfts3[l].position.z)
-                nftmesh.rotation.y=-1.56
+                nftmesh.rotation.y = -1.56
                 this.scene.add(nftmesh);
             }
         },
         addForthNftGroup() {
             for (var l = 0; l < this.nfts4.length; l++) {
                 let nft = new THREE.TextureLoader().load('images/nft.jpg')
-                let nftgeometry = new THREE.BoxBufferGeometry(0.5,0.7, 0);
-                 let nftmaterial = new THREE.MeshBasicMaterial({
+                let nftgeometry = new THREE.BoxBufferGeometry(0.5, 0.7, 0);
+                let nftmaterial = new THREE.MeshBasicMaterial({
                     map: nft
                 });
                 const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
                 nftmesh.position.set(this.nfts4[l].position.x, this.nfts4[l].position.y, this.nfts4[l].position.z)
-                nftmesh.rotation.y=-1.56
+                nftmesh.rotation.y = -1.56
                 this.scene.add(nftmesh);
             }
         }
