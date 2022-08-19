@@ -4,14 +4,14 @@
         <v-row justify="center">
             <v-col cols="12" lg="8" md="8" align="center">
                 <p class="title">Mint Showcase</p>
-                <v-card color="#030537" width="500" height="300"></v-card>
                 <div class="enclose-border">
-                    <v-row>
-                        <v-col cols="3" v-for="(item,i) in 4" :key="i">
-                            <v-img :src="require('assets/images/featured/f1.png')" max-width="150"></v-img>
-                        </v-col>
+                    <v-row justify="center" v-if="fullmode==false">
+                        <GalleryMintshow :full="fullmode" :nfts="details.images" />
+                        <v-btn text @click="fullmode=true">
+                            <v-icon>mdi-fullscreen</v-icon>
+                            View Full Screen
+                        </v-btn>
                     </v-row>
-
                     <v-row>
                         <v-col>
                             <h4 class="theme-color mb-3">About this collection</h4>
@@ -26,7 +26,7 @@
                                 <v-icon color="#1DA1F2" @click="openLink(2)">mdi-linkedin</v-icon>
                             </v-row>
                         </v-card>
-                        <small>Mint Date <span class="theme-color mr-3">3 July 2022</span> <span class="mr-3">Items {{details.images.length}}</span> <span>Mint Price {{details.price}} Sol</span></small>
+                        <small v-if="details.images">Mint Date <span class="theme-color mr-3">3 July 2022</span> <span class="mr-3">Items {{details.images.length}}</span> <span>Mint Price {{details.price}} Sol</span></small>
                     </v-row>
                     <v-row class="py-8">
                         <v-col align="left">
@@ -74,6 +74,13 @@
             </v-col>
         </v-row>
     </v-container>
+    <v-overlay :value="fullmode">
+        <v-btn text @click="fullmode=false" class="text-capitalize full-view-btn">
+            <v-icon>mdi-fullscreen-exit</v-icon>
+            Exit Full Screen
+        </v-btn>
+        <GalleryMintshow :nfts="details.images" :full="fullmode" />
+    </v-overlay>
 </div>
 </template>
 
@@ -82,7 +89,8 @@ export default {
     data() {
         return {
             tab: 0,
-            details: ''
+            details: '',
+            fullmode: false
         }
     },
     computed: {
@@ -133,5 +141,11 @@ export default {
 
 .theme--dark.v-timeline .v-timeline-item__dot {
     background: transparent;
+}
+
+.full-view-btn {
+    position: absolute;
+    top: 5;
+    left: 5;
 }
 </style>

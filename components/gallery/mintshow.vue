@@ -6,12 +6,20 @@
 
 <script>
 let THREE = null;
-let ComboControls=null
 if (process.client) {
-    ComboControls=require("@cognite/three-combo-controls")
     THREE = require("three");
 }
 export default {
+    props: {
+        nfts: {
+            type: Array,
+            required: true
+        },
+        full: {
+            type: Boolean,
+            required: true
+        }
+    },
     data() {
         return {
             scene: new THREE.Scene(),
@@ -19,7 +27,7 @@ export default {
                 70,
                 window.innerWidth / window.innerHeight,
                 0.1,
-                1000
+                500
             ),
             renderer: new THREE.WebGLRenderer({
                 antialias: true
@@ -112,65 +120,26 @@ export default {
         };
     },
     async mounted() {
+        //x-y-z axes
         const axesHelper = new THREE.AxesHelper(50);
         axesHelper.setColors('#ff0000', '#00ff00', '#0000ff')
         this.scene.add(axesHelper);
 
         //rendering the view section
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        if (this.full == true) {
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+        } else {
+            this.renderer.setSize(window.innerWidth / 2.1, window.innerHeight / 1.5);
+        }
         this.$refs.canvas.appendChild(this.renderer.domElement);
         this.camera.position.set(0, 1, -1);
         this.camera.lookAt(0, 0.5, 3)
 
-        // let OC=require("three/examples/jsm/controls/OrbitControls")
-        // let orbit=new OC.OrbitControls(this.camera,this.renderer.domElement)
-        // orbit.update()
+        //control
+        let OC = require("three/examples/jsm/controls/OrbitControls")
+        let orbit = new OC.OrbitControls(this.camera, this.renderer.domElement)
+        orbit.update()
 
-        // to move object freely using mouse and to zoom in and zoom out
-        let fpcntrl = require("three/examples/jsm/controls/FirstPersonControls");
-        var fpc = new fpcntrl.FirstPersonControls(this.camera, this.renderer.domElement);
-        console.log('ok:', fpc)
-        fpc.enabled = true;
-        fpc.activeLook = true
-        fpc.lookVertical = false
-        fpc.constrainVertical = false
-        fpc.verticalMin = Math.PI / 1.7
-        fpc.verticalMax = Math.PI / 2.3
-        fpc.movementSpeed = 0.1
-        fpc.lookSpeed = 0.005
-
-        console.log('control:', fpc)
-
-        function animate() {
-            requestAnimationFrame(animate)
-            fpc.update(0.1)
-        }
-        animate()
-        // const controls = ComboControls(this.camera, this.renderer.domElement);
-        // const clock = new THREE.Clock();
-
-        // function animate() {
-        //     controls.update(clock.getDelta());
-        //     // ...
-        // }
-        // animate()
-        // console.log('ctrl:',ComboControls)
-
-        // 3d models
-        const modelLoader = require("three/examples/jsm/loaders/GLTFLoader.js");
-        const homeloader = await new modelLoader.GLTFLoader();
-        homeloader.load(
-            "models/new.glb",
-            (gltf) => {
-                const model = gltf.scene;
-                model.position.set(0, 0, 0)
-                this.scene.add(model);
-            },
-            undefined,
-            (error) => {
-                console.error(error);
-            }
-        );
         //adding wall image
         var texture = new THREE.TextureLoader().load('images/wall-banner.png');
         var geometry = new THREE.BoxBufferGeometry(6, 2, 0);
@@ -181,20 +150,38 @@ export default {
         mesh.position.set(0.05, 1, -3.05)
         this.scene.add(mesh);
 
+        this.addLight()
+        this.load3DModel()
         this.addFirstNftGroup()
         this.addSecondNftGroup()
         this.addThirdNftGroup()
         this.addForthNftGroup()
-
-        // lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 2);
-        this.scene.add(ambientLight);
 
         //setting animation loop
         this.renderer.setAnimationLoop(this.animate);
 
     },
     methods: {
+        async load3DModel() {
+            const modelLoader = require("three/examples/jsm/loaders/GLTFLoader.js");
+            const homeloader = await new modelLoader.GLTFLoader();
+            homeloader.load(
+                "models/mintcase.glb",
+                (gltf) => {
+                    const model = gltf.scene;
+                    model.position.set(0, 0, 0)
+                    this.scene.add(model);
+                },
+                undefined,
+                (error) => {
+                    console.error(error);
+                }
+            );
+        },
+        addLight() {
+            const ambientLight = new THREE.AmbientLight(0xffffff, 2);
+            this.scene.add(ambientLight);
+        },
         animate() {
             this.renderer.render(this.scene, this.camera);
         },
