@@ -10,7 +10,6 @@
                     <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
                             <div v-for="(item, i) in cases" :key="i">
-                            <p>Mint Showcase</p>
                                <GalleryMintCard :mintId="item._id" :title="item.collection_name" image="https://res.cloudinary.com/doxa4k3b0/image/upload/v1659090899/Nftsoul/mint-showcase/pvgdlof3jzupary13je2.jpg" :creator="item.user_id" :date="item.date" :mintPrice="item.price" />
                             </div>
                         </VueSlickCarousel>

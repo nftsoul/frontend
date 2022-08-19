@@ -15,18 +15,21 @@
                     <v-row>
                         <v-col>
                             <h4 class="theme-color mb-3">About this collection</h4>
-                            <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </small>
+                            <small>{{details.description}}</small>
                         </v-col>
                     </v-row>
                     <v-row class="mt-8">
                         <v-card tile color="#1905DA" class="mr-5">
-                            <v-icon color="#1DA1F2">mdi-twitter</v-icon>
+                            <v-row no-gutters>
+                                <v-icon color="#1DA1F2" @click="openLink(0)">mdi-twitter</v-icon>
+                                <v-img :src="require('~/assets/icons/discord.png')" @click="openLink(1)" width="25" height="20" class="mx-2"></v-img>
+                                <v-icon color="#1DA1F2" @click="openLink(2)">mdi-linkedin</v-icon>
+                            </v-row>
                         </v-card>
-                        <small>Mint Date <span class="theme-color mr-3">3 July 2022</span> <span class="mr-3">Items 12</span> <span>Mint Price 0.2 Sol</span></small>
+                        <small>Mint Date <span class="theme-color mr-3">3 July 2022</span> <span class="mr-3">Items {{details.images.length}}</span> <span>Mint Price {{details.price}} Sol</span></small>
                     </v-row>
                     <v-row class="py-8">
                         <v-col align="left">
-
                             <v-tabs v-model="tab" background-color="transparent" color="#c202d3" hide-slider>
                                 <v-tab class="text-capitalize">RoadMap</v-tab>
                                 <v-tab>Team</v-tab>
@@ -34,16 +37,16 @@
                             <v-tabs-items v-model="tab" style="background-color:transparent">
                                 <v-tab-item>
                                     <v-timeline align-top dense>
-                                        <v-timeline-item v-for="(item, i) in 4" :key="i" class="my-16" small color="white" right>
+                                        <v-timeline-item v-for="(item,i) in details.roadmap" :key="i" class="my-16" small color="white" right>
                                             <p class="theme-color mb-2">Phase {{i+1}}</p>
-                                            <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </small>
+                                            <small>{{item}}</small>
                                         </v-timeline-item>
                                     </v-timeline>
                                 </v-tab-item>
                                 <v-tab-item>
                                     <v-container>
                                         <v-row>
-                                            <v-col cols="12" lg="6" md="6" v-for="i in 4" :key="i">
+                                            <v-col cols="12" lg="6" md="6" v-for="(item,i) in details.members" :key="i">
                                                 <V-card dark>
                                                     <v-row no-gutters>
                                                         <v-col cols="8">
@@ -78,7 +81,38 @@
 export default {
     data() {
         return {
-            tab: 0
+            tab: 0,
+            details: ''
+        }
+    },
+    computed: {
+        mint_id() {
+            return this.$route.params.id
+        }
+    },
+    mounted() {
+        this.getMintDetails()
+    },
+    methods: {
+        getMintDetails() {
+            this.$axios.get('/mint/stream/' + this.mint_id)
+                .then(res => {
+                    this.details = res.data.result[0]
+                    console.log('data:', res.data)
+                })
+                .catch(err => console.log(err.response))
+        },
+        openLink(i) {
+            if (i == 0) {
+                window.open(this.details.social[0].twitter)
+
+            } else if (i == 1) {
+                window.open(this.details.social[0].discord)
+
+            } else if (i == 2) {
+                window.open(this.details.social[0].linkedin)
+
+            }
         }
     }
 }

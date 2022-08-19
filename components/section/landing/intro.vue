@@ -39,11 +39,7 @@
 </template>
 
 <script>
-import Appbar from "../layout/appbar";
 export default {
-  components: {
-    Appbar,
-  },
   data() {
     return {
       windowHeight: 0,
