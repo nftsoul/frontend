@@ -10,7 +10,7 @@
                     <client-only>
                         <VueSlickCarousel v-bind="slickSetting">
                             <div v-for="(item, i) in cases" :key="i">
-                               <GalleryMintCard :mintId="item._id" :title="item.collection_name" image="https://res.cloudinary.com/doxa4k3b0/image/upload/v1659090899/Nftsoul/mint-showcase/pvgdlof3jzupary13je2.jpg" :creator="item.user_id" :date="item.date" :mintPrice="item.price" />
+                               <GalleryMintCard :mintId="item._id" :title="item.collection_name" :image="item.image" :creator="item.user_id" :date="item.date" :mintPrice="item.price" />
                             </div>
                         </VueSlickCarousel>
                     </client-only>
@@ -55,8 +55,6 @@ export default {
             this.$axios
                 .get("/mint/list?page=1&limit=4")
                 .then((res) => {
-                    console.log('mint:',res.data)
-                    // this.free = res.data.free
                     this.cases=res.data.result
                 })
                 .catch((err) => console.log(err.response));

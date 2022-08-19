@@ -35,7 +35,21 @@
                             <FormCustomTextField v-model="member.role[i]" :rules="[validRules.required,validRules.lengthMin3]" />
                             <label>Social Link</label>
                             <FormCustomTextField v-model="member.social_link[i]" :rules="[validRules.required,validRules.lengthMin3]" />
+                            <v-col align="center">
+                                <v-avatar v-if="member.avatar[i]" class="mb-3" size="80">
+                                    <v-img :src="member.avatar[i]"></v-img>
+                                </v-avatar>
+                                <br>
+                                <v-btn dark color="#FE87FF" small :loading="uploadavatar" @click="selectAvatar(i)" class="mb-5">
+                                    <v-icon>
+                                        mdi-image-plus
+                                    </v-icon>
+                                    Upload Profile
+                                </v-btn>
+                            </v-col>
+
                         </v-col>
+                        <input ref="uploader" class="d-none" type="file" accept="image/png,image/jpg,image/jpeg" @change="onAvatarUpload" />
                     </v-row>
 
                     <v-btn color="#A0A0A0" dark class="mb-8" @click="team +=1">
@@ -91,13 +105,13 @@
                                             </div>
                                         </VueSlickCarousel>
                                     </client-only>
-                                    <v-btn dark color="#FE87FF" :loading="uploading" @click="selectImage" v-if="files.length >0 && files.length<11" class="mt-5">
+                                    <v-btn dark color="#FE87FF" :loading="uploading" @click="selectImage" v-if="files.length >0 && files.length<10" class="mt-5">
                                         <v-icon>
                                             mdi-image-plus
                                         </v-icon>
                                         Upload More
                                     </v-btn><br>
-                                    <small style="color:red" v-if="files.length>0 && files.length<11">11 nfts required to showcase.</small>
+                                    <small style="color:red" v-if="files.length>0 && files.length<10">10 nfts required to showcase.</small>
                                     <input ref="imageUploader" multiple class="d-none" type="file" accept="image/png,image/jpg,image/jpeg" @change="onImageUpload" />
                                 </div>
                             </div>
@@ -130,7 +144,8 @@ export default {
             member: {
                 name: [],
                 role: [],
-                social_link: []
+                social_link: [],
+                avatar: []
             },
             twitter: '',
             discord: '',
@@ -151,6 +166,8 @@ export default {
             activePicker: null,
             date: null,
             menu: false,
+            avatarIndex: null,
+            uploadavatar: false,
             slickSetting: {
                 dots: true,
                 infinite: true,
@@ -204,9 +221,9 @@ export default {
     methods: {
         async create() {
             if (this.$refs.form.validate()) {
-                if (this.files.length < 11) {
+                if (this.files.length < 10) {
                     this.$toast
-                        .error("You must select 11 nfts.", {
+                        .error("You must select 10 nfts.", {
                             iconPack: "mdi",
                             icon: "mdi-image",
                             theme: "outline",
@@ -216,25 +233,28 @@ export default {
 
                     //arranging team data
                     this.saving = true
-                    let meminfo = []
-                    for (var x = 0; x < this.team; x++) {
-                        meminfo.push({
-                            'name': this.member.name[x],
-                            'role': this.member.role[x],
-                            'social_link': this.member.social_link[x]
+                    let finalmem = []
+                    for (var x = 0; x < this.member.name.length - 1; x++) {
+                        finalmem.push({
+                            name: this.member.name[x + 1],
+                            role: this.member.role[x + 1],
+                            social_link: this.member.social_link[x + 1],
+                            avatar: this.member.avatar[x + 1]
                         })
                     }
+
                     this.$axios.post('/mint/create', {
                             collection_name: this.name,
                             description: this.description,
                             roadmap: this.road.phases,
                             about_team: this.about_team,
-                            members: meminfo,
+                            members: finalmem,
                             social: {
                                 'twitter': this.twitter,
                                 'discord': this.discord,
                                 'linkedin': this.linkedin
                             },
+                            date: this.date,
                             email: this.email,
                             price: this.mintPrice,
                             image: this.files[0],
@@ -255,14 +275,47 @@ export default {
                 }
             }
         },
+
         selectImage() {
             this.$refs.imageUploader.click();
+        },
+        selectAvatar(index) {
+            this.avatarIndex = index
+            this.$refs.uploader.click();
         },
         removeFile(item) {
             this.files.splice(this.files.indexOf(item), 1)
         },
         save(date) {
             this.$refs.menu.save(date)
+        },
+        async onAvatarUpload(e) {
+            this.uploadavatar = true
+            var file = e.target.files[0];
+
+            const readData = (f) =>
+                new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(f);
+                });
+
+            /* Read data */
+            const data = await readData(file);
+
+            /* upload the converted data */
+            const instance = this.$cloudinary
+                .upload(data, {
+                    folder: "Nftsoul/mint-profile",
+                    uploadPreset: "famafihn",
+                })
+                .then((response) => {
+                    this.uploadavatar = false;
+                    this.member.avatar[this.avatarIndex] = response.secure_url
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
         async onImageUpload(e) {
 
@@ -295,6 +348,7 @@ export default {
                     });
             }
 
+            // }
         }
     }
 }

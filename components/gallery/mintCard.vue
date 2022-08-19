@@ -54,7 +54,7 @@
           <v-col class="pa-0" align="center">
             <small class="theme-color">{{$moment(date).format("LL")}}</small>
             <v-row no-gutters>
-              <small class="mr-1">Items: 12</small>
+              <small class="mr-1">Items: 10</small>
               <v-spacer></v-spacer>
               <small class="mr-1">Price: {{ mintPrice }}</small>
             </v-row>

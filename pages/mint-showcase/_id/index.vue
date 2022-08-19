@@ -6,7 +6,7 @@
                 <p class="title">Mint Showcase</p>
                 <div class="enclose-border">
                     <v-row justify="center" v-if="fullmode==false">
-                        <GalleryMintshow :full="fullmode" :nfts="details.images" />
+                        <GalleryMintshow v-if="details.images" :full="fullmode" :nfts="details.images" />
                         <v-btn text @click="fullmode=true">
                             <v-icon>mdi-fullscreen</v-icon>
                             View Full Screen
@@ -26,7 +26,7 @@
                                 <v-icon color="#1DA1F2" @click="openLink(2)">mdi-linkedin</v-icon>
                             </v-row>
                         </v-card>
-                        <small v-if="details.images">Mint Date <span class="theme-color mr-3">3 July 2022</span> <span class="mr-3">Items {{details.images.length}}</span> <span>Mint Price {{details.price}} Sol</span></small>
+                        <small v-if="details.images">Mint Date <span class="theme-color mr-3">{{$moment(details.date).format("LL")}}</span> <span class="mr-3">Items {{details.images.length}}</span> <span>Mint Price {{details.price}} Sol</span></small>
                     </v-row>
                     <v-row class="py-8">
                         <v-col align="left">
@@ -50,15 +50,15 @@
                                                 <V-card dark>
                                                     <v-row no-gutters>
                                                         <v-col cols="8">
-                                                            <h4>Hodei Amadi</h4>
+                                                            <h4>{{item.name}}</h4>
                                                             <v-divider style="border:1px solid white"></v-divider>
-                                                            <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor .</small>
+                                                            <small>{{item.role}}</small>
                                                             <v-row no-gutters>
-                                                                <v-icon color="#1DA1F2">mdi-twitter</v-icon>
+                                                                <v-icon color="#1DA1F2" @click="window.open(item.social_link)">mdi-twitter</v-icon>
                                                             </v-row>
                                                         </v-col>
                                                         <v-col cols="4">
-                                                            <v-img class="rounded-circle ml-n2" width="100" height="100" style="border:2px solid white" :src="require('~/assets/images/featured/f1.png')"></v-img>
+                                                            <v-img v-if="item.avatar" class="rounded-circle ml-n2" width="100" height="100" style="border:2px solid white" :src="item.avatar"></v-img>
                                                         </v-col>
                                                     </v-row>
                                                 </V-card>
@@ -106,7 +106,6 @@ export default {
             this.$axios.get('/mint/stream/' + this.mint_id)
                 .then(res => {
                     this.details = res.data.result[0]
-                    console.log('data:', res.data)
                 })
                 .catch(err => console.log(err.response))
         },

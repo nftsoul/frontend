@@ -1,12 +1,18 @@
 <template>
 <div>
     <v-container style="height:500px;">
+        <v-row no-gutters justify="end">
+            <v-btn class="btn-exhibit mt-5" @click="$router.push('/profile/'+userAddress+'/create-mint-showcase')">
+                Create New Mintcase
+                <v-icon>mdi-plus</v-icon>
+            </v-btn>
+        </v-row>
         <v-row justify="center" v-if="shows.length > 0">
             <v-col v-for="(item, i) in shows" :key="i" cols="12" lg="3" md="4" align="center">
                 <GalleryMintCard :mintId="item._id" :title="item.collection_name" :image="item.image" :creator="item.user_id" date="2022-03-04" :mintPrice="item.price" />
             </v-col>
         </v-row>
-         <v-row v-else justify="center">
+        <v-row v-else justify="center">
             <client-only v-if="loaded==false">
                 <v-skeleton-loader v-for="(item,i) in 4" :key="i" class="mx-5" width="220" dark type="card, article"></v-skeleton-loader>
             </client-only>
@@ -30,7 +36,7 @@ export default {
     data() {
         return {
             shows: [],
-            loaded:false
+            loaded: false
         }
     },
     computed: {
@@ -38,18 +44,16 @@ export default {
             return this.$route.params.address;
         },
     },
-    mounted(){
+    mounted() {
         this.getMyShows()
     },
-    methods:{
-        getMyShows(){
+    methods: {
+        getMyShows() {
             this.$axios
                 .get("/mint/my/list?page=1&limit=4")
                 .then((res) => {
-                    console.log('mint:',res.data)
-                    // this.free = res.data.free
-                    this.shows=res.data.result
-                    this.loaded=true
+                    this.shows = res.data.result
+                    this.loaded = true
                 })
                 .catch((err) => console.log(err.response));
         }
