@@ -82,7 +82,6 @@
 
                                                             <v-spacer></v-spacer>
 
-                                                            <!-- <span>Rank {{ getRank(item) }}</span> -->
                                                         </v-row>
                                                         <v-divider class="mt-3"></v-divider>
                                                         <v-card-text class="caption px-0">

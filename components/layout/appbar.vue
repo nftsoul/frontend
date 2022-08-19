@@ -11,7 +11,6 @@
             <v-btn v-if="walletAddress == null" class="connect-wallet" @click="$store.commit('wallet/setWalletDialog',true)">
                 Connect Wallet
             </v-btn>
-
             <div v-else>
                 <v-row no-gutters>
 

@@ -122,6 +122,7 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: ["@nuxtjs/axios", "@nuxtjs/toast", "@nuxtjs/dotenv",'@nuxtjs/auth-next','@nuxtjs/cloudinary'],
+
   axios: {
     baseURL: process.env.API_URL,
     // credentials: true,

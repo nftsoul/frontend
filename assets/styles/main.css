@@ -101,12 +101,14 @@ label,
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
 .gradient-title{
   font-weight: 500;
   background: linear-gradient(264.75deg, #FE87FF 3.04%, #FD2BFF 23.86%, #C202D3 41.34%, #5E0FFF 68.89%, #1905DA 99.63%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
 .spinner-box {
   width: 60px;
   height: 60px;
