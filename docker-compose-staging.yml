@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
       args:
         - NODE_ENV=development
-        - IMG=14
+        - IMG=16
         - LOCATION=nftsoul-staging
     restart: always
     user: root:root
