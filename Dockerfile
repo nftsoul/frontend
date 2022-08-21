@@ -14,7 +14,7 @@ CMD export NODE_ENV=${NODE_ENV}
 RUN node -v
 RUN npm -v
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 RUN npm run build
 
 #start the server
