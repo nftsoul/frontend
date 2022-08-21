@@ -2,7 +2,7 @@
     <div>
         <button @click="GoHome" type="button">Home Page</button>
         <NuxtLink to="Details">details</NuxtLink>
-        <NuxtLink to="/PopularGalleries" event="" @click.native="calculateQueryParams('/foo')">
+        <NuxtLink to="/PopularGalleries" event="" @click.native="calculateQueryParams('/PopularGalleries')">
             Popular Galleries
         </NuxtLink>
     </div>
@@ -18,7 +18,7 @@ export default {
 
     calculateQueryParams(path) {
         const query = {
-            foo: performance.now(),
+            PopularGalleries: performance.now(),
         }
 
         this.$router.push({ path, query })

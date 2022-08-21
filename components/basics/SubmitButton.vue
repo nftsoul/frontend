@@ -1,6 +1,6 @@
 <template>
     <v-btn class="submit-btn">
-        <button class="btn" type="button">{{ SubmitButtonText }}</button>
+        <button @click="ProfilePage" class="btn" type="button">{{ SubmitButtonText }}</button>
     </v-btn>
 </template>
 
@@ -9,13 +9,17 @@ export default {
     props: {
         SubmitButtonText: {
             type: String,
+        },
+        path: {
+            type: String,
+            required: true
         }
     },
     methods: {
-        ShowAlert(msg) {
-            alert(msg);
+        ProfilePage() {
+            this.$router.push(this.path);
         }
-    },
+    }
 }
 </script>
 
@@ -24,7 +28,7 @@ export default {
     background-image: linear-gradient(to right, #2E11DE, #FE87FF);
     border-radius: 6px;
     padding: 6px;
-    margin: 8px;
+    margin: 10px;
     width: 140px;
 }
 

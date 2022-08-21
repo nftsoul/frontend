@@ -4,8 +4,10 @@
             <button class="btn" type=button @click="GoHome">Go Home</button>
             <!-- <ActionButton @click="GoHome" ActionButtonText="Return Home" /> -->
         </div>
-        <nuxt-link to="{name: 'IndexPage'}">
+        <nuxt-link :to="{ name: 'index' }">
             <Button ButtonText="Go To Home" />
+            <v-icon>
+            </v-icon>
         </nuxt-link>
     </div>
 </template>
