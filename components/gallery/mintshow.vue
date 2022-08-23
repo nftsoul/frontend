@@ -1,7 +1,24 @@
 <template>
-<div>
+<div id="blocker">
     <div ref="canvas">
-        <div id="instruct"></div>
+        <div id="instructions" class="dark-bg">
+            <v-row no-gutters class="mb-0 px-5" :class="setPadding()" justify="space-between">
+                <v-btn text v-if="fullmode==true" @click="$store.commit('three/setFullMode',false)" class="text-capitalize full-view-btn">
+                    <v-icon>mdi-fullscreen-exit</v-icon>
+                    Exit Full Screen
+                </v-btn>
+                <p style="font-size:25px">
+                    Click to Enter
+                </p>
+                <div>
+                    <small class="mx-5">Move: WASD or Arrow Keys</small>
+                    <small class="mx-5">Look: MOUSE</small>
+                    <small class="mx-5">Exit: ESC</small>
+                </div>
+
+            </v-row>
+
+        </div>
     </div>
 
 </div>
@@ -25,104 +42,25 @@ export default {
     },
     data() {
         return {
-            scene: new THREE.Scene(),
-            camera: new THREE.PerspectiveCamera(
-                70,
-                window.innerWidth / window.innerHeight,
-                0.1,
-                500
-            ),
-            renderer: new THREE.WebGLRenderer({
-                antialias: true
-            }),
-            nfts1: [{
-                    img: '',
-                    position: {
-                        x: -0.5,
-                        y: 0.95,
-                        z: 2.85
-                    }
-                },
-                {
-                    img: '',
-                    position: {
-                        x: 0.88,
-                        y: 0.95,
-                        z: 2.85
-                    }
-                },
-                {
-                    img: '',
-                    position: {
-                        x: -1.92,
-                        y: 0.95,
-                        z: 2.85
-                    }
-                }
-            ],
-            nfts2: [{
-                    img: '',
-                    position: {
-                        x: -2.88,
-                        y: 1.12,
-                        z: -1.74
-                    }
-                },
-                {
-                    img: '',
-                    position: {
-                        x: -2.88,
-                        y: 1.12,
-                        z: -0.25
-                    }
-                },
-                {
-                    img: '',
-                    position: {
-                        x: -2.88,
-                        y: 1.12,
-                        z: 1.25
-                    }
-                }
-            ],
-            nfts3: [{
-                    img: '',
-                    position: {
-                        x: 2.9,
-                        y: 1.18,
-                        z: -1.99
-                    }
-                },
-                {
-                    img: '',
-                    position: {
-                        x: 2.9,
-                        y: 0.92,
-                        z: -0.73
-                    }
-                }
-            ],
-            nfts4: [{
-                    img: '',
-                    position: {
-                        x: 2,
-                        y: 1.31,
-                        z: 1.85
-                    }
-                },
-                {
-                    img: '',
-                    position: {
-                        x: 2,
-                        y: 1.31,
-                        z: 0.85
-                    }
-                },
 
-            ],
         };
     },
+    computed: {
+        fullmode() {
+            return this.$store.state.three.fullmode
+        },
+    },
     async mounted() {
+        let scene = new THREE.Scene()
+        let camera = new THREE.PerspectiveCamera(
+            70,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            500
+        )
+        let renderer = new THREE.WebGLRenderer({
+            antialias: true
+        })
         //x-y-z axes
         const axesHelper = new THREE.AxesHelper(50);
         axesHelper.setColors('#ff0000', '#00ff00', '#0000ff')
@@ -130,35 +68,192 @@ export default {
 
         //rendering the view section
         if (this.full == true) {
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(window.innerWidth, window.innerHeight);
         } else {
-            this.renderer.setSize(window.innerWidth / 2.1, window.innerHeight / 1.5);
+            renderer.setSize(window.innerWidth / 2.1, window.innerHeight / 1.5);
         }
-        this.$refs.canvas.appendChild(this.renderer.domElement);
-        this.camera.position.set(0, 1, -2);
-        this.camera.lookAt(0, 0.5, 3)
+        this.$refs.canvas.appendChild(renderer.domElement);
+        camera.position.set(0, 1, -2);
+        camera.lookAt(0, 0.5, 3)
 
-        //control
-        // let OC = require("three/examples/jsm/controls/OrbitControls")
-        // let orbit = new OC.OrbitControls(this.camera, this.renderer.domElement)
-        // orbit.update()
-        let fpcntrl = require("three/examples/jsm/controls/FirstPersonControls");
-        var fpc = new fpcntrl.FirstPersonControls(this.camera, this.renderer.domElement);
-        
-        fpc.enabled = true;
-        fpc.activeLook = true
-        fpc.lookVertical = false
-        fpc.constrainVertical = false
-        fpc.verticalMin = Math.PI / 1.7
-        fpc.verticalMax = Math.PI / 2.3
-        fpc.movementSpeed = 0.1
-        fpc.lookSpeed = 0.005
+        //pointer lock controls
+        let PLC = require("three/examples/jsm/controls/PointerLockControls")
+        let controls;
 
-        function animate() {
-            requestAnimationFrame(animate)
-            fpc.update(0.3)
+        const objects = [];
+
+        let raycaster;
+
+        let moveForward = false;
+        let moveBackward = false;
+        let moveLeft = false;
+        let moveRight = false;
+        let canJump = false;
+
+        let prevTime = performance.now();
+        const velocity = new THREE.Vector3();
+        const direction = new THREE.Vector3();
+        const vertex = new THREE.Vector3();
+        const color = new THREE.Color();
+
+        const light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
+        light.position.set(0.5, 1, 0.75);
+        scene.add(light);
+        controls = new PLC.PointerLockControls(camera, renderer.domElement);
+
+        const blocker = document.getElementById('blocker');
+        const instructions = document.getElementById('instructions');
+
+        instructions.addEventListener('click', function () {
+
+            controls.lock();
+
+        });
+
+        controls.addEventListener('lock', function () {
+
+            instructions.style.display = 'none';
+            // blocker.style.display = 'none';
+
+        });
+
+        controls.addEventListener('unlock', function () {
+
+            // blocker.style.display = 'block';
+            instructions.style.display = '';
+
+        });
+
+        scene.add(controls.getObject());
+
+        const onKeyDown = function (event) {
+
+            switch (event.code) {
+
+                case 'ArrowUp':
+                case 'KeyW':
+                    moveForward = true;
+                    break;
+
+                case 'ArrowLeft':
+                case 'KeyA':
+                    moveLeft = true;
+                    break;
+
+                case 'ArrowDown':
+                case 'KeyS':
+                    moveBackward = true;
+                    break;
+
+                case 'ArrowRight':
+                case 'KeyD':
+                    moveRight = true;
+                    break;
+
+                case 'Space':
+                    if (canJump === true) velocity.y += 350;
+                    canJump = false;
+                    break;
+
+            }
+
+        };
+
+        const onKeyUp = function (event) {
+
+            switch (event.code) {
+
+                case 'ArrowUp':
+                case 'KeyW':
+                    moveForward = false;
+                    break;
+
+                case 'ArrowLeft':
+                case 'KeyA':
+                    moveLeft = false;
+                    break;
+
+                case 'ArrowDown':
+                case 'KeyS':
+                    moveBackward = false;
+                    break;
+
+                case 'ArrowRight':
+                case 'KeyD':
+                    moveRight = false;
+                    break;
+
+            }
+
+        };
+
+        document.addEventListener('keydown', onKeyDown);
+        document.addEventListener('keyup', onKeyUp);
+
+        raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
+        animatecontrol()
+
+        function animatecontrol() {
+
+            requestAnimationFrame(animatecontrol);
+
+            const time = performance.now();
+
+            if (controls.isLocked === true) {
+
+                raycaster.ray.origin.copy(controls.getObject().position);
+                raycaster.ray.origin.y -= 10;
+
+                const intersections = raycaster.intersectObjects(objects, false);
+
+                const onObject = intersections.length > 0;
+
+                const delta = (time - prevTime) / 1000;
+
+                velocity.x -= velocity.x * 10.0 * delta;
+                velocity.z -= velocity.z * 10.0 * delta;
+
+                velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+                direction.z = Number(moveForward) - Number(moveBackward);
+                direction.x = Number(moveRight) - Number(moveLeft);
+                direction.normalize(); // this ensures consistent movements in all directions
+
+                if (moveForward || moveBackward) velocity.z -= direction.z * 50.0 * delta;
+                if (moveLeft || moveRight) velocity.x -= direction.x * 50.0 * delta;
+
+                if (onObject === true) {
+
+                    velocity.y = Math.max(0, velocity.y);
+                    canJump = true;
+
+                }
+
+                controls.moveRight(-velocity.x * delta);
+                controls.moveForward(-velocity.z * delta);
+
+            }
+            prevTime = time;
+            renderer.render(scene, camera);
         }
-        animate()
+
+        //loading 3d model
+        const modelLoader = require("three/examples/jsm/loaders/GLTFLoader.js");
+        const homeloader = await new modelLoader.GLTFLoader();
+        homeloader.load(
+            "https://res.cloudinary.com/doxa4k3b0/image/upload/v1660887567/Nftsoul/mintcase_kxkrml.glb",
+            (gltf) => {
+                const model = gltf.scene;
+                model.position.set(0, 0, 0)
+                scene.add(model);
+            },
+            undefined,
+            (error) => {
+                console.error(error);
+            }
+        );
+        const ambientLight = new THREE.AmbientLight(0xffffff, 2);
+        scene.add(ambientLight);
 
         //adding wall image
         var texture = new THREE.TextureLoader().load('https://res.cloudinary.com/doxa4k3b0/image/upload/v1660887447/Nftsoul/wall-banner_fnwdai.png');
@@ -168,108 +263,185 @@ export default {
         });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(0.05, 1, -3.05)
-        this.scene.add(mesh);
-        this.plotNfts()
-        this.addLight()
-        this.load3DModel()
-        this.addFirstNftGroup()
-        this.addSecondNftGroup()
-        this.addThirdNftGroup()
-        this.addForthNftGroup()
+        scene.add(mesh);
 
         //setting animation loop
-        this.renderer.setAnimationLoop(this.animate);
+        // this.renderer.setAnimationLoop(this.animate);
+        //plotting nfts dynamically
+        var nfts1 = [{
+                img: '',
+                position: {
+                    x: -0.5,
+                    y: 0.95,
+                    z: 2.85
+                }
+            },
+            {
+                img: '',
+                position: {
+                    x: 0.88,
+                    y: 0.95,
+                    z: 2.85
+                }
+            },
+            {
+                img: '',
+                position: {
+                    x: -1.92,
+                    y: 0.95,
+                    z: 2.85
+                }
+            }
+        ];
+        var nfts2 = [{
+                img: '',
+                position: {
+                    x: -2.88,
+                    y: 1.12,
+                    z: -1.74
+                }
+            },
+            {
+                img: '',
+                position: {
+                    x: -2.88,
+                    y: 1.12,
+                    z: -0.25
+                }
+            },
+            {
+                img: '',
+                position: {
+                    x: -2.88,
+                    y: 1.12,
+                    z: 1.25
+                }
+            }
+        ];
+        var nfts3 = [{
+                img: '',
+                position: {
+                    x: 2.9,
+                    y: 1.18,
+                    z: -1.99
+                }
+            },
+            {
+                img: '',
+                position: {
+                    x: 2.9,
+                    y: 0.92,
+                    z: -0.73
+                }
+            }
+        ];
+        var nfts4 = [{
+                img: '',
+                position: {
+                    x: 2,
+                    y: 1.31,
+                    z: 1.85
+                }
+            },
+            {
+                img: '',
+                position: {
+                    x: 2,
+                    y: 1.31,
+                    z: 0.85
+                }
+            },
+
+        ];
+
+        nfts1[0].img = this.nfts[0]
+        nfts1[1].img = this.nfts[1]
+        nfts1[2].img = this.nfts[2]
+        nfts2[0].img = this.nfts[3]
+        nfts2[1].img = this.nfts[4]
+        nfts2[2].img = this.nfts[5]
+        nfts3[1].img = this.nfts[6]
+        nfts3[1].img = this.nfts[7]
+        nfts4[0].img = this.nfts[8]
+        nfts4[1].img = this.nfts[9]
+
+        //first group nfts
+        for (var l = 0; l < nfts1.length; l++) {
+            var nft = new THREE.TextureLoader().load(nfts1[l].img)
+            var nftgeometry = new THREE.BoxBufferGeometry(1, 1, 0);
+            var nftmaterial = new THREE.MeshBasicMaterial({
+                map: nft
+            });
+            const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
+            nftmesh.position.set(nfts1[l].position.x, nfts1[l].position.y, nfts1[l].position.z)
+            scene.add(nftmesh);
+        }
+
+        //second group nft
+        for (var l = 0; l < nfts2.length; l++) {
+            let nft = new THREE.TextureLoader().load(nfts2[l].img)
+            let nftgeometry = new THREE.BoxBufferGeometry(1, 1, 0);
+            let nftmaterial = new THREE.MeshBasicMaterial({
+                map: nft
+            });
+            const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
+            nftmesh.position.set(nfts2[l].position.x, nfts2[l].position.y, nfts2[l].position.z)
+            nftmesh.rotation.y = -1.56
+            scene.add(nftmesh);
+        }
+
+        //third group nft
+        for (var l = 0; l < nfts3.length; l++) {
+            let nft = new THREE.TextureLoader().load(nfts3[l].img)
+            let nftgeometry = new THREE.BoxBufferGeometry(1, 0.8, 0);
+            let nftmaterial = new THREE.MeshBasicMaterial({
+                map: nft
+            });
+            const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
+            nftmesh.position.set(nfts3[l].position.x, nfts3[l].position.y, nfts3[l].position.z)
+            nftmesh.rotation.y = -1.56
+            scene.add(nftmesh);
+        }
+
+        //forth group nfts
+        for (var l = 0; l < nfts4.length; l++) {
+            let nft = new THREE.TextureLoader().load(nfts4[l].img)
+            let nftgeometry = new THREE.BoxBufferGeometry(0.5, 0.7, 0);
+            let nftmaterial = new THREE.MeshBasicMaterial({
+                map: nft
+            });
+            const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
+            nftmesh.position.set(nfts4[l].position.x, nfts4[l].position.y, nfts4[l].position.z)
+            nftmesh.rotation.y = -1.56
+            scene.add(nftmesh);
+        }
 
     },
     methods: {
-        plotNfts() {
-            this.nfts1[0].img = this.nfts[0]
-            this.nfts1[1].img = this.nfts[1]
-            this.nfts1[2].img = this.nfts[2]
-            this.nfts2[0].img = this.nfts[3]
-            this.nfts2[1].img = this.nfts[4]
-            this.nfts2[2].img = this.nfts[5]
-            this.nfts3[1].img = this.nfts[6]
-            this.nfts3[1].img = this.nfts[7]
-            this.nfts4[0].img = this.nfts[8]
-            this.nfts4[1].img = this.nfts[9]
-        },
-        async load3DModel() {
-            const modelLoader = require("three/examples/jsm/loaders/GLTFLoader.js");
-            const homeloader = await new modelLoader.GLTFLoader();
-            homeloader.load(
-                "https://res.cloudinary.com/doxa4k3b0/image/upload/v1660887567/Nftsoul/mintcase_kxkrml.glb",
-                (gltf) => {
-                    const model = gltf.scene;
-                    model.position.set(0, 0, 0)
-                    this.scene.add(model);
-                },
-                undefined,
-                (error) => {
-                    console.error(error);
-                }
-            );
-        },
-        addLight() {
-            const ambientLight = new THREE.AmbientLight(0xffffff, 2);
-            this.scene.add(ambientLight);
-        },
-        animate() {
-            this.renderer.render(this.scene, this.camera);
-        },
-        addFirstNftGroup() {
-            for (var l = 0; l < this.nfts1.length; l++) {
-                var nft = new THREE.TextureLoader().load(this.nfts1[l].img)
-                var nftgeometry = new THREE.BoxBufferGeometry(1, 1, 0);
-                var nftmaterial = new THREE.MeshBasicMaterial({
-                    map: nft
-                });
-                const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
-                nftmesh.position.set(this.nfts1[l].position.x, this.nfts1[l].position.y, this.nfts1[l].position.z)
-                this.scene.add(nftmesh);
+        setPadding() {
+            if (this.fullmode == true) {
+                return 'pt-16'
+            } else {
+                return 'pt-2'
             }
         },
-        addSecondNftGroup() {
-            for (var l = 0; l < this.nfts2.length; l++) {
-                let nft = new THREE.TextureLoader().load(this.nfts2[l].img)
-                let nftgeometry = new THREE.BoxBufferGeometry(1, 1, 0);
-                let nftmaterial = new THREE.MeshBasicMaterial({
-                    map: nft
-                });
-                const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
-                nftmesh.position.set(this.nfts2[l].position.x, this.nfts2[l].position.y, this.nfts2[l].position.z)
-                nftmesh.rotation.y = -1.56
-                this.scene.add(nftmesh);
-            }
-        },
-
-        addThirdNftGroup() {
-            for (var l = 0; l < this.nfts3.length; l++) {
-                let nft = new THREE.TextureLoader().load(this.nfts3[l].img)
-                let nftgeometry = new THREE.BoxBufferGeometry(1, 0.8, 0);
-                let nftmaterial = new THREE.MeshBasicMaterial({
-                    map: nft
-                });
-                const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
-                nftmesh.position.set(this.nfts3[l].position.x, this.nfts3[l].position.y, this.nfts3[l].position.z)
-                nftmesh.rotation.y = -1.56
-                this.scene.add(nftmesh);
-            }
-        },
-        addForthNftGroup() {
-            for (var l = 0; l < this.nfts4.length; l++) {
-                let nft = new THREE.TextureLoader().load(this.nfts4[l].img)
-                let nftgeometry = new THREE.BoxBufferGeometry(0.5, 0.7, 0);
-                let nftmaterial = new THREE.MeshBasicMaterial({
-                    map: nft
-                });
-                const nftmesh = new THREE.Mesh(nftgeometry, nftmaterial);
-                nftmesh.position.set(this.nfts4[l].position.x, this.nfts4[l].position.y, this.nfts4[l].position.z)
-                nftmesh.rotation.y = -1.56
-                this.scene.add(nftmesh);
-            }
-        }
 
     },
 };
 </script>
+
+<style>
+#instructions {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+
+    /* text-align: center; */
+    font-size: 18px;
+    cursor: pointer;
+}
+</style>

@@ -7,7 +7,7 @@
                 <div class="enclose-border">
                     <v-row justify="center" v-if="fullmode==false">
                         <GalleryMintshow v-if="details.images" :full="fullmode" :nfts="details.images" />
-                        <v-btn text @click="fullmode=true">
+                        <v-btn text @click="$store.commit('three/setFullMode',true)">
                             <v-icon>mdi-fullscreen</v-icon>
                             View Full Screen
                         </v-btn>
@@ -75,10 +75,6 @@
         </v-row>
     </v-container>
     <v-overlay :value="fullmode">
-        <v-btn text @click="fullmode=false" class="text-capitalize full-view-btn">
-            <v-icon>mdi-fullscreen-exit</v-icon>
-            Exit Full Screen
-        </v-btn>
         <GalleryMintshow :nfts="details.images" :full="fullmode" />
     </v-overlay>
 </div>
@@ -90,10 +86,12 @@ export default {
         return {
             tab: 0,
             details: '',
-            fullmode: false
         }
     },
     computed: {
+        fullmode(){
+            return this.$store.state.three.fullmode
+        },
         mint_id() {
             return this.$route.params.id
         }
