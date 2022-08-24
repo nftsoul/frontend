@@ -1,39 +1,29 @@
 <template>
-  <v-app dark>
-    <v-main>
-      <MyNav />
-      <Nuxt />
-    </v-main>
-  </v-app>
+<v-app>
+    <client-only>
+        <LayoutAppbar />
+        <CommonSolscan />
+    </client-only>
+    <Nuxt />
+    <client-only>
+        <LayoutFooter />
+    </client-only>
+</v-app>
 </template>
 
 <script>
-import MyNav from "../components/header/MyNav.vue";
 export default {
-  name: "DefaultLayout",
-  data() {
-    return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          icon: "mdi-apps",
-          title: "Welcome",
-          to: "/"
-        },
-        {
-          icon: "mdi-chart-bubble",
-          title: "Inspire",
-          to: "/inspire"
-        }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: "Vuetify.js"
-    };
-  },
-  components: { MyNav }
-}
+    data() {
+        return {
+            loaded: false,
+        };
+    },
+    mounted() {
+        this.loaded = true
+    }
+};
 </script>
+
+<style lang="css">
+@import "~/assets/styles/main.css";
+</style>

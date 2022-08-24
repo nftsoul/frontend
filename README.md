@@ -1,4 +1,4 @@
-# intern_task
+# nftsoul
 
 ## Build Setup
 

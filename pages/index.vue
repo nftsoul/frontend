@@ -1,16 +1,20 @@
 <template>
-  <div>
-    <LandingPage />
-    <Cards />
-  </div>
+<div>
+    <client-only>
+        <LandingIntro />
+        <LandingPopular />
+        <LandingRecent />
+        <LandingFree />
+        <LandingPremium />
+        <LeaderboardMain />
+        <LandingWorking />
+        <LandingPartner />
+        <CommonProfile />
+        <DialogWallet />
+
+    </client-only>
+  
+</div>
 </template>
 
-<script>
-import Buttons from '../components/sections/Buttons.vue';
-import Cards from '../components/sections/Cards.vue';
-import LandingPage from '../components/sections/LandingPage.vue';
-export default {
-  name: "IndexPage",
-  components: { Buttons, Cards, LandingPage }
-}
-</script>
+
