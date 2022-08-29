@@ -6,6 +6,13 @@
         <v-row justify="center">
             <h3>Item Preview</h3>
         </v-row>
+        <v-row justify="center" v-if="fullmode==false">
+                        <GalleryMintshow v-if="details.images" :full="fullmode" :nfts="details.images" />
+                        <v-btn text @click="$store.commit('three/setFullMode',true)">
+                            <v-icon>mdi-fullscreen</v-icon>
+                            View Full Screen
+                        </v-btn>
+                    </v-row>
         <v-row justify="center">
             <v-col cols="12">
                 <div v-if="stream != ''">
@@ -366,7 +373,7 @@ export default {
         },
         currentRoute() {
             return this.$store.state.nft.currentRoute;
-        },
+        }
     },
     beforeRouteLeave(to, from, next) {
         // this.leave=true

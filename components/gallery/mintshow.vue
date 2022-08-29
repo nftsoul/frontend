@@ -82,7 +82,7 @@ export default {
 
         const objects = [];
 
-        let raycaster;
+        let raycaster,stats;
 
         let moveForward = false;
         let moveBackward = false;
@@ -189,8 +189,10 @@ export default {
 
         document.addEventListener('keydown', onKeyDown);
         document.addEventListener('keyup', onKeyUp);
+        document.addEventListener('mousemove', onMouseMove);
 
         raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
+        const mouse = new THREE.Vector2(1, 1);
         animatecontrol()
 
         function animatecontrol() {
@@ -234,7 +236,7 @@ export default {
 
             }
             prevTime = time;
-            renderer.render(scene, camera);
+            render()
         }
 
         //loading 3d model
@@ -265,6 +267,10 @@ export default {
         mesh.position.set(0.05, 1, -3.05)
         scene.add(mesh);
 
+        //stats
+        // const sts=require("three/examples/jsm/libs/stats.module.")
+        // stats = new sts.Stats();
+		// document.body.appendChild( stats.dom );
         //setting animation loop
         // this.renderer.setAnimationLoop(this.animate);
         //plotting nfts dynamically
@@ -414,6 +420,44 @@ export default {
             nftmesh.position.set(nfts4[l].position.x, nfts4[l].position.y, nfts4[l].position.z)
             nftmesh.rotation.y = -1.56
             scene.add(nftmesh);
+        }
+
+        //for mouse
+
+        function onMouseMove(event) {
+
+            event.preventDefault();
+
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        }
+        animateMouseEvent()
+        function animateMouseEvent() {
+
+            requestAnimationFrame(animateMouseEvent);
+
+            // controls.update();
+
+            raycaster.setFromCamera(mouse, camera);
+
+            const intersection = raycaster.intersectObject(mesh);
+
+            if (intersection.length > 0) {
+
+                const instanceId = intersection[0].instanceId;
+
+                console.log('clicked:',instanceId)
+
+            }
+
+            render();
+
+            // stats.update();
+
+        }
+        function render(){
+                        renderer.render(scene, camera);
         }
 
     },

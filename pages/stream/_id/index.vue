@@ -6,6 +6,13 @@
         <v-row justify="center">
             <h3>Item Preview</h3>
         </v-row>
+        <v-row justify="center" v-if="fullmode==false">
+            <GalleryMintshow v-if="stream" :full="fullmode" :nfts="nfts" />
+            <v-btn text @click="$store.commit('three/setFullMode',true)">
+                <v-icon>mdi-fullscreen</v-icon>
+                View Full Screen
+            </v-btn>
+        </v-row>
         <v-row justify="center">
             <v-col cols="12">
                 <div v-if="stream != ''">
@@ -144,7 +151,7 @@
             </v-col>
         </v-row>
         <!-- comments -->
-        <v-row justify="center">
+        <v-row v-if="comments" justify="center">
             <v-col cols="10" class="px-8">
                 <v-card dark outlined class="max-width:800">
                     <div v-if="comments.length > 0">
@@ -373,7 +380,8 @@ export default {
             moreReply: false,
             profile: this.$auth.user,
             raritylist: [],
-            rarityurl: []
+            rarityurl: [],
+            nfts: []
         };
     },
     watch: {
@@ -395,6 +403,9 @@ export default {
         },
         currentRoute() {
             return this.$store.state.nft.currentRoute;
+        },
+        fullmode() {
+            return this.$store.state.three.fullmode
         },
     },
     beforeRouteLeave(to, from, next) {
@@ -425,8 +436,6 @@ export default {
                 }).catch(err => console.log(err.response))
         },
         getRank(item) {
-            console.log('stream:',this.stream)
-            console.log('item:',item)
             const index = this.raritylist.indexOf(item.name)
             if (index) {
                 this.$axios.get('https://api.howrare.is/v0.1/collections/' + this.rarityurl[index] + '/only_rarity')
@@ -438,9 +447,8 @@ export default {
                             }
                         }
                     })
-            }
-            else{
-               ''
+            } else {
+                ''
             }
 
         },
@@ -520,6 +528,9 @@ export default {
             this.$axios.get("/gallery/stream/" + this.gallery_id).then((res) => {
                 this.stream = res.data[0];
                 this.current = this.stream.nfts[this.index];
+                for (var x = 0; x < this.stream.nfts.length; x++) {
+                    this.nfts.push(this.stream.nfts[x].image)
+                }
             });
         },
         makeReply(item) {

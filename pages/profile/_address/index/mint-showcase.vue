@@ -50,7 +50,7 @@ export default {
     methods: {
         getMyShows() {
             this.$axios
-                .get("/mint/my/list?page=1&limit=4")
+                .get("/mint/list?page=1&limit=4")
                 .then((res) => {
                     this.shows = res.data.result
                     this.loaded = true

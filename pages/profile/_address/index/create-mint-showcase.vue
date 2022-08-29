@@ -30,11 +30,11 @@
                         <v-col cols="6" v-for="i in team" :key="i">
                             <p>Member {{i}}</p>
                             <label>Name</label>
-                            <FormCustomTextField v-model="member.name[i]" :rules="[validRules.required,validRules.lengthMin3]" />
+                            <FormCustomTextField v-model="member.name[i]" />
                             <label>Role</label>
-                            <FormCustomTextField v-model="member.role[i]" :rules="[validRules.required,validRules.lengthMin3]" />
+                            <FormCustomTextField v-model="member.role[i]"/>
                             <label>Social Link</label>
-                            <FormCustomTextField v-model="member.social_link[i]" :rules="[validRules.required,validRules.lengthMin3]" />
+                            <FormCustomTextField v-model="member.social_link[i]"/>
                             <v-col align="center">
                                 <v-avatar v-if="member.avatar[i]" class="mb-3" size="80">
                                     <v-img :src="member.avatar[i]"></v-img>
@@ -59,13 +59,13 @@
                     <br>
 
                     <label for="">Twitter Link</label>
-                    <FormCustomTextField v-model="twitter" :rules="[validRules.required,validRules.lengthMin3]" />
+                    <FormCustomTextField v-model="twitter" :rules="[validRules.required,validRules.lengthMin3,validRules.validLink]" />
 
                     <label for="">Discord Link</label>
-                    <FormCustomTextField v-model="discord" :rules="[validRules.required,validRules.lengthMin3]" />
+                    <FormCustomTextField v-model="discord" :rules="[validRules.required,validRules.lengthMin3,,validRules.validLink]" />
 
                     <label for="">Linkedin Profile</label>
-                    <FormCustomTextField v-model="linkedin" :rules="[validRules.required,validRules.lengthMin3]" />
+                    <FormCustomTextField v-model="linkedin" :rules="[validRules.required,validRules.lengthMin3,,validRules.validLink]" />
 
                     <label for="">Email Address</label>
                     <FormCustomTextField v-model="email" :rules="[validRules.required,validRules.validEmail]" />
@@ -89,21 +89,28 @@
                         <v-col cols="12" align="center">
                             <div>
                                 <p>Upload File</p>
-                                <div style="border:1px solid #FE87FF" class="py-16">
-                                    <div @click="selectImage" class="link" v-if="files.length==0">
-                                        <v-icon color="#FE87FF" size="75">
-                                            mdi-image
-                                        </v-icon>
-                                        <v-btn text :loading="uploading">Browse Files</v-btn>
-                                    </div>
+                                <div style="border:1px solid #FE87FF" class="py-2">
+                                    <p>10 NFTs Required</p>
                                     <client-only>
-                                        <VueSlickCarousel v-if="files.length>0" v-bind="slickSetting">
-                                            <div v-for="(item, i) in files" :key="i">
-                                                <v-img :src="item" class="rounded-lg white-border mx-2" max-width="300">
-                                                </v-img>
-                                                <v-icon @click="removeFile(item)">mdi-close</v-icon>
+                                        <VueSlickCarousel v-bind="slickSetting" v-if="files.length>0">
+                                            <div>
+                                                <div v-for="(item, i) in files" :key="i">
+                                                    <v-img :src="item" class="rounded-lg white-border mx-2" max-width="300">
+                                                    </v-img>
+                                                    <v-icon @click="removeFile(item)">mdi-close</v-icon>
+                                                </div>
                                             </div>
+
                                         </VueSlickCarousel>
+                                        <v-container v-else>
+                                            <v-row>
+                                                <v-col cols="12" lg="3" md="3" v-for="i in 10" :key="i">
+                                                    <div class="img-slot" @click="selectImage">
+                                                        <v-icon large class="mt-5">mdi-plus</v-icon>
+                                                    </div>
+                                                </v-col>
+                                            </v-row>
+                                        </v-container>
                                     </client-only>
                                     <v-btn dark color="#FE87FF" :loading="uploading" @click="selectImage" v-if="files.length >0 && files.length<10" class="mt-5">
                                         <v-icon>
@@ -161,6 +168,8 @@ export default {
                 lengthMax200: (v) => (v && v.length < 200) || "Should not be more than 200 characters.",
                 lengthMin3: (v) => (v && v.length > 2) || "At least 3 characters.",
                 validEmail: v => /.+@.+\..+/.test(v) || "E-mail must be valid",
+                validLink: v=>/https?:[0-9]*\/\/[\w!?/\+\-_~=;\.,*&@#$%\(\)\'\[\]]+/.test(v) || 'URL must be valid',
+                twitterLink: v => /http(?:s)?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)/ || 'Not a twitter link'
             },
             uploading: false,
             activePicker: null,
@@ -242,7 +251,7 @@ export default {
                             avatar: this.member.avatar[x + 1]
                         })
                     }
-
+                   if(finalmem.length>0){
                     this.$axios.post('/mint/create', {
                             collection_name: this.name,
                             description: this.description,
@@ -272,6 +281,16 @@ export default {
                             this.saving = false
                         })
                         .catch(err => console.log(err.response))
+                    }
+                    else{
+                        this.$toast
+                                .error("At least one team member is required", {
+                                    iconPack: "mdi",
+                                    icon: "mdi-account",
+                                    theme: "outline",
+                                })
+                                .goAway(3000);
+                    }
                 }
             }
         },
@@ -353,3 +372,12 @@ export default {
     }
 }
 </script>
+
+<style>
+.img-slot {
+    width: 75px;
+    height: 75px;
+    border: 1px solid white;
+    border-style: dashed;
+}
+</style>
