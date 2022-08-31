@@ -1,208 +1,256 @@
 <template>
-<div class="dark-bg">
-    <UtilsSeo :title="pre.gallery[0].gallery_name" :gallery_id="pre.gallery[0]._id" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
-    <v-card :min-height="screenHeight()" flat color="transparent" class="pt-16">
-        <v-container class="pt-16">
-            <v-row justify="center">
-                <v-col cols="12" lg="12" md="11">
-                    <div class="enclose-border">
-                        <v-container v-if="preview != ''">
-                            <v-row>
-                                <v-col v-if="preview.nfts.length > 0" cols="12" lg="3" md="6" align="center" class="px-5">
-                                    <v-img :src="preview.image" class="rounded-lg">
-                                        <template v-slot:placeholder>
-                                            <v-row class="fill-height ma-0" align="center" justify="center">
-                                                <v-progress-circular indeterminate color="grey lighten-5">
-                                                </v-progress-circular>
-                                            </v-row>
-                                        </template>
-                                    </v-img>
-                                </v-col>
-                                <v-col cols="12" lg="5" md="6" class="pr-0">
-                                    <v-row class="pb-2 mb-2">
-                                        <p v-if="preview.gallery_name.length > 30">{{
-                                                    preview.gallery_name.slice(0, 30)
-                                            }}<br>{{
-        preview.gallery_name.slice(30, -1)
-}}</p>
-                                        <p v-else>{{ preview.gallery_name }}</p>
-                                        <v-spacer></v-spacer>
-                                        <ShareNetwork class="mx-3" style="text-decoration: none;" network="twitter" :url="getShareLink()" :title="preview.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
-
-                                            <div @mouseenter="expand = true" @mouseleave="expand = false">
-                                                <v-row no-gutters>
-                                                    <div class="twitter-share">
-                                                        <v-icon color="white">mdi-twitter</v-icon>
-                                                    </div>
-                                                    <v-expand-y-transition>
-                                                        <div v-show="expand" class="twitter-share-expanded">
-                                                            <small>Share on twitter</small>
-                                                        </div>
-                                                    </v-expand-y-transition>
+    <div class="dark-bg">
+        <UtilsSeo :title="pre.gallery[0].gallery_name" :gallery_id="pre.gallery[0]._id"
+            :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
+        <v-card :min-height="screenHeight()" flat color="transparent" class="pt-16" style="min-height:300px">
+            <v-container class="pt-16">
+                <v-row justify="center">
+                    <v-col cols="12" lg="12" md="11">
+                        <div class="enclose-border">
+                            <v-container v-if="preview != ''">
+                                <v-row>
+                                    <v-col v-if="preview.nfts.length > 0" cols="12" lg="3" md="6" align="center"
+                                        class="px-5">
+                                        <v-img :src="preview.image" class="rounded-lg">
+                                            <template v-slot:placeholder>
+                                                <v-row class="fill-height ma-0" align="center" justify="center">
+                                                    <v-progress-circular indeterminate color="grey lighten-5">
+                                                    </v-progress-circular>
                                                 </v-row>
-                                            </div>
-                                        </ShareNetwork>
+                                            </template>
+                                        </v-img>
+                                    </v-col>
+                                    <v-col cols="12" lg="5" md="6" class="pr-0">
+                                        <v-row class="pb-2 mb-2">
+                                            <p v-if="preview.gallery_name.length > 30">{{
+                                                 preview.gallery_name.slice(0, 30) 
+                                                }}<br>{{  preview.gallery_name.slice(30, -1)  }}</p>
+                                            <p v-else>{{  preview.gallery_name  }}</p>
+                                            <v-spacer></v-spacer>
+                                            <ShareNetwork class="mx-3" style="text-decoration: none;" network="twitter"
+                                                :url="getShareLink()" :title="preview.gallery_name"
+                                                description="Exhibit and earn from your NFT Collections"
+                                                quote="Create galleries, showcase your best NFTs and earn from them."
+                                                hashtags="nftsoul,nft_collection">
 
-                                    </v-row>
-                                    <v-list dense style="box-shadow: none !important" class="px-2">
-                                        <v-list-item dense @click="seeProfile()">
-                                            <v-list-item-avatar class="my-0 ml-2">
-                                                <v-img v-if="preview.created_by.image_link" :src="preview.created_by.image_link"></v-img>
-                                                <v-icon v-else>mdi-account-tie</v-icon>
-                                            </v-list-item-avatar>
-                                            <v-list-item-content>
-                                                <v-list-item-title v-if="preview.created_by.name">
-                                                    {{ preview.created_by.name.slice(0, 20) }}</v-list-item-title>
-                                                <v-list-item-title v-else>{{ preview.user_id.slice(0, 5) }}
-                                                </v-list-item-title>
-                                            </v-list-item-content>
-                                        </v-list-item>
-                                    </v-list>
-                                    <v-row class="mt-5">
-                                        <v-col cols="5">
-                                            <p class="mb-0 caption text--disabled">start with</p>
-                                            <p class="text-h5" v-if="preview.price > 0">{{ preview.price }} SOL</p>
-                                            <p class="text-h5" v-else>{{ 0 }} SOL</p>
-
-                                            <div>
-                                                <v-btn small color="green" class="mt-7" rounded x-small @click="stream" :loading="loading">
-                                                    <small>{{ getBtnText() }}</small>
-                                                </v-btn>
-                                            </div>
-                                            <p class="mt-2 body-2">
-                                                Total Items: {{ preview.nfts.length }}
-                                            </p>
-                                        </v-col>
-                                        <v-col cols="7" class="px-0">
-                                            <p class="mb-0 caption text--disabled">
-                                                About This Gallery
-                                            </p>
-                                            <p style="line-height: 15px">
-                                                <small>{{ preview.description }}</small>
-                                            </p>
-                                        </v-col>
-                                    </v-row>
-                                </v-col>
-                                <v-col cols="12" lg="4" md="6" class="px-3">
-                                    <h5 class="mx-5">Comments</h5>
-                                    <div style="border-left:1px solid #500083;height:300px;overflow:auto" class="px-3">
-                                        <div v-if="comments.length > 0">
-                                            <v-list-item v-for="(item, i) in comments" :key="i" class="px-0">
-                                                <v-list-item-avatar size="50" class="mr-2">
-                                                    <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="60" max-height="60"></v-img>
-                                                    <v-icon v-else large>mdi-account</v-icon>
-                                                </v-list-item-avatar>
-                                                <v-list-item-content @mouseenter="hoverIndex=i">
-                                                    <v-list-item-title>
-                                                        <span v-if="item.user_id.name">{{ item.user_id.name }}</span>
-                                                        <span v-else>{{ item.user_id.wallet_address.slice(0, 5)
-                                                            }}</span>
-                                                        <small class="caption text--disabled">{{ $moment(item.time).fromNow() }}</small>
-                                                        <small class="reply-btn position-abs text--disabled mb-0 mt-n6" v-if="hoverIndex==i" @click="selectedIndex = i,replying = true,reply=''">
-                                                            <v-icon small>mdi-reply</v-icon>Reply
-                                                        </small>
-                                                    </v-list-item-title>
-                                                    <v-card-text class="text--disabled pa-0"><small v-html="item.body"></small></v-card-text><br>
+                                                <div @mouseenter="expand = true" @mouseleave="expand = false">
                                                     <v-row no-gutters>
-                                                        <small v-if="item.reply_count > 0" @click="getReplies(item, i)" class="reply-btn">{{ item.reply_count }} Replied</small>
-                                                        <v-btn x-small text v-if="replyPage == 1 && selectedIndex == i" :loading="more"></v-btn>
+                                                        <div class="twitter-share">
+                                                            <v-icon color="white">mdi-twitter</v-icon>
+                                                        </div>
+                                                        <v-expand-y-transition>
+                                                            <div v-show="expand" class="twitter-share-expanded">
+                                                                <small>Share on twitter</small>
+                                                            </div>
+                                                        </v-expand-y-transition>
                                                     </v-row>
+                                                </div>
+                                            </ShareNetwork>
 
-                                                    <!-- make reply -->
-                                                    <div v-if="replying == true && selectedIndex == i">
-                                                        <v-list-item dense class="px-0" v-if="profile">
-                                                            <v-row no-gutters>
-                                                                <v-col cols="2" class="pa-0">
-                                                                    <v-list-item-avatar size="30" class="mb-0 mt-2 mr-1">
-                                                                        <v-img v-if="profile.image_link" :src="profile.image_link" :lazy-src="profile.image_link"></v-img>
-                                                                        <v-icon v-else large>mdi-account</v-icon>
-                                                                    </v-list-item-avatar>
-                                                                </v-col>
-                                                                <v-col>
-                                                                    <v-list-item-content class="py-1">
-                                                                        <v-textarea rows="1" id="txtArea" auto-grow @keypress.enter="onEnterPress(item)" dark color="white" :loading="makingReply" append-outer-icon="mdi-check" @click:append-outer="makeReply(item)" class="mb-n5" v-model="reply" outlined dense placeholder="Reply">
-                                                                            <template v-slot:append>
-                                                                                <v-fade-transition leave-absolute>
-                                                                                    <v-menu offset-y top>
-                                                                                        <template v-slot:activator="{ on, attrs }">
-                                                                                            <v-img :src="require('~/assets/icons/emoji-icon.png')" max-width="30" class="mt-n1 link" v-bind="attrs" v-on="on"></v-img>
-                                                                                        </template>
-                                                                                        <Picker set="emojione" @select="selectEmojiReply" />
-                                                                                    </v-menu>
-                                                                                </v-fade-transition>
-                                                                            </template>
-                                                                        </v-textarea>
-                                                                    </v-list-item-content>
-                                                                </v-col>
-                                                            </v-row>
-                                                        </v-list-item>
-                                                    </div>
-                                                    <!-- end make reply -->
+                                        </v-row>
+                                        <v-list dense style="box-shadow: none !important" class="px-2">
+                                            <v-list-item dense @click="seeProfile()">
+                                                <v-list-item-avatar class="my-0 ml-2">
+                                                    <v-img v-if="preview.created_by.image_link"
+                                                        :src="preview.created_by.image_link"></v-img>
+                                                    <v-icon v-else>mdi-account-tie</v-icon>
+                                                </v-list-item-avatar>
+                                                <v-list-item-content>
+                                                    <v-list-item-title v-if="preview.created_by.name">
+                                                        {{  preview.created_by.name.slice(0, 20)  }}</v-list-item-title>
+                                                    <v-list-item-title v-else>{{  preview.user_id.slice(0, 5)  }}
+                                                    </v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>
+                                        <v-row class="mt-5">
+                                            <v-col cols="5">
+                                                <p class="mb-0 caption text--disabled">start with</p>
+                                                <p class="text-h5" v-if="preview.price > 0">{{  preview.price  }} SOL</p>
+                                                <p class="text-h5" v-else>{{  0  }} SOL</p>
 
-                                                    <!-- replies -->
-                                                    <div v-if="item.replies" style="width:100%">
-                                                        <v-list-item dense v-for="(reply, j) in item.replies" :key="j">
-                                                            <v-list-item-avatar size="30" class="mr-2">
-                                                                <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link" max-width="60" max-height="60"></v-img>
-                                                                <v-icon v-else>mdi-account</v-icon>
-                                                            </v-list-item-avatar>
-                                                            <v-list-item-content>
-                                                                <v-list-item-title>
-                                                                    <span v-if="reply.user_id.name">{{ reply.user_id.name }}</span>
-                                                                    <span v-else>{{
-                                                                                reply.user_id.wallet_address.slice(0, 5)
-                                                                        }}</span>
-                                                                    <small class="caption text--disabled">{{ $moment(reply.time).fromNow() }}</small>
-                                                                </v-list-item-title>
-                                                                <v-card-text style="width:100%" class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text>
-                                                                <br>
-                                                            </v-list-item-content>
-                                                        </v-list-item>
-
+                                                <div>
+                                                    <v-btn small color="green" class="mt-7" rounded x-small
+                                                        @click="stream" :loading="loading">
+                                                        <small>{{  getBtnText()  }}</small>
+                                                    </v-btn>
+                                                </div>
+                                                <p class="mt-2 body-2">
+                                                    Total Items: {{  preview.nfts.length  }}
+                                                </p>
+                                            </v-col>
+                                            <v-col cols="7" class="px-0">
+                                                <p class="mb-0 caption text--disabled">
+                                                    About This Gallery
+                                                </p>
+                                                <p style="line-height: 15px">
+                                                    <small>{{  preview.description  }}</small>
+                                                </p>
+                                            </v-col>
+                                        </v-row>
+                                    </v-col>
+                                    <v-col cols="12" lg="4" md="6" class="px-3">
+                                        <h5 class="mx-5">Comments</h5>
+                                        <div style="border-left:1px solid #500083;height:300px;overflow:auto"
+                                            class="px-3">
+                                            <div v-if="comments.length > 0">
+                                                <v-list-item v-for="(item, i) in comments" :key="i" class="px-0">
+                                                    <v-list-item-avatar size="50" class="mr-2">
+                                                        <v-img v-if="item.user_id.image_link"
+                                                            :src="item.user_id.image_link" max-width="60"
+                                                            max-height="60"></v-img>
+                                                        <v-icon v-else large>mdi-account</v-icon>
+                                                    </v-list-item-avatar>
+                                                    <v-list-item-content @mouseenter="hoverIndex = i">
+                                                        <v-list-item-title class="d-flex d-sm-block flex-column ">
+                                                            <span v-if="item.user_id.name" class="mr-sm-2">{{
+                                                                 item.user_id.name 
+                                                                }}</span>
+                                                            <span v-else>{{  item.user_id.wallet_address.slice(0, 5) 
+                                                                }}</span>
+                                                            <small class="caption text--disabled">{{
+                                                                 $moment(item.time).fromNow()  }}</small>
+                                                            <small
+                                                                class="reply-btn position-abs top-103 text--disabled mb-0 mt-n6"
+                                                                v-if="hoverIndex == i"
+                                                                @click="selectedIndex = i, replying = true, reply = ''">
+                                                                <v-icon small>mdi-reply</v-icon>Reply
+                                                            </small>
+                                                        </v-list-item-title>
+                                                        <v-card-text class="text--disabled pa-0"><small
+                                                                v-html="item.body"></small></v-card-text><br>
                                                         <v-row no-gutters>
-                                                            <v-btn v-if="item.reply_count > 5 && item.replies.length < item.reply_count" @click="getReplies(item, i)" x-small text>
-                                                                <v-icon small>mdi-arrow-down</v-icon>
-                                                                <small>See More</small>
-                                                            </v-btn>
-                                                            <v-btn v-if="replyPage > 1" x-small text :loading="more">
-                                                            </v-btn>
+                                                            <small v-if="item.reply_count > 0"
+                                                                @click="getReplies(item, i)" class="reply-btn">{{
+                                                                 item.reply_count  }} Replied</small>
+                                                            <v-btn x-small text
+                                                                v-if="replyPage == 1 && selectedIndex == i"
+                                                                :loading="more"></v-btn>
                                                         </v-row>
 
-                                                    </div>
-                                                    <!-- end replies -->
-                                                </v-list-item-content>
+                                                        <!-- make reply -->
+                                                        <div v-if="replying == true && selectedIndex == i">
+                                                            <v-list-item dense class="px-0" v-if="profile">
+                                                                <v-row no-gutters>
+                                                                    <v-col cols="2" class="pa-0">
+                                                                        <v-list-item-avatar size="30"
+                                                                            class="mb-0 mt-2 mr-1">
+                                                                            <v-img v-if="profile.image_link"
+                                                                                :src="profile.image_link"
+                                                                                :lazy-src="profile.image_link"></v-img>
+                                                                            <v-icon v-else large>mdi-account</v-icon>
+                                                                        </v-list-item-avatar>
+                                                                    </v-col>
+                                                                    <v-col>
+                                                                        <v-list-item-content class="py-1">
+                                                                            <v-textarea rows="1" id="txtArea" auto-grow
+                                                                                @keypress.enter="onEnterPress(item)"
+                                                                                dark color="white"
+                                                                                :loading="makingReply"
+                                                                                append-outer-icon="mdi-check"
+                                                                                @click:append-outer="makeReply(item)"
+                                                                                class="mb-n5" v-model="reply" outlined
+                                                                                dense placeholder="Reply">
+                                                                                <template v-slot:append>
+                                                                                    <v-fade-transition leave-absolute>
+                                                                                        <v-menu offset-y top>
+                                                                                            <template
+                                                                                                v-slot:activator="{ on, attrs }">
+                                                                                                <v-img
+                                                                                                    :src="require('~/assets/icons/emoji-icon.png')"
+                                                                                                    max-width="30"
+                                                                                                    class="mt-n1 link"
+                                                                                                    v-bind="attrs"
+                                                                                                    v-on="on"></v-img>
+                                                                                            </template>
+                                                                                            <Picker set="emojione"
+                                                                                                @select="selectEmojiReply" />
+                                                                                        </v-menu>
+                                                                                    </v-fade-transition>
+                                                                                </template>
+                                                                            </v-textarea>
+                                                                        </v-list-item-content>
+                                                                    </v-col>
+                                                                </v-row>
+                                                            </v-list-item>
+                                                        </div>
+                                                        <!-- end make reply -->
 
-                                            </v-list-item>
-                                        </div>
-                                        <div v-else>
-                                            <small>No comments yet</small>
-                                        </div>
-                                    </div>
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                        <v-container v-else>
-                            <v-row>
-                                <v-col cols="12" lg="4" md="6">
-                                    <v-skeleton-loader type="image"></v-skeleton-loader>
-                                </v-col>
-                                <v-col cols="12" lg="4" md="6">
-                                    <v-skeleton-loader type="list-item-avatar, list-item-three-line, card-heading, actions\">
-                                    </v-skeleton-loader>
-                                </v-col>
-                                <v-col cols="12" lg="4" md="6">
-                                    <v-skeleton-loader v-for="(item, i) in 5" :key="i" dark type="list-item-avatar">
-                                    </v-skeleton-loader>
+                                                        <!-- replies -->
+                                                        <div v-if="item.replies" style="width:100%">
+                                                            <v-list-item dense v-for="(reply, j) in item.replies"
+                                                                :key="j">
+                                                                <v-list-item-avatar size="30" class="mr-2">
+                                                                    <v-img v-if="reply.user_id.image_link"
+                                                                        :src="reply.user_id.image_link" max-width="60"
+                                                                        max-height="60"></v-img>
+                                                                    <v-icon v-else>mdi-account</v-icon>
+                                                                </v-list-item-avatar>
+                                                                <v-list-item-content>
+                                                                    <v-list-item-title>
+                                                                        <span v-if="reply.user_id.name">{{
+                                                                             reply.user_id.name  }}</span>
+                                                                        <span v-else>{{
+                                                                             reply.user_id.wallet_address.slice(0, 5) 
+                                                                            }}</span>
+                                                                        <small class="caption text--disabled">{{
+                                                                             $moment(reply.time).fromNow()  }}</small>
+                                                                    </v-list-item-title>
+                                                                    <v-card-text style="width:100%"
+                                                                        class="text--disabled pa-0"><small
+                                                                            v-html="reply.body"></small></v-card-text>
+                                                                    <br>
+                                                                </v-list-item-content>
+                                                            </v-list-item>
 
-                                </v-col>
-                            </v-row>
-                        </v-container>
-                    </div>
-                </v-col>
-            </v-row>
-        </v-container>
-    </v-card>
-</div>
+                                                            <v-row no-gutters>
+                                                                <v-btn
+                                                                    v-if="item.reply_count > 5 && item.replies.length < item.reply_count"
+                                                                    @click="getReplies(item, i)" x-small text>
+                                                                    <v-icon small>mdi-arrow-down</v-icon>
+                                                                    <small>See More</small>
+                                                                </v-btn>
+                                                                <v-btn v-if="replyPage > 1" x-small text
+                                                                    :loading="more">
+                                                                </v-btn>
+                                                            </v-row>
+
+                                                        </div>
+                                                        <!-- end replies -->
+                                                    </v-list-item-content>
+
+                                                </v-list-item>
+                                            </div>
+                                            <div v-else>
+                                                <small>No comments yet</small>
+                                            </div>
+                                        </div>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                            <v-container v-else>
+                                <v-row>
+                                    <v-col cols="12" lg="4" md="6">
+                                        <v-skeleton-loader type="image"></v-skeleton-loader>
+                                    </v-col>
+                                    <v-col cols="12" lg="4" md="6">
+                                        <v-skeleton-loader
+                                            type="list-item-avatar, list-item-three-line, card-heading, actions\">
+                                        </v-skeleton-loader>
+                                    </v-col>
+                                    <v-col cols="12" lg="4" md="6">
+                                        <v-skeleton-loader v-for="(item, i) in 5" :key="i" dark type="list-item-avatar">
+                                        </v-skeleton-loader>
+
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+                        </div>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-card>
+    </div>
 </template>
 
 <script>
@@ -274,7 +322,7 @@ export default {
     methods: {
         checkView() {
             this.$axios.get("/gallery/isviewed", {
-                params:{gallery_id: this.gallery_id}
+                params: { gallery_id: this.gallery_id }
             }).then(res => {
                 this.viewed = res.data.isViewed
             });
@@ -298,9 +346,9 @@ export default {
         },
         onEnterPress(item) {
             var el = document.getElementById("txtArea");
-            el.addEventListener("keypress", (event)=> {
+            el.addEventListener("keypress", (event) => {
                 if (event.key == "Enter") {
-                    if (event.shiftKey) {} else {
+                    if (event.shiftKey) { } else {
                         this.makeReply(item)
                         event.preventDefault();
                     }
@@ -380,11 +428,11 @@ export default {
         },
         getComments() {
             this.$axios.get("/comment/" + this.gallery_id, {
-                    params: {
-                        page: 1,
-                        limit: 5
-                    }
-                })
+                params: {
+                    page: 1,
+                    limit: 5
+                }
+            })
                 .then(res => {
                     this.comments = res.data.result;
                     this.loaded = true;
@@ -558,7 +606,8 @@ export default {
 .position-abs {
     position: absolute;
     right: 0;
-    top: 40px;
+    bottom: 0;
+    /* top: 40px; */
 }
 
 .v-list-item__avatar {

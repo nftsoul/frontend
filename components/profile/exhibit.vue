@@ -1,19 +1,20 @@
 <template>
     <div class="dark-bg">
-        <v-card :max-height="screenHeight()" flat color="transparent" style="overflow: auto">
+        <v-card :max-height="screenHeight()" flat color="transparent" style="overflow: auto; min-height: 300px;">
             <v-container>
                 <v-row justify="center">
                     <v-col cols="12" lg="6" md="10">
                         <div class="placeholder-content">
                             <section class="sticky-content py-2">
                                 <!-- sticky header -->
-                                <v-row no-gutters class="pb-3" style="position: sticky">
-                                    <div class="rounded-pill card-back px-1">
+                                <v-row no-gutters class="pb-3 d-flex"
+                                    style="position: sticky; justify-content: space-evenly;">
+                                    <div class="rounded-pill card-back px-1 mb-3 mb-sm-0">
                                         <v-text-field v-model="search" rounded placeholder="Search your nft.."
                                             class="mt-n2 mb-n5" color="white" dark background-color="primary">
                                         </v-text-field>
                                     </div>
-                                    <v-spacer></v-spacer>
+                                    <v-spacer class="d-none d-sm-block"></v-spacer>
                                     <ReusableIconButton v-if="editing == false" @click="createGallery"
                                         ButtonText="Add to Gallery" IconName="mdi-plus" />
                                 </v-row>
@@ -22,12 +23,11 @@
                             <!-- nfts list -->
                             <v-row v-if="nfts.length > 0" class="pt-8">
                                 <v-col cols="12" lg="6" md="6" v-for="(item, i) in nfts" :key="i">
-                                    <v-card class="outer-card rounded-lg" style="height: 55px">
+                                    <v-card class="outer-card rounded-lg mx-auto" style="height: 55px">
                                         <div class="inner-card pa-1 rounded-lg" style="height: 53px">
-                                            <v-list dense style="
-                          background-color: transparent;
-                          box-shadow: none !important;
-                        " class="py-0">
+                                            <v-list dense
+                                                style="background-color: transparent; box-shadow: none !important; "
+                                                class="py-0">
                                                 <v-list-item class="px-0">
                                                     <v-list-item-avatar tile class="rounded-lg my-0">
                                                         <v-img :src="item.image" :lazy-src="item.image">
@@ -42,8 +42,8 @@
                                                     </v-list-item-avatar>
                                                     <v-list-item-content>
                                                         <v-list-item-title>{{
-                                                                item.name
-                                                        }}</v-list-item-title>
+                                                             item.name 
+                                                            }}</v-list-item-title>
                                                     </v-list-item-content>
                                                     <v-list-item-action>
                                                         <v-tooltip top v-if="collected.includes(item.name)">
@@ -85,7 +85,7 @@
                             <v-row v-if="nfts.length == 0 && loading == false">
                                 <v-col align="center">
                                     <v-img :src="require('~/assets/images/sad.svg')" max-width="300"></v-img>
-                                    <p>{{ noNft }}</p>
+                                    <p>{{  noNft  }}</p>
                                 </v-col>
                             </v-row>
                         </div>
@@ -175,10 +175,12 @@ export default {
             if (process.client) {
                 return window.innerHeight - 350;
             }
+
             else {
                 return 600;
             }
         },
+
         async getAllNftData() {
             if (this.wallet == "Phantom") {
                 await this.getCollected();

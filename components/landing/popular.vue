@@ -17,7 +17,8 @@
                         <v-row no-gutters>
 
                             <small class="float-left mt-2">In Last:</small>
-                            <v-btn-toggle v-model="duration" dense tile group dark color="#FE87FF">
+                            <v-btn-toggle v-model="duration" dense tile group dark color="#FE87FF"
+                                class="d-block d-sm-inline-flex">
                                 <v-btn small value="one">
                                     <small>24 Hours</small>
                                 </v-btn>
@@ -51,9 +52,12 @@
                         </client-only>
                     </v-col>
                     <v-col cols="12" align="right">
-                        <v-row justify="end">
+                        <v-row justify="center" class=" justify-md-end">
+                            <!-- <v-row justify="end" class="justify-sm-center-down"> -->
+                            <!-- <v-spacer class="d-md-none"></v-spacer> -->
                             <ReusableBorderGradientButton @click="$router.push('/popular-galleries')"
                                 ButtonText="View All" />
+                            <!-- <v-spacer class="d-md-none"></v-spacer> -->
                         </v-row>
                     </v-col>
                 </v-row>

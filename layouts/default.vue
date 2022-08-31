@@ -1,14 +1,14 @@
 <template>
-<v-app>
-    <client-only>
-        <LayoutAppbar />
-        <CommonSolscan />
-    </client-only>
-    <Nuxt />
-    <client-only>
-        <LayoutFooter />
-    </client-only>
-</v-app>
+    <v-app style="position: relative; overflow:hidden">
+        <client-only>
+            <LayoutAppbar />
+            <CommonSolscan />
+        </client-only>
+        <Nuxt />
+        <client-only>
+            <LayoutFooter />
+        </client-only>
+    </v-app>
 </template>
 
 <script>

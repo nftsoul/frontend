@@ -1,291 +1,350 @@
 <template>
-<div class="dark-bg pt-16">
-    <UtilsSeo :title="pre.gallery[0].gallery_name" :gallery_id="pre.gallery[0]._id" :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
+    <div class="dark-bg pt-16">
+        <UtilsSeo :title="pre.gallery[0].gallery_name" :gallery_id="pre.gallery[0]._id"
+            :description="pre.gallery[0].description" :image="pre.gallery[0].image" />
 
-    <v-container class="pt-16">
-        <v-row justify="center">
-            <h3>Item Preview</h3>
-        </v-row>
-        <v-row justify="center">
-            <v-col cols="12">
-                <div v-if="stream != ''">
-                    <client-only>
-                        <carousel-3d style="box-shadow: none" :autoplay="false" :autoplay-timeout="10000" :controls-visible="true" :controls-width="40" :controls-height="40" perspective="0" inverseScaling="00" space="360" display="1" width="900" height="535" border="0">
-                            <slide v-for="(item, i) in stream.nfts" :index="i" :key="i">
-                                <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
-                                    <div class="enclose-border yo">
-                                        <v-container>
-                                            <v-row>
-                                                <v-col cols="4">
-                                                    <p class="mb-0">
-                                                        {{ stream.gallery_name }}
-                                                    </p>
-                                                    <p class="mb-0">
-                                                        <small>{{ index + 1 }} of {{ stream.nfts.length }}
+        <v-container class="pt-16">
+            <v-row justify="center">
+                <h3>Item Preview</h3>
+            </v-row>
+            <v-row justify="center">
+                <v-col cols="12">
+                    <div v-if="stream != ''">
+                        <client-only>
+                            <carousel-3d style="box-shadow: none" :autoplay="false" :autoplay-timeout="10000"
+                                :controls-visible="true" :controls-width="40" :controls-height="40" perspective="0"
+                                inverseScaling="00" space="360" display="1" width="900" height="535" border="0">
+                                <slide v-for="(item, i) in stream.nfts" :index="i" :key="i">
+                                    <template slot-scope="{ index, isCurrent, leftIndex, rightIndex }">
+                                        <div class="enclose-border yo">
+                                            <v-container>
+                                                <v-row>
+                                                    <v-col cols="4">
+                                                        <p class="mb-0">
+                                                            {{  stream.gallery_name  }}
+                                                        </p>
+                                                        <p class="mb-0">
+                                                            <small>{{  index + 1  }} of {{  stream.nfts.length  }}
 
-                                                            <v-tooltip top v-if="favourite.includes(stream._id)">
-                                                                <template v-slot:activator="{ on, attrs }">
-                                                                    <v-chip dark small v-bind="attrs" v-on="on" class="pa-2">
-                                                                        <v-icon small class="mr-1">mdi-heart</v-icon>Added
-                                                                    </v-chip>
-                                                                </template>
-                                                                <span>Favourite</span>
-                                                            </v-tooltip>
+                                                                <v-tooltip top v-if="favourite.includes(stream._id)">
+                                                                    <template v-slot:activator="{ on, attrs }">
+                                                                        <v-chip dark small v-bind="attrs" v-on="on"
+                                                                            class="pa-2">
+                                                                            <v-icon small class="mr-1">mdi-heart
+                                                                            </v-icon>Added
+                                                                        </v-chip>
+                                                                    </template>
+                                                                    <span>Favourite</span>
+                                                                </v-tooltip>
 
-                                                            <v-tooltip top v-else>
-                                                                <template v-slot:activator="{ on, attrs }">
-                                                                    <v-chip dark small @click="addToFavourite" v-bind="attrs" v-on="on" :loading="loading">
-                                                                        <v-icon small class="mr-1">mdi-heart</v-icon>Add
-                                                                    </v-chip>
-                                                                </template>
-                                                                <span>Add to Favourite</span>
-                                                            </v-tooltip>
-                                                        </small>
-                                                    </p>
-                                                </v-col>
-                                                <v-col cols="3">
-                                                    <ShareNetwork style="text-decoration: none;" class="mb-2" network="twitter" :url="getShareLink()" :title="stream.gallery_name" description="Exhibit and earn from your NFT Collections" quote="Create galleries, showcase your best NFTs and earn from them." hashtags="nftsoul,nft_collection">
+                                                                <v-tooltip top v-else>
+                                                                    <template v-slot:activator="{ on, attrs }">
+                                                                        <v-chip dark small @click="addToFavourite"
+                                                                            v-bind="attrs" v-on="on" :loading="loading">
+                                                                            <v-icon small class="mr-1">mdi-heart
+                                                                            </v-icon>Add
+                                                                        </v-chip>
+                                                                    </template>
+                                                                    <span>Add to Favourite</span>
+                                                                </v-tooltip>
+                                                            </small>
+                                                        </p>
+                                                    </v-col>
+                                                    <v-col cols="3">
+                                                        <ShareNetwork style="text-decoration: none;" class="mb-2"
+                                                            network="twitter" :url="getShareLink()"
+                                                            :title="stream.gallery_name"
+                                                            description="Exhibit and earn from your NFT Collections"
+                                                            quote="Create galleries, showcase your best NFTs and earn from them."
+                                                            hashtags="nftsoul,nft_collection">
 
-                                                        <div @mouseenter="expand=true" @mouseleave="expand=false">
-                                                            <v-row no-gutters>
-                                                                <div class="twitter-share">
-                                                                    <v-icon color="white">mdi-twitter</v-icon>
-                                                                </div>
-                                                                <v-expand-y-transition>
-                                                                    <div v-show="expand" class="twitter-share-expanded">
-                                                                        <small>Share on twitter</small>
+                                                            <div @mouseenter="expand = true"
+                                                                @mouseleave="expand = false">
+                                                                <v-row no-gutters>
+                                                                    <div class="twitter-share">
+                                                                        <v-icon color="white">mdi-twitter</v-icon>
                                                                     </div>
-                                                                </v-expand-y-transition>
-                                                            </v-row>
-                                                        </div>
-                                                    </ShareNetwork>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <v-col cols="12" lg="5" md="6">
-                                                    <div class="img-box pa-2">
-                                                        <v-img :src="item.image" :lazy-src="item.image" class="mx-auto rounded-lg" max-width="350" height="300">
-                                                            <template v-slot:placeholder>
-                                                                <v-row class="fill-height ma-0" align="center" justify="center">
-                                                                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                                                    <v-expand-y-transition>
+                                                                        <div v-show="expand"
+                                                                            class="twitter-share-expanded">
+                                                                            <small>Share on twitter</small>
+                                                                        </div>
+                                                                    </v-expand-y-transition>
                                                                 </v-row>
-                                                            </template>
-                                                        </v-img>
-                                                    </div>
-                                                </v-col>
-                                                <v-col cols="12" lg="7" md="6" class="mt-n6">
-                                                    <v-card outlined class="rounded-lg pa-2">
-                                                        <v-row no-gutters>
-                                                            <v-chip dark small :color="getColor('story')" @click="active = 'story'">Nft Story</v-chip>
-                                                            <v-chip small dark class="mx-2" :color="getColor('attributes')" @click="active = 'attributes'">Attributes</v-chip>
-
-                                                            <v-chip dark small :color="getColor('details')" @click="active = 'details'">Details</v-chip>
-
-                                                            <v-spacer></v-spacer>
-                                                        </v-row>
-                                                        <v-divider class="mt-3"></v-divider>
-                                                        <v-card-text class="caption px-0">
-                                                            <div class="attr-desc-box">
-                                                                <span v-if="active == 'details'">{{item.description}}</span>
-
-                                                                <span v-if="active == 'attributes'">
-                                                                    <v-row>
-                                                                        <v-col class="py-0" cols="4" v-for="(attr, j) in item.attributes" :key="j">
-                                                                            <div class="ma-1 attr-box">
-                                                                                <p class="mb-0" v-if="attr.trait_type">
-                                                                                    {{ attr.trait_type }}
-                                                                                </p>
-                                                                                <span v-if="attr.value" class="text--white">{{ attr.value }}</span>
-                                                                            </div>
-                                                                        </v-col>
-                                                                    </v-row>
-                                                                </span>
-                                                                <span v-if="active == 'story'">{{item.story}}</span>
                                                             </div>
-                                                        </v-card-text>
-                                                    </v-card>
+                                                        </ShareNetwork>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col cols="12" lg="5" md="6">
+                                                        <div class="img-box pa-2">
+                                                            <v-img :src="item.image" :lazy-src="item.image"
+                                                                class="mx-auto rounded-lg" max-width="350" height="300">
+                                                                <template v-slot:placeholder>
+                                                                    <v-row class="fill-height ma-0" align="center"
+                                                                        justify="center">
+                                                                        <v-progress-circular indeterminate
+                                                                            color="grey lighten-5">
+                                                                        </v-progress-circular>
+                                                                    </v-row>
+                                                                </template>
+                                                            </v-img>
+                                                        </div>
+                                                    </v-col>
+                                                    <v-col cols="12" lg="7" md="6" class="mt-n6">
+                                                        <v-card outlined class="rounded-lg pa-2">
+                                                            <v-row no-gutters>
+                                                                <v-chip dark small :color="getColor('story')"
+                                                                    @click="active = 'story'">Nft Story</v-chip>
+                                                                <v-chip small dark class="mx-2"
+                                                                    :color="getColor('attributes')"
+                                                                    @click="active = 'attributes'">Attributes</v-chip>
 
-                                                    <v-divider class="mt-n3"></v-divider>
+                                                                <v-chip dark small :color="getColor('details')"
+                                                                    @click="active = 'details'">Details</v-chip>
 
-                                                    <v-list-item dense class="px-0 mt-2">
-                                                        <v-list-item-avatar size="30">
-                                                            <v-icon>mdi-account-tie</v-icon>
-                                                        </v-list-item-avatar>
-                                                        <v-list-item-content>
-                                                            <v-list-item-title>
-                                                                {{ stream.user_id.slice(0, 5) }}
-                                                            </v-list-item-title>
-                                                        </v-list-item-content>
-                                                    </v-list-item>
+                                                                <v-spacer></v-spacer>
+                                                            </v-row>
+                                                            <v-divider class="mt-3"></v-divider>
+                                                            <v-card-text class="caption px-0">
+                                                                <div class="attr-desc-box">
+                                                                    <span v-if="active == 'details'">{{  item.description 
+                                                                        }}</span>
+
+                                                                    <span v-if="active == 'attributes'">
+                                                                        <v-row>
+                                                                            <v-col class="py-0" cols="4"
+                                                                                v-for="(attr, j) in item.attributes"
+                                                                                :key="j">
+                                                                                <div class="ma-1 attr-box">
+                                                                                    <p class="mb-0"
+                                                                                        v-if="attr.trait_type">
+                                                                                        {{  attr.trait_type  }}
+                                                                                    </p>
+                                                                                    <span v-if="attr.value"
+                                                                                        class="text--white">{{
+                                                                                         attr.value  }}</span>
+                                                                                </div>
+                                                                            </v-col>
+                                                                        </v-row>
+                                                                    </span>
+                                                                    <span v-if="active == 'story'">{{  item.story 
+                                                                        }}</span>
+                                                                </div>
+                                                            </v-card-text>
+                                                        </v-card>
+
+                                                        <v-divider class="mt-n3"></v-divider>
+
+                                                        <v-list-item dense class="px-0 mt-2">
+                                                            <v-list-item-avatar size="30">
+                                                                <v-icon>mdi-account-tie</v-icon>
+                                                            </v-list-item-avatar>
+                                                            <v-list-item-content>
+                                                                <v-list-item-title>
+                                                                    {{  stream.user_id.slice(0, 5)  }}
+                                                                </v-list-item-title>
+                                                            </v-list-item-content>
+                                                        </v-list-item>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-container>
+                                        </div>
+                                    </template>
+                                </slide>
+                            </carousel-3d>
+                        </client-only>
+                    </div>
+                    <v-container v-else>
+                        <v-row justify="center">
+                            <v-col cols="12" lg="6" md="6">
+                                <v-skeleton-loader type="V-list-item"></v-skeleton-loader>
+                                <v-skeleton-loader type="image"></v-skeleton-loader>
+                            </v-col>
+                            <v-col cols="12" lg="6" md="6">
+                                <v-skeleton-loader type="card-avatar, article, actions"></v-skeleton-loader>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </v-col>
+            </v-row>
+            <!-- comments -->
+            <v-row justify="center">
+                <v-col cols="10" class="px-8">
+                    <v-card dark outlined class="max-width:800">
+                        <div v-if="comments.length > 0">
+                            <v-list-item v-for="(item, i) in comments" :key="i">
+
+                                <v-list-item-avatar class="mr-2">
+                                    <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="40"
+                                        max-height="40"></v-img>
+                                    <v-icon v-else large>mdi-account</v-icon>
+                                </v-list-item-avatar>
+
+                                <v-list-item-content @mouseenter="hoverIndex = i">
+                                    <v-list-item-title class="d-flex d-sm-block flex-column ">
+                                        <span class="mr-sm-2" v-if="item.user_id.name">{{  item.user_id.name  }}</span>
+                                        <span class="mr-sm-2" v-else>{{  item.user_id.wallet_address.slice(0, 5) 
+                                            }}</span>
+                                        <small class="caption text--disabled">{{  $moment(item.time).fromNow()  }}</small>
+                                        <small class="reply-btn position-abs text--disabled mb-0 ml-2 mt-n1"
+                                            v-if="hoverIndex == i"
+                                            @click="selectedIndex = i, replying = true, reply = ''">
+                                            <v-icon small>mdi-reply</v-icon>Reply
+                                        </small>
+                                    </v-list-item-title>
+                                    <v-card-text class="text--disabled pa-0"><small v-html="item.body"></small>
+                                    </v-card-text><br>
+                                    <v-row no-gutters class="mt-1">
+                                        <small v-if="item.reply_count > 0" @click="getReplies(item, i)"
+                                            class="reply-btn">{{  item.reply_count  }} Replied</small>
+                                        <v-btn x-small text v-if="replyPage == 1 && selectedIndex == i"
+                                            :loading="moreReply"></v-btn>
+                                    </v-row>
+
+                                    <div v-if="replying == true && selectedIndex == i" class="mt-3">
+                                        <v-list-item dense class="px-0" v-if="profile">
+                                            <v-row
+                                                class="d-flex flex-column flex-sm-row justify-center align-center align-sm-start"
+                                                no-gutters>
+                                                <v-col cols="1" class="pa-0 ml-1 mb-1">
+                                                    <v-list-item-avatar size="30" class="mb-0 mt-2 mr-1">
+                                                        <v-img v-if="profile.image_link" :src="profile.image_link"
+                                                            :lazy-src="profile.image_link"></v-img>
+                                                        <v-icon v-else large>mdi-account</v-icon>
+                                                    </v-list-item-avatar>
+                                                </v-col>
+                                                <v-col>
+                                                    <v-list-item-content class="py-1 ml-n5">
+                                                        <v-row class="justify-center align-center justify-center"
+                                                            no-gutters>
+                                                            <v-textarea rows="1" id="txtArea"
+                                                                @keyup.enter="onEnterPress(item)" auto-grow dark
+                                                                color="white" class="mb-n5 ml-6 mr-2" v-model="reply"
+                                                                outlined dense placeholder="Reply">
+                                                                <template v-slot:append>
+                                                                    <v-fade-transition leave-absolute>
+                                                                        <v-menu offset-y top>
+                                                                            <template v-slot:activator="{ on, attrs }">
+                                                                                <v-img
+                                                                                    :src="require('~/assets/icons/emoji-icon.png')"
+                                                                                    max-width="30" class="mt-n1 link"
+                                                                                    v-bind="attrs" v-on="on"></v-img>
+                                                                            </template>
+                                                                            <Picker set="emojione"
+                                                                                @select="selectEmojiReply" />
+                                                                        </v-menu>
+                                                                    </v-fade-transition>
+                                                                </template>
+                                                            </v-textarea>
+                                                            <v-btn small class="connect-wallet mt-1 ml-6"
+                                                                @click="makeReply(item)" :loading="makingReply">
+                                                                <small>Reply</small>
+                                                            </v-btn>
+                                                        </v-row>
+
+                                                    </v-list-item-content>
                                                 </v-col>
                                             </v-row>
-                                        </v-container>
+                                        </v-list-item>
                                     </div>
-                                </template>
-                            </slide>
-                        </carousel-3d>
-                    </client-only>
-                </div>
-                <v-container v-else>
-                    <v-row justify="center">
-                        <v-col cols="12" lg="6" md="6">
-                            <v-skeleton-loader type="V-list-item"></v-skeleton-loader>
-                            <v-skeleton-loader type="image"></v-skeleton-loader>
-                        </v-col>
-                        <v-col cols="12" lg="6" md="6">
-                            <v-skeleton-loader type="card-avatar, article, actions"></v-skeleton-loader>
-                        </v-col>
-                    </v-row>
-                </v-container>
-            </v-col>
-        </v-row>
-        <!-- comments -->
-        <v-row justify="center">
-            <v-col cols="10" class="px-8">
-                <v-card dark outlined class="max-width:800">
-                    <div v-if="comments.length > 0">
-                        <v-list-item v-for="(item, i) in comments" :key="i">
+                                    <!-- end make reply -->
 
-                            <v-list-item-avatar class="mr-2">
-                                <v-img v-if="item.user_id.image_link" :src="item.user_id.image_link" max-width="40" max-height="40"></v-img>
-                                <v-icon v-else large>mdi-account</v-icon>
-                            </v-list-item-avatar>
-
-                            <v-list-item-content @mouseenter="hoverIndex=i">
-                                <v-list-item-title>
-                                    <span v-if="item.user_id.name">{{item.user_id.name}}</span>
-                                    <span v-else>{{item.user_id.wallet_address.slice(0, 5)}}</span>
-                                    <small class="caption text--disabled">{{$moment(item.time).fromNow()}}</small>
-                                    <small class="reply-btn position-abs text--disabled mb-0 ml-2 mt-n1" v-if="hoverIndex==i" @click="selectedIndex = i,replying = true,reply=''">
-                                        <v-icon small>mdi-reply</v-icon>Reply
-                                    </small>
-                                </v-list-item-title>
-                                <v-card-text class="text--disabled pa-0"><small v-html="item.body"></small></v-card-text><br>
-                                <v-row no-gutters class="mt-1">
-                                    <small v-if="item.reply_count>0" @click="getReplies(item,i)" class="reply-btn">{{item.reply_count}} Replied</small>
-                                    <v-btn x-small text v-if="replyPage==1 && selectedIndex==i" :loading="moreReply"></v-btn>
-
-                                </v-row>
-
-                                <div v-if="replying==true && selectedIndex==i" class="mt-3">
-                                    <v-list-item dense class="px-0" v-if="profile">
+                                    <!-- replies -->
+                                    <div v-if="item.replies" style="width:100%">
+                                        <v-list-item dense v-for="(reply, j) in item.replies" :key="j">
+                                            <v-list-item-avatar size="30" class="mr-2">
+                                                <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link"
+                                                    max-width="60" max-height="60"></v-img>
+                                                <v-icon v-else>mdi-account</v-icon>
+                                            </v-list-item-avatar>
+                                            <v-list-item-content>
+                                                <v-list-item-title>
+                                                    <span v-if="reply.user_id.name">{{  reply.user_id.name  }}</span>
+                                                    <span v-else>{{  reply.user_id.wallet_address.slice(0, 5)  }}</span>
+                                                    <small class="caption text--disabled">{{
+                                                         $moment(reply.time).fromNow()  }}</small>
+                                                </v-list-item-title>
+                                                <v-card-text style="width:100%" class="text--disabled pa-0"><small
+                                                        v-html="reply.body"></small></v-card-text><br>
+                                            </v-list-item-content>
+                                        </v-list-item>
                                         <v-row no-gutters>
-                                            <v-col cols="1" class="pa-0">
-                                                <v-list-item-avatar size="30" class="mb-0 mt-2 mr-1">
-                                                    <v-img v-if="profile.image_link" :src="profile.image_link" :lazy-src="profile.image_link"></v-img>
-                                                    <v-icon v-else large>mdi-account</v-icon>
-                                                </v-list-item-avatar>
-                                            </v-col>
-                                            <v-col>
-                                                <v-list-item-content class="py-1 ml-n5">
-                                                    <v-row no-gutters>
-                                                        <v-textarea rows="1" id="txtArea" @keyup.enter="onEnterPress(item)" auto-grow dark color="white" class="mb-n5 mr-2" v-model="reply" outlined dense placeholder="Reply">
-                                                            <template v-slot:append>
-                                                                <v-fade-transition leave-absolute>
-                                                                    <v-menu offset-y top>
-                                                                        <template v-slot:activator="{ on, attrs }">
-                                                                            <v-img :src="require('~/assets/icons/emoji-icon.png')" max-width="30" class="mt-n1 link" v-bind="attrs" v-on="on"></v-img>
-                                                                        </template>
-                                                                        <Picker set="emojione" @select="selectEmojiReply" />
-                                                                    </v-menu>
-                                                                </v-fade-transition>
-                                                            </template>
-                                                        </v-textarea>
-                                                        <v-btn small class="connect-wallet mt-1" @click="makeReply(item)" :loading="makingReply"><small>Reply</small></v-btn>
-                                                    </v-row>
-
-                                                </v-list-item-content>
-                                            </v-col>
+                                            <v-btn v-if="item.reply_count > 5 && item.replies.length < item.reply_count"
+                                                @click="getReplies(item, i)" x-small text>
+                                                <v-icon small>mdi-arrow-down</v-icon>
+                                                <small>See More</small>
+                                            </v-btn>
+                                            <v-btn v-if="replyPage > 1" x-small text :loading="moreReply"></v-btn>
                                         </v-row>
-                                    </v-list-item>
-                                </div>
-                                <!-- end make reply -->
+                                    </div>
+                                    <!-- end replies -->
+                                </v-list-item-content>
 
-                                <!-- replies -->
-                                <div v-if="item.replies" style="width:100%">
-                                    <v-list-item dense v-for="(reply,j) in item.replies" :key="j">
-                                        <v-list-item-avatar size="30" class="mr-2">
-                                            <v-img v-if="reply.user_id.image_link" :src="reply.user_id.image_link" max-width="60" max-height="60"></v-img>
-                                            <v-icon v-else>mdi-account</v-icon>
-                                        </v-list-item-avatar>
-                                        <v-list-item-content>
-                                            <v-list-item-title>
-                                                <span v-if="reply.user_id.name">{{reply.user_id.name}}</span>
-                                                <span v-else>{{ reply.user_id.wallet_address.slice(0, 5) }}</span>
-                                                <small class="caption text--disabled">{{$moment(reply.time).fromNow()}}</small>
-                                            </v-list-item-title>
-                                            <v-card-text style="width:100%" class="text--disabled pa-0"><small v-html="reply.body"></small></v-card-text><br>
-                                        </v-list-item-content>
-                                    </v-list-item>
-                                    <v-row no-gutters>
-                                        <v-btn v-if="item.reply_count>5 && item.replies.length < item.reply_count" @click="getReplies(item,i)" x-small text>
-                                            <v-icon small>mdi-arrow-down</v-icon>
-                                            <small>See More</small>
-                                        </v-btn>
-                                        <v-btn v-if="replyPage>1" x-small text :loading="moreReply"></v-btn>
-                                    </v-row>
-                                </div>
-                                <!-- end replies -->
-                            </v-list-item-content>
-
-                        </v-list-item>
-                    </div>
-                    <div v-else class="ma-5">
-                        <div v-if="!loaded">
-                            <v-skeleton-loader v-for="(item, i) in 5" :key="i" dark type="list-item-avatar"></v-skeleton-loader>
+                            </v-list-item>
                         </div>
-                        <small v-else>No comments yet...</small>
-                    </div>
+                        <div v-else class="ma-5">
+                            <div v-if="!loaded">
+                                <v-skeleton-loader v-for="(item, i) in 5" :key="i" dark type="list-item-avatar">
+                                </v-skeleton-loader>
+                            </div>
+                            <small v-else>No comments yet...</small>
+                        </div>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn text x-small v-if="comments.length > 4 && totalComments != comments.length"
+                                @click="getComments()" :loading="more">
+                                See More Comments
+                                <v-icon small>mdi-arrow-down</v-icon>
+                            </v-btn>
+                            <v-spacer></v-spacer>
+                        </v-card-actions>
+                        <v-row no-gutters class="px-5 d-flex justify-center">
+                            <v-avatar class="mb-2 mt-2 mt-sm-0">
+                                <v-img v-if="profile.image_link" :src="profile.image_link"></v-img>
+                                <v-icon v-else large>mdi-account</v-icon>
+                            </v-avatar>
+                            <v-textarea dark rows="1" auto-grow ref="textArea" id="txtArea2"
+                                @keyup.enter="preventComment()" color="white" class="px-2" outlined v-model="comment"
+                                :error-messages="error" placeholder="What do you think about the gallery?">
+                                <template v-slot:append>
+                                    <v-fade-transition leave-absolute>
+                                        <v-menu offset-y top>
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-img :src="require('~/assets/icons/emoji-icon.png')" max-width="30"
+                                                    class="mt-n2 link" v-bind="attrs" v-on="on"></v-img>
+                                            </template>
+                                            <Picker set="emojione" @select="showEmoji" />
+                                        </v-menu>
+                                    </v-fade-transition>
+                                </template>
+                            </v-textarea>
+
+                        </v-row>
+                        <v-row no-gutters class="px-5 pb-5">
+                            <v-spacer class="d-none d-block-sm"></v-spacer>
+                            <v-btn small rounded dark class="mt-n3 mx-auto connect-wallet" :loading="commenting"
+                                @click="makeComment()">Post a comment</v-btn>
+                        </v-row>
+                    </v-card>
+                </v-col>
+            </v-row>
+            <!-- end comments -->
+        </v-container>
+
+        <v-dialog v-model="leave" max-width="400">
+            <div class="border-white rounded-lg">
+                <v-card color="primary" class="rounded-lg">
+                    <p>Sure to leave?</p>
+
                     <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn text x-small v-if="comments.length > 4 && totalComments != comments.length" @click="getComments()" :loading="more">
-                            See More Comments
-                            <v-icon small>mdi-arrow-down</v-icon>
-                        </v-btn>
-                        <v-spacer></v-spacer>
+                        <v-btn @click="leave = false">cancel</v-btn>
+                        <v-btn @click="goTo()">confirm</v-btn>
                     </v-card-actions>
-                    <v-row no-gutters class="px-5">
-                        <v-avatar>
-                            <v-img v-if="profile.image_link" :src="profile.image_link"></v-img>
-                            <v-icon v-else large>mdi-account</v-icon>
-                        </v-avatar>
-                        <v-textarea dark rows="1" auto-grow ref="textArea" id="txtArea2" @keyup.enter="preventComment()" color="white" class="px-2" outlined v-model="comment" :error-messages="error" placeholder="What do you think about the gallery?">
-                            <template v-slot:append>
-                                <v-fade-transition leave-absolute>
-                                    <v-menu offset-y top>
-                                        <template v-slot:activator="{ on, attrs }">
-                                            <v-img :src="require('~/assets/icons/emoji-icon.png')" max-width="30" class="mt-n2 link" v-bind="attrs" v-on="on"></v-img>
-                                        </template>
-                                        <Picker set="emojione" @select="showEmoji" />
-                                    </v-menu>
-                                </v-fade-transition>
-                            </template>
-                        </v-textarea>
-
-                    </v-row>
-                    <v-row no-gutters class="px-5 pb-5">
-                        <v-spacer></v-spacer>
-                        <v-btn small rounded dark class="mt-n3 connect-wallet" :loading="commenting" @click="makeComment()">Post a comment</v-btn>
-                    </v-row>
                 </v-card>
-            </v-col>
-        </v-row>
-        <!-- end comments -->
-    </v-container>
-
-    <v-dialog v-model="leave" max-width="400">
-        <div class="border-white rounded-lg">
-            <v-card color="primary" class="rounded-lg">
-                <p>Sure to leave?</p>
-
-                <v-card-actions>
-                    <v-btn @click="leave = false">cancel</v-btn>
-                    <v-btn @click="goTo()">confirm</v-btn>
-                </v-card-actions>
-            </v-card>
-        </div>
-    </v-dialog>
-</div>
+            </div>
+        </v-dialog>
+    </div>
 </template>
 
 <script>
@@ -401,7 +460,7 @@ export default {
             var el = document.getElementById("txtArea2");
             el.addEventListener("keypress", (event) => {
                 if (event.key == "Enter") {
-                    if (event.shiftKey) {} else {
+                    if (event.shiftKey) { } else {
                         this.makeComment()
                         event.preventDefault();
                     }
@@ -409,12 +468,12 @@ export default {
 
             });
         },
-    
+
         onEnterPress(item) {
             var el = document.getElementById("txtArea");
-            el.addEventListener("keypress", (event)=> {
+            el.addEventListener("keypress", (event) => {
                 if (event.key == "Enter") {
-                    if (event.shiftKey) {} else {
+                    if (event.shiftKey) { } else {
                         this.makeReply(item)
                         event.preventDefault();
                     }
@@ -431,10 +490,10 @@ export default {
             }
             this.$axios.get(
                 "/comment/reply/" + item._id, {
-                    params: {
-                        page: this.replyPage,
-                    },
-                }
+                params: {
+                    page: this.replyPage,
+                },
+            }
             ).then(res => {
                 this.moreReply = false
                 const index = this.comments.indexOf(item)
@@ -660,5 +719,14 @@ a.prev span {
 
 .v-list-item__avatar {
     align-self: flex-start;
+}
+
+.position-abs {
+    position: absolute;
+    right: 10%;
+    /* left: 50%; */
+    /* right: 0; */
+    bottom: 0;
+    /* top: 40px; */
 }
 </style>

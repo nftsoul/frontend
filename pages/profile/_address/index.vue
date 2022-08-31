@@ -2,11 +2,13 @@
     <div class="dark-bg">
         <ProfileMain />
         <v-container>
-            <v-row justify="center">
+            <v-row>
                 <v-col cols="12" lg="8" md="6">
 
-                    <v-tabs v-model="tab" background-color="#000229" tile color="purple" group v-if="profile">
-                        <v-tabs-slider color="#000229"></v-tabs-slider>
+                    <v-tabs v-model="tab" center-active background-color="#000229" tile color="purple" group
+                        v-if="profile" fixed-tabs show-arrows>
+                        <v-tabs-slider color="#000229">
+                        </v-tabs-slider>
 
                         <v-tab href="#tab-1" v-if="walletAddress == profile.wallet_address" class="text-capitalize"
                             :to="'/profile/' + userAddress + '/nfts'">
@@ -29,7 +31,7 @@
                 </v-col>
                 <ReusableGradientButton v-if="creating == false"
                     @click="$router.push({ name: 'profile-address-index-exhibit', params: { 'address': userAddress } })"
-                    class="mt-5" ButtonText="Create Gallery" />
+                    class="mt-5 mx-auto" ButtonText="Create Gallery" />
             </v-row>
         </v-container>
         <NuxtChild />

@@ -38,7 +38,7 @@
                     </div>
 
                     <v-row justify="center" v-if="walletAddress == profile.wallet_address" no-gutters class="mt-n5">
-                        <v-col cols="3" align="center">
+                        <v-col cols="3" align="center" class="ml-n14 ml-sm-n1 ">
                             <ReusableTransparentButton @click="showProfileDialog" ButtonText="Edit Profile" />
                         </v-col>
 
@@ -54,7 +54,7 @@
                                 mdi-twitter
                             </v-icon>
                         </v-btn>
-                        <v-chip light color="white" style="cursor:pointer">
+                        <v-chip class="mr-n3 mr-sm-0" light color="white" style="cursor:pointer">
                             <span class="ml-5" style="color:#1da1f2">Share on twitter</span>
                         </v-chip>
                     </ShareNetwork>

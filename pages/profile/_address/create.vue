@@ -33,21 +33,22 @@
                                 <v-col cols="12" class="py-0">
                                     <label for="story" class="text--disabled text-left">Story</label>
                                 </v-col>
-                                <v-col cols="5" align="center" class="px-15">
+                                <v-col cols="5" align="center" class="px-3 px-sm-15 mx-auto">
                                     <client-only>
                                         <VueSlickCarousel v-bind="slickSetting2" ref="carousel">
                                             <div v-for="(item, i) in collection" :key="i" class="py-3">
-                                                <v-img :src="item.image"></v-img>
-                                                <span>{{ i + 1 }} of {{ collection.length }}</span>
+                                                <v-img :src="item.image">
+                                                </v-img>
+                                                <span>{{  i + 1  }} of {{  collection.length  }}</span>
                                             </div>
                                         </VueSlickCarousel>
                                     </client-only>
 
                                 </v-col>
-                                <v-col cols="7">
-                                    <v-textarea v-model="story" @input="addStory()" color="#030537" rows="4"
-                                        background-color="#030537" solo dark
-                                        placeholder="Tell us your short story about nft"></v-textarea>
+                                <v-col cols="12" sm="7" class="mx-auto" style="min-width:236px">
+                                    <v-textarea v-model="story" @input="addStory()" :width="textareaWitdh()"
+                                        color="#030537" rows="4" background-color="#030537" solo dark
+                                        placeholder="Tell us your short story about nft" class="w-10"></v-textarea>
                                     <v-row justify="end" no-gutters>
                                         <ReusableBorderGradientButton @click="prev()" ButtonText="Prev"
                                             IconName="mdi-chevron-double-left" />
@@ -64,16 +65,18 @@
                                 </v-col>
                             </v-row>
 
-                            <v-row class="mt-2" no-gutters>
+                            <v-row class="mt-2 d-flex" no-gutters>
                                 <v-checkbox class="mt-n2" :rules="[validRules.required]" color="white" v-model="agree">
                                 </v-checkbox>
-                                <small>I understand that and I am ready to pay 0.01 SOL to create
+                                <small class="ml-2" style="width:80%">I understand that and I am ready to pay 0.01
+                                    SOL to
+                                    create
                                     this gallery.</small>
                             </v-row>
                         </v-form>
                         <v-row>
                             <v-btn class="mx-auto my-5 btn-exhibit" @click="createGallery()" :loading="creating">
-                                {{ btnText }}</v-btn>
+                                {{  btnText  }}</v-btn>
                         </v-row>
                     </div>
                 </v-col>
@@ -87,7 +90,7 @@
                     </div>
                     <div class="enclose-border ma-3">
                         <v-row no-gutters>
-                            <small>Total: {{ collection.length }} items</small>
+                            <small>Total: {{  collection.length  }} items</small>
                             <v-spacer></v-spacer>
                             <v-menu offset-y>
                                 <template v-slot:activator="{ on, attrs }">
@@ -146,10 +149,9 @@
                             <v-col cols="6" v-for="(item, i) in collection" :key="i">
                                 <v-card class="outer-card rounded-lg" style="height: 55px;">
                                     <div class="inner-card pa-1 rounded-lg" style="height: 53px;">
-                                        <v-list dense style="
-                        background-color: transparent;
-                        box-shadow: none !important;
-                      " class="py-0">
+                                        <v-list dense
+                                            style=" background-color: transparent; box-shadow: none !important; "
+                                            class="py-0">
                                             <v-list-item class="px-0">
                                                 <v-list-item-avatar tile class="rounded-lg my-0">
                                                     <v-img :src="item.image" :lazy-src="item.image">
@@ -163,7 +165,7 @@
                                                     </v-img>
                                                 </v-list-item-avatar>
                                                 <v-list-item-content>
-                                                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                                                    <v-list-item-title>{{  item.name  }}</v-list-item-title>
                                                 </v-list-item-content>
                                                 <v-list-item-action>
                                                     <div v-if="collection.includes(item)"
@@ -350,6 +352,21 @@ export default {
 
     },
     methods: {
+        // scrWidth() {
+        //     if (process.client = 'xs') {
+        //         return window.innerWidth + 200;
+        //     }
+        // },
+        textareaWitdh() {
+            switch (this.$vuetify.breakpoint.name) {
+                case 'xs': return 220
+                case 'sm': return 400
+                case 'md': return 500
+                case 'lg': return 600
+                case 'xl': return 800
+            }
+        },
+
         addNewNft() {
 
         },
@@ -379,6 +396,7 @@ export default {
             this.story = this.collection[this.selectedIndex].story
 
         },
+
         addStory() {
             this.collection[this.selectedIndex]['story'] = this.story
 

@@ -18,7 +18,7 @@
                         </client-only>
                     </v-col>
                     <v-col cols="12" align="right">
-                        <v-row justify="end">
+                        <v-row justify="center" class=" justify-md-end">
                             <ReusableBorderGradientButton @click="$router.push('/new-galleries')"
                                 ButtonText="View All" />
                         </v-row>

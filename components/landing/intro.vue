@@ -4,17 +4,17 @@
       :src="require('~/assets/images/dark-banner.png')">
       <v-container fluid class="py-16">
         <v-row class="py-16">
-          <v-col cols="6" lg="11" md="6" class="py-lg-16 px-lg-16">
+          <v-col cols="9" lg="11" md="6" class="py-lg-16 px-lg-16">
             <p class="text-lg-h3 text-md-h4 text-h5">
               Exhibit and Earn From <br />Your NFT Collections
             </p>
             <p class="">
               Create galleries, showcase your best NFTs and earn from them.
             </p>
-            <v-row class="mt-10">
+            <v-row class="mt-10 block">
               <ReusableGradientButton @click="exhibit()" ButtonText="Exhibit" />
-              <ReusableBorderGradientButton class="ma-3 text-center" @click="$router.push({ path: '/featured' })"
-                ButtonText="Explore" path="/featured" />
+              <ReusableBorderGradientButton class="d-ma-sm-0 ma-3 text-center"
+                @click="$router.push({ path: '/featured' })" ButtonText="Explore" path="/featured" />
             </v-row>
           </v-col>
         </v-row>

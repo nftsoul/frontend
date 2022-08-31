@@ -2,8 +2,8 @@
     <div>
         <v-app-bar color="transparent" style="position: absolute; top: 0" app flat class="px-md-5" extended>
             <v-img :src="require('~/assets/images/NFTsoul-horizontal.png')" max-width="250"
-                @click="$router.push({ path: '/' })" class="mt-3 link"></v-img>
-            <div class="outer-btn px-2 mt-3 ml-n4">
+                @click="$router.push({ path: '/' })" class="ml-n7 ml-sm-0 mt-3 link"></v-img>
+            <div class="outer-btn px-2 mt-3 ml-n4 hidden-xs-only ">
                 <p class="mb-0">Nftsoul Beta</p>
             </div>
             <v-spacer></v-spacer>
@@ -90,7 +90,7 @@
                                     <v-menu transition="slide-y-transition" bottom offset-y>
                                         <template v-slot:activator="{ on, attrs }">
                                             <p class="wallet-text mt-3" v-bind="attrs" v-on="on">
-                                                {{ walletAddress.slice(0, 8) + "..." }}
+                                                {{  walletAddress.slice(0, 8) + "..."  }}
                                             </p>
                                         </template>
                                         <v-card width="200" color="#636262" class="mt-3">
@@ -130,7 +130,7 @@
                             </div>
                             <div class="auth-inside-2">
                                 <p class="wallet-text mt-3">
-                                    {{ walletAddress.slice(0, 8) + "..." }}
+                                    {{  walletAddress.slice(0, 8) + "..."  }}
                                 </p>
                             </div>
                         </div>

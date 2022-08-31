@@ -1,42 +1,45 @@
 <template>
-<div>
-    <v-card width="400" class="mx-auto pt-2" dark color="primary" min-height="500">
-        <v-row justify="space-between" no-gutters class="px-2">
-            <span>Your Notifications</span>
-            <v-btn v-if="$route.name !='all-notifications'" @click="$router.push('/all-notifications')" text small class="text-capitalize">See All Activity</v-btn>
-        </v-row>
-        <v-row justify="space-between" no-gutters class="px-2" v-if="$route.name=='all-notifications'">
-            <div>
-                <v-tabs v-model="tab" background-color="transparent" tile color="purple" group height="30">
-                    <v-tabs-slider color="#000229"></v-tabs-slider>
-                    <v-tab class="text-capitalize" @click="tab=0">
-                        All
-                    </v-tab>
-                    <v-tab class="text-capitalize" @click="tab=1">
-                        Unread
-                    </v-tab>
-                </v-tabs>
-            </div>
-            <v-btn text small class="text-capitalize" @click="markAllAsRead()">Mark all as read</v-btn>
-        </v-row>
-        <v-divider class="mt-2"></v-divider>
-        <v-card-text style="max-height:400px;overflow:auto" class="pa-0">
-            <div v-if="notifications.length>0">
-                <div v-for="(item,i) in notifications" :key="i">
-                    <v-card :color="getColor(item)" flat tile>
-                        <v-list-item color="background" style="box-shadow:none" dense link @click="goToLink(item)">
-                            <v-list-item-avatar>
-                                <v-divider></v-divider>
-                                <v-img v-if="item.from.image_link" :src="item.from.image_link" :lazy-src="item.from.image_link"></v-img>
-                                <v-icon v-else large>mdi-account</v-icon>
-                            </v-list-item-avatar>
+    <div>
+        <v-card width="400" class="mx-auto pt-2" dark color="primary" min-height="500">
+            <v-row no-gutters class="px-2 justify-space-around justify-sm-space-between">
+                <span>Your Notifications</span>
+                <v-btn v-if="$route.name != 'all-notifications'" @click="$router.push('/all-notifications')" text small
+                    class="text-capitalize">See All Activity</v-btn>
+            </v-row>
+            <v-row no-gutters class="px-2 justify-space-around justify-sm-space-between"
+                v-if="$route.name == 'all-notifications'">
+                <div>
+                    <v-tabs v-model="tab" background-color="transparent" tile color="purple" group height="30">
+                        <v-tabs-slider color="#000229"></v-tabs-slider>
+                        <v-tab class="text-capitalize" @click="tab = 0">
+                            All
+                        </v-tab>
+                        <v-tab class="text-capitalize" @click="tab = 1">
+                            Unread
+                        </v-tab>
+                    </v-tabs>
+                </div>
+                <v-btn text small class="text-capitalize" @click="markAllAsRead()">Mark all as read</v-btn>
+            </v-row>
+            <v-divider class="mt-2"></v-divider>
+            <v-card-text style="max-height:400px;overflow:auto" class="pa-0">
+                <div v-if="notifications.length > 0">
+                    <div v-for="(item, i) in notifications" :key="i">
+                        <v-card :color="getColor(item)" flat tile>
+                            <v-list-item color="background" style="box-shadow:none" dense link @click="goToLink(item)">
+                                <v-list-item-avatar>
+                                    <v-divider></v-divider>
+                                    <v-img v-if="item.from.image_link" :src="item.from.image_link"
+                                        :lazy-src="item.from.image_link"></v-img>
+                                    <v-icon v-else large>mdi-account</v-icon>
+                                </v-list-item-avatar>
 
-                            <v-list-item-content>
-                                <div class="comment-box">
-                                    <p class="mb-0 mt-2" style="font-size:12px" v-html="getDescription(item)"></p>
-                                </div>
-                            </v-list-item-content>
-                            <!-- <v-list-item-action>
+                                <v-list-item-content>
+                                    <div class="comment-box">
+                                        <p class="mb-0 mt-2" style="font-size:12px" v-html="getDescription(item)"></p>
+                                    </div>
+                                </v-list-item-content>
+                                <!-- <v-list-item-action>
                                         <v-list-item-action-text>
                                             <span v-if="!hover">{{ moment.utc(item.created_at).fromNow() }}</span>
                                             <v-tooltip top v-if="hover">
@@ -49,30 +52,34 @@
                                             </v-tooltip>
                                         </v-list-item-action-text>
                                     </v-list-item-action> -->
-                        </v-list-item>
-                        <!-- <v-row no-gutters justify="center" v-if="notifications.length>7 && notifications.length<total">
+                            </v-list-item>
+                            <!-- <v-row no-gutters justify="center" v-if="notifications.length>7 && notifications.length<total">
                                     <v-btn text @click="getNotifications()" :loading="more">Load More</v-btn>
                                 </v-row> -->
-                    </v-card>
+                        </v-card>
+                    </div>
                 </div>
-            </div>
-            <div v-else>
-                <div v-if="dataEnd==false">
-                    <v-skeleton-loader class="my-1" v-for="(item,i) in 8" :key="i" type="list-item-avatar"></v-skeleton-loader>
+                <div v-else>
+                    <div v-if="dataEnd == false">
+                        <v-skeleton-loader class="my-1" v-for="(item, i) in 8" :key="i" type="list-item-avatar">
+                        </v-skeleton-loader>
 
+                    </div>
                 </div>
-            </div>
-            <v-row no-gutters justify="center" v-if="finish==false && notifications.length>7" class="my-2">
-                <v-progress-circular v-intersect.quiet="{handler: onIntersect,options: {threshold: [0, 0.5, 1.0]}}" indeterminate color="grey lighten-5"></v-progress-circular>
-            </v-row>
-            <v-row no-gutters justify="center">
-                <p v-if="dataEnd==true && notifications.length==0" class="text--disabled my-3">No Notifications</p>
+                <v-row no-gutters justify="center" v-if="finish == false && notifications.length > 7" class="my-2">
+                    <v-progress-circular
+                        v-intersect.quiet="{ handler: onIntersect, options: { threshold: [0, 0.5, 1.0] } }"
+                        indeterminate color="grey lighten-5"></v-progress-circular>
+                </v-row>
+                <v-row no-gutters justify="center">
+                    <p v-if="dataEnd == true && notifications.length == 0" class="text--disabled my-3">No Notifications
+                    </p>
 
-            </v-row>
-        </v-card-text>
+                </v-row>
+            </v-card-text>
 
-    </v-card>
-</div>
+        </v-card>
+    </div>
 </template>
 
 <script>
@@ -123,12 +130,12 @@ export default {
             this.page += 1
             this.more = true
             this.$axios.get('/notification/user', {
-                    params: {
-                        page: this.page,
-                        limit: this.limit,
-                        id: this.$auth.user._id
-                    },
-                })
+                params: {
+                    page: this.page,
+                    limit: this.limit,
+                    id: this.$auth.user._id
+                },
+            })
                 .then(res => {
                     this.more = false
                     this.total = res.data.total_notifications
@@ -229,8 +236,8 @@ export default {
 
             }
             this.$axios.patch('notification/mark-all-read', {
-                    id: this.$auth.user.user._id
-                })
+                id: this.$auth.user.user._id
+            })
                 .catch(err => console.log(err.response))
         }
     }
