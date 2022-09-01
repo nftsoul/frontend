@@ -55,6 +55,7 @@ export default {
             this.$axios
                 .get("/mint/list?page=1&limit=4")
                 .then((res) => {
+                    console.log('resp:',res.data)
                     this.cases=res.data.result
                 })
                 .catch((err) => console.log(err.response));
