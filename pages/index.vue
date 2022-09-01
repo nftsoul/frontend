@@ -1,20 +1,18 @@
 <template>
 <div>
     <client-only>
-        <LandingIntro />
-        <LandingPopular />
-        <LandingRecent />
-        <LandingFree />
-        <LandingPremium />
-        <LeaderboardMain />
-        <LandingWorking />
-        <LandingPartner />
+        <SectionLandingIntro />
+        <SectionLandingPopular />
+        <SectionLandingRecent />
+        <SectionLandingFree />
+        <SectionLandingPremium />
+        <SectionLandingMintCase />
+        <SectionLeaderboardMain />
+        <SectionLandingWorking />
+        <SectionLandingPartner />
         <CommonProfile />
         <DialogWallet />
-
     </client-only>
   
 </div>
 </template>
-
-

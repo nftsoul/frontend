@@ -350,17 +350,19 @@
 <script>
 import {
     Picker
-} from 'emoji-mart-vue'
+} from "emoji-mart-vue";
 export default {
     components: {
-        Picker
+        Picker,
     },
     async asyncData({
         params
     }) {
-        const pre = await fetch(process.env.API_URL + `/gallery/${params.id}`).then((res) => res.json());
+        const pre = await fetch(process.env.API_URL + `/gallery/${params.id}`).then(
+            (res) => res.json()
+        );
         return {
-            pre
+            pre,
         };
     },
     head() {
@@ -368,8 +370,8 @@ export default {
             link: [{
                 hid: "canonical",
                 rel: "canonical",
-                href: process.env.API_URL + `/gallery/${this.$route.params.id}`
-            }]
+                href: process.env.API_URL + `/gallery/${this.$route.params.id}`,
+            }, ],
         };
     },
     data() {
@@ -397,21 +399,24 @@ export default {
             selectedIndex: null,
             hoverIndex: null,
             replying: false,
-            reply: '',
-            selectedComment: '',
+            reply: "",
+            selectedComment: "",
             replyPage: 0,
             more: false,
             makingReply: false,
             moreReply: false,
-            profile: this.$auth.user
+            profile: this.$auth.user,
+            raritylist: [],
+            rarityurl: [],
+            nfts: []
         };
     },
     watch: {
         comment() {
             if (this.comment != "") {
-                this.error = ''
+                this.error = "";
             }
-        }
+        },
     },
     computed: {
         walletAddress() {
@@ -426,14 +431,18 @@ export default {
         currentRoute() {
             return this.$store.state.nft.currentRoute;
         },
+        fullmode() {
+            return this.$store.state.three.fullmode
+        },
     },
     beforeRouteLeave(to, from, next) {
         // this.leave=true
         this.$store.commit("nft/setStream", false);
         next();
     },
-    mounted() {
+    async mounted() {
         if (this.streaming == true) {
+            await this.getRarityCollection()
             this.getStream();
             this.getComments();
             this.getFavourite();
@@ -442,18 +451,46 @@ export default {
         }
     },
     methods: {
+        getRarityCollection() {
+            this.$axios
+                .get("https://api.howrare.is/v0.1/collections")
+                .then((res) => {
+                    this.reslist = res.data.result.data
+                    for (var x = 0; x < res.data.result.data; x++) {
+                        this.raritylist.push(res.data.result.data[x].name)
+                        this.rarityurl.push(res.data.result.data[x].url)
+                    }
+                }).catch(err => console.log(err.response))
+        },
+        getRank(item) {
+            const index = this.raritylist.indexOf(item.name)
+            if (index) {
+                this.$axios.get('https://api.howrare.is/v0.1/collections/' + this.rarityurl[index] + '/only_rarity')
+                    .then(res => {
+                        let resp2 = res.data.result.data.items
+                        for (var x = 0; x < resp2.length; x++) {
+                            if (resp2[x].mint == item.mint) {
+                                return resp2[x].rank
+                            }
+                        }
+                    })
+            } else {
+                ''
+            }
+
+        },
         selectEmojiReply(e) {
             if (!this.reply) {
-                this.reply = e.native
+                this.reply = e.native;
             } else {
-                this.reply += e.native
+                this.reply += e.native;
             }
         },
         showEmoji(e) {
             if (!this.comment) {
-                this.comment = e.native
+                this.comment = e.native;
             } else {
-                this.comment += e.native
+                this.comment += e.native;
             }
         },
         preventComment() {
@@ -465,7 +502,6 @@ export default {
                         event.preventDefault();
                     }
                 }
-
             });
         },
 
@@ -481,12 +517,12 @@ export default {
             });
         },
         getReplies(item, i) {
-            this.moreReply = true
+            this.moreReply = true;
             if (this.selectedComment != item._id) {
-                this.replyPage = 1
-                this.selectedComment = item._id
+                this.replyPage = 1;
+                this.selectedComment = item._id;
             } else {
-                this.replyPage += 1
+                this.replyPage += 1;
             }
             this.$axios.get(
                 "/comment/reply/" + item._id, {
@@ -520,32 +556,57 @@ export default {
             this.$axios
                 .get("/gallery/stream/" + this.gallery_id)
                 .then((res) => {
-                    this.stream = res.data[0];
-                    this.current = this.stream.nfts[this.index];
+                    this.moreReply = false;
+                    const index = this.comments.indexOf(item);
+                    let rep = res.data.replies;
+                    if (!this.comments[index].replies) {
+                        this.comments[index]["replies"] = [];
+                    }
+                    let reply_ids = [];
+                    for (var y = 0; y < this.comments[index].replies.length; y++) {
+                        reply_ids.push(this.comments[index].replies[y]._id);
+                    }
+                    for (var x = 0; x < rep.length; x++) {
+                        if (!reply_ids.includes(rep[x]._id)) {
+                            this.comments[index].replies.push(rep[x]);
+                        }
+                    }
                 });
         },
+        getShareLink() {
+            return process.env.SITE_URL + "/preview/" + this.gallery_id;
+        },
+        getStream() {
+            this.$axios.get("/gallery/stream/" + this.gallery_id).then((res) => {
+                this.stream = res.data[0];
+                this.current = this.stream.nfts[this.index];
+                for (var x = 0; x < this.stream.nfts.length; x++) {
+                    this.nfts.push(this.stream.nfts[x].image)
+                }
+            });
+        },
         makeReply(item) {
-            this.makingReply = true
-            this.selectedComment = item
-            if (this.reply != '') {
+            this.makingReply = true;
+            this.selectedComment = item;
+            if (this.reply != "") {
                 this.$axios
                     .post("/comment/reply/" + item._id, {
                         body: this.reply,
                         user_id: this.profile._id,
                     })
                     .then((res) => {
-                        this.makingReply = false
-                        let rep = res.data.reply
-                        this.reply = ''
-                        rep['user_id'] = this.profile
-                        const index = this.comments.indexOf(item)
+                        this.makingReply = false;
+                        let rep = res.data.reply;
+                        this.reply = "";
+                        rep["user_id"] = this.profile;
+                        const index = this.comments.indexOf(item);
                         if (this.comments[index].replies) {
-                            this.comments[index].replies.push(rep)
+                            this.comments[index].replies.push(rep);
                         } else {
-                            this.comments[index]['replies'] = []
-                            this.comments[index].replies.push(rep)
+                            this.comments[index]["replies"] = [];
+                            this.comments[index].replies.push(rep);
                         }
-                        this.comments[index].reply_count += 1
+                        this.comments[index].reply_count += 1;
                     })
                     .catch((err) => err.response);
             }
