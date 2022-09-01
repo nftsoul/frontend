@@ -90,7 +90,7 @@
                                     <v-menu transition="slide-y-transition" bottom offset-y>
                                         <template v-slot:activator="{ on, attrs }">
                                             <p class="wallet-text mt-3" v-bind="attrs" v-on="on">
-                                                {{  walletAddress.slice(0, 8) + "..."  }}
+                                                {{ walletAddress.slice(0, 8) + "..." }}
                                             </p>
                                         </template>
                                         <v-card width="200" color="#636262" class="mt-3">
@@ -116,6 +116,10 @@
             </v-btn>
             <v-list v-else nav dense>
                 <v-list-item>
+                    <v-btn @click.stop="drawer = !drawer" class="px-0 mt-2"
+                        style="background:transparent; min-width:36px;">
+                        <v-icon large dark v-bind="attrs" v-on="on">mdi-window-close</v-icon>
+                    </v-btn>
                     <div class="auth-box mt-5 mx-auto">
                         <div class="auth-inside">
                             <div class="auth-inside-1" @click="
@@ -130,7 +134,7 @@
                             </div>
                             <div class="auth-inside-2">
                                 <p class="wallet-text mt-3">
-                                    {{  walletAddress.slice(0, 8) + "..."  }}
+                                    {{ walletAddress.slice(0, 8) + "..." }}
                                 </p>
                             </div>
                         </div>
