@@ -190,10 +190,13 @@ export default {
         document.addEventListener('keydown', onKeyDown);
         document.addEventListener('keyup', onKeyUp);
         document.addEventListener('mousemove', onMouseMove);
-
+        //mouse pointing in 3d
         raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0), 0, 10);
         const mouse = new THREE.Vector2(1, 1);
+
         animatecontrol()
+        let x=1
+        let z=1
 
         function animatecontrol() {
 
@@ -219,10 +222,28 @@ export default {
 
                 direction.z = Number(moveForward) - Number(moveBackward);
                 direction.x = Number(moveRight) - Number(moveLeft);
+                
                 direction.normalize(); // this ensures consistent movements in all directions
 
-                if (moveForward || moveBackward) velocity.z -= direction.z * 50.0 * delta;
-                if (moveLeft || moveRight) velocity.x -= direction.x * 50.0 * delta;
+                if (moveForward || moveBackward) {
+                    velocity.z -= direction.z * 50.0 * delta
+                    if(moveForward){
+                        z++
+                    }
+                    else{
+                        z--
+                    }
+                }
+                if (moveLeft || moveRight) {
+                    velocity.x -= direction.x * 50.0 * delta
+                    if(moveRight){
+                        x++
+                    }
+                    else{
+                        x--
+                    }
+                    
+                }
 
                 if (onObject === true) {
 
@@ -230,9 +251,13 @@ export default {
                     canJump = true;
 
                 }
-
+                if(x < 20 && x >-12){
                 controls.moveRight(-velocity.x * delta);
-                controls.moveForward(-velocity.z * delta);
+                }
+                if(z <50 && z>-5){
+                    controls.moveForward(-velocity.z * delta);
+
+                }
 
             }
             prevTime = time;

@@ -5,13 +5,13 @@
             <v-col cols="12" lg="8" md="8" align="center">
                 <p class="title">Mint Showcase</p>
                 <div class="enclose-border">
-                    <!-- <v-row justify="center" v-if="fullmode==false">
+                    <v-row justify="center" v-if="fullmode==false">
                         <GalleryMintshow v-if="details.images" :full="fullmode" :nfts="details.images" />
                         <v-btn text @click="$store.commit('three/setFullMode',true)">
                             <v-icon>mdi-fullscreen</v-icon>
                             View Full Screen
                         </v-btn>
-                    </v-row> -->
+                    </v-row>
                     <v-row>
                         <v-col>
                             <h4 class="theme-color mb-3">About this collection</h4>
