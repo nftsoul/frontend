@@ -3,8 +3,8 @@
         <v-card width="400" class="mx-auto pt-2" dark color="primary" min-height="500">
             <v-row no-gutters class="px-2 justify-space-around justify-sm-space-between">
                 <span>Your Notifications</span>
-                <v-btn v-if="$route.name != 'all-notifications'" @click="$router.push('/all-notifications')" text small
-                    class="text-capitalize">See All Activity</v-btn>
+                <v-btn v-if="$route.name != 'all-notifications'" @click="$router.push({ path: '/all-notifications' })"
+                    text small class="text-capitalize">See All Activity</v-btn>
             </v-row>
             <v-row no-gutters class="px-2 justify-space-around justify-sm-space-between"
                 v-if="$route.name == 'all-notifications'">
@@ -26,6 +26,7 @@
                 <div v-if="notifications.length > 0">
                     <div v-for="(item, i) in notifications" :key="i">
                         <v-card :color="getColor(item)" flat tile>
+                            <!-- @click="goToLink(item)" -->
                             <v-list-item color="background" style="box-shadow:none" dense link @click="goToLink(item)">
                                 <v-list-item-avatar>
                                     <v-divider></v-divider>
@@ -97,7 +98,8 @@ export default {
             more: false,
             tab: 0,
             limit: 10,
-            finish: false
+            finish: false,
+            params: { address: this.$auth.user._id }
         }
     },
     watch: {
@@ -120,7 +122,7 @@ export default {
         },
         profile() {
             return this.$store.state.wallet.profile
-        }
+        },
     },
     mounted() {
         this.getNotifications()
@@ -183,6 +185,12 @@ export default {
             }
             return desc;
         },
+        GoLink() {
+            this.$router.push({
+                name: "profile-address-index-exhibit",
+                params: { address: this.$auth.user._id }
+            });
+        },
         goToLink(item) {
             if (item.seen == false) {
                 this.readNotification(item)
@@ -201,7 +209,11 @@ export default {
                     break;
 
                 case 'fav_added':
-                    this.$router.push('/profile/' + this.walletAddress + '/gallery')
+                    // this.$router.push('/profile/' + this.walletAddress + '/gallery');
+                    this.$router.push({
+                        name: "profile-address-index-gallery",
+                        params: { address: this.$auth.user._id },
+                    });
                     break;
 
             }

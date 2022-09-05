@@ -44,7 +44,8 @@ export default {
       {
         hid: "twitter:image",
         name: "twitter:image",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
+        content:
+          "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
       },
 
       // Open Graph
@@ -69,12 +70,14 @@ export default {
       {
         hid: "og:image",
         property: "og:image",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
+        content:
+          "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
       },
       {
         hid: "og:image:secure_url",
         property: "og:image:secure_url",
-        content: "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
+        content:
+          "https://res.cloudinary.com/doxa4k3b0/image/upload/v1656221813/Nftsoul/mini-log_uzzhhc.png",
       },
       {
         hid: "og:image:alt",
@@ -84,11 +87,11 @@ export default {
     ],
     link: [
       {
-        hid: 'canonical',
-        rel: 'canonical',
-        href: `https://nftsoul.io`
+        hid: "canonical",
+        rel: "canonical",
+        href: `https://nftsoul.io`,
       },
-      { rel: "icon", type: "image/x-icon", href: "/mini-log.png" }
+      { rel: "icon", type: "image/x-icon", href: "/mini-log.png" },
     ],
   },
 
@@ -109,7 +112,7 @@ export default {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME,
     apiKey: process.env.CLOUDINARY_API_KEY,
     apiSecret: process.env.CLOUDINARY_API_SECRET,
-    useComponent:true
+    useComponent: true,
   },
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -117,11 +120,16 @@ export default {
     // https://go.nuxtjs.dev/vuetify
     "@nuxtjs/vuetify",
     "@nuxtjs/moment",
-
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios", "@nuxtjs/toast", "@nuxtjs/dotenv",'@nuxtjs/auth-next','@nuxtjs/cloudinary'],
+  modules: [
+    "@nuxtjs/axios",
+    "@nuxtjs/toast",
+    "@nuxtjs/dotenv",
+    "@nuxtjs/auth-next",
+    "@nuxtjs/cloudinary",
+  ],
 
   axios: {
     baseURL: process.env.API_URL,
@@ -129,24 +137,24 @@ export default {
   },
   auth: {
     strategies: {
-      'local': {
+      local: {
         token: {
           property: "token",
           required: true,
-          maxAge: 23*60*60
+          maxAge: 23 * 60 * 60,
         },
         user: {
           property: false,
-          autoFetch: false
+          autoFetch: false,
         },
         endpoints: {
           login: { url: "/auth/login", method: "post" },
           logout: { url: "/auth/logout", method: "get" },
-          user: { url: "/profile", method: "get" }
-        }
+          user: { url: "/profile", method: "get" },
+        },
       },
     },
-    redirect:false
+    redirect: false,
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -156,7 +164,7 @@ export default {
       dark: true,
       themes: {
         dark: {
-          theme:'#C202D3',
+          theme: "#C202D3",
           primary: "#030537",
           background: "#000229",
           notification: "#1b024d",

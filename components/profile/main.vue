@@ -109,7 +109,7 @@ export default {
             },
             updating: false,
             image_link: "",
-            profile: ""
+            profile: "",
         };
     },
     computed: {

@@ -1,27 +1,28 @@
 <template>
-<div id="blocker">
-    <div ref="canvas">
-        <div id="instructions" class="dark-bg">
-            <v-row no-gutters class="mb-0 px-5" :class="setPadding()" justify="space-between">
-                <v-btn text v-if="fullmode==true" @click="$store.commit('three/setFullMode',false)" class="text-capitalize full-view-btn">
-                    <v-icon>mdi-fullscreen-exit</v-icon>
-                    Exit Full Screen
-                </v-btn>
-                <p style="font-size:25px">
-                    Click to Enter
-                </p>
-                <div>
-                    <small class="mx-5">Move: WASD or Arrow Keys</small>
-                    <small class="mx-5">Look: MOUSE</small>
-                    <small class="mx-5">Exit: ESC</small>
-                </div>
+    <div id="blocker">
+        <div ref="canvas">
+            <div id="instructions" class="dark-bg">
+                <v-row no-gutters class="mb-0 px-5" :class="setPadding()" justify="space-between">
+                    <v-btn text v-if="fullmode == true" @click="$store.commit('three/setFullMode', false)"
+                        class="text-capitalize full-view-btn">
+                        <v-icon>mdi-fullscreen-exit</v-icon>
+                        Exit Full Screen
+                    </v-btn>
+                    <p style="font-size:25px">
+                        Click to Enter
+                    </p>
+                    <div>
+                        <small class="mx-5">Move: WASD or Arrow Keys</small>
+                        <small class="mx-5">Look: MOUSE</small>
+                        <small class="mx-5">Exit: ESC</small>
+                    </div>
 
-            </v-row>
+                </v-row>
 
+            </div>
         </div>
-    </div>
 
-</div>
+    </div>
 </template>
 
 <script>
@@ -82,7 +83,7 @@ export default {
 
         const objects = [];
 
-        let raycaster,stats;
+        let raycaster, stats;
 
         let moveForward = false;
         let moveBackward = false;
@@ -195,8 +196,8 @@ export default {
         const mouse = new THREE.Vector2(1, 1);
 
         animatecontrol()
-        let x=1
-        let z=1
+        let x = 1
+        let z = 1
 
         function animatecontrol() {
 
@@ -222,27 +223,27 @@ export default {
 
                 direction.z = Number(moveForward) - Number(moveBackward);
                 direction.x = Number(moveRight) - Number(moveLeft);
-                
+
                 direction.normalize(); // this ensures consistent movements in all directions
 
                 if (moveForward || moveBackward) {
                     velocity.z -= direction.z * 50.0 * delta
-                    if(moveForward){
+                    if (moveForward) {
                         z++
                     }
-                    else{
+                    else {
                         z--
                     }
                 }
                 if (moveLeft || moveRight) {
                     velocity.x -= direction.x * 50.0 * delta
-                    if(moveRight){
+                    if (moveRight) {
                         x++
                     }
-                    else{
+                    else {
                         x--
                     }
-                    
+
                 }
 
                 if (onObject === true) {
@@ -251,10 +252,10 @@ export default {
                     canJump = true;
 
                 }
-                if(x < 20 && x >-12){
-                controls.moveRight(-velocity.x * delta);
+                if (x < 20 && x > -12) {
+                    controls.moveRight(-velocity.x * delta);
                 }
-                if(z <50 && z>-5){
+                if (z < 50 && z > -5) {
                     controls.moveForward(-velocity.z * delta);
 
                 }
@@ -295,93 +296,93 @@ export default {
         //stats
         // const sts=require("three/examples/jsm/libs/stats.module.")
         // stats = new sts.Stats();
-		// document.body.appendChild( stats.dom );
+        // document.body.appendChild( stats.dom );
         //setting animation loop
         // this.renderer.setAnimationLoop(this.animate);
         //plotting nfts dynamically
         var nfts1 = [{
-                img: '',
-                position: {
-                    x: -0.5,
-                    y: 0.95,
-                    z: 2.85
-                }
-            },
-            {
-                img: '',
-                position: {
-                    x: 0.88,
-                    y: 0.95,
-                    z: 2.85
-                }
-            },
-            {
-                img: '',
-                position: {
-                    x: -1.92,
-                    y: 0.95,
-                    z: 2.85
-                }
+            img: '',
+            position: {
+                x: -0.5,
+                y: 0.95,
+                z: 2.85
             }
+        },
+        {
+            img: '',
+            position: {
+                x: 0.88,
+                y: 0.95,
+                z: 2.85
+            }
+        },
+        {
+            img: '',
+            position: {
+                x: -1.92,
+                y: 0.95,
+                z: 2.85
+            }
+        }
         ];
         var nfts2 = [{
-                img: '',
-                position: {
-                    x: -2.88,
-                    y: 1.12,
-                    z: -1.74
-                }
-            },
-            {
-                img: '',
-                position: {
-                    x: -2.88,
-                    y: 1.12,
-                    z: -0.25
-                }
-            },
-            {
-                img: '',
-                position: {
-                    x: -2.88,
-                    y: 1.12,
-                    z: 1.25
-                }
+            img: '',
+            position: {
+                x: -2.88,
+                y: 1.12,
+                z: -1.74
             }
+        },
+        {
+            img: '',
+            position: {
+                x: -2.88,
+                y: 1.12,
+                z: -0.25
+            }
+        },
+        {
+            img: '',
+            position: {
+                x: -2.88,
+                y: 1.12,
+                z: 1.25
+            }
+        }
         ];
         var nfts3 = [{
-                img: '',
-                position: {
-                    x: 2.9,
-                    y: 1.18,
-                    z: -1.99
-                }
-            },
-            {
-                img: '',
-                position: {
-                    x: 2.9,
-                    y: 0.92,
-                    z: -0.73
-                }
+            img: '',
+            position: {
+                x: 2.9,
+                y: 1.18,
+                z: -1.99
             }
+        },
+        {
+            img: '',
+            position: {
+                x: 2.9,
+                y: 0.92,
+                z: -0.73
+            }
+        }
         ];
         var nfts4 = [{
-                img: '',
-                position: {
-                    x: 2,
-                    y: 1.31,
-                    z: 1.85
-                }
-            },
-            {
-                img: '',
-                position: {
-                    x: 2,
-                    y: 1.31,
-                    z: 0.85
-                }
-            },
+            img: '',
+            position: {
+                x: 2,
+                y: 1.31,
+                z: 1.85
+            }
+        },
+        {
+            img: '',
+            position: {
+                x: 2,
+                y: 1.31,
+                z: 0.85
+            }
+        },
 
         ];
 
@@ -472,7 +473,7 @@ export default {
 
                 const instanceId = intersection[0].instanceId;
 
-                console.log('clicked:',instanceId)
+                console.log('clicked:', instanceId)
 
             }
 
@@ -481,8 +482,8 @@ export default {
             // stats.update();
 
         }
-        function render(){
-                        renderer.render(scene, camera);
+        function render() {
+            renderer.render(scene, camera);
         }
 
     },
