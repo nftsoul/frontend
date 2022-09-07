@@ -13,6 +13,12 @@
                     <GalleryMintCard :mintId="item._id" :title="item.collection_name" :image="item.image"
                         :creator="item.user_id" date="2022-03-04" :mintPrice="item.price" />
                 </v-col>
+                <v-col cols="12" align="right">
+                    <v-row justify="center" class=" justify-md-end">
+                        <ReusableBorderGradientButton @click="$router.push('/all-mint-showcases')"
+                            ButtonText="View All" />
+                    </v-row>
+                </v-col>
             </v-row>
             <v-row v-else justify="center">
                 <client-only v-if="loaded == false">
@@ -40,30 +46,30 @@
 <script>
 
 export default {
-    data() {
-        return {
-            shows: [],
-            loaded: false
-        }
-    },
-    computed: {
-        userAddress() {
-            return this.$route.params.address;
-        },
-    },
-    mounted() {
-        this.getMyShows()
-    },
-    methods: {
-        getMyShows() {
-            this.$axios
-                .get("/mint/list?page=1&limit=4")
-                .then((res) => {
-                    this.shows = res.data.result
-                    this.loaded = true
-                })
-                .catch((err) => console.log(err.response));
-        }
-    }
+data() {
+return {
+shows: [],
+loaded: false
+}
+},
+computed: {
+userAddress() {
+return this.$route.params.address;
+},
+},
+mounted() {
+this.getMyShows()
+},
+methods: {
+getMyShows() {
+this.$axios
+.get("/mint/list?page=1&limit=4")
+.then((res) => {
+this.shows = res.data.result
+this.loaded = true
+})
+.catch((err) => console.log(err.response));
+}
+}
 }
 </script>
